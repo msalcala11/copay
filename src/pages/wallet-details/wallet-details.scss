@@ -74,10 +74,12 @@ page-wallet-details {
     }
     .item {
       font-size: 16px;
+      padding-left: 19px;
 
       .item-inner {
         background-image: none;
-        padding: 7px 10px 7px;
+        padding: 7px 10px 7px 0;
+        margin-left: 3px;
       }
     }
     img {
