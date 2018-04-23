@@ -123,7 +123,7 @@
     </div>
 
     <ion-list *ngIf="history && history[0]" class="tx-history">
-      <div *ngFor="let tx of history; trackBy: trackByFn; let i = index">
+      <div class="item-wrapper" *ngFor="let tx of history; trackBy: trackByFn; let i = index">
 
         <span *ngIf="isFirstInGroup(i)">
           <ion-item-divider *ngIf="isDateInCurrentMonth(getDate(tx.time))">

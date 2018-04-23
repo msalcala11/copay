@@ -65,6 +65,21 @@ page-wallet-details {
     }
   }
   .tx-history {
+    .item-wrapper {
+      &:last-child {
+        .item-inner {
+          border-bottom: 0;
+        }
+      }
+    }
+    .item {
+      font-size: 16px;
+
+      .item-inner {
+        background-image: none;
+        padding: 7px 10px 7px;
+      }
+    }
     img {
       width: 35px;
     }
@@ -81,7 +96,8 @@ page-wallet-details {
       }
     }
     .date {
-      font-size: 12.5px;
+      font-size: 14px;
+      margin-top: 5px;
     }
   }
 
