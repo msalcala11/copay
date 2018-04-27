@@ -76,9 +76,13 @@ page-wallet-details {
       font-size: 16px;
       padding-left: 19px;
 
+      .item-icon {
+        margin-right: 15px;
+      }
+
       .item-inner {
         background-image: none;
-        padding: 7px 10px 7px 0;
+        padding: 11px 10px 11px 0;
         margin-left: 3px;
       }
     }
@@ -99,7 +103,7 @@ page-wallet-details {
     }
     .date {
       font-size: 14px;
-      margin-top: 5px;
+      margin-top: 8px;
     }
   }
 
