@@ -35,6 +35,7 @@ import { CopayersPage } from '../pages/add/copayers/copayers';
 import { ImportWalletPage } from '../pages/add/import-wallet/import-wallet';
 import { JoinWalletPage } from '../pages/add/join-wallet/join-wallet';
 import { FingerprintModalPage } from '../pages/fingerprint/fingerprint';
+import { HomePage } from '../pages/home/home';
 import { BitPayCardIntroPage } from '../pages/integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { CoinbasePage } from '../pages/integrations/coinbase/coinbase';
 import { GlideraPage } from '../pages/integrations/glidera/glidera';
@@ -139,13 +140,13 @@ export class CopayApp {
   private onAppLoad(readySource) {
     this.logger.info(
       'Platform ready (' +
-      readySource +
-      '): ' +
-      this.appProvider.info.nameCase +
-      ' - v' +
-      this.appProvider.info.version +
-      ' #' +
-      this.appProvider.info.commitHash
+        readySource +
+        '): ' +
+        this.appProvider.info.nameCase +
+        ' - v' +
+        this.appProvider.info.version +
+        ' #' +
+        this.appProvider.info.commitHash
     );
 
     if (this.platform.is('cordova')) {
@@ -198,7 +199,7 @@ export class CopayApp {
     if (profile) {
       this.logger.info('Profile exists.');
 
-      this.rootPage = TabsPage;
+      this.rootPage = HomePage; // TabsPage;
 
       if (this.platform.is('cordova')) {
         this.handleDeepLinks();

@@ -44,7 +44,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { ReleaseProvider } from '../../providers/release/release';
 import { ReplaceParametersProvider } from '../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../providers/wallet/wallet';
-
+import { TabsPage } from '../tabs/tabs';
 
 @Component({
   selector: 'page-home',
@@ -133,7 +133,6 @@ export class HomePage {
 
     // Update list of wallets and status
     this.setWallets();
-
   }
 
   ionViewDidEnter() {
@@ -174,34 +173,38 @@ export class HomePage {
   }
 
   private openEmailDisclaimer() {
-    let message = this.translate.instant('By providing your email address, you give explicit consent to BitPay to use your email address to send you email notifications about payments.');
+    let message = this.translate.instant(
+      'By providing your email address, you give explicit consent to BitPay to use your email address to send you email notifications about payments.'
+    );
     let title = this.translate.instant('Privacy Policy update');
     let okText = this.translate.instant('Accept');
     let cancelText = this.translate.instant('Disable notifications');
-    this.popupProvider.ionicConfirm(title, message, okText, cancelText).then((ok) => {
-      if (ok) {
-        // Accept new Privacy Policy
-        this.persistenceProvider.setEmailLawCompliance('accepted');
-      } else {
-        // Disable email notifications
-        this.persistenceProvider.setEmailLawCompliance('rejected');
-        this.emailProvider.updateEmail({
-          enabled: false,
-          email: 'null@email'
-        });
-      }
-    });
+    this.popupProvider
+      .ionicConfirm(title, message, okText, cancelText)
+      .then(ok => {
+        if (ok) {
+          // Accept new Privacy Policy
+          this.persistenceProvider.setEmailLawCompliance('accepted');
+        } else {
+          // Disable email notifications
+          this.persistenceProvider.setEmailLawCompliance('rejected');
+          this.emailProvider.updateEmail({
+            enabled: false,
+            email: 'null@email'
+          });
+        }
+      });
   }
 
   ionViewDidLoad() {
-    this.logger.info('ionViewDidLoad HomePage'); 
+    this.logger.info('ionViewDidLoad HomePage');
 
     if (this.emailProvider.getEmailIfEnabled()) {
       this.persistenceProvider.getEmailLawCompliance().then(value => {
         setTimeout(() => {
           if (!value) this.openEmailDisclaimer();
         }, 2000);
-      });  
+      });
     }
 
     // Create, Join, Import and Delete -> Get Wallets -> Update Status for All Wallets
@@ -420,7 +423,12 @@ export class HomePage {
         this.logger.debug('Update available:', result.updateAvailable);
         if (result.updateAvailable) {
           this.newRelease = true;
-          this.updateText = this.replaceParametersProvider.replace(this.translate.instant('There is a new version of {{nameCase}} available'), { nameCase: this.appProvider.info.nameCase });
+          this.updateText = this.replaceParametersProvider.replace(
+            this.translate.instant(
+              'There is a new version of {{nameCase}} available'
+            ),
+            { nameCase: this.appProvider.info.nameCase }
+          );
         }
       })
       .catch(err => {
@@ -445,9 +453,14 @@ export class HomePage {
       });
       return;
     }
-    this.navCtrl.push(WalletDetailsPage, {
-      walletId: wallet.credentials.walletId
-    });
+    // this.navCtrl.push(WalletDetailsPage, {
+    //   walletId: wallet.credentials.walletId
+    // });
+    this.modalCtrl
+      .create(TabsPage, {
+        walletId: wallet.credentials.walletId
+      })
+      .present();
   }
 
   public openNotificationModal(n: any) {

@@ -89,10 +89,14 @@ ion-spinner * {
   }
 }
 
-// Fixes IOS 10.3.1 icons 
+// Fixes IOS 10.3.1 icons
 .item-img {
   display: flex;
   align-items: center;
+}
+
+.tabbar .tab-button {
+  max-width: 80px;
 }
 
 // Prevent the names of the tabs from disappearing
@@ -101,7 +105,7 @@ ion-spinner * {
 }
 
 // Remove border of icons when screen resolution is big
-.tab-button-icon{
+.tab-button-icon {
   overflow: unset;
 }
 
@@ -313,6 +317,9 @@ ion-icon {
     height: 2rem !important;
   }
   // custom icons
+  &[class*='tab-activity'] {
+    mask-image: url(../assets/img/tab-icons/ico-activity.svg);
+  }
   &[class*='tab-home'] {
     mask-image: url(../assets/img/tab-icons/ico-home.svg);
   }

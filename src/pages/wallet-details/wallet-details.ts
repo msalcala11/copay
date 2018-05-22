@@ -157,7 +157,7 @@ export class WalletDetailsPage {
     this.updateTxHistoryError = false;
     this.updatingTxHistoryProgress = 0;
 
-    let progressFn = function (txs, newTxs) {
+    let progressFn = function(txs, newTxs) {
       if (newTxs > 5) this.thistory = null;
       this.updatingTxHistoryProgress = newTxs;
     }.bind(this);
@@ -339,5 +339,10 @@ export class WalletDetailsPage {
         txid: data.txid
       });
     });
+  }
+  public close() {
+    // console.log('this.navCtrl', this.navCtrl);
+    this.navCtrl.parent.viewCtrl.dismiss();
+    // this.navCtrl.parent.viewCtrl.pop();
   }
 }
