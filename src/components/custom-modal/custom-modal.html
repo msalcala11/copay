@@ -1,5 +1,5 @@
-<ion-content class="popup-modal" no-bounce [ngSwitch]="modal">
-  <div class="height-content" *ngSwitchCase="'fee-warning'">
+<ion-content class="popup-modal" no-bounce>
+  <!-- <div class="height-content" *ngSwitchCase="'fee-warning'">
     <div class="modal-img background-color-danger">
       <img src="assets/img/icon-warning.svg">
     </div>
@@ -15,8 +15,23 @@
         </ion-col>
       </ion-row>
     </div>
-  </div>
-  <div class="height-content" *ngSwitchCase="'sensitive-info'">
+  </div> -->
+
+  <div [ngSwitch]="modal">
+    <custom-modal-content *ngSwitchCase="'fee-warning'" [type]="'warning'">
+      <!-- <custom-modal-icon>
+        <img src="assets/img/icon-warning.svg">
+      </custom-modal-icon> -->
+      <custom-modal-heading>Bitcoin miner fees unusually high</custom-modal-heading>
+      <custom-modal-message>Bitcoin (BTC) miner fees are high due to record demand for limited space on the Bitcoin network. BitPay does not receive
+        and does not control bitcoin miner fees.</custom-modal-message>
+      <custom-modal-button-confirm>
+        {{ 'I understand' | translate }}
+      </custom-modal-button-confirm>
+    </custom-modal-content>
+
+
+    <!-- <div class="height-content" *ngSwitchCase="'sensitive-info'">
     <div class="modal-img background-color-warning">
       <img src="assets/img/icon-warning.svg">
     </div>
@@ -38,8 +53,30 @@
         </ion-col>
       </ion-row>
     </div>
-  </div>
-  <div class="height-content" *ngSwitchCase="'backup-warning'">
+  </div> -->
+
+
+    <custom-modal-content *ngSwitchCase="'sensitive-info'">
+      <!-- <custom-modal-icon>
+      <img src="assets/img/icon-warning.svg">
+    </custom-modal-icon> -->
+      <custom-modal-heading>Sensitive Data</custom-modal-heading>
+      <custom-modal-message>
+        The information you are about to share/export may contain sensitive data such us wallet IDs, addresses, balances, etc. Although
+        this is not critical, please be careful and make sure you trust the person or entity you are sharing this information
+        with.
+      </custom-modal-message>
+      <custom-modal-button-cancel>
+        {{ 'Go Back' | translate }}
+      </custom-modal-button-cancel>
+      <custom-modal-button-confirm>
+        {{ 'I understand' | translate }}
+      </custom-modal-button-confirm>
+    </custom-modal-content>
+
+
+
+    <!-- <div class="height-content" *ngSwitchCase="'backup-warning'">
     <div class="modal-img background-color-warning">
       <img src="assets/img/no-screenshot.svg">
     </div>
@@ -60,8 +97,27 @@
         </ion-col>
       </ion-row>
     </div>
-  </div>
-  <div class="height-content" *ngSwitchCase="'backup-needed'">
+  </div> -->
+
+
+    <custom-modal-content *ngSwitchCase="'backup-warning'">
+      <custom-modal-icon>
+        <img src="assets/img/no-screenshot.svg">
+      </custom-modal-icon>
+      <custom-modal-heading>Screenshots are not secure</custom-modal-heading>
+      <custom-modal-message>
+        If you take a screenshot, your backup may be viewed by other apps. You can make a safe backup with physical paper and a pen.
+      </custom-modal-message>
+      <custom-modal-button-cancel>
+        {{ 'Go Back' | translate }}
+      </custom-modal-button-cancel>
+      <custom-modal-button-confirm>
+        {{ 'I understand' | translate }}
+      </custom-modal-button-confirm>
+    </custom-modal-content>
+
+
+    <!-- <div class="height-content" *ngSwitchCase="'backup-needed'">
     <div class="modal-img background-color-danger">
       <img src="assets/img/warning.svg">
     </div>
@@ -81,8 +137,27 @@
         </ion-col>
       </ion-row>
     </div>
-  </div>
-  <div class="height-content" *ngSwitchCase="'backup-ready'">
+  </div> -->
+
+    <custom-modal-content *ngSwitchCase="'backup-needed'">
+      <!-- <custom-modal-icon>
+      <img src="assets/img/warning.svg">
+    </custom-modal-icon> -->
+      <custom-modal-heading>Backup Needed</custom-modal-heading>
+      <custom-modal-message>
+        Now is a good time to backup your wallet. If this device is lost, it is impossible to access your funds without a backup.
+      </custom-modal-message>
+      <custom-modal-button-cancel>
+        {{ 'Do it later' | translate }}
+      </custom-modal-button-cancel>
+      <custom-modal-button-confirm>
+        {{ 'I understand' | translate }}
+      </custom-modal-button-confirm>
+    </custom-modal-content>
+
+
+
+    <!-- <div class="height-content" *ngSwitchCase="'backup-ready'">
     <div class="modal-img background-color-success">
       <img src="assets/img/warning.svg">
     </div>
@@ -100,4 +175,22 @@
       </ion-row>
     </div>
   </div>
-</ion-content>
+</ion-content> -->
+
+    <custom-modal-content *ngSwitchCase="'backup-needed'">
+      <!-- <custom-modal-icon>
+      <img src="assets/img/warning.svg">
+    </custom-modal-icon> -->
+      <custom-modal-heading>Your bitcoin wallet is backed up!</custom-modal-heading>
+      <custom-modal-message>
+        Be sure to store your recovery phrase in a secure place. If this app is deleted, your money cannot be recovered without it.
+      </custom-modal-message>
+      <custom-modal-button-cancel>
+        {{ 'Do it later' | translate }}
+      </custom-modal-button-cancel>
+      <custom-modal-button-confirm>
+        {{ 'I understand' | translate }}
+      </custom-modal-button-confirm>
+    </custom-modal-content>
+
+  </div>
