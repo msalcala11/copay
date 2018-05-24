@@ -1,49 +1,49 @@
 <ion-content class="popup-modal" no-bounce [ngSwitch]="modal">
 
-  <custom-modal-content *ngSwitchCase="'fee-warning'" [type]="'danger'">
-    <div modal-heading translate>Bitcoin miner fees unusually high</div>
-    <div modal-message translate>Bitcoin (BTC) miner fees are high due to record demand for limited space on the Bitcoin network. BitPay does not receive
+  <custom-modal-content *ngSwitchCase="'fee-warning'" type="danger">
+    <img modal-icon src="assets/img/icon-warning.svg">
+    <div class="modal-heading" translate>Bitcoin miner fees unusually high</div>
+    <div class="modal-message" translate>Bitcoin (BTC) miner fees are high due to record demand for limited space on the Bitcoin network. BitPay does not receive
       and does not control bitcoin miner fees.</div>
     <div modal-confirm-text translate>I understand</div>
   </custom-modal-content>
 
   <custom-modal-content *ngSwitchCase="'sensitive-info'">
-    <div modal-heading translate>Sensitive Data</div>
-    <div modal-message translate>
+    <img modal-icon src="assets/img/icon-warning.svg">
+    <div class="modal-heading" translate>Sensitive Data</div>
+    <div class="modal-message" translate>
       The information you are about to share/export may contain sensitive data such us wallet IDs, addresses, balances, etc. Although
       this is not critical, please be careful and make sure you trust the person or entity you are sharing this information
       with.
     </div>
-    <custom-modal-cancel-text translate>Go Back</custom-modal-cancel-text>
+    <modal-cancel-text translate>Go Back</modal-cancel-text>
     <div modal-confirm-text translate>I understand</div>
   </custom-modal-content>
 
   <custom-modal-content *ngSwitchCase="'backup-warning'">
-    <custom-modal-icon>
-      <img src="assets/img/no-screenshot.svg">
-    </custom-modal-icon>
-    <div modal-heading translate>Screenshots are not secure</div>
-    <div modal-message translate>
+    <img modal-icon src="assets/img/no-screenshot.svg">
+    <div class="modal-heading" translate>Screenshots are not secure</div>
+    <div class="modal-message" translate>
       If you take a screenshot, your backup may be viewed by other apps. You can make a safe backup with physical paper and a pen.
     </div>
-    <custom-modal-cancel-text translate>Go Back</custom-modal-cancel-text>
+    <modal-cancel-text translate>Go Back</modal-cancel-text>
     <div modal-confirm-text translate>I understand</div>
   </custom-modal-content>
 
   <custom-modal-content *ngSwitchCase="'backup-needed'">
-    <div modal-heading translate>Backup Needed</div>
-    <div modal-message translate>
+    <img modal-icon src="assets/img/icon-warning.svg">
+    <div class="modal-heading" translate>Backup Needed</div>
+    <div class="modal-message" translate>
       Now is a good time to backup your wallet. If this device is lost, it is impossible to access your funds without a backup.
     </div>
-    <custom-modal-cancel-text translate>Do it later</custom-modal-cancel-text>
+    <modal-cancel-text translate>Do it later</modal-cancel-text>
     <div modal-confirm-text translate>I understand</div>
   </custom-modal-content>
 
-  <custom-modal-content *ngSwitchCase="'backup-ready'" [type]="'success'">
-    <custom-modal-icon>
-      <img src="assets/img/onboarding-success.svg"> </custom-modal-icon>
-    <div modal-heading translate>Your bitcoin wallet is backed up!</div>
-    <div modal-message translate>
+  <custom-modal-content *ngSwitchCase="'backup-ready'" type="success">
+    <img modal-icon src="assets/img/onboarding-success.svg">
+    <div class="modal-heading" translate>Your bitcoin wallet is backed up!</div>
+    <div class="modal-message" translate>
       Be sure to store your recovery phrase in a secure place. If this app is deleted, your money cannot be recovered without it.
     </div>
     <div modal-confirm-text translate>Got it</div>

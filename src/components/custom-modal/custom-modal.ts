@@ -8,8 +8,7 @@ import {
 } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
 import { Subject } from 'rxjs/Subject';
-import { CustomModalContent } from './custom-modal-content';
-import { CUSTOM_MODAL_TAGS } from './custom-modal-tags';
+import { CustomModalContent, ModalCancelText } from './custom-modal-content';
 
 @Component({
   selector: 'custom-modal',
@@ -38,5 +37,5 @@ export class CustomModalComponent {
 export const CUSTOM_MODAL_COMPONENTS = [
   CustomModalComponent,
   CustomModalContent,
-  CUSTOM_MODAL_TAGS
+  ModalCancelText
 ];

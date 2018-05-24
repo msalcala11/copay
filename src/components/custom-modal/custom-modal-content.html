@@ -1,19 +1,14 @@
 <div class="height-content">
   <div class="modal-img" #imageContainer>
-    <ng-content select="custom-modal-icon" *ngIf="customIcon"></ng-content>
-    <img src="assets/img/icon-warning.svg" *ngIf="!customIcon">
+    <ng-content select="[modal-icon]"></ng-content>
   </div>
   <div class="modal-content">
-    <div class="modal-heading">
-      <ng-content select="[modal-heading]"></ng-content>
-    </div>
-    <div class="modal-message">
-      <ng-content select="[modal-message]"></ng-content>
-    </div>
+    <ng-content select=".modal-heading"></ng-content>
+    <ng-content select=".modal-message"></ng-content>
     <ion-row justify-content-center>
-      <ion-col *ngIf="cancelButtonText">
+      <ion-col *ngIf="modalCancelText">
         <button ion-button clear [color]="type" (click)="close(false)">
-          <ng-content select="custom-modal-cancel-text"></ng-content>
+          <ng-content select="modal-cancel-text"></ng-content>
         </button>
       </ion-col>
       <ion-col>
