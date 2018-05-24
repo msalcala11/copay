@@ -1,33 +1,7 @@
-import {
-  CustomModalButtonCancel,
-  CustomModalButtonConfirm,
-  CustomModalComponent,
-  CustomModalContent,
-  CustomModalHeading,
-  CustomModalIcon,
-  CustomModalMessage
-} from './custom-modal/custom-modal';
-import {
-  ExpandableHeaderComponent,
-  ExpandableHeaderFooterComponent,
-  ExpandableHeaderPrimaryComponent
-} from './expandable-header/expandable-header';
-
-const EXPANDABLE_HEADER_COMPONENTS = [
-  ExpandableHeaderComponent,
-  ExpandableHeaderFooterComponent,
-  ExpandableHeaderPrimaryComponent
-];
+import { CUSTOM_MODAL_COMPONENTS } from './custom-modal/custom-modal';
+import { EXPANDABLE_HEADER_COMPONENTS } from './expandable-header/expandable-header';
 
 export const COMPONENTS = [
-  CustomModalButtonCancel,
-  CustomModalButtonConfirm,
-  CustomModalComponent,
-  CustomModalContent,
-  CustomModalHeading,
-  CustomModalIcon,
-  CustomModalMessage,
+  CUSTOM_MODAL_COMPONENTS,
   EXPANDABLE_HEADER_COMPONENTS
 ];
-
-console.log('COMPONENTS', COMPONENTS);

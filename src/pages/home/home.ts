@@ -26,6 +26,7 @@ import { ActivityPage } from './activity/activity';
 import { ProposalsPage } from './proposals/proposals';
 
 // Providers
+import { CustomModalComponent } from '../../components/custom-modal/custom-modal';
 import { AddressBookProvider } from '../../providers/address-book/address-book';
 import { AppProvider } from '../../providers/app/app';
 import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
@@ -44,7 +45,6 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { ReleaseProvider } from '../../providers/release/release';
 import { ReplaceParametersProvider } from '../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../providers/wallet/wallet';
-import { CustomModalComponent } from '../../components/custom-modal/custom-modal';
 
 @Component({
   selector: 'page-home',
@@ -171,13 +171,15 @@ export class HomePage {
       });
     });
 
-    let feeWarningModal = this.modalCtrl
-      .create(
-        CustomModalComponent,
-        { modal: 'fee-warning' }
-        // { showBackdrop: false, enableBackdropDismiss: false }
-      )
-      .present();
+    let feeWarningModal = this.modalCtrl.create(
+      CustomModalComponent,
+      { modal: 'sensitive-info' },
+      { showBackdrop: false, enableBackdropDismiss: false }
+    );
+    feeWarningModal.present();
+    feeWarningModal.onDidDismiss(data => {
+      console.log('data', data);
+    });
   }
 
   private openEmailDisclaimer() {

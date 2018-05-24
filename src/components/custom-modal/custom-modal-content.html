@@ -1,31 +1,25 @@
 <div class="height-content">
-  <div class="modal-img" [ngClass]="{'background-color-warning':  type === 'warning'}">
+  <div class="modal-img" #imageContainer>
     <ng-content select="custom-modal-icon" *ngIf="customIcon"></ng-content>
     <img src="assets/img/icon-warning.svg" *ngIf="!customIcon">
   </div>
   <div class="modal-content">
-    <div class="modal-heading" translate>
+    <div class="modal-heading">
       <ng-content select="custom-modal-heading"></ng-content>
-      <!-- Bitcoin miner fees unusually high -->
     </div>
-    <div class="modal-message" translate>
+    <div class="modal-message">
       <ng-content select="custom-modal-message"></ng-content>
-
-      <!-- Bitcoin (BTC) miner fees are high due to record demand for limited space on the Bitcoin network. BitPay does not receive
-      and does not control bitcoin miner fees. -->
     </div>
     <ion-row justify-content-center>
       <ion-col *ngIf="cancelButtonText">
-        <button ion-button clear [color]="type" (click)="close()">
+        <button ion-button clear [color]="type" (click)="close(false)">
           <ng-content select="custom-modal-button-cancel"></ng-content>
         </button>
       </ion-col>
       <ion-col>
         <button ion-button clear [color]="type" (click)="close(true)">
-          <!-- {{ 'I understand' | translate }} -->
           <ng-content select="custom-modal-button-confirm"></ng-content>
         </button>
-        <!-- <ng-content select="custom-modal-button-confirm"></ng-content> -->
       </ion-col>
     </ion-row>
   </div>

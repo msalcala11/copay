@@ -1,46 +1,15 @@
-import { Component, ContentChild, Input } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  ElementRef,
+  Input,
+  Renderer,
+  ViewChild
+} from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
-
-@Component({
-  selector: 'custom-modal-icon',
-  template: `<ng-content></ng-content>`
-})
-export class CustomModalIcon {}
-
-@Component({
-  selector: 'custom-modal-heading',
-  template: `<ng-content></ng-content>`
-})
-export class CustomModalHeading {}
-
-@Component({
-  selector: 'custom-modal-message',
-  template: `<ng-content></ng-content>`
-})
-export class CustomModalMessage {}
-
-@Component({
-  selector: 'custom-modal-button-confirm',
-  template: `<ng-content></ng-content>`
-})
-export class CustomModalButtonConfirm {}
-
-@Component({
-  selector: 'custom-modal-button-cancel',
-  template: `<ng-content></ng-content>`
-})
-export class CustomModalButtonCancel {}
-
-@Component({
-  selector: 'custom-modal-content',
-  templateUrl: 'custom-modal-content.html'
-})
-export class CustomModalContent {
-  @Input() type: string = 'warning';
-  @ContentChild(CustomModalButtonCancel)
-  cancelButtonText: CustomModalButtonCancel;
-  @ContentChild(CustomModalIcon) customIcon: CustomModalIcon;
-}
+import { Subject } from 'rxjs/Subject';
+import { CustomModalContent } from './custom-modal-content';
+import { CUSTOM_MODAL_TAGS } from './custom-modal-tags';
 
 @Component({
   selector: 'custom-modal',
@@ -49,21 +18,25 @@ export class CustomModalContent {
 export class CustomModalComponent {
   modal: string;
 
+  @ViewChild(CustomModalContent) modalContent: CustomModalContent;
+
   constructor(private viewCtrl: ViewController, private navParams: NavParams) {
     this.modal = this.navParams.get('modal');
   }
 
-  public close(data): void {
-    this.viewCtrl.dismiss(data, null, { animate: false });
+  ngAfterViewInit() {
+    this.modalContent.action.subscribe(confirm => {
+      this.close(confirm);
+    });
+  }
+
+  public close(confirm: boolean): void {
+    this.viewCtrl.dismiss(confirm, null, { animate: false });
   }
 }
 
-// export const CUSTOM_MODAL_COMPONENTS = [
-//   CustomModalComponent,
-//   CustomModalContent,
-//   CustomModalIcon,
-//   CustomModalHeading,
-//   CustomModalMessage,
-//   CustomModalButtonConfirm,
-//   CustomModalButtonCancel
-// ];
+export const CUSTOM_MODAL_COMPONENTS = [
+  CustomModalComponent,
+  CustomModalContent,
+  CUSTOM_MODAL_TAGS
+];

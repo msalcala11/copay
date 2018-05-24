@@ -33,8 +33,6 @@ import { NavbarBg } from '../directives/navbar-bg/navbar-bg';
 import { NoLowFee } from '../directives/no-low-fee/no-low-fee';
 
 /* Components */
-// import { ComponentsModule } from './../components/components.module';
-
 import { COMPONENTS } from './../components/components';
 
 /* Providers */
