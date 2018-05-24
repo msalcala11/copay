@@ -342,22 +342,27 @@ export class WalletDetailsPage {
       });
     });
   }
-<<<<<<< HEAD
   public close() {
     // console.log('this.navCtrl', this.navCtrl);
     this.navCtrl.parent.viewCtrl.dismiss();
     // this.navCtrl.parent.viewCtrl.pop();
   }
-=======
 
   public openExternalLink(url: string): void {
     let optIn = true;
     let title = null;
-    let message = this.translate.instant('Help and support information is available at the website.');
+    let message = this.translate.instant(
+      'Help and support information is available at the website.'
+    );
     let okText = this.translate.instant('Open');
     let cancelText = this.translate.instant('Go Back');
-    this.externalLinkProvider.open(url, optIn, title, message, okText, cancelText);
+    this.externalLinkProvider.open(
+      url,
+      optIn,
+      title,
+      message,
+      okText,
+      cancelText
+    );
   }
-
->>>>>>> 9dbb0cc149be4eb628c71645871102752b747d03
 }
