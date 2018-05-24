@@ -170,16 +170,6 @@ export class HomePage {
         this.bitpayCardItems = cards;
       });
     });
-
-    let feeWarningModal = this.modalCtrl.create(
-      CustomModalComponent,
-      { modal: 'sensitive-info' },
-      { showBackdrop: false, enableBackdropDismiss: false }
-    );
-    feeWarningModal.present();
-    feeWarningModal.onDidDismiss(data => {
-      console.log('data', data);
-    });
   }
 
   private openEmailDisclaimer() {
