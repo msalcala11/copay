@@ -1,50 +1,52 @@
 <ion-content class="popup-modal" no-bounce [ngSwitch]="modal">
 
   <custom-modal-content *ngSwitchCase="'fee-warning'" [type]="'danger'">
-    <custom-modal-heading translate>Bitcoin miner fees unusually high</custom-modal-heading>
-    <custom-modal-message translate>Bitcoin (BTC) miner fees are high due to record demand for limited space on the Bitcoin network. BitPay does not receive
-      and does not control bitcoin miner fees.</custom-modal-message>
-    <custom-modal-button-confirm translate>I understand</custom-modal-button-confirm>
+    <div modal-heading translate>Bitcoin miner fees unusually high</div>
+    <div modal-message translate>Bitcoin (BTC) miner fees are high due to record demand for limited space on the Bitcoin network. BitPay does not receive
+      and does not control bitcoin miner fees.</div>
+    <div modal-confirm-text translate>I understand</div>
   </custom-modal-content>
 
   <custom-modal-content *ngSwitchCase="'sensitive-info'">
-    <custom-modal-heading translate>Sensitive Data</custom-modal-heading>
-    <custom-modal-message translate>
+    <div modal-heading translate>Sensitive Data</div>
+    <div modal-message translate>
       The information you are about to share/export may contain sensitive data such us wallet IDs, addresses, balances, etc. Although
       this is not critical, please be careful and make sure you trust the person or entity you are sharing this information
       with.
-    </custom-modal-message>
-    <custom-modal-button-cancel translate>Go Back</custom-modal-button-cancel>
-    <custom-modal-button-confirm translate>I understand</custom-modal-button-confirm>
+    </div>
+    <custom-modal-cancel-text translate>Go Back</custom-modal-cancel-text>
+    <div modal-confirm-text translate>I understand</div>
   </custom-modal-content>
 
   <custom-modal-content *ngSwitchCase="'backup-warning'">
     <custom-modal-icon>
       <img src="assets/img/no-screenshot.svg">
     </custom-modal-icon>
-    <custom-modal-heading translate>Screenshots are not secure</custom-modal-heading>
-    <custom-modal-message translate>
+    <div modal-heading translate>Screenshots are not secure</div>
+    <div modal-message translate>
       If you take a screenshot, your backup may be viewed by other apps. You can make a safe backup with physical paper and a pen.
-    </custom-modal-message>
-    <custom-modal-button-cancel translate>Go Back</custom-modal-button-cancel>
-    <custom-modal-button-confirm transltae>I understand</custom-modal-button-confirm>
+    </div>
+    <custom-modal-cancel-text translate>Go Back</custom-modal-cancel-text>
+    <div modal-confirm-text translate>I understand</div>
   </custom-modal-content>
 
   <custom-modal-content *ngSwitchCase="'backup-needed'">
-    <custom-modal-heading translate>Backup Needed</custom-modal-heading>
-    <custom-modal-message translate>
+    <div modal-heading translate>Backup Needed</div>
+    <div modal-message translate>
       Now is a good time to backup your wallet. If this device is lost, it is impossible to access your funds without a backup.
-    </custom-modal-message>
-    <custom-modal-button-cancel translate>Do it later</custom-modal-button-cancel>
-    <custom-modal-button-confirm translate>I understand</custom-modal-button-confirm>
+    </div>
+    <custom-modal-cancel-text translate>Do it later</custom-modal-cancel-text>
+    <div modal-confirm-text translate>I understand</div>
   </custom-modal-content>
 
   <custom-modal-content *ngSwitchCase="'backup-ready'" [type]="'success'">
     <custom-modal-icon>
       <img src="assets/img/onboarding-success.svg"> </custom-modal-icon>
-    <custom-modal-heading translate>Your bitcoin wallet is backed up!</custom-modal-heading>
-    <custom-modal-message translate>
+    <div modal-heading translate>Your bitcoin wallet is backed up!</div>
+    <div modal-message translate>
       Be sure to store your recovery phrase in a secure place. If this app is deleted, your money cannot be recovered without it.
-    </custom-modal-message>
-    <custom-modal-button-confirm translate>Got it</custom-modal-button-confirm>
+    </div>
+    <div modal-confirm-text translate>Got it</div>
   </custom-modal-content>
+
+</ion-content>

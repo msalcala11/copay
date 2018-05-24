@@ -5,20 +5,20 @@
   </div>
   <div class="modal-content">
     <div class="modal-heading">
-      <ng-content select="custom-modal-heading"></ng-content>
+      <ng-content select="[modal-heading]"></ng-content>
     </div>
     <div class="modal-message">
-      <ng-content select="custom-modal-message"></ng-content>
+      <ng-content select="[modal-message]"></ng-content>
     </div>
     <ion-row justify-content-center>
       <ion-col *ngIf="cancelButtonText">
         <button ion-button clear [color]="type" (click)="close(false)">
-          <ng-content select="custom-modal-button-cancel"></ng-content>
+          <ng-content select="custom-modal-cancel-text"></ng-content>
         </button>
       </ion-col>
       <ion-col>
         <button ion-button clear [color]="type" (click)="close(true)">
-          <ng-content select="custom-modal-button-confirm"></ng-content>
+          <ng-content select="[modal-confirm-text]"></ng-content>
         </button>
       </ion-col>
     </ion-row>

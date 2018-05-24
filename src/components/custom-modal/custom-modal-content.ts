@@ -7,7 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { CustomModalButtonCancel, CustomModalIcon } from './custom-modal-tags';
+import { CustomModalCancelText, CustomModalIcon } from './custom-modal-tags';
 
 @Component({
   selector: 'custom-modal-content',
@@ -15,9 +15,8 @@ import { CustomModalButtonCancel, CustomModalIcon } from './custom-modal-tags';
 })
 export class CustomModalContent {
   @Input() type: 'danger' | 'warning' | 'success' = 'warning';
-  @ContentChild(CustomModalButtonCancel)
-  cancelButtonText: CustomModalButtonCancel;
-  @ContentChild(CustomModalIcon) customIcon: CustomModalIcon;
+  @ContentChild(CustomModalCancelText) cancelButtonText: CustomModalCancelText;
+  @ContentChild(CustomModalIcon) customIcon: ElementRef;
   @ViewChild('imageContainer') imageContainer: ElementRef;
 
   private actionSubject = new Subject<boolean>();
