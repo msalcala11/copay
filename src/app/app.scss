@@ -95,13 +95,19 @@ ion-spinner * {
   align-items: center;
 }
 
-.tabbar .tab-button {
-  max-width: 80px;
-}
+.tabbar {
+  justify-content: center;
+  padding-top: 5px;
 
-// Prevent the names of the tabs from disappearing
-.tabbar .tab-button .tab-button-text {
-  display: block;
+  .tab-button {
+    max-width: 15vw;
+    min-width: 80px;
+
+    // Prevent the names of the tabs from disappearing
+    .tab-button-text {
+      display: block;
+    }
+  }
 }
 
 // Remove border of icons when screen resolution is big

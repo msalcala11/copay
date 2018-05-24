@@ -302,6 +302,12 @@ export class ScanPage {
       });
   }
 
+  public close() {
+    // console.log('this.navCtrl', this.navCtrl);
+    this.navCtrl.pop({ animate: false });
+    // this.navCtrl.parent.viewCtrl.pop();
+  }
+
   handleQrCodeResult(resultString: string) {
     this.scanner.resetScan();
     setTimeout(() => {

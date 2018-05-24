@@ -45,6 +45,7 @@ import { ReleaseProvider } from '../../providers/release/release';
 import { ReplaceParametersProvider } from '../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../providers/wallet/wallet';
 import { TabsPage } from '../tabs/tabs';
+import { ScanPage } from '../scan/scan';
 
 @Component({
   selector: 'page-home',
@@ -457,10 +458,30 @@ export class HomePage {
     //   walletId: wallet.credentials.walletId
     // });
     this.modalCtrl
-      .create(TabsPage, {
-        walletId: wallet.credentials.walletId
-      })
+      .create(
+        TabsPage,
+        {
+          walletId: wallet.credentials.walletId
+        },
+        {
+          cssClass: 'fullscreen-modal'
+        }
+      )
       .present();
+  }
+
+  public scan() {
+    this.modalCtrl
+      .create(
+        ScanPage,
+        // {
+        //   walletId: wallet.credentials.walletId
+        // },
+        {
+          cssClass: 'fullscreen-modal'
+        }
+      )
+      .present({ animate: false });
   }
 
   public openNotificationModal(n: any) {
