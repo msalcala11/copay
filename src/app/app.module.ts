@@ -71,7 +71,6 @@ export function createTranslateLoader(http: HttpClient) {
       backButtonText: ''
     }),
     BrowserModule,
-    // ComponentsModule,
     HttpClientModule,
     MomentModule,
     NgxQRCodeModule,
