@@ -7,7 +7,6 @@ import {
   ViewChild
 } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
-import { Subject } from 'rxjs/Subject';
 import { CustomModalContent, ModalCancelText } from './custom-modal-content';
 
 @Component({

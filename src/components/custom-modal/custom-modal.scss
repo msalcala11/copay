@@ -6,12 +6,9 @@ custom-modal {
     width: 90%;
     height: 360px;
     max-width: 350px;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    transform: translate3d(-50%, -50%, 0);
     border-radius: 12px;
     text-align: center;
-    overflow: hidden;
-    -webkit-box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
     box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
     .modal-img {
       position: absolute;
