@@ -1,19 +1,20 @@
-custom-modal {
+custom-modal.ion-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   .popup-modal {
     background: #fff;
     top: 50% !important;
     left: 50%;
     width: 90%;
-    height: 360px;
     max-width: 350px;
-    transform: translate3d(-50%, -50%, 0);
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
     .modal-img {
-      position: absolute;
       width: 100%;
-      padding: 1rem;
+      padding: 2.5rem;
       border-radius: 12px 12px 0px 0px;
       img {
         height: 70px;
@@ -26,18 +27,25 @@ custom-modal {
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding-top: 10rem;
+      padding: 2rem 2.5rem 1.3rem;
       .modal-heading {
-        padding: 1rem 2rem 1rem 2rem;
-        font-size: 18px;
+        font-size: 22px;
+        font-weight: 500;
+        line-height: 28px;
+        margin: 1rem;
+        // color: #4a4a4a;
       }
       .modal-message {
-        padding: 1rem 2rem 1rem 2rem;
-        font-size: 12.5px;
+        font-size: 16px;
+        font-weight: 100;
         line-height: 22px;
+        margin: 2rem;
+        // color: #4a4a4a;
       }
-      .button-standard {
+      .button {
         margin: 0;
+        margin-top: -1.3rem;
+        font-size: 21px;
       }
     }
   }
