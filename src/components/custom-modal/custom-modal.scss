@@ -13,11 +13,14 @@ custom-modal.ion-page {
     text-align: center;
     box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
     .modal-img {
+      display: flex;
+      justify-content: center;
       width: 100%;
-      padding: 2.5rem;
+      padding: 3rem;
       border-radius: 12px 12px 0px 0px;
       img {
-        height: 70px;
+        display: block;
+        height: 95px;
       }
     }
     .modal-content {
