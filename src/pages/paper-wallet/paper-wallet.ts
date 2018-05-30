@@ -3,7 +3,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { Events, ModalController, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 
+// pages
+import { FinishModalPage } from '../finish/finish';
+
 // providers
+import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { BwcProvider } from '../../providers/bwc/bwc';
 import { FeeProvider } from '../../providers/fee/fee';
 import { Logger } from '../../providers/logger/logger';
@@ -12,7 +16,6 @@ import { PlatformProvider } from '../../providers/platform/platform';
 import { PopupProvider } from '../../providers/popup/popup';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { WalletProvider } from '../../providers/wallet/wallet';
-import { FinishModalPage } from '../finish/finish';
 
 @Component({
   selector: 'page-paper-wallet',
@@ -28,11 +31,12 @@ export class PaperWalletPage {
   public totalBalanceStr: string;
   public network: string;
   public wallets: any;
+  // All coins for which we have a usable wallet to sweep to
+  public coins: string[];
   public scannedKey: string;
   public isPkEncrypted: boolean;
   public passphrase: string;
-  public privateKey: string;
-  public balanceSat: number;
+  public balances: any[] = [];
   public noMatchingWallet: boolean;
   public balanceHidden: boolean;
   public error: boolean;
@@ -56,18 +60,11 @@ export class PaperWalletPage {
     private modalCtrl: ModalController,
     private translate: TranslateService,
     private platformProvider: PlatformProvider,
+    private bwcErrorProvider: BwcErrorProvider
   ) {
     this.bitcore = this.bwcProvider.getBitcore();
     this.isCordova = this.platformProvider.isCordova;
-  }
-
-  ionViewWillLeave() {
-    this.navCtrl.swipeBackEnabled = true;
-  }
-
-  ionViewWillEnter() {
     this.isOpenSelector = false;
-    this.navCtrl.swipeBackEnabled = false;
     this.scannedKey = this.navParams.data.privateKey;
     this.isPkEncrypted = this.scannedKey ? (this.scannedKey.substring(0, 2) == '6P') : null;
     this.error = false;
@@ -80,6 +77,18 @@ export class PaperWalletPage {
       return !wallet.needsBackup;
     });
 
+    this.coins = _.uniq(_.map(this.wallets, (wallet: any) => wallet.coin));
+  }
+
+  ionViewWillLeave() {
+    this.navCtrl.swipeBackEnabled = true;
+  }
+
+  ionViewWillEnter() {
+    this.navCtrl.swipeBackEnabled = false;
+  }
+
+  ionViewDidEnter() {
     if (!this.wallets || !this.wallets.length) {
       this.noMatchingWallet = true;
       return;
@@ -96,7 +105,9 @@ export class PaperWalletPage {
       }
       this.popupProvider.ionicPrompt(null, message, opts).then((res) => {
         this.passphrase = res;
-        this.scanFunds();
+        setTimeout(() => {
+          this.scanFunds();
+        }, 200);
       });
     }
   }
@@ -106,8 +117,8 @@ export class PaperWalletPage {
     this.wallet.decryptBIP38PrivateKey(scannedKey, passphrase, null, cb);
   }
 
-  private getBalance(privateKey: string, cb: (err: any, balance: number) => any): void {
-    this.wallet.getBalanceFromPrivateKey(privateKey, cb);
+  private getBalance(privateKey: string, coin: string, cb: (err: any, balance: number) => any): void {
+    this.wallet.getBalanceFromPrivateKey(privateKey, coin, cb);
   }
 
   private checkPrivateKey(privateKey: string): boolean {
@@ -119,52 +130,74 @@ export class PaperWalletPage {
     return true;
   };
 
-  private _scanFunds(): Promise<any> {
+  private _scanFunds(coin: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.getPrivateKey(this.scannedKey, this.isPkEncrypted, this.passphrase, (err: any, privateKey: string) => {
         if (err) return reject(err);
         if (!this.checkPrivateKey(privateKey)) return reject(new Error('Invalid private key'));
 
-        this.getBalance(privateKey, (err: any, balance: number) => {
+        this.getBalance(privateKey, coin, (err: any, balance: number) => {
           if (err) return reject(err);
-          return resolve({ privateKey, balance });
+          return resolve({ privateKey, coin, balance });
         });
       });
     });
   }
 
-  public scanFunds() {
+  public scanFunds(): void {
     this.onGoingProcessProvider.set('scanning');
-    this._scanFunds().then((data) => {
+
+    let scans: any[] = _.map(this.coins, (coin: string) => this._scanFunds(coin));
+
+    Promise.all(scans).then(data => {
       this.onGoingProcessProvider.clear();
-      this.privateKey = data.privateKey;
-      this.balanceSat = data.balance;
-      if (this.balanceSat <= 0) {
-        this.popupProvider.ionicAlert('Error', this.translate.instant('Not funds found'));
+
+      _.each(data, d => { this.balances.push(d); });
+
+      let available: any = {};
+      this.balances = _.filter(_.clone(this.balances), b => {
+        let nonzero: boolean = b.balance > 0;
+        available[b.coin] = nonzero;
+        return nonzero;
+      });
+
+      this.wallets = _.filter(_.clone(this.wallets), w => available[w.coin]);
+
+      this.wallet = this.wallets[0];
+
+      if (this.balances.length == 0) {
+        this.popupProvider.ionicAlert('Error', this.translate.instant('No funds found'));
+
         this.navCtrl.pop();
       }
     }).catch((err: any) => {
       this.onGoingProcessProvider.clear();
       this.logger.error(err);
-      this.popupProvider.ionicAlert(this.translate.instant('Error scanning funds:'), err || err.toString());
+      this.popupProvider.ionicAlert(this.translate.instant('Error scanning funds:'), this.bwcErrorProvider.msg(err));
       this.navCtrl.pop();
     });
   }
 
   private _sweepWallet(): Promise<any> {
     return new Promise((resolve, reject) => {
+      let balanceToSweep: any = _.filter(this.balances, b => {
+        return b.coin === this.wallet.coin;
+      })[0];
+
       this.walletProvider.getAddress(this.wallet, true).then((destinationAddress: string) => {
-        this.wallet.buildTxFromPrivateKey(this.privateKey, destinationAddress, null, (err: any, testTx: any) => {
+        let opts: any = {};
+        opts.coin = balanceToSweep.coin;
+        this.wallet.buildTxFromPrivateKey(balanceToSweep.privateKey, destinationAddress, opts, (err: any, testTx: any) => {
           if (err) return reject(err);
           let rawTxLength = testTx.serialize().length;
-          this.feeProvider.getCurrentFeeRate('btc', 'livenet').then((feePerKb: number) => {
-            let opts: any = {};
+          this.feeProvider.getCurrentFeeRate(balanceToSweep.coin, 'livenet').then((feePerKb: number) => {
             opts.fee = Math.round((feePerKb * rawTxLength) / 2000);
-            this.wallet.buildTxFromPrivateKey(this.privateKey, destinationAddress, opts, (err: any, tx: any) => {
+            this.wallet.buildTxFromPrivateKey(balanceToSweep.privateKey, destinationAddress, opts, (err: any, tx: any) => {
               if (err) return reject(err);
               this.wallet.broadcastRawTx({
                 rawTx: tx.serialize(),
-                network: 'livenet'
+                network: 'livenet',
+                coin: balanceToSweep.coin
               }, (err, txid) => {
                 if (err) return reject(err);
                 return resolve({ destinationAddress, txid });
@@ -185,8 +218,9 @@ export class PaperWalletPage {
       this.logger.debug('Success sweep. Destination address:' + data.destinationAddress + ' - transaction id: ' + data.txid);
       this.openFinishModal();
     }).catch((err: any) => {
+      this.onGoingProcessProvider.clear();
       this.logger.error(err);
-      this.popupProvider.ionicAlert(this.translate.instant('Error sweeping wallet:'), err || err.toString());
+      this.popupProvider.ionicAlert(this.translate.instant('Error sweeping wallet:'), this.bwcErrorProvider.msg(err));
     });
   }
 

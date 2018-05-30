@@ -506,7 +506,7 @@ export class ConfirmPage {
             let feeWarningModal = this.modalCtrl.create(
               CustomModalComponent,
               { modal: 'fee-warning' },
-              { showBackdrop: false, enableBackdropDismiss: false }
+              { cssClass: 'fullscreen-modal' }
             );
             feeWarningModal.present();
           }
@@ -647,6 +647,12 @@ export class ConfirmPage {
       }
       txp.excludeUnconfirmedUtxos = !tx.spendUnconfirmed;
       txp.dryRun = dryRun;
+
+      if (tx.recipientType == 'wallet') {
+        txp.customData = {
+          toWalletName: tx.name ? tx.name : null
+        };
+      }
 
       this.walletProvider
         .createTx(wallet, txp)

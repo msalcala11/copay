@@ -67,7 +67,9 @@ export class BackupGamePage {
     this.fromOnboarding = this.navParams.get('fromOnboarding');
     this.wallet = this.profileProvider.getWallet(this.walletId);
     this.credentialsEncrypted = this.wallet.isPrivKeyEncrypted();
+  }
 
+  ionViewDidEnter() {
     this.deleted = this.isDeletedSeed();
     if (this.deleted) {
       this.logger.debug('no mnemonics');
@@ -255,7 +257,7 @@ export class BackupGamePage {
         let modal = this.modalCtrl.create(
           CustomModalComponent,
           { modal: 'backup-ready' },
-          { showBackdrop: false, enableBackdropDismiss: false }
+          { cssClass: 'fullscreen-modal' }
         );
         modal.present({ animate: false });
         modal.onDidDismiss(() => {
