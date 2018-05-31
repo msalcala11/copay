@@ -11,7 +11,7 @@ import {
 import { SocialSharing } from '@ionic-native/social-sharing';
 
 // components
-import { CustomModalComponent } from '../../../../components/custom-modal/custom-modal';
+import { MiniModalComponent } from '../../../../components/mini-modal/mini-modal';
 
 // providers
 import { ConfigProvider } from '../../../../providers/config/config';
@@ -153,7 +153,7 @@ export class SessionLogPage {
 
   private showWarningModal() {
     let sessionLogWarningModal = this.modalCtrl.create(
-      CustomModalComponent,
+      MiniModalComponent,
       { modal: 'sensitive-info' },
       { cssClass: 'fullscreen-modal' }
     );

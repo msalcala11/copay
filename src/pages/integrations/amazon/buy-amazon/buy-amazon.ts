@@ -11,7 +11,7 @@ import * as moment from 'moment';
 import { Logger } from '../../../../providers/logger/logger';
 
 // Components
-import { CustomModalComponent } from '../../../../components/custom-modal/custom-modal';
+import { MiniModalComponent } from '../../../../components/mini-modal/mini-modal';
 
 // Pages
 import { FinishModalPage } from '../../../finish/finish';
@@ -144,7 +144,7 @@ export class BuyAmazonPage {
 
     if (per > this.FEE_TOO_HIGH_LIMIT_PER) {
       let feeWarningModal = this.modalCtrl.create(
-        CustomModalComponent,
+        MiniModalComponent,
         { modal: 'fee-warning' },
         { cssClass: 'fullscreen-modal' }
       );

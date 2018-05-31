@@ -15,10 +15,10 @@ import { Subject } from 'rxjs/Subject';
 export class ModalCancelText {}
 
 @Component({
-  selector: 'custom-modal-content',
-  templateUrl: 'custom-modal-content.html'
+  selector: 'mini-modal-content',
+  templateUrl: 'mini-modal-content.html'
 })
-export class CustomModalContent {
+export class MiniModalContent {
   @Input() type: 'danger' | 'warning' | 'success' = 'warning';
   @ContentChild(ModalCancelText) modalCancelText: ModalCancelText;
   @ViewChild('imageContainer') imageContainer: ElementRef;

@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 import { Logger } from '../../../providers/logger/logger';
 
 // Components
-import { CustomModalComponent } from '../../../components/custom-modal/custom-modal';
+import { MiniModalComponent } from '../../../components/mini-modal/mini-modal';
 
 // Pages
 import { FinishModalPage } from '../../finish/finish';
@@ -504,7 +504,7 @@ export class ConfirmPage {
 
           if (txp.feeTooHigh) {
             let feeWarningModal = this.modalCtrl.create(
-              CustomModalComponent,
+              MiniModalComponent,
               { modal: 'fee-warning' },
               { cssClass: 'fullscreen-modal' }
             );

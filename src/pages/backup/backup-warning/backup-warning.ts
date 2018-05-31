@@ -10,7 +10,7 @@ import {
 import { BackupGamePage } from '../backup-game/backup-game';
 
 // components
-import { CustomModalComponent } from '../../../components/custom-modal/custom-modal';
+import { MiniModalComponent } from '../../../components/mini-modal/mini-modal';
 
 @Component({
   selector: 'page-backup-warning',
@@ -33,7 +33,7 @@ export class BackupWarningPage {
 
   public openWarningModal(): void {
     let BackupWarningModal = this.modalCtrl.create(
-      CustomModalComponent,
+      MiniModalComponent,
       { modal: 'backup-warning' },
       { cssClass: 'fullscreen-modal' }
     );

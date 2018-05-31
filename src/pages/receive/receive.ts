@@ -17,7 +17,7 @@ import { AmountPage } from '../send/amount/amount';
 import { CopayersPage } from './../add/copayers/copayers';
 
 // Components
-import { CustomModalComponent } from '../../components/custom-modal/custom-modal';
+import { MiniModalComponent } from '../../components/mini-modal/mini-modal';
 
 // Providers
 import { AddressProvider } from '../../providers/address/address';
@@ -152,7 +152,7 @@ export class ReceivePage {
 
   public goToBackup(): void {
     let BackupWarningModal = this.modalCtrl.create(
-      CustomModalComponent,
+      MiniModalComponent,
       { modal: 'backup-needed' },
       { cssClass: 'fullscreen-modal' }
     );

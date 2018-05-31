@@ -7,16 +7,16 @@ import {
   ViewChild
 } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
-import { CustomModalContent, ModalCancelText } from './custom-modal-content';
+import { MiniModalContent, ModalCancelText } from './mini-modal-content';
 
 @Component({
-  selector: 'custom-modal',
-  templateUrl: 'custom-modal.html'
+  selector: 'mini-modal',
+  templateUrl: 'mini-modal.html'
 })
-export class CustomModalComponent {
+export class MiniModalComponent {
   modal: string;
 
-  @ViewChild(CustomModalContent) modalContent: CustomModalContent;
+  @ViewChild(MiniModalContent) modalContent: MiniModalContent;
 
   constructor(private viewCtrl: ViewController, private navParams: NavParams) {
     this.modal = this.navParams.get('modal');
@@ -33,8 +33,8 @@ export class CustomModalComponent {
   }
 }
 
-export const CUSTOM_MODAL_COMPONENTS = [
-  CustomModalComponent,
-  CustomModalContent,
+export const MINI_MODAL_COMPONENTS = [
+  MiniModalComponent,
+  MiniModalContent,
   ModalCancelText
 ];

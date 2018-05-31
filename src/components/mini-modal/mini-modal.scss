@@ -1,10 +1,10 @@
-custom-modal.ion-page {
+mini-modal.ion-page {
   @include center;
   overflow-y: scroll;
 
   $short-screen-height: 600px;
 
-  .popup-modal {
+  .mini-modal {
     $modal-border-radius: 8px;
     background: #fff;
     border-radius: $modal-border-radius;

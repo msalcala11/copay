@@ -15,7 +15,7 @@ import { Logger } from '../../../providers/logger/logger';
 import { DisclaimerPage } from '../../onboarding/disclaimer/disclaimer';
 
 // components
-import { CustomModalComponent } from '../../../components/custom-modal/custom-modal';
+import { MiniModalComponent } from '../../../components/mini-modal/mini-modal';
 
 // providers
 import { BwcProvider } from '../../../providers/bwc/bwc';
@@ -255,7 +255,7 @@ export class BackupGamePage {
       .then(() => {
         this.onGoingProcessProvider.clear();
         let modal = this.modalCtrl.create(
-          CustomModalComponent,
+          MiniModalComponent,
           { modal: 'backup-ready' },
           { cssClass: 'fullscreen-modal' }
         );
