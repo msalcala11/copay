@@ -1,42 +1,36 @@
 custom-modal.ion-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include center;
 
   .popup-modal {
+    $modal-border-radius: 8px;
     background: #fff;
-    top: 50% !important;
-    left: 50%;
-    width: 90%;
-    max-width: 350px;
-    border-radius: 8px;
-    text-align: center;
+    border-radius: $modal-border-radius;
     box-shadow: 0 2px 22px 0 rgba(0, 0, 0, 0.38);
+    max-width: 350px;
+    text-align: center;
+    width: 90%;
 
     .modal-img {
-      display: flex;
-      justify-content: center;
-      width: 100%;
+      @include center;
+      border-radius: $modal-border-radius $modal-border-radius 0px 0px;
       padding: 3rem;
-      border-radius: 8px 8px 0px 0px;
+      width: 100%;
       img {
         display: block;
         height: 95px;
       }
     }
     .modal-content {
-      height: 100%;
-      display: flex;
+      @include center;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      height: 100%;
       padding: 2rem 1.5rem;
+      $content-margin: 1.2rem;
       .modal-heading {
         font-size: 22px;
         font-weight: 500;
         line-height: 28px;
-        margin: 1.2rem;
+        margin: $content-margin;
         padding: 0 0.5rem;
         color: $text-color;
       }
@@ -44,20 +38,17 @@ custom-modal.ion-page {
         font-size: 16px;
         font-weight: 100;
         line-height: 22px;
-        margin: 1.2rem;
+        margin: $content-margin;
         color: $text-color;
       }
       .button {
         margin: 0;
         font-size: 21px;
         font-weight: 500;
-        height: 3.6rem;
+        height: 3 * $content-margin;
         font-weight: 500;
       }
     }
-  }
-  .height-content {
-    height: 100%;
   }
   .background-color-warning {
     background-color: color($colors, warning);
