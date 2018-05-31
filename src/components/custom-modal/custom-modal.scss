@@ -1,5 +1,8 @@
 custom-modal.ion-page {
   @include center;
+  overflow-y: scroll;
+
+  $short-screen-height: 600px;
 
   .popup-modal {
     $modal-border-radius: 8px;
@@ -18,6 +21,10 @@ custom-modal.ion-page {
       img {
         display: block;
         height: 95px;
+
+        @media (max-height: $short-screen-height) {
+          height: 70px;
+        }
       }
     }
     .modal-content {
@@ -47,6 +54,10 @@ custom-modal.ion-page {
         font-weight: 500;
         height: 3 * $content-margin;
         font-weight: 500;
+
+        @media (max-height: $short-screen-height) {
+          font-size: 17px;
+        }
       }
     }
   }
