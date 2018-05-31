@@ -9,12 +9,14 @@ describe('ImportWalletPage', () => {
 
   beforeEach(
     async(() => {
-      return TestUtils.configurePageTestingModule([ImportWalletPage]).then(testEnv => {
-        fixture = testEnv.fixture;
-        instance = testEnv.instance;
-        testBed = testEnv.testBed;
-        fixture.detectChanges();
-      });
+      return TestUtils.configurePageTestingModule([ImportWalletPage]).then(
+        testEnv => {
+          fixture = testEnv.fixture;
+          instance = testEnv.instance;
+          testBed = testEnv.testBed;
+          fixture.detectChanges();
+        }
+      );
     })
   );
   afterEach(() => {

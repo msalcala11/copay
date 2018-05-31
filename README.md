@@ -175,7 +175,7 @@ Depending on the key `derivationStrategy`, addresses are derived using
 | <1.2          | All                       | BIP45               | P2SH         |
 | ≥1.2          | Non-multisig              | BIP44               | P2PKH        |
 | ≥1.2          | Multisig                  | BIP44               | P2SH         |
-| ≥1.5          | Multisig Hardware wallets | BIP44 (root m/48’) | P2SH         |
+| ≥1.5          | Multisig Hardware wallets | BIP44 (root m/48’)  | P2SH         |
 
 Using a tool like [Bitcore PlayGround](http://bitcore.io/playground) all wallet addresses can be generated. (TIP: Use the `Address` section for P2PKH address type wallets and `Multisig Address` for P2SH address type wallets). For multisig addresses, the required number of signatures (key `m` on the export) is also needed to recreate the addresses.
 

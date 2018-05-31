@@ -25,7 +25,7 @@ describe('HomePage', () => {
         instance = testEnv.instance;
         testBed = testEnv.testBed;
         instance.showCard = {
-          setShowRateCard: () => { }
+          setShowRateCard: () => {}
         };
         fixture.detectChanges();
       })
@@ -40,7 +40,8 @@ describe('HomePage', () => {
       it('should get recentTransactions enabled', () => {
         instance.ionViewWillEnter();
         const configProvider = testBed.get(ConfigProvider);
-        const recentTransactionsEnabled = configProvider.get().recentTransactions.enabled;
+        const recentTransactionsEnabled = configProvider.get()
+          .recentTransactions.enabled;
         expect(recentTransactionsEnabled).toEqual(true);
       });
       it('should not break if address book list call fails', () => {

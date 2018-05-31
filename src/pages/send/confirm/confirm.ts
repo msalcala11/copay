@@ -650,7 +650,7 @@ export class ConfirmPage {
 
       if (tx.recipientType == 'wallet') {
         txp.customData = {
-          'toWalletName': tx.name ? tx.name : null
+          toWalletName: tx.name ? tx.name : null
         };
       }
 

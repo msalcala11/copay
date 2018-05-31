@@ -71,7 +71,7 @@ describe('CopayApp', () => {
         (window as any).require = () => {
           return {
             App: {
-              on: (event, cb) => { },
+              on: (event, cb) => {},
               argv: ['URL']
             }
           };
