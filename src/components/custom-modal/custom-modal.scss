@@ -30,24 +30,27 @@ custom-modal.ion-page {
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 2rem 1.5rem 1.5rem;
+      padding: 2rem 1.5rem;
       .modal-heading {
         font-size: 22px;
         font-weight: 500;
         line-height: 28px;
         margin: 1.2rem;
         padding: 0 0.5rem;
-        // color: #4a4a4a;
+        color: $text-color;
       }
       .modal-message {
         font-size: 16px;
         font-weight: 100;
         line-height: 22px;
         margin: 1.2rem;
+        color: $text-color;
       }
       .button {
         margin: 0;
         font-size: 21px;
+        font-weight: 500;
+        height: 3.6rem;
         font-weight: 500;
       }
     }
