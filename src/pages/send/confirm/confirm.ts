@@ -498,7 +498,7 @@ export class ConfirmPage {
     return new Promise((resolve, reject) => {
       this.getTxp(_.clone(tx), wallet, opts.dryRun)
         .then((txp: any) => {
-          let per = txp.fee / (txp.amount + txp.fee) * 100;
+          let per = (txp.fee / (txp.amount + txp.fee)) * 100;
           txp.feeRatePerStr = per.toFixed(2) + '%';
           txp.feeTooHigh = per > this.FEE_TOO_HIGH_LIMIT_PER;
 

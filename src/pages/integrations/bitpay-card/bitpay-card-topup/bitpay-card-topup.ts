@@ -300,7 +300,7 @@ export class BitPayCardTopUpPage {
               {
                 toAddress: details.toAddress,
                 amount: details.amount,
-                message: message
+                message
               }
             ],
             message,
@@ -453,7 +453,7 @@ export class BitPayCardTopUpPage {
   }
 
   private checkFeeHigh(amount: number, fee: number) {
-    let per = fee / (amount + fee) * 100;
+    let per = (fee / (amount + fee)) * 100;
 
     if (per > FEE_TOO_HIGH_LIMIT_PER) {
       let feeWarningModal = this.modalCtrl.create(
