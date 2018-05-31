@@ -101,7 +101,7 @@ export class SlideToAcceptPage implements AfterViewInit {
       if (
         xDisplacement >= 0 &&
         xDisplacement <
-          this.containerWidth - this.origin.width * 15 / 100 + 30 &&
+          this.containerWidth - (this.origin.width * 15) / 100 + 30 &&
         this.isPressed
       ) {
         // Set element styles

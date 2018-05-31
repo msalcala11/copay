@@ -507,7 +507,7 @@ export class ShapeshiftConfirmPage {
                       );
 
                       // Fee rate
-                      let per = ctxp.fee / (ctxp.amount + ctxp.fee) * 100;
+                      let per = (ctxp.fee / (ctxp.amount + ctxp.fee)) * 100;
                       this.feeRatePerStr = per.toFixed(2) + '%';
 
                       // Amount + Unit

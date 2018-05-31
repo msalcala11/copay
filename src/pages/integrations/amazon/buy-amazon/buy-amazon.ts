@@ -140,7 +140,7 @@ export class BuyAmazonPage {
   }
 
   private checkFeeHigh(amount: number, fee: number) {
-    let per = fee / (amount + fee) * 100;
+    let per = (fee / (amount + fee)) * 100;
 
     if (per > this.FEE_TOO_HIGH_LIMIT_PER) {
       let feeWarningModal = this.modalCtrl.create(

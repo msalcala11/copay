@@ -142,7 +142,9 @@ export class MercadoLibreProvider {
         var status =
           data.status == 'new'
             ? 'PENDING'
-            : data.status == 'paid' ? 'PENDING' : data.status;
+            : data.status == 'paid'
+              ? 'PENDING'
+              : data.status;
         data.status = status;
         this.logger.info('Mercado Libre Gift Card Create/Update: ' + status);
         return cb(null, data);

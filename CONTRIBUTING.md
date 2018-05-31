@@ -14,7 +14,7 @@ The issue tracker is the preferred channel for [bug reports](#bugs),
 [features requests](#features), support requests (#support) and [submitting pull
 requests](#pull-requests), but please respect the following restrictions:
 
-* Please **do not** derail or troll issues. Keep the discussion on topic and
+- Please **do not** derail or troll issues. Keep the discussion on topic and
   respect the opinions of others.
 
 <a name="bugs"></a>
@@ -26,14 +26,14 @@ Good bug reports are extremely helpful - thank you!
 
 Guidelines for bug reports:
 
-1. **Use the GitHub issue search** &mdash; check if the issue has already been
-   reported.
+1.  **Use the GitHub issue search** &mdash; check if the issue has already been
+    reported.
 
-2. **Check if the issue has been fixed** &mdash; try to reproduce it using the
-   latest `master` or development branch in the repository.
+2.  **Check if the issue has been fixed** &mdash; try to reproduce it using the
+    latest `master` or development branch in the repository.
 
-3. **Isolate the problem** &mdash; create a [reduced test
-   case](http://css-tricks.com/reduced-test-cases/) and a live example.
+3.  **Isolate the problem** &mdash; create a [reduced test
+    case](http://css-tricks.com/reduced-test-cases/) and a live example.
 
 A good bug report shouldn't leave others needing to chase you up for more
 information. Please try to be as detailed as possible in your report. What is
@@ -48,9 +48,9 @@ Example:
 > A summary of the issue and the browser/OS environment in which it occurs. If
 > suitable, include the steps required to reproduce the bug.
 >
-> 1. This is the first step
-> 2. This is the second step
-> 3. Further steps, etc.
+> 1.  This is the first step
+> 2.  This is the second step
+> 3.  Further steps, etc.
 >
 > `<url>` - a link to the reduced test case
 >
@@ -80,14 +80,14 @@ Please also check our [FAQ](https://github.com/bitpay/copay/wiki/COPAY---FAQ).
 When requesting support describe the issue as much in detail as possible. Consider to
 provide the following information:
 
-* Which platform are you using? (Which device and operating system)
-* Which version of Copay are you using? (Check Copay version on the side menu)
-* Please import your wallet on a different platform. Does the problem persist?
-* What type of wallet are you using? (multisig or singlesig)
-* When the wallet was created? On which device / operating system
-* Please check Copay logs (General Settings -> About Copay -> Session Logs). Look for
+- Which platform are you using? (Which device and operating system)
+- Which version of Copay are you using? (Check Copay version on the side menu)
+- Please import your wallet on a different platform. Does the problem persist?
+- What type of wallet are you using? (multisig or singlesig)
+- When the wallet was created? On which device / operating system
+- Please check Copay logs (General Settings -> About Copay -> Session Logs). Look for
   any errors reported there (errors are shown in red)
-* If possible, please provide a screenshot of the error / issue.
+- If possible, please provide a screenshot of the error / issue.
 
 If you need to provide personal / sensitive data to solve the issue (like the Wallet Id), do not use Github Issues.
 We will provide a better channel (like an BitPay email address) so you can send the information. If possible, please

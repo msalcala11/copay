@@ -162,7 +162,7 @@ export class TxpDetailsPage {
       this.tx.fee
     );
     this.tx.feeRateStr =
-      (this.tx.fee / (this.tx.amount + this.tx.fee) * 100).toFixed(2) + '%';
+      ((this.tx.fee / (this.tx.amount + this.tx.fee)) * 100).toFixed(2) + '%';
     this.tx.feeLevelStr = this.feeProvider.feeOpts[this.tx.feeLevel];
   }
 

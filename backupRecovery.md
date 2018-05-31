@@ -8,19 +8,19 @@ Copay is a Multisig HD Wallet. Copay app holds the extended private keys for the
 
 ### Backup Formats:
 
-* Wallet recovery phrase (RP): 12 words mnemonic backup (available from Copay v1.2+). The 12 words are used as wallet seed, following BIP39 specification. The wallet RP may require a passphrase to recreate the wallet (if one was specified at creation time).
-* Wallet Backup (WB): Exported data from Copay, containing an AES encrypted JSON with many wallet parameters (like extended private key, wallet name, extended public keys of copayers, etc. See #export-format). This data can be created from Copay v1.2+ (Settings -> Advanced -> Export) and it was the default backup format on previous Copay versions. WB can be a file (standard format for Copay desktop versions) or a text (standard for Copay mobile versions).
+- Wallet recovery phrase (RP): 12 words mnemonic backup (available from Copay v1.2+). The 12 words are used as wallet seed, following BIP39 specification. The wallet RP may require a passphrase to recreate the wallet (if one was specified at creation time).
+- Wallet Backup (WB): Exported data from Copay, containing an AES encrypted JSON with many wallet parameters (like extended private key, wallet name, extended public keys of copayers, etc. See #export-format). This data can be created from Copay v1.2+ (Settings -> Advanced -> Export) and it was the default backup format on previous Copay versions. WB can be a file (standard format for Copay desktop versions) or a text (standard for Copay mobile versions).
 
 ### Backup recovery cases
 
-* Case 1: Lost of device holding the wallet
-* Case 2: Change to a new Bitcore Wallet Service (BWS)
-* Case 3: Lost device + new Bitcore Wallet Service
+- Case 1: Lost of device holding the wallet
+- Case 2: Change to a new Bitcore Wallet Service (BWS)
+- Case 3: Lost device + new Bitcore Wallet Service
 
 ### Wallet Recovery Scope
 
-* Basic Recovery: Wallet access is restored. It is possible to see wallet balance and past transactions. It is possible to send and receive payments.
-* Full Recovery: All the features of Partial Recovery + wallet name, copayer names are recovered, past payment proposal metadata (who signed, and notes) are recovered.
+- Basic Recovery: Wallet access is restored. It is possible to see wallet balance and past transactions. It is possible to send and receive payments.
+- Full Recovery: All the features of Partial Recovery + wallet name, copayer names are recovered, past payment proposal metadata (who signed, and notes) are recovered.
 
 ## Wallet Restore Scenarios
 

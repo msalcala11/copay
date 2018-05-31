@@ -188,8 +188,9 @@ export class TxDetailsPage {
         );
         this.btx.feeFiatStr = v;
         this.btx.feeRateStr =
-          (this.btx.fees / (this.btx.amount + this.btx.fees) * 100).toFixed(2) +
-          '%';
+          ((this.btx.fees / (this.btx.amount + this.btx.fees)) * 100).toFixed(
+            2
+          ) + '%';
 
         if (this.btx.action != 'invalid') {
           if (this.btx.action == 'sent')

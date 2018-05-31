@@ -235,7 +235,7 @@ export class CoinbaseProvider {
     this.feeProvider
       .getFeeRate('btc', 'livenet', 'normal')
       .then(feePerKb => {
-        var feeBTC = (feePerKb * txNormalFeeKB / 100000000).toFixed(8);
+        var feeBTC = ((feePerKb * txNormalFeeKB) / 100000000).toFixed(8);
 
         return cb(null, amount - parseInt(feeBTC, 10), parseInt(feeBTC, 10));
       })
@@ -1055,8 +1055,8 @@ export class CoinbaseProvider {
                       }
                       var newSellPrice = s.data.amount;
                       var variance = Math.abs(
-                        (newSellPrice - dataFromStorage.sell_price_amount) /
-                          dataFromStorage.sell_price_amount *
+                        ((newSellPrice - dataFromStorage.sell_price_amount) /
+                          dataFromStorage.sell_price_amount) *
                           100
                       );
                       if (variance < dataFromStorage.price_sensitivity.value) {

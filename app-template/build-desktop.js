@@ -21,8 +21,7 @@ var nw = new NwBuilder({
 // Log stuff you want
 nw.on('log', console.log);
 
-nw
-  .build()
+nw.build()
   .then(function() {
     console.log('all done!');
   })

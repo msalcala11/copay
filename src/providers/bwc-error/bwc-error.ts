@@ -9,7 +9,9 @@ export class BwcErrorProvider {
     if (!err) return 'Unknown error';
 
     const name = err.name
-      ? err.name === 'Error' ? err.message : err.name.replace(/^bwc.Error/g, '')
+      ? err.name === 'Error'
+        ? err.message
+        : err.name.replace(/^bwc.Error/g, '')
       : err;
 
     let body = '';

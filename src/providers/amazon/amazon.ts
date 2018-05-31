@@ -129,7 +129,9 @@ export class AmazonProvider {
           var status =
             data.status == 'new'
               ? 'PENDING'
-              : data.status == 'paid' ? 'PENDING' : data.status;
+              : data.status == 'paid'
+                ? 'PENDING'
+                : data.status;
           data.status = status;
           this.logger.info('Amazon.com Gift Card Create/Update: ' + status);
           return cb(null, data);

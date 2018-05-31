@@ -224,7 +224,7 @@
     "nw": "0.21.6",
     "nw-builder": "3.5.1",
     "plist": "2.1.0",
-    "prettier": "1.10.2",
+    "prettier": "^1.13.3",
     "protractor": "5.3.0",
     "reg-cli": "0.11.4",
     "serve-static": "1.13.2",

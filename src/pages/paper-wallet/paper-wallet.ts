@@ -235,7 +235,7 @@ export class PaperWalletPage {
               this.feeProvider
                 .getCurrentFeeRate(balanceToSweep.coin, 'livenet')
                 .then((feePerKb: number) => {
-                  opts.fee = Math.round(feePerKb * rawTxLength / 2000);
+                  opts.fee = Math.round((feePerKb * rawTxLength) / 2000);
                   this.wallet.buildTxFromPrivateKey(
                     balanceToSweep.privateKey,
                     destinationAddress,

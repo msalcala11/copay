@@ -120,7 +120,7 @@ export class RateProvider {
     ) {
       return null;
     }
-    return amount / this.getRate(code, chain) * this.BTC_TO_SAT;
+    return (amount / this.getRate(code, chain)) * this.BTC_TO_SAT;
   }
 
   public listAlternatives(sort: boolean) {
