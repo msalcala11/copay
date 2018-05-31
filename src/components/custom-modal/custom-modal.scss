@@ -40,6 +40,10 @@ custom-modal.ion-page {
         margin: $content-margin;
         padding: 0 0.5rem;
         color: $text-color;
+
+        @media (max-height: $short-screen-height) {
+          font-size: 20px;
+        }
       }
       .modal-message {
         font-size: 16px;

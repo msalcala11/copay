@@ -221,7 +221,7 @@ export class HomePage {
 
     let feeWarningModal = this.modalCtrl.create(
       CustomModalComponent,
-      { modal: 'backup-ready' },
+      { modal: 'fee-warning' },
       { cssClass: 'fullscreen-modal' }
     );
     feeWarningModal.present();
