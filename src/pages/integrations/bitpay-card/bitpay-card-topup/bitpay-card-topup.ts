@@ -9,9 +9,6 @@ import {
 import * as _ from 'lodash';
 import { Logger } from '../../../../providers/logger/logger';
 
-// Components
-import { MiniModalComponent } from '../../../../components/mini-modal/mini-modal';
-
 // Pages
 import { FinishModalPage } from '../../../finish/finish';
 import { BitPayCardPage } from '../bitpay-card';
@@ -456,11 +453,7 @@ export class BitPayCardTopUpPage {
     let per = (fee / (amount + fee)) * 100;
 
     if (per > FEE_TOO_HIGH_LIMIT_PER) {
-      let feeWarningModal = this.modalCtrl.create(
-        MiniModalComponent,
-        { modal: 'fee-warning' },
-        { cssClass: 'fullscreen-modal' }
-      );
+      const feeWarningModal = this.popupProvider.createMiniModal('fee-warning');
       feeWarningModal.present();
     }
   }

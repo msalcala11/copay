@@ -219,11 +219,7 @@ export class HomePage {
       this.setWallets();
     });
 
-    let feeWarningModal = this.modalCtrl.create(
-      MiniModalComponent,
-      { modal: 'fee-warning' },
-      { cssClass: 'fullscreen-modal' }
-    );
+    const feeWarningModal = this.popupProvider.createMiniModal('backup-needed');
     feeWarningModal.present();
   }
 

@@ -10,9 +10,6 @@ import {
 import * as _ from 'lodash';
 import { Logger } from '../../../providers/logger/logger';
 
-// Components
-import { MiniModalComponent } from '../../../components/mini-modal/mini-modal';
-
 // Pages
 import { FinishModalPage } from '../../finish/finish';
 import { PayProPage } from '../../paypro/paypro';
@@ -503,10 +500,8 @@ export class ConfirmPage {
           txp.feeTooHigh = per > this.FEE_TOO_HIGH_LIMIT_PER;
 
           if (txp.feeTooHigh) {
-            let feeWarningModal = this.modalCtrl.create(
-              MiniModalComponent,
-              { modal: 'fee-warning' },
-              { cssClass: 'fullscreen-modal' }
+            const feeWarningModal = this.popupProvider.createMiniModal(
+              'fee-warning'
             );
             feeWarningModal.present();
           }
