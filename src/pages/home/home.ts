@@ -21,7 +21,7 @@ import { MercadoLibrePage } from '../integrations/mercado-libre/mercado-libre';
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { TxDetailsPage } from '../tx-details/tx-details';
 import { TxpDetailsPage } from '../txp-details/txp-details';
-import { WalletDetailsPage } from '../wallet-details/wallet-details';
+// import { WalletDetailsPage } from '../wallet-details/wallet-details';
 import { ActivityPage } from './activity/activity';
 import { ProposalsPage } from './proposals/proposals';
 
@@ -468,6 +468,7 @@ export class HomePage {
     this.modalCtrl
       .create(
         ScanPage,
+        null,
         // {
         //   walletId: wallet.credentials.walletId
         // },
@@ -475,7 +476,8 @@ export class HomePage {
           cssClass: 'fullscreen-modal'
         }
       )
-      .present({ animate: false });
+      .present();
+    // .present({ animate: false });
   }
 
   public openNotificationModal(n: any) {

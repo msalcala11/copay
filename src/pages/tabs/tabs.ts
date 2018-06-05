@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { HomePage } from '../home/home';
+// import { HomePage } from '../home/home';
 import { ReceivePage } from '../receive/receive';
-import { ScanPage } from '../scan/scan';
+// import { ScanPage } from '../scan/scan';
 import { SendPage } from '../send/send';
-import { SettingsPage } from '../settings/settings';
+// import { SettingsPage } from '../settings/settings';
 import { WalletDetailsPage } from '../wallet-details/wallet-details';
 
 @Component({
@@ -25,8 +25,8 @@ export class TabsPage {
 
   rootParams: NavParams;
 
-  constructor(private navParams: NavParams, private navCtrl: NavController) {
-    this.rootParams = navParams;
+  constructor(private navParams: NavParams) {
+    this.rootParams = this.navParams;
   }
 
   // public close() {
