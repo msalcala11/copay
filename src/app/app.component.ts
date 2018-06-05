@@ -242,11 +242,14 @@ export class CopayApp {
 
   private openFingerprintModal(): void {
     this.isModalOpen = true;
-    let isCopay = this.appProvider.info.nameCase == 'Copay' ? true : false;
-    this.events.publish('showFingerprintModalEvent', isCopay);
-    this.events.subscribe('finishFingerprintModalEvent', () => {
+    const modal = this.modalCtrl.create(
+      FingerprintModalPage,
+      {},
+      { cssClass: 'fullscreen-modal' }
+    );
+    modal.present({ animate: false });
+    modal.onDidDismiss(() => {
       this.isModalOpen = false;
-      this.events.unsubscribe('finishFingerprintModalEvent');
     });
   }
 
@@ -361,6 +364,7 @@ export class CopayApp {
         return false;
       }
     }
+    return false;
   }
 
   private getSelectedTabNav(): any {

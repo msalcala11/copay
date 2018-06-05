@@ -7,6 +7,9 @@
     width: 100% !important;
     height: 100% !important;
   }
+  ion-backdrop {
+    visibility: visible !important;
+  }
 }
 
 .modal-close-button {

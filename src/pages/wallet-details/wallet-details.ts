@@ -92,7 +92,7 @@ export class WalletDetailsPage {
   }
 
   ionViewWillEnter() {
-    this.events.subscribe('bwsEvent', (walletId, type, n) => {
+    this.events.subscribe('bwsEvent', (walletId, type) => {
       if (walletId == this.wallet.id && type != 'NewAddress') this.updateAll();
     });
     this.events.subscribe('Local/TxAction', walletId => {
@@ -112,8 +112,6 @@ export class WalletDetailsPage {
 
   private groupHistory(history: any[]): any[][] {
     return history.reduce((groups, tx, txInd) => {
-      const txDate = this.getDate(tx.time);
-      const month = this.timeProvider.getMonthYear(txDate);
       this.isFirstInGroup(txInd)
         ? groups.push([tx])
         : groups[groups.length - 1].push(tx);
@@ -159,7 +157,7 @@ export class WalletDetailsPage {
     this.updateTxHistoryError = false;
     this.updatingTxHistoryProgress = 0;
 
-    let progressFn = function(txs, newTxs) {
+    let progressFn = function(_, newTxs) {
       if (newTxs > 5) this.thistory = null;
       this.updatingTxHistoryProgress = newTxs;
     }.bind(this);
@@ -177,7 +175,7 @@ export class WalletDetailsPage {
         this.wallet.completeHistory = txHistory;
         this.showHistory();
       })
-      .catch(err => {
+      .catch(() => {
         this.updatingTxHistory = false;
         this.updateTxHistoryError = true;
       });
@@ -283,7 +281,7 @@ export class WalletDetailsPage {
     return date;
   }
 
-  public trackByFn(index, tx) {
+  public trackByFn(index) {
     return index;
   }
 

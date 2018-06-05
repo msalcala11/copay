@@ -1,9 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
-import { IonicModule, Platform } from 'ionic-angular';
-
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
+import { IonicModule } from 'ionic-angular';
 
 import { CopayApp } from './app.component';
 
@@ -21,27 +18,31 @@ describe('CopayApp', () => {
   let fixture;
   let component;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        declarations: [CopayApp],
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          IonicModule.forRoot(CopayApp),
-          ProvidersModule,
-          HttpClientTestingModule,
-          TranslateModule.forRoot({
-            loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }
-          })
-        ]
-      });
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [CopayApp],
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        IonicModule.forRoot(CopayApp),
+        ProvidersModule,
+        HttpClientTestingModule,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }
+        })
+      ],
+      providers: [{ provide: 'console', useValue: { log: () => undefined } }]
+    });
+  }));
 
   beforeEach(async () => {
     fixture = TestBed.createComponent(CopayApp);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    spyOn(component, 'ngOnDestroy');
+    fixture.destroy();
   });
 
   it('should be created', () => {
@@ -71,7 +72,7 @@ describe('CopayApp', () => {
         (window as any).require = () => {
           return {
             App: {
-              on: (event, cb) => { },
+              on: () => {},
               argv: ['URL']
             }
           };

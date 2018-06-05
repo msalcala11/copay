@@ -44,8 +44,9 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { ReleaseProvider } from '../../providers/release/release';
 import { ReplaceParametersProvider } from '../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../providers/wallet/wallet';
-import { TabsPage } from '../tabs/tabs';
+
 import { ScanPage } from '../scan/scan';
+import { TabsPage } from '../tabs/tabs';
 
 @Component({
   selector: 'page-home',
@@ -117,6 +118,9 @@ export class HomePage {
   ionViewWillEnter() {
     this.recentTransactionsEnabled = this.configProvider.get().recentTransactions.enabled;
 
+    // Update list of wallets, status and TXPs
+    this.setWallets();
+
     this.addressBookProvider
       .list()
       .then((ab: any) => {
@@ -128,12 +132,6 @@ export class HomePage {
 
     // Update Tx Notifications
     this.getNotifications();
-
-    // Update Tx Proposals
-    this.updateTxps();
-
-    // Update list of wallets and status
-    this.setWallets();
   }
 
   ionViewDidEnter() {
@@ -163,7 +161,7 @@ export class HomePage {
     }, 200);
 
     // Only BitPay Wallet
-    this.bitPayCardProvider.get({}, (err, cards) => {
+    this.bitPayCardProvider.get({}, (_, cards) => {
       this.zone.run(() => {
         this.showBitPayCard = this.appProvider.info._enabledExtensions.debitcard
           ? true
@@ -214,7 +212,8 @@ export class HomePage {
       this.setWallets();
     });
 
-    this.plt.resume.subscribe(e => {
+    this.plt.resume.subscribe(() => {
+      this.getNotifications();
       this.updateTxps();
       this.setWallets();
     });
@@ -237,11 +236,15 @@ export class HomePage {
   private setWallets = _.debounce(
     () => {
       this.wallets = this.profileProvider.getWallets();
-      this.walletsBtc = this.profileProvider.getWallets({ coin: 'btc' });
-      this.walletsBch = this.profileProvider.getWallets({ coin: 'bch' });
+      this.walletsBtc = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'btc';
+      });
+      this.walletsBch = _.filter(this.wallets, (x: any) => {
+        return x.credentials.coin == 'bch';
+      });
       this.updateAllWallets();
     },
-    1000,
+    5000,
     {
       leading: true
     }
@@ -328,7 +331,7 @@ export class HomePage {
           this.logger.error(err);
         });
     },
-    1000,
+    5000,
     {
       leading: true
     }
@@ -349,27 +352,18 @@ export class HomePage {
           this.logger.error(err);
         });
     },
-    1000,
+    5000,
     {
       leading: true
     }
   );
 
   private updateAllWallets(): void {
-    let wallets: any[] = [];
     let foundMessage = false;
 
-    _.each(this.walletsBtc, wBtc => {
-      wallets.push(wBtc);
-    });
+    if (_.isEmpty(this.wallets)) return;
 
-    _.each(this.walletsBch, wBch => {
-      wallets.push(wBch);
-    });
-
-    if (_.isEmpty(wallets)) return;
-
-    let i = wallets.length;
+    let i = this.wallets.length;
     let j = 0;
 
     let pr = ((wallet, cb) => {
@@ -405,7 +399,7 @@ export class HomePage {
         });
     }).bind(this);
 
-    _.each(wallets, (wallet: any) => {
+    _.each(this.wallets, (wallet: any) => {
       pr(wallet, () => {
         if (++j == i) {
           this.updateTxps();
@@ -504,7 +498,7 @@ export class HomePage {
             this.onGoingProcessProvider.clear();
             this.openTxpModal(_txp);
           })
-          .catch((err: any) => {
+          .catch(() => {
             this.onGoingProcessProvider.clear();
             this.logger.warn('No txp found');
             let title = this.translate.instant('Error');
@@ -596,6 +590,7 @@ export class HomePage {
   public doRefresh(refresher) {
     refresher.pullMin = 90;
     this.updateAllWallets();
+    this.getNotifications();
     setTimeout(() => {
       refresher.complete();
     }, 2000);

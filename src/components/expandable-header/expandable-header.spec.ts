@@ -8,7 +8,6 @@ import {
   ExpandableHeaderPrimaryComponent
 } from './expandable-header';
 
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 let fixture: ComponentFixture<TestHostComponent>;
@@ -25,7 +24,7 @@ const scrollEventMock = {
 @Component({
   template: `
   <expandable-header>
-    <expandable-header-primary>pirmary content</expandable-header-primary>
+    <expandable-header-primary>primary content</expandable-header-primary>
     <expandable-header-footer>footer content</expandable-header-footer>
   </expandable-header>`
 })
@@ -35,24 +34,21 @@ class TestHostComponent {
 }
 
 describe('ExpandableHeaderComponent', () => {
-  beforeEach(
-    async(() =>
-      TestUtils.beforeEachCompiler([
-        TestHostComponent,
-        ExpandableHeaderComponent,
-        ExpandableHeaderFooterComponent,
-        ExpandableHeaderPrimaryComponent
-      ]).then(compiled => {
-        fixture = compiled.fixture;
-        instance = compiled.instance.expandableHeader;
-        ionScrollSubject = new Subject<ScrollEvent>();
-        contentMock = {
-          ionScroll: ionScrollSubject.asObservable()
-        };
-        instance.scrollArea = contentMock as Content;
-      })
-    )
-  );
+  beforeEach(async(() =>
+    TestUtils.beforeEachCompiler([
+      TestHostComponent,
+      ExpandableHeaderComponent,
+      ExpandableHeaderFooterComponent,
+      ExpandableHeaderPrimaryComponent
+    ]).then(compiled => {
+      fixture = compiled.fixture;
+      instance = compiled.instance.expandableHeader;
+      ionScrollSubject = new Subject<ScrollEvent>();
+      contentMock = {
+        ionScroll: ionScrollSubject.asObservable()
+      };
+      instance.scrollArea = contentMock as Content;
+    })));
   afterEach(() => {
     fixture.destroy();
   });

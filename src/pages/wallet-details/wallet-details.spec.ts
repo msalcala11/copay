@@ -1,43 +1,33 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed
-} from '@angular/core/testing';
+import { async, ComponentFixture } from '@angular/core/testing';
 
 import { TestUtils } from '../../test';
 
 import { ProfileProvider } from './../../providers/profile/profile';
-import { TimeProvider } from './../../providers/time/time';
 import { WalletDetailsPage } from './wallet-details';
 
 describe('WalletDetailsPage', () => {
   let fixture: ComponentFixture<WalletDetailsPage>;
   let instance: any;
-  let testBed: typeof TestBed;
 
-  beforeEach(
-    async(() => {
-      const mockWallet = {
-        name: 'Test Wallet',
-        cachedStatus: null,
-        credentials: { m: 1 },
-        status: {},
-        canSign: () => true,
-        isComplete: () => true,
-        isPrivKeyEncrypted: () => true
-      };
-      spyOn(ProfileProvider.prototype, 'getWallet').and.returnValue(mockWallet);
-      return TestUtils.configurePageTestingModule([WalletDetailsPage]).then(
-        testEnv => {
-          fixture = testEnv.fixture;
-          instance = testEnv.instance;
-          testBed = testEnv.testBed;
-          fixture.detectChanges();
-        }
-      );
-    })
-  );
+  beforeEach(async(() => {
+    const mockWallet = {
+      name: 'Test Wallet',
+      cachedStatus: null,
+      credentials: { m: 1 },
+      status: {},
+      canSign: () => true,
+      isComplete: () => true,
+      isPrivKeyEncrypted: () => true
+    };
+    spyOn(ProfileProvider.prototype, 'getWallet').and.returnValue(mockWallet);
+    return TestUtils.configurePageTestingModule([WalletDetailsPage]).then(
+      testEnv => {
+        fixture = testEnv.fixture;
+        instance = testEnv.instance;
+        fixture.detectChanges();
+      }
+    );
+  }));
   afterEach(() => {
     fixture.destroy();
   });

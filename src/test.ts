@@ -10,10 +10,7 @@ import 'zone.js/dist/fake-async-test';
 // tslint:enable:ordered-imports
 
 import { DecimalPipe } from '@angular/common';
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -29,6 +26,7 @@ import {
 } from '@ngx-translate/core';
 import { MomentModule } from 'angular2-moment';
 import {
+  ActionSheetController,
   AlertController,
   App,
   Config,
@@ -37,6 +35,7 @@ import {
   Events,
   Form,
   GestureController,
+  Haptic,
   IonicModule,
   Keyboard,
   LoadingController,
@@ -44,17 +43,21 @@ import {
   ModalController,
   NavController,
   NavParams,
-  Platform
+  Platform,
+  ToastController,
+  ViewController
 } from 'ionic-angular';
 import {
+  ActionSheetControllerMock,
   AlertControllerMock,
   ConfigMock,
-  EventsMock,
+  HapticMock,
   LoadingControllerMock,
   ModalControllerMock,
   NavControllerMock,
-  NavParamsMock,
-  PlatformMock
+  PlatformMock,
+  ToastControllerMock,
+  ViewControllerMock
 } from 'ionic-mocks';
 
 import { AndroidFingerprintAuthMock } from '@ionic-native-mocks/android-fingerprint-auth';
@@ -68,14 +71,15 @@ import { File } from '@ionic-native/file';
 import { QRScanner } from '@ionic-native/qr-scanner';
 
 import { TouchID } from '@ionic-native/touch-id';
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { AppProvider } from './providers/app/app';
-import { PersistenceProvider } from './providers/persistence/persistence';
 import { PlatformProvider } from './providers/platform/platform';
 
+import { KeysPipe } from './pipes/keys';
 import { SatToFiatPipe } from './pipes/satToFiat';
 import { SatToUnitPipe } from './pipes/satToUnit';
+
+import { Logger } from './providers';
 import { ProvidersModule } from './providers/providers.module';
 
 import * as appTemplate from './../app-template/bitpay/appConfig.json';
@@ -91,6 +95,84 @@ getTestBed().initTestEnvironment(
 const context: any = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
+
+const baseImports = [
+  FormsModule,
+  HttpClientTestingModule,
+  IonicModule,
+  ReactiveFormsModule,
+  TranslateModule.forRoot({
+    loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }
+  })
+];
+
+const angularProviders = [TranslateService];
+const ionicProviders = [
+  App,
+  DomController,
+  Events,
+  Form,
+  Keyboard,
+  MenuController,
+  NavController,
+  {
+    provide: Platform,
+    useFactory: () => {
+      const instance = PlatformMock.instance();
+      instance.is.and.returnValue(false);
+      instance.resume = new Subject();
+      return instance;
+    }
+  },
+  { provide: Config, useFactory: () => ConfigMock.instance() },
+  { provide: DeepLinker, useFactory: () => ConfigMock.instance() },
+  {
+    provide: ActionSheetController,
+    useFactory: () => ActionSheetControllerMock.instance()
+  },
+  {
+    provide: ModalController,
+    useFactory: () => ModalControllerMock.instance()
+  },
+  {
+    provide: AlertController,
+    useFactory: () => AlertControllerMock.instance()
+  },
+  {
+    provide: Haptic,
+    useFactory: () => HapticMock.instance()
+  },
+  {
+    provide: LoadingController,
+    useFactory: () => LoadingControllerMock.instance()
+  },
+  {
+    provide: NavController,
+    useFactory: () => NavControllerMock.instance()
+  },
+  {
+    provide: ToastController,
+    useFactory: () => ToastControllerMock.instance()
+  },
+  {
+    provide: ViewController,
+    useFactory: () => ViewControllerMock.instance()
+  },
+  { provide: FCM, useClass: FCMMock },
+  { provide: File, useClass: FileMock },
+  { provide: QRScanner, useClass: QRScannerMock },
+  { provide: TouchID, useClass: TouchIDMock },
+  {
+    provide: AndroidFingerprintAuth,
+    useClass: AndroidFingerprintAuthMock
+  }
+];
+const baseProviders = [
+  ...angularProviders,
+  ...ionicProviders,
+  Logger,
+  { provide: 'console', useValue: { log: () => undefined } }
+];
 
 export class TestUtils {
   public static beforeEachCompiler(
@@ -110,18 +192,8 @@ export class TestUtils {
   public static configureIonicTestingModule(components: any[]): typeof TestBed {
     return TestBed.configureTestingModule({
       declarations: [...components],
-      imports: [FormsModule, IonicModule, ReactiveFormsModule, TranslateModule],
-      providers: [
-        App,
-        Form,
-        Keyboard,
-        DomController,
-        MenuController,
-        NavController,
-        { provide: Platform, useFactory: () => PlatformMock.instance() },
-        { provide: Config, useFactory: () => ConfigMock.instance() },
-        { provide: DeepLinker, useFactory: () => ConfigMock.instance() }
-      ]
+      imports: baseImports,
+      providers: baseProviders
     });
   }
 
@@ -131,69 +203,19 @@ export class TestUtils {
   ): Promise<{ fixture: any; instance: any; testBed: typeof TestBed }> {
     const providers = (otherParams && otherParams.providers) || [];
     await TestBed.configureTestingModule({
-      declarations: [...components, SatToFiatPipe, SatToUnitPipe],
-      imports: [
-        FormsModule,
-        IonicModule,
-        MomentModule,
-        ReactiveFormsModule,
-        ProvidersModule,
-        TranslateModule.forRoot({
-          loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }
-        }),
-        HttpClientTestingModule
-      ],
+      declarations: [...components, KeysPipe, SatToFiatPipe, SatToUnitPipe],
+      imports: [...baseImports, MomentModule, ProvidersModule],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        App,
+        ...baseProviders,
         AppProvider,
         DecimalPipe,
+        KeysPipe,
         SatToFiatPipe,
         SatToUnitPipe,
-        Events,
-        Form,
         GestureController,
-        Keyboard,
-        DomController,
-        MenuController,
         NavParams,
         PlatformProvider,
-        TranslateService,
-        {
-          provide: Platform,
-          useFactory: () => {
-            const instance = PlatformMock.instance();
-            instance.is.and.returnValue(false);
-            instance.resume = new Subject();
-            return instance;
-          }
-        },
-        { provide: Config, useFactory: () => ConfigMock.instance() },
-        { provide: DeepLinker, useFactory: () => ConfigMock.instance() },
-        { provide: FCM, useClass: FCMMock },
-        { provide: File, useClass: FileMock },
-        { provide: QRScanner, useClass: QRScannerMock },
-        { provide: TouchID, useClass: TouchIDMock },
-        {
-          provide: ModalController,
-          useFactory: () => ModalControllerMock.instance()
-        },
-        {
-          provide: AlertController,
-          useFactory: () => AlertControllerMock.instance()
-        },
-        {
-          provide: LoadingController,
-          useFactory: () => LoadingControllerMock.instance()
-        },
-        {
-          provide: NavController,
-          useFactory: () => NavControllerMock.instance()
-        },
-        {
-          provide: AndroidFingerprintAuth,
-          useClass: AndroidFingerprintAuthMock
-        },
         ...providers
       ]
     }).compileComponents();
@@ -209,6 +231,20 @@ export class TestUtils {
       instance: fixture.debugElement.componentInstance,
       testBed: TestBed
     };
+  }
+
+  public static configureProviderTestingModule(
+    providerOverrides: Array<{
+      provide: any;
+      useClass?: any;
+      useValue?: any;
+      useFactory?: (...args: any[]) => any;
+    }> = []
+  ) {
+    return TestBed.configureTestingModule({
+      imports: [...baseImports, ProvidersModule],
+      providers: [...baseProviders, ...providerOverrides]
+    });
   }
 
   // http://stackoverflow.com/questions/2705583/how-to-simulate-a-click-with-javascript

@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { AlertController, ModalController, NavController, NavParams } from 'ionic-angular';
+import { AlertController, NavController, NavParams } from 'ionic-angular';
 
 // pages
 import { BackupGamePage } from '../backup-game/backup-game';
-import { BackupWarningModalPage } from '../backup-warning-modal/backup-warning-modal';
+
+import { PopupProvider } from '../../../providers/popup/popup';
 
 @Component({
   selector: 'page-backup-warning',
-  templateUrl: 'backup-warning.html',
+  templateUrl: 'backup-warning.html'
 })
 export class BackupWarningPage {
   public currentIndex: number;
@@ -18,18 +19,24 @@ export class BackupWarningPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
-    public modalCtrl: ModalController
+    public popupProvider: PopupProvider
   ) {
     this.walletId = this.navParams.get('walletId');
     this.fromOnboarding = this.navParams.get('fromOnboarding');
   }
 
   public openWarningModal(): void {
-    let BackupWarningModal = this.modalCtrl.create(BackupWarningModalPage, {}, { showBackdrop: false, enableBackdropDismiss: false });
-    BackupWarningModal.present({ animate: false });
-    BackupWarningModal.onDidDismiss(() => {
-      this.navCtrl.push(BackupGamePage, { walletId: this.walletId, fromOnboarding: this.fromOnboarding });
+    const backupWarningModal = this.popupProvider.createMiniModal(
+      'backup-warning'
+    );
+    backupWarningModal.present({ animate: false });
+    backupWarningModal.onDidDismiss(response => {
+      if (response) {
+        this.navCtrl.push(BackupGamePage, {
+          walletId: this.walletId,
+          fromOnboarding: this.fromOnboarding
+        });
+      }
     });
   }
-
 }

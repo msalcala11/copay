@@ -1,51 +1,20 @@
-import { HttpClientModule } from '@angular/common/http';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { AndroidFingerprintAuth } from '@ionic-native/android-fingerprint-auth';
 import { TouchID } from '@ionic-native/touch-id';
-import {
-  TranslateFakeLoader,
-  TranslateLoader,
-  TranslateModule
-} from '@ngx-translate/core';
-import { LoadingController, Platform } from 'ionic-angular';
-import { Logger } from '../../providers/logger/logger';
+import { TestUtils } from '../../test';
 import { AppProvider } from '../app/app';
-import { ConfigProvider } from '../config/config';
-import { LanguageProvider } from '../language/language';
-import { PersistenceProvider } from '../persistence/persistence';
 import { PlatformProvider } from '../platform/platform';
 import { TouchIdProvider } from './touchid';
 
 describe('Provider: TouchId Provider', () => {
   let touchIdProvider: TouchIdProvider;
   let platformProvider: PlatformProvider;
-  let configProvider: ConfigProvider;
+  let testBed: typeof TestBed;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        TranslateModule.forRoot({
-          loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }
-        })
-      ],
-      providers: [
-        AppProvider,
-        AndroidFingerprintAuth,
-        ConfigProvider,
-        LoadingController,
-        Logger,
-        LanguageProvider,
-        { provide: PersistenceProvider },
-        Platform,
-        PlatformProvider,
-        TouchID,
-        TouchIdProvider
-      ]
-    });
-    touchIdProvider = TestBed.get(TouchIdProvider);
-    platformProvider = TestBed.get(PlatformProvider);
-    configProvider = TestBed.get(ConfigProvider);
+    testBed = TestUtils.configureProviderTestingModule();
+    touchIdProvider = testBed.get(TouchIdProvider);
+    platformProvider = testBed.get(PlatformProvider);
   });
 
   describe('Function: isAvailable', () => {
@@ -73,18 +42,26 @@ describe('Provider: TouchId Provider', () => {
   });
 
   describe('Function: check', () => {
-    it('should verify is IOS device has Fingerprint', () => {
+    it('should verify iOS device has Fingerprint', () => {
       platformProvider.isIOS = true;
-      platformProvider.isCordova = true;
-      touchIdProvider.check().then(resolve => {
-        expect(resolve).toBeDefined();
-      });
+      const touchId = testBed.get(TouchID);
+      const spy = spyOn(touchId, 'verifyFingerprint').and.returnValue(
+        Promise.resolve()
+      );
+      touchIdProvider.check();
+      expect(spy).toHaveBeenCalled();
     });
 
-    it('should verify is Android device has Fingerprint', () => {
+    it('should verify Android device has Fingerprint', () => {
       platformProvider.isAndroid = true;
-      touchIdProvider.check().then(resolve => {
-        expect(resolve).toBeDefined();
+      const androidFingerprintAuth = testBed.get(AndroidFingerprintAuth);
+      const appProvider = testBed.get(AppProvider);
+      const spy = spyOn(androidFingerprintAuth, 'encrypt').and.returnValue(
+        Promise.resolve({ withFingerprint: true })
+      );
+      touchIdProvider.check();
+      expect(spy).toHaveBeenCalledWith({
+        clientId: appProvider.info.nameCase
       });
     });
   });
@@ -98,7 +75,7 @@ describe('Provider: TouchId Provider', () => {
         needsBackup: false
       };
       platformProvider.isIOS = true;
-      return touchIdProvider.checkWallet(wallet).then(resolve => {
+      return touchIdProvider.checkWallet(wallet).then(() => {
         expect().nothing();
       });
     });

@@ -1,9 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Subject } from 'rxjs';
 
@@ -18,19 +13,16 @@ describe('HomePage', () => {
   let instance: any;
   let testBed: typeof TestBed;
 
-  beforeEach(
-    async(() =>
-      TestUtils.configurePageTestingModule([HomePage]).then(testEnv => {
-        fixture = testEnv.fixture;
-        instance = testEnv.instance;
-        testBed = testEnv.testBed;
-        instance.showCard = {
-          setShowRateCard: () => {}
-        };
-        fixture.detectChanges();
-      })
-    )
-  );
+  beforeEach(async(() =>
+    TestUtils.configurePageTestingModule([HomePage]).then(testEnv => {
+      fixture = testEnv.fixture;
+      instance = testEnv.instance;
+      testBed = testEnv.testBed;
+      instance.showCard = {
+        setShowRateCard: () => {}
+      };
+      fixture.detectChanges();
+    })));
   afterEach(() => {
     fixture.destroy();
   });
@@ -40,7 +32,8 @@ describe('HomePage', () => {
       it('should get recentTransactions enabled', () => {
         instance.ionViewWillEnter();
         const configProvider = testBed.get(ConfigProvider);
-        const recentTransactionsEnabled = configProvider.get().recentTransactions.enabled;
+        const recentTransactionsEnabled = configProvider.get()
+          .recentTransactions.enabled;
         expect(recentTransactionsEnabled).toEqual(true);
       });
       it('should not break if address book list call fails', () => {
@@ -64,9 +57,11 @@ describe('HomePage', () => {
       it('should update txps and set wallets on platform resume', () => {
         instance.plt.resume = new Subject();
         instance.ionViewDidLoad();
+        const getNotificationsSpy = spyOn(instance, 'getNotifications');
         const updateTxpsSpy = spyOn(instance, 'updateTxps');
         const setWalletsSpy = spyOn(instance, 'setWallets');
         instance.plt.resume.next();
+        expect(getNotificationsSpy).toHaveBeenCalled();
         expect(updateTxpsSpy).toHaveBeenCalled();
         expect(setWalletsSpy).toHaveBeenCalled();
       });

@@ -12,24 +12,21 @@ let scrollContent;
 })
 class TestHostComponent {
   color: string = 'blue';
-  constructor(private element: ElementRef) {}
+  constructor(public element: ElementRef) {}
 }
 
 describe('IosScrollBgColor', () => {
-  beforeEach(
-    async(() =>
-      TestUtils.beforeEachCompiler([TestHostComponent, IosScrollBgColor]).then(
-        compiled => {
-          fixture = compiled.fixture;
-          instance = compiled.instance;
-          fixture.detectChanges();
-          scrollContent = instance.element.nativeElement.getElementsByClassName(
-            'scroll-content'
-          )[0];
-        }
-      )
-    )
-  );
+  beforeEach(async(() =>
+    TestUtils.beforeEachCompiler([TestHostComponent, IosScrollBgColor]).then(
+      compiled => {
+        fixture = compiled.fixture;
+        instance = compiled.instance;
+        fixture.detectChanges();
+        scrollContent = instance.element.nativeElement.getElementsByClassName(
+          'scroll-content'
+        )[0];
+      }
+    )));
   afterEach(() => {
     fixture.destroy();
   });

@@ -1,52 +1,22 @@
-/* tslint:disable */
-import { TestBed, inject, async } from '@angular/core/testing';
-import { AlertController, App, Config, Platform } from 'ionic-angular';
-import { Logger } from '../../providers/logger/logger';
-import {
-  TranslateModule,
-  TranslateService,
-  TranslateLoader,
-  TranslateFakeLoader
-} from '@ngx-translate/core';
+import { inject } from '@angular/core/testing';
+import { AlertController } from 'ionic-angular';
+import { TestUtils } from '../../test';
 import { PopupProvider } from './popup';
-
-import { AlertControllerMock } from 'ionic-mocks';
 
 describe('PopupProvider', () => {
   let alertCtrl: AlertController;
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        TranslateModule.forRoot({
-          loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }
-        })
-      ],
-      providers: [
-        PopupProvider,
-        App,
-        Config,
-        Platform,
-        Logger,
-        TranslateService,
-        {
-          provide: AlertController,
-          useFactory: () => AlertControllerMock.instance()
-        }
-      ]
-    });
-    alertCtrl = AlertControllerMock.instance();
+    const testBed = TestUtils.configureProviderTestingModule();
+    alertCtrl = testBed.get(AlertController);
   });
 
-  it(
-    'should exist',
-    inject([PopupProvider], (popupProvider: PopupProvider) => {
-      expect(popupProvider).not.toBeUndefined();
-    })
-  );
+  it('should exist', inject([PopupProvider], (popupProvider: PopupProvider) => {
+    expect(popupProvider).toBeDefined();
+  }));
 
-  it(
-    'should have an alert',
-    inject([PopupProvider], (popupProvider: PopupProvider) => {
+  it('should have an alert', inject(
+    [PopupProvider],
+    (popupProvider: PopupProvider) => {
       popupProvider.ionicAlert('title', 'subtitle', 'ok text').then(done => {
         let alert = alertCtrl.create();
         expect(popupProvider.ionicAlert).toHaveBeenCalledWith(
@@ -57,12 +27,12 @@ describe('PopupProvider', () => {
         expect(alert.present).toHaveBeenCalled();
         done();
       });
-    })
-  );
+    }
+  ));
 
-  it(
-    'should have a confirm',
-    inject([PopupProvider], (popupProvider: PopupProvider) => {
+  it('should have a confirm', inject(
+    [PopupProvider],
+    (popupProvider: PopupProvider) => {
       popupProvider.ionicConfirm('title', 'message').then(done => {
         let alert = alertCtrl.create();
         expect(popupProvider.ionicConfirm).toHaveBeenCalledWith(
@@ -72,12 +42,12 @@ describe('PopupProvider', () => {
         expect(alert.present).toHaveBeenCalled();
         done();
       });
-    })
-  );
+    }
+  ));
 
-  it(
-    'should have a prompt',
-    inject([PopupProvider], (popupProvider: PopupProvider) => {
+  it('should have a prompt', inject(
+    [PopupProvider],
+    (popupProvider: PopupProvider) => {
       let opts = {
         defaultText: null,
         placeholder: null,
@@ -96,6 +66,6 @@ describe('PopupProvider', () => {
         });
         expect(alert.present).toHaveBeenCalled();
       });
-    })
-  );
+    }
+  ));
 });
