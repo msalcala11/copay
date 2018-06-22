@@ -837,7 +837,6 @@ export class ConfirmPage {
   }
 
   public chooseFeeLevel(): void {
-    if (this.memoFocused) return;
     if (this.tx.coin == 'bch') return;
     if (this.usingMerchantFee) return; // TODO: should we allow override?
 
@@ -899,7 +898,6 @@ export class ConfirmPage {
   }
 
   public showWallets(): void {
-    if (this.memoFocused) return;
     this.isOpenSelector = true;
     let id = this.wallet ? this.wallet.credentials.walletId : null;
     this.events.publish(

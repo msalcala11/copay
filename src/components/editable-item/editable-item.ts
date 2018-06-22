@@ -29,6 +29,11 @@ export class EditableItemComponent {
   @Input() value: string;
   @Input() itemPlaceholder: string;
 
+  listenerForEnsuringBlurOnIos = (e: Event) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
   constructor(private platformProvider: PlatformProvider) {
     this.textInput.valueChanges
       .pipe(
@@ -53,8 +58,8 @@ export class EditableItemComponent {
     this.isFocused = false;
   }
 
-  ngOnInit(): void {
-    setTimeout(() => this.resizeTextarea(), 0);
+  ngAfterViewInit() {
+    this.resizeTextarea();
   }
 
   public resizeTextarea() {
@@ -77,6 +82,7 @@ export class EditableItemComponent {
       this.value = '';
     }
     this.valChange.emit(this.value);
+    this.disableClickBlock();
   }
 
   public async toggleValueUpdate(): Promise<void> {
@@ -97,5 +103,29 @@ export class EditableItemComponent {
         elem.setSelectionRange(this.value.length, this.value.length);
       }
     }
+    this.enableClickBlock();
+  }
+
+  private getIonApp() {
+    return document.getElementsByTagName('ion-app')[0];
+  }
+
+  private enableClickBlock() {
+    // Ensures that tapping on other clickable elements on a page
+    // only blurs the textarea (and ignores any other click listeners)
+    this.getIonApp().addEventListener(
+      'click',
+      this.listenerForEnsuringBlurOnIos,
+      true
+    );
+  }
+
+  private async disableClickBlock() {
+    await Observable.timer(100).toPromise();
+    this.getIonApp().removeEventListener(
+      'click',
+      this.listenerForEnsuringBlurOnIos,
+      true
+    );
   }
 }

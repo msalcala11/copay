@@ -19,7 +19,7 @@
         </div>
       </div>
     </ion-item>
-    <button ion-item class="item-fee" (mousedown)="chooseFeeLevel()">
+    <button ion-item class="item-fee" (click)="chooseFeeLevel()">
       <div class="fee-title">
         <span translate>Bitcoin miner fee:</span> {{tx.feeLevelName | translate}}
       </div>
@@ -96,7 +96,7 @@
       </div>
     </ion-item>
 
-    <button class="container-from" ion-item detail-none (mousedown)="showWallets()">
+    <button class="container-from" ion-item detail-none (click)="showWallets()">
       <span translate>From</span>
       <div class="wallet" *ngIf="wallet">
         <ion-icon item-start>
