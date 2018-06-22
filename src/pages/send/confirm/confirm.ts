@@ -8,6 +8,7 @@ import {
   NavParams
 } from 'ionic-angular';
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { Logger } from '../../../providers/logger/logger';
 
 // Pages
@@ -60,6 +61,7 @@ export class ConfirmPage {
   public successText: string;
   public paymentExpired: boolean;
   public remainingTimeStr: string;
+  public memoFocused: boolean;
 
   // Config Related values
   public config;
@@ -105,6 +107,7 @@ export class ConfirmPage {
       ? this.config.wallet.settings.feeLevel
       : 'normal';
     this.isCordova = this.platformProvider.isCordova;
+    this.memoFocused = false;
   }
 
   ionViewWillLeave() {
@@ -834,6 +837,7 @@ export class ConfirmPage {
   }
 
   public chooseFeeLevel(): void {
+    if (this.memoFocused) return;
     if (this.tx.coin == 'bch') return;
     if (this.usingMerchantFee) return; // TODO: should we allow override?
 
@@ -884,7 +888,18 @@ export class ConfirmPage {
     });
   }
 
+  public async waitForMemo(event) {
+    // waits a few ms to ensure when clicking out of
+    // txMemo input user does not press 'from' or 'feeLevel' btns
+    Observable.timer(50)
+      .toPromise()
+      .then(() => {
+        this.memoFocused = event;
+      });
+  }
+
   public showWallets(): void {
+    if (this.memoFocused) return;
     this.isOpenSelector = true;
     let id = this.wallet ? this.wallet.credentials.walletId : null;
     this.events.publish(
