@@ -53,8 +53,8 @@ export class EditableItemComponent {
     this.isFocused = false;
   }
 
-  ngOnInit(): void {
-    setTimeout(() => this.resizeTextarea(), 0);
+  ngAfterViewInit(): void {
+    this.resizeTextarea();
   }
 
   public resizeTextarea() {
