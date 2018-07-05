@@ -62,9 +62,6 @@ export class BuyAmazonPage {
   public network: string;
   public walletSelectorTitle: string;
   public isOpenSelector: boolean;
-  public pageTitle: string;
-  public country: string;
-  public onlyIntegers: boolean;
 
   // Platform info
   public isCordova: boolean;
@@ -96,9 +93,6 @@ export class BuyAmazonPage {
     this.amazonGiftCard = null;
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
     this.isCordova = this.platformProvider.isCordova;
-    this.country = this.amazonProvider.country;
-    this.pageTitle = this.amazonProvider.pageTitle;
-    this.onlyIntegers = this.amazonProvider.onlyIntegers;
   }
 
   ionViewWillLeave() {
@@ -355,10 +349,10 @@ export class BuyAmazonPage {
               });
             });
         })
-        .catch(err => {
+        .catch(() => {
           return reject({
             title: this.translate.instant('Error in Payment Protocol'),
-            message: err
+            message: this.translate.instant('Invalid URL')
           });
         });
     });
@@ -577,27 +571,18 @@ export class BuyAmazonPage {
     let finishComment: string;
     let cssClass: string;
     if (this.amazonGiftCard.status == 'FAILURE') {
-      finishComment = this.translate.instant(
-        'Your purchase could not be completed'
-      );
+      finishComment = 'Your purchase could not be completed';
       cssClass = 'danger';
     }
     if (this.amazonGiftCard.status == 'PENDING') {
-      finishComment = this.translate.instant(
-        'Your purchase was added to the list of pending'
-      );
+      finishComment = 'Your purchase was added to the list of pending';
       cssClass = 'warning';
     }
     if (this.amazonGiftCard.status == 'SUCCESS') {
-      finishComment = this.replaceParametersProvider.replace(
-        this.translate.instant('Bought {{ amount }}'),
-        { amount: this.amountUnitStr }
-      );
+      finishComment = 'Bought ' + this.amountUnitStr;
     }
     if (this.amazonGiftCard.status == 'SUCCESS') {
-      finishComment = this.translate.instant(
-        'Gift card generated and ready to use.'
-      );
+      finishComment = 'Gift card generated and ready to use.';
     }
     let finishText = '';
     let modal = this.modalCtrl.create(
@@ -606,13 +591,12 @@ export class BuyAmazonPage {
       { showBackdrop: true, enableBackdropDismiss: false }
     );
     modal.present();
-
     modal.onDidDismiss(async () => {
       await this.navCtrl.popToRoot({ animate: false });
       await this.navCtrl.parent.select(0);
       await this.navCtrl.push(
         AmazonPage,
-        { invoiceId: this.invoiceId, country: this.country },
+        { invoiceId: this.invoiceId },
         { animate: false }
       );
     });

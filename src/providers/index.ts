@@ -14,6 +14,7 @@ export { TouchID } from '@ionic-native/touch-id';
 export { Vibration } from '@ionic-native/vibration';
 
 /* Providers */
+export { ActionSheetProvider } from '../providers/actionSheet/actionSheet';
 export { AddressBookProvider } from '../providers/address-book/address-book';
 export { AddressProvider } from '../providers/address/address';
 export { AmazonProvider } from '../providers/amazon/amazon';
@@ -29,6 +30,7 @@ export { BwcErrorProvider } from '../providers/bwc-error/bwc-error';
 export { BwcProvider } from '../providers/bwc/bwc';
 export { CoinbaseProvider } from '../providers/coinbase/coinbase';
 export { ConfigProvider } from '../providers/config/config';
+export { DomProvider } from '../providers/dom/dom';
 export {
   DerivationPathHelperProvider
 } from '../providers/derivation-path-helper/derivation-path-helper';

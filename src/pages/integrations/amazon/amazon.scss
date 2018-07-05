@@ -1,7 +1,5 @@
 page-amazon {
-  font-family: 'AmazonEmberDisplay';
   .container {
-    background-color: white;
     height: 100%;
   }
   .center-header {
@@ -14,11 +12,8 @@ page-amazon {
     .logo {
       display: inline-block;
       margin-bottom: 1em;
-      .usa-logo {
+      img {
         max-width: 170px;
-      }
-      .japan-logo {
-        max-width: 240px;
       }
     }
     .description {
@@ -26,14 +21,7 @@ page-amazon {
       max-width: 300px;
     }
   }
-  .short-disclaimer {
-    font-size: 12px;
-    text-align: left;
-    color: color($colors, light-grey);
-    padding: 0 20px;
-    margin-top: 20px;
-    width: 100%;
-  }
+
   .integration-giftCard {
     &-logo {
       background-color: #ffffff;

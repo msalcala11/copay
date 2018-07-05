@@ -8,10 +8,10 @@
   <ion-list>
     <ion-item-divider></ion-item-divider>
     <ion-item (click)="saveBlack()">
-      <div translate float-left>Name (at creation)</div>
-      <div text-end text-wrap ion-text color="light-grey">
+      <span translate>Name (at creation)</span>
+      <ion-note item-end>
         {{walletName}}
-      </div>
+      </ion-note>
     </ion-item>
     <ion-item>
       <span translate>Coin</span>
