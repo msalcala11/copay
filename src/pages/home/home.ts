@@ -44,6 +44,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { ReleaseProvider } from '../../providers/release/release';
 import { ReplaceParametersProvider } from '../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../providers/wallet/wallet';
+import { PurchasedCardsPage } from '../integrations/gift-cards/purchased-cards/purchased-cards';
 import { SettingsPage } from '../settings/settings';
 
 @Component({
@@ -598,16 +599,17 @@ export class HomePage {
   }
 
   public goTo(page: string): void {
-    const pageMap = {
-      AmazonPage,
-      BitPayCardIntroPage,
-      CoinbasePage,
-      GlideraPage,
-      MercadoLibrePage,
-      ShapeshiftPage
-    };
-
-    this.navCtrl.push(pageMap[page]);
+    // const pageMap = {
+    //   AmazonPage: PurchasedCardsPage,
+    //   BitPayCardIntroPage,
+    //   CoinbasePage,
+    //   GlideraPage,
+    //   MercadoLibrePage,
+    //   ShapeshiftPage
+    // };
+    console.log('page', page);
+    // this.navCtrl.push(pageMap[page]);
+    this.navCtrl.push(PurchasedCardsPage);
   }
 
   public goToCard(cardId): void {

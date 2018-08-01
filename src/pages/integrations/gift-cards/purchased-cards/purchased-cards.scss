@@ -1,0 +1,24 @@
+.cards-list {
+  &__icon {
+    $icon-height: 50px;
+    height: $icon-height;
+    width: $icon-height;
+    margin: 3px 10px 3px 12px;
+
+    &.amazon {
+      padding: 7px;
+      background: black;
+    }
+  }
+
+  &__label {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  &__note {
+    font-weight: 300;
+    font-size: 15px;
+  }
+}

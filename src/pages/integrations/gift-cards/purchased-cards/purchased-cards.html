@@ -1,0 +1,33 @@
+<wide-header-page title="Amazon Gift Cards">
+  <ion-buttons right>
+    <button clear class="modal-close-button bar-button bar-button-{{platformName}} bar-button-default bar-button-default-{{platformName}}"
+      (click)="settings()" ion-button>
+      <ion-icon ios="md-add" md="md-add" color="blank"></ion-icon>
+    </button>
+  </ion-buttons>
+  <div page-content>
+    <ion-list class="settings-list cards-list">
+      <ion-item-divider>Current Cards</ion-item-divider>
+      <button ion-item (click)="openAddressBookPage()" *ngFor="let item of [0, 1]">
+        <ion-icon item-start>
+          <img class="cards-list__icon amazon" src="assets/img/amazon/amazon-icon.svg" width="22">
+        </ion-icon>
+        <ion-label>
+          <div class="cards-list__label">$50.00</div>
+          <ion-note class="cards-list__note">4 minutes ago</ion-note>
+        </ion-label>
+      </button>
+
+      <ion-item-divider>Archived Cards</ion-item-divider>
+      <button ion-item (click)="openAddressBookPage()" *ngFor="let item of [0, 1]">
+        <ion-icon item-start>
+          <img class="cards-list__icon amazon" src="assets/img/amazon/amazon-icon.svg" width="22">
+        </ion-icon>
+        <ion-label>
+          <div class="cards-list__label">$50.00</div>
+          <ion-note class="cards-list__note">4 minutes ago</ion-note>
+        </ion-label>
+      </button>
+    </ion-list>
+  </div>
+</wide-header-page>

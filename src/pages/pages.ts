@@ -127,6 +127,8 @@ import { CustomAmountPage } from '../pages/receive/custom-amount/custom-amount';
 import { WideHeaderPage } from './templates/wide-header-page/wide-header-page';
 import { WalletTabsChild } from './wallet-tabs/wallet-tabs-child';
 
+import { PurchasedCardsPage } from './integrations/gift-cards/purchased-cards/purchased-cards';
+
 export const PAGES = [
   ActivityPage,
   AddPage,
@@ -179,6 +181,7 @@ export const PAGES = [
   OnboardingPage,
   PaperWalletPage,
   PayProPage,
+  PurchasedCardsPage,
   GlideraTxDetailsPage,
   ...PIN_COMPONENTS,
   ProposalsPage,
