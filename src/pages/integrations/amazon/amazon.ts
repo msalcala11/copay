@@ -51,7 +51,7 @@ export class AmazonPage {
       if (this.giftCards) {
         this.updatePendingGiftCards();
       }
-      console.log('this.giftCards', this.giftCards);
+      // console.log('this.giftCards', this.giftCards);
     });
   }
 

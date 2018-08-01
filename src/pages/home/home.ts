@@ -599,15 +599,15 @@ export class HomePage {
   }
 
   public goTo(page: string): void {
-    // const pageMap = {
-    //   AmazonPage: PurchasedCardsPage,
-    //   BitPayCardIntroPage,
-    //   CoinbasePage,
-    //   GlideraPage,
-    //   MercadoLibrePage,
-    //   ShapeshiftPage
-    // };
-    console.log('page', page);
+    const pageMap = {
+      AmazonPage: PurchasedCardsPage,
+      BitPayCardIntroPage,
+      CoinbasePage,
+      GlideraPage,
+      MercadoLibrePage,
+      ShapeshiftPage
+    };
+    pageMap[page] = true;
     // this.navCtrl.push(pageMap[page]);
     this.navCtrl.push(PurchasedCardsPage);
   }
