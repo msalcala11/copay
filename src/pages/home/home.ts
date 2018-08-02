@@ -607,9 +607,9 @@ export class HomePage {
       MercadoLibrePage,
       ShapeshiftPage
     };
-    pageMap[page] = true;
-    // this.navCtrl.push(pageMap[page]);
-    this.navCtrl.push(PurchasedCardsPage);
+    // pageMap[page] = true;
+    this.navCtrl.push(pageMap[page]);
+    // this.navCtrl.push(PurchasedCardsPage);
   }
 
   public goToCard(cardId): void {
