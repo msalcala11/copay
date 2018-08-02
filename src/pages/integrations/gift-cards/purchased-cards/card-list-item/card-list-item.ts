@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'card-list-item',
   template: `
-  <button ion-item>
+  <button ion-item class="card-list-item">
     <ion-icon item-start>
       <img class="card-list-item__icon amazon" src="assets/img/amazon/amazon-icon.svg">
     </ion-icon>
