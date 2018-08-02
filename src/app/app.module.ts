@@ -18,6 +18,7 @@ import { PAGES } from './../pages/pages';
 
 /* Pipes */
 import { FiatToUnitPipe } from '../pipes/fiatToUnit';
+import { FormatCurrencyPipe } from '../pipes/format-currency';
 import { KeysPipe } from '../pipes/keys';
 import { OrderByPipe } from '../pipes/order-by';
 import { SatToFiatPipe } from '../pipes/satToFiat';
@@ -57,10 +58,11 @@ export function createTranslateLoader(http: HttpClient) {
     Animate,
     RevealAtScrollPosition,
     /* Pipes */
+    FiatToUnitPipe,
+    FormatCurrencyPipe,
+    KeysPipe,
     SatToUnitPipe,
     SatToFiatPipe,
-    FiatToUnitPipe,
-    KeysPipe,
     OrderByPipe
   ],
   imports: [

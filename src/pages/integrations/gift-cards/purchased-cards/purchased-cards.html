@@ -24,7 +24,7 @@
           <img class="cards-list__icon amazon" src="assets/img/amazon/amazon-icon.svg" width="22">
         </ion-icon>
         <ion-label>
-          <div class="cards-list__label">{{item.value.amount.toFixed(2)}} {{item.value.currency}}</div>
+          <div class="cards-list__label">{{item.value.amount | formatCurrency:item.value.currency}} {{item.value.currency}}</div>
           <ion-note class="cards-list__note">{{item.value.date | amTimeAgo}}</ion-note>
         </ion-label>
       </button>
