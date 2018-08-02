@@ -8,26 +8,9 @@
   <div page-content>
     <ion-list class="settings-list cards-list">
       <ion-item-divider>Current Cards</ion-item-divider>
-      <button ion-item (click)="openAddressBookPage()" *ngFor="let item of [0, 1]">
-        <ion-icon item-start>
-          <img class="cards-list__icon amazon" src="assets/img/amazon/amazon-icon.svg" width="22">
-        </ion-icon>
-        <ion-label>
-          <div class="cards-list__label">$50.00</div>
-          <ion-note class="cards-list__note">4 minutes ago</ion-note>
-        </ion-label>
-      </button>
-
-      <ion-item-divider>Archived Cards</ion-item-divider>
-      <button ion-item (click)="openAddressBookPage()" *ngFor="let item of (giftCards | keys : 'date') | orderBy : ['-order']">
-        <ion-icon item-start>
-          <img class="cards-list__icon amazon" src="assets/img/amazon/amazon-icon.svg" width="22">
-        </ion-icon>
-        <ion-label>
-          <div class="cards-list__label">{{item.value.amount | formatCurrency:item.value.currency}} {{item.value.currency}}</div>
-          <ion-note class="cards-list__note">{{item.value.date | amTimeAgo}}</ion-note>
-        </ion-label>
-      </button>
+      <card-list-item *ngFor="let card of currentGiftCards" [card]="card"></card-list-item>
+      <ion-item-divider *ngIf="archivedGiftCards && archivedGiftCards.length">Archived Cards</ion-item-divider>
+      <card-list-item *ngFor="let card of archivedGiftCards" [card]="card"></card-list-item>
     </ion-list>
   </div>
 </wide-header-page>

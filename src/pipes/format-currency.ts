@@ -9,10 +9,11 @@ export class FormatCurrencyPipe implements PipeTransform {
 
   transform(amount: number, currencyCode: string) {
     const precision = this.getPrecision(currencyCode);
-    return this.decimalPipe.transform(
+    const numericalValue = this.decimalPipe.transform(
       amount,
       this.getPrecisionString(precision)
     );
+    return `${numericalValue} ${currencyCode}`;
   }
   getPrecision(currencyCode: string) {
     return currencyCode.toUpperCase() === 'JPY' ? 0 : 2;

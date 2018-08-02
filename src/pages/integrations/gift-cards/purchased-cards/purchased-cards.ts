@@ -1,18 +1,3 @@
-// import { Component } from '@angular/core';
-// import { PlatformProvider } from '../../../../providers/platform/platform';
-
-// @Component({
-//   templateUrl: 'purchased-cards.html'
-// })
-// export class PurchasedCardsPage {
-//   platformName: 'ios' | 'md' = 'md';
-//   constructor(public platformProvider: PlatformProvider) {}
-
-//   ngOnInit() {
-//     this.platformName = this.platformProvider.isIOS ? 'ios' : 'md';
-//   }
-// }
-
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
@@ -30,6 +15,7 @@ import { PlatformProvider } from '../../../../providers/platform/platform';
 import { PopupProvider } from '../../../../providers/popup/popup';
 import { TimeProvider } from '../../../../providers/time/time';
 import { GiftCardNewData } from '../../gift-cards';
+import { CardListItemComponent } from './card-list-item';
 
 @Component({
   selector: 'purchased-cards-page',
@@ -38,6 +24,8 @@ import { GiftCardNewData } from '../../gift-cards';
 export class PurchasedCardsPage {
   public network: string;
   public giftCards;
+  public currentGiftCards;
+  public archivedGiftCards;
   public country: string;
   public pageTitle: string;
   public updatingPending;
@@ -113,7 +101,7 @@ export class PurchasedCardsPage {
     return new Promise(resolve => {
       this.amazonProvider.getPendingGiftCards((err, gcds) => {
         if (err) this.logger.error(err);
-        this.giftCards = gcds;
+        this.setGiftCards(gcds);
         return resolve();
       });
     });
@@ -142,10 +130,20 @@ export class PurchasedCardsPage {
           this.popupProvider.ionicAlert('Could not get gift cards', err);
           return reject(err);
         }
-        this.giftCards = gcds;
+        this.setGiftCards(gcds);
         return resolve();
       });
     });
+  }
+
+  setGiftCards(giftCardMap) {
+    this.giftCards = giftCardMap;
+    const giftCardKeys = Object.keys(this.giftCards);
+    const giftCards = giftCardKeys.map(
+      giftCardId => this.giftCards[giftCardId]
+    );
+    this.currentGiftCards = giftCards.filter(gc => !gc.archived);
+    this.archivedGiftCards = this.currentGiftCards; // giftCards.filter(gc => gc.archived);
   }
 
   public updatePendingGiftCards = _.debounce(
@@ -244,3 +242,8 @@ export class PurchasedCardsPage {
     }
   }
 }
+
+export const PURCHASED_CARDS_PAGE_COMPONENTS = [
+  PurchasedCardsPage,
+  CardListItemComponent
+];
