@@ -355,7 +355,7 @@ ion-icon {
 
 .button-standard {
   width: 90%;
-  max-width: 300px !important;
+  max-width: 300px; // !important;
   margin-left: auto;
   margin-right: auto;
   display: block;

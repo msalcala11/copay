@@ -27,12 +27,16 @@ card-details-page {
     height: 200px;
   }
 
+  $max-width: 315px;
+
   .card-info {
     background-color: #f7f7f7;
     border: 1px solid #e7e7e7;
     border-radius: 8px;
     padding: 70px 30px 20px;
     margin-top: -70px;
+    margin-bottom: 25px;
+    max-width: $max-width;
     &__title {
       color: rgba(0, 0, 0, 0.6);
       font-size: 16px;
@@ -46,6 +50,15 @@ card-details-page {
     &__date {
       color: #4a4a4a;
       font-size: 14px;
+    }
+  }
+
+  .actions {
+    button {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+      max-width: $max-width;
     }
   }
 }
