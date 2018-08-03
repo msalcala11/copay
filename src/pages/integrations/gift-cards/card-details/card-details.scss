@@ -1,4 +1,6 @@
 card-details-page {
+  @include fix-ios-bg-scroll(white);
+
   .header-extend {
     height: 250px;
   }
