@@ -15,10 +15,10 @@
         <div class="card-info__date">Created {{card.date | amTimeAgo}}</div>
       </div>
       <div class="actions">
-        <button ion-button class="button-standard" (click)="goToReceive()">
+        <button ion-button class="button-standard" (click)="redeem()">
           {{'Redeem Now' | translate}}
         </button>
-        <button ion-button class="button-standard button-secondary" (click)="goToReceive()">
+        <button ion-button class="button-standard button-secondary" (click)="openArchiveSheet()">
           {{"I've used this card" | translate}}
         </button>
       </div>

@@ -19,6 +19,9 @@ export class CardDetailsPage {
 
   ngOnInit() {
     this.card = this.navParams.get('card');
-    console.log('this.card', this.card);
   }
+
+  redeem() {}
+
+  openArchiveSheet() {}
 }

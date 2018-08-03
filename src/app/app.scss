@@ -375,6 +375,16 @@ ion-icon {
 .button-secondary {
   background-color: #ededed;
   color: black;
+
+  &:focus,
+  &:active {
+    background-color: #ededed;
+    color: black;
+  }
+
+  &:active {
+    background-color: #e5e5e5;
+  }
 }
 
 .btn-transparent {
