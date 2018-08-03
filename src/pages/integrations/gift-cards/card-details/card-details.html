@@ -7,12 +7,12 @@
     <div class="header-extend">
     </div>
     <div class="content">
-      <div class="balance">{{24 | formatCurrency:'USD'}}</div>
+      <div class="balance">{{card.amount | formatCurrency:card.currency}}</div>
       <img class="card-image" src="assets/img/amazon/amazon-gift-card.png">
       <div class="card-info">
         <div class="card-info__title">Claim Code</div>
-        <div class="card-info__claim-code">29B4-NZ5UW9-DY7C</div>
-        <div class="card-info__date">Created 1 day ago</div>
+        <div class="card-info__claim-code">{{card.claimCode}}</div>
+        <div class="card-info__date">Created {{card.date | amTimeAgo}}</div>
       </div>
       <div class="actions">
         <button ion-button class="button-standard" (click)="goToReceive()">
