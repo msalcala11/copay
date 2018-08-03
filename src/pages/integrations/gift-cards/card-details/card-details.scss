@@ -1,5 +1,6 @@
 card-details-page {
-  @include fix-ios-bg-scroll(white);
+  $background-color: white;
+  @include fix-ios-bg-scroll($background-color);
 
   .header-extend {
     height: 250px;
@@ -7,7 +8,7 @@ card-details-page {
 
   .scroll-content {
     > div.wrapper {
-      background-color: white;
+      background-color: $background-color;
 
       .content {
         padding: 0 30px;
@@ -19,7 +20,7 @@ card-details-page {
   }
 
   .balance {
-    color: white;
+    color: $background-color;
     font-size: 25px;
     font-weight: 500;
     margin: 30px 0 20px;
