@@ -13,7 +13,13 @@ export class FormatCurrencyPipe implements PipeTransform {
       amount,
       this.getPrecisionString(precision)
     );
-    return `${numericalValue} ${currencyCode}`;
+    const formattedValue = `${numericalValue} ${currencyCode}`;
+    const finalValue =
+      currencyCode.toUpperCase() === 'USD'
+        ? `$${formattedValue}`
+        : formattedValue;
+
+    return finalValue;
   }
   getPrecision(currencyCode: string) {
     return currencyCode.toUpperCase() === 'JPY' ? 0 : 2;
