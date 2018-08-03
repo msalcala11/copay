@@ -40,6 +40,8 @@ card-details-page {
     margin-top: -70px;
     margin-bottom: 25px;
     max-width: $max-width;
+    margin-left: auto;
+    margin-right: auto;
     &__title {
       color: rgba(0, 0, 0, 0.6);
       font-size: 16px;
@@ -57,6 +59,10 @@ card-details-page {
   }
 
   .actions {
+    max-width: $max-width;
+    margin-left: auto;
+    margin-right: auto;
+
     button {
       width: 100%;
       margin-left: 0;

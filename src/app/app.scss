@@ -358,10 +358,12 @@ ion-icon {
   background-color: #ededed;
   color: black;
 
+  &:hover.button-md,
   &:focus,
   &:active {
     background-color: #ededed;
     color: black;
+    box-shadow: none;
   }
 
   &:active {
