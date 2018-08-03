@@ -8,6 +8,7 @@ card-details-page {
       background-color: white;
 
       .content {
+        padding: 0 30px;
         position: relative;
         z-index: 1;
         text-align: center;
@@ -24,5 +25,27 @@ card-details-page {
 
   .card-image {
     height: 200px;
+  }
+
+  .card-info {
+    background-color: #f7f7f7;
+    border: 1px solid #e7e7e7;
+    border-radius: 8px;
+    padding: 70px 30px 20px;
+    margin-top: -70px;
+    &__title {
+      color: rgba(0, 0, 0, 0.6);
+      font-size: 16px;
+    }
+    &__claim-code {
+      color: #060606;
+      font-weight: 500;
+      font-size: 18px;
+      margin: 20px 0;
+    }
+    &__date {
+      color: #4a4a4a;
+      font-size: 14px;
+    }
   }
 }
