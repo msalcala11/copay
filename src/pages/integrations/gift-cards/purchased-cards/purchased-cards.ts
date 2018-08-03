@@ -15,6 +15,7 @@ import { PlatformProvider } from '../../../../providers/platform/platform';
 import { PopupProvider } from '../../../../providers/popup/popup';
 import { TimeProvider } from '../../../../providers/time/time';
 import { GiftCardNewData } from '../../gift-cards';
+import { CardDetailsPage } from '../card-details/card-details';
 import { CardListItemComponent } from './card-list-item/card-list-item';
 
 @Component({
@@ -240,6 +241,10 @@ export class PurchasedCardsPage {
         });
         break;
     }
+  }
+
+  public goToCardDetails(card) {
+    return this.navCtrl.push(CardDetailsPage, { card });
   }
 }
 

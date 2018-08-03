@@ -127,6 +127,7 @@ import { CustomAmountPage } from '../pages/receive/custom-amount/custom-amount';
 import { WideHeaderPage } from './templates/wide-header-page/wide-header-page';
 import { WalletTabsChild } from './wallet-tabs/wallet-tabs-child';
 
+import { CardDetailsPage } from './integrations/gift-cards/card-details/card-details';
 import { PURCHASED_CARDS_PAGE_COMPONENTS } from './integrations/gift-cards/purchased-cards/purchased-cards';
 
 export const PAGES = [
@@ -153,6 +154,7 @@ export const PAGES = [
   BuyCoinbasePage,
   BuyGlideraPage,
   BuyMercadoLibrePage,
+  CardDetailsPage,
   ChooseFeeLevelPage,
   CreateWalletPage,
   CoinbasePage,
