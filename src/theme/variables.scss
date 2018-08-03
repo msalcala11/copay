@@ -25,14 +25,23 @@ $app-direction: ltr;
 $colors: (
   primary: $color-primary,
   secondary: $color-secondary,
-  warning: #ffa500,
-  danger: #ef473a,
+  warning: #fdb455,
+  danger: #df5264,
   success: #01d1a2,
+  info: #5476eb,
   light: #f4f4f4,
   blank: #fff,
   dark: #424242,
   grey: #667,
-  light-grey: #9b9bab
+  light-grey: #9b9bab,
+  error: #e56c7b
+);
+
+$background-colors: (
+  warning: #fff7f2,
+  danger: #fff2f4,
+  success: #bfffeb,
+  info: #eff1f8
 );
 // App background color
 $background-color: #f8f8f9;
@@ -78,6 +87,7 @@ $searchbar-ios-background-color: color($colors, blank);
 $searchbar-ios-padding-vertical: 16px;
 $searchbar-ios-padding-horizontal: 8px;
 $note-ios-color: color($colors, light-grey);
+$toolbar-ios-title-font-weight: 400;
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
@@ -160,8 +170,8 @@ ion-footer {
   }
 }
 
-// Titles centered on all headers for material design
 .toolbar {
+  // Titles centered on all headers for material design
   &.toolbar-md {
     //material design only
     position: relative;
@@ -178,7 +188,13 @@ ion-footer {
       text-align: center;
       .toolbar-title-md {
         padding: 0px 50px 0px 50px;
+        font-weight: 400;
       }
+    }
+  }
+  &.toolbar-ios {
+    .back-button {
+      padding: 15px;
     }
   }
 }

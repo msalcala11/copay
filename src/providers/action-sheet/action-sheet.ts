@@ -7,15 +7,19 @@ import { DomProvider } from '../../providers/dom/dom';
 
 export type InfoSheetType =
   | 'address-copied'
+  | 'backup-ready'
+  | 'backup-warning'
   | 'copayers'
+  | 'copy-to-clipboard'
   | 'custom-amount'
   | 'default-error'
+  | 'insufficient-funds'
   | 'miner-fee'
   | 'miner-fee-notice'
   | 'paper-key-unverified'
   | 'paper-key-unverified-with-activity'
   | 'receiving-bitcoin'
-  | 'insufficient-funds';
+  | 'sensitive-info';
 
 export type OptionsSheetType = 'address-options';
 export interface WalletSelectorParams {

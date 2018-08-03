@@ -1,16 +1,16 @@
 import { Component, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import { ActionSheetController, ToastController } from 'ionic-angular';
+import { ActionSheetController } from 'ionic-angular';
 
 // native
 import { SocialSharing } from '@ionic-native/social-sharing';
 
 // providers
+import { ActionSheetProvider } from '../../../../providers/action-sheet/action-sheet';
 import { ConfigProvider } from '../../../../providers/config/config';
 import { Logger } from '../../../../providers/logger/logger';
 import { PlatformProvider } from '../../../../providers/platform/platform';
-import { PopupProvider } from '../../../../providers/popup/popup';
 
 import * as _ from 'lodash';
 
@@ -33,10 +33,9 @@ export class SessionLogPage {
     private logger: Logger,
     private socialSharing: SocialSharing,
     private actionSheetCtrl: ActionSheetController,
-    private toastCtrl: ToastController,
     private platformProvider: PlatformProvider,
     private translate: TranslateService,
-    private popupProvider: PopupProvider
+    private actionSheetProvider: ActionSheetProvider
   ) {
     this.dom = dom;
     this.config = this.configProvider.get();
@@ -92,12 +91,11 @@ export class SessionLogPage {
     textarea.value = this.prepareLogs();
     textarea.select();
     this.dom.execCommand('copy');
-    let message = this.translate.instant('Copied to clipboard');
-    let showSuccess = this.toastCtrl.create({
-      message,
-      duration: 1000
-    });
-    showSuccess.present();
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'copy-to-clipboard',
+      { msg: this.translate.instant('Session Log') }
+    );
+    infoSheet.present();
   }
 
   private sendLogs(): void {
@@ -146,12 +144,12 @@ export class SessionLogPage {
   }
 
   private showWarningModal() {
-    const sessionLogWarningModal = this.popupProvider.createMiniModal(
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
       'sensitive-info'
     );
-    sessionLogWarningModal.present();
-    sessionLogWarningModal.onDidDismiss(response => {
-      if (response) this.isCordova ? this.sendLogs() : this.copyToClipboard();
+    infoSheet.present();
+    infoSheet.onDidDismiss(option => {
+      if (option) this.isCordova ? this.sendLogs() : this.copyToClipboard();
     });
   }
 }
