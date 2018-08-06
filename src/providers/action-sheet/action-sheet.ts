@@ -7,6 +7,7 @@ import { DomProvider } from '../../providers/dom/dom';
 
 export type InfoSheetType =
   | 'address-copied'
+  | 'archive-gift-card'
   | 'backup-ready'
   | 'backup-warning'
   | 'copayers'

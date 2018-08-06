@@ -7,6 +7,7 @@ export interface GiftCard {
   amount: number;
   currency: string;
   date: number;
+  archived: boolean;
 }
 
 @Component({
@@ -36,5 +37,9 @@ export class CardDetailsPage {
 
   redeem() {}
 
-  openArchiveSheet() {}
+  openArchiveSheet() {
+    const sheet = this.actionSheetProvider.createInfoSheet('archive-gift-card');
+    sheet.present();
+    sheet.onDidDismiss(() => (this.card.archived = true));
+  }
 }
