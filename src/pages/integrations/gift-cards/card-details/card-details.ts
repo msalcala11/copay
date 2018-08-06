@@ -35,12 +35,20 @@ export class CardDetailsPage {
       .present();
   }
 
+  archive() {
+    console.log('archive');
+  }
+
   redeem() {}
+
+  showInvoice() {
+    console.log('show invoice');
+  }
 
   openArchiveSheet() {
     const sheet = this.actionSheetProvider.createInfoSheet('archive-gift-card');
     sheet.present();
-    sheet.onDidDismiss(() => (this.card.archived = true));
+    sheet.onDidDismiss(() => this.archive());
   }
 
   showMoreOptions() {
@@ -48,6 +56,12 @@ export class CardDetailsPage {
       'gift-card-options'
     );
     sheet.present();
-    sheet.onDidDismiss(() => (this.card.archived = true));
+    sheet.onDidDismiss(data => {
+      if (data === 'archive') {
+        this.archive();
+      } else if (data === 'view-invoice') {
+        this.showInvoice();
+      }
+    });
   }
 }
