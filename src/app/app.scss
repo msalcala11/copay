@@ -369,7 +369,8 @@ ion-icon {
     }
   }
 
-  &:active {
+  &:active,
+  &.activated {
     &.button-md,
     &.button-ios {
       background-color: #e5e5e5;
