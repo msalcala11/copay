@@ -1,16 +1,32 @@
 <action-sheet>
   <div class="options-container" [ngSwitch]="sheetType">
-    <div class="option" (click)="optionClicked('request-amount')" *ngSwitchCase="'address-options'">
-      <div class="option-icon">
-        <img src="assets/img/specific-amount.svg">
+    <div *ngSwitchCase="'address-options'">
+      <div class="option" (click)="optionClicked('request-amount')">
+        <div class="option-icon">
+          <img src="assets/img/specific-amount.svg">
+        </div>
+        <div translate class="option-text">Request Specific Amount</div>
       </div>
-      <div translate class="option-text">Request Specific Amount</div>
+      <div *ngIf="params.showShare" class="option" (click)="optionClicked('share-address')">
+        <div class="option-icon">
+          <img src="assets/img/icon-share.svg">
+        </div>
+        <div translate class="option-text">Share Address</div>
+      </div>
     </div>
-    <div *ngIf="params.showShare" class="option" (click)="optionClicked('share-address')">
-      <div class="option-icon">
-        <img src="assets/img/icon-share.svg">
+    <div *ngSwitchCase="'gift-card-options'">
+      <div class="option" (click)="optionClicked('archive')">
+        <div class="option-icon">
+          <img src="assets/img/specific-amount.svg">
+        </div>
+        <div translate class="option-text">Archive Card</div>
       </div>
-      <div translate class="option-text">Share Address</div>
+      <div class="option" (click)="optionClicked('view-invoice')">
+        <div class="option-icon">
+          <img src="assets/img/icon-share.svg">
+        </div>
+        <div translate class="option-text">View Invoice</div>
+      </div>
     </div>
     <div (click)="dismiss()" class="cancel-btn">Cancel</div>
   </div>

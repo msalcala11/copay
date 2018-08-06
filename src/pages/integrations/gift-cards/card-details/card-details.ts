@@ -42,4 +42,12 @@ export class CardDetailsPage {
     sheet.present();
     sheet.onDidDismiss(() => (this.card.archived = true));
   }
+
+  showMoreOptions() {
+    const sheet = this.actionSheetProvider.createOptionsSheet(
+      'gift-card-options'
+    );
+    sheet.present();
+    sheet.onDidDismiss(() => (this.card.archived = true));
+  }
 }

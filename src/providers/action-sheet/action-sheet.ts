@@ -23,7 +23,7 @@ export type InfoSheetType =
   | 'receiving-bitcoin'
   | 'sensitive-info';
 
-export type OptionsSheetType = 'address-options';
+export type OptionsSheetType = 'address-options' | 'gift-card-options';
 export interface WalletSelectorParams {
   wallets: any[];
   selectedWalletId: string;
