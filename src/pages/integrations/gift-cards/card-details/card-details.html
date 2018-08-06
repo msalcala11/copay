@@ -9,7 +9,7 @@
     <div class="content">
       <div class="balance">{{card.amount | formatCurrency:card.currency}}</div>
       <img class="card-image" src="assets/img/amazon/amazon-gift-card.png">
-      <div class="card-info">
+      <div class="card-info" (click)="copyClaimCode()" [copy-to-clipboard]="card.claimCode" [hide-toast]="true">
         <div class="card-info__title">Claim Code</div>
         <div class="card-info__claim-code">{{card.claimCode}}</div>
         <div class="card-info__date">Created {{card.date | amTimeAgo}}</div>

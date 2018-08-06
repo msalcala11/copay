@@ -11,6 +11,7 @@ export type InfoSheetType =
   | 'backup-warning'
   | 'copayers'
   | 'copy-to-clipboard'
+  | 'copied-gift-card-claim-code'
   | 'custom-amount'
   | 'default-error'
   | 'insufficient-funds'
