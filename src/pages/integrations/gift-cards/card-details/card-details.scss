@@ -6,19 +6,6 @@ card-details-page {
     height: 250px;
   }
 
-  .scroll-content {
-    > div.wrapper {
-      background-color: $background-color;
-
-      .content {
-        padding: 0 30px;
-        position: relative;
-        z-index: 1;
-        text-align: center;
-      }
-    }
-  }
-
   .balance {
     color: $background-color;
     font-size: 25px;

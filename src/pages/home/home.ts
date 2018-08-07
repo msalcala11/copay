@@ -44,6 +44,8 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { ReleaseProvider } from '../../providers/release/release';
 import { ReplaceParametersProvider } from '../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../providers/wallet/wallet';
+import { BuyAmazonPage } from '../integrations/amazon/buy-amazon/buy-amazon';
+import { BuyCardPage } from '../integrations/gift-cards/buy-card/buy-card';
 import { PurchasedCardsPage } from '../integrations/gift-cards/purchased-cards/purchased-cards';
 import { SettingsPage } from '../settings/settings';
 

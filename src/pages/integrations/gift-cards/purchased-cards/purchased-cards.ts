@@ -15,6 +15,7 @@ import { PlatformProvider } from '../../../../providers/platform/platform';
 import { PopupProvider } from '../../../../providers/popup/popup';
 import { TimeProvider } from '../../../../providers/time/time';
 import { GiftCardNewData } from '../../gift-cards';
+import { BuyCardPage } from '../buy-card/buy-card';
 import { CardDetailsPage } from '../card-details/card-details';
 import { CardListItemComponent } from './card-list-item/card-list-item';
 
@@ -89,7 +90,9 @@ export class PurchasedCardsPage {
     }
   }
 
-  addCard() {}
+  addCard() {
+    this.navCtrl.push(BuyCardPage);
+  }
 
   private async initAmazon(): Promise<any> {
     if (!this.amazonProvider.currency) {

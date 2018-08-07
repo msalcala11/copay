@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 @Component({
-  selector: 'card-details-page',
-  templateUrl: 'card-details.html'
+  selector: 'buy-card-page',
+  templateUrl: 'buy-card.html'
 })
 export class BuyCardPage {
   constructor(private nav: NavController) {}
