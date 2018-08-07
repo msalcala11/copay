@@ -1,6 +1,4 @@
-$gift-card-page-background-color: white;
-$gift-card-page-padding: 30px;
-$gift-card-content-max-width: 315px;
+@import './../gift-cards';
 
 buy-card-page {
   @include fix-ios-bg-scroll($gift-card-page-background-color);
@@ -14,6 +12,7 @@ buy-card-page {
     flex-direction: column;
     min-height: 100%;
     text-align: center;
+
     .header-extension {
       height: 100px;
       background: $toolbar-background;
@@ -37,14 +36,14 @@ buy-card-page {
         flex-grow: 1;
         font-size: 50px;
         font-weight: 500;
-        margin-top: -30px;
+        margin-top: -27px;
       }
     }
 
     .buy-box {
-      $buy-box-padding: 35px;
       font-size: 16px;
-      padding: 10px $buy-box-padding 10px;
+      padding: 10px 35px 20px;
+
       &__terms {
         text-align: left;
 
@@ -54,34 +53,6 @@ buy-card-page {
 
         margin-bottom: 30px;
       }
-    }
-  }
-}
-
-.gift-card-content {
-  .scroll-content {
-    > div.wrapper {
-      background-color: $gift-card-page-background-color;
-
-      .content {
-        padding: 0 $gift-card-page-padding;
-        position: relative;
-        z-index: 1;
-        text-align: center;
-      }
-    }
-  }
-
-  .actions {
-    max-width: $gift-card-content-max-width;
-    margin-left: auto;
-    margin-right: auto;
-
-    button {
-      width: 100%;
-      margin-left: 0;
-      margin-right: 0;
-      max-width: $gift-card-content-max-width;
     }
   }
 }
