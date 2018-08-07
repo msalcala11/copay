@@ -17,8 +17,6 @@ card-details-page {
     height: 200px;
   }
 
-  $max-width: 315px;
-
   .card-info {
     background-color: #f7f7f7;
     border: 1px solid #e7e7e7;
@@ -26,7 +24,7 @@ card-details-page {
     padding: 70px 30px 20px;
     margin-top: -70px;
     margin-bottom: 25px;
-    max-width: $max-width;
+    max-width: $gift-card-content-max-width;
     margin-left: auto;
     margin-right: auto;
     &__title {
@@ -47,7 +45,7 @@ card-details-page {
   }
 
   .actions {
-    max-width: $max-width;
+    max-width: $gift-card-content-max-width;
     margin-left: auto;
     margin-right: auto;
 
@@ -55,7 +53,7 @@ card-details-page {
       width: 100%;
       margin-left: 0;
       margin-right: 0;
-      max-width: $max-width;
+      max-width: $gift-card-content-max-width;
     }
   }
 }
