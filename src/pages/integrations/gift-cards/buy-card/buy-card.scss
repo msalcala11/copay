@@ -25,6 +25,7 @@ buy-card-page {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
+      min-height: 180px;
 
       .card-image {
         margin-top: -80px;
