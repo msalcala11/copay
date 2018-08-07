@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { ActionSheetProvider } from '../../../../providers/action-sheet/action-sheet';
+import { AmazonProvider } from '../../../../providers/amazon/amazon';
+import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 
 export interface GiftCard {
-  claimCode: string;
   amount: number;
+  archived: boolean;
+  claimCode: string;
   currency: string;
   date: number;
-  archived: boolean;
+  invoiceUrl: string;
 }
 
 @Component({
@@ -19,7 +22,9 @@ export class CardDetailsPage {
 
   constructor(
     private navParams: NavParams,
-    private actionSheetProvider: ActionSheetProvider
+    private amazonProvider: AmazonProvider,
+    private actionSheetProvider: ActionSheetProvider,
+    private externalLinkProvider: ExternalLinkProvider
   ) {}
 
   ngOnInit() {
@@ -36,13 +41,7 @@ export class CardDetailsPage {
   }
 
   archive() {
-    console.log('archive');
-  }
-
-  redeem() {}
-
-  showInvoice() {
-    console.log('show invoice');
+    console.log('archive', this.card);
   }
 
   openArchiveSheet() {
@@ -51,16 +50,30 @@ export class CardDetailsPage {
     sheet.onDidDismiss(() => this.archive());
   }
 
+  openExternalLink(url: string): void {
+    this.externalLinkProvider.open(url);
+  }
+
+  redeem() {
+    const url = `${this.amazonProvider.redeemAmazonUrl}${this.card.claimCode}`;
+    this.externalLinkProvider.open(url);
+  }
+
+  showInvoice() {
+    this.externalLinkProvider.open(this.card.invoiceUrl);
+  }
+
   showMoreOptions() {
     const sheet = this.actionSheetProvider.createOptionsSheet(
       'gift-card-options'
     );
     sheet.present();
     sheet.onDidDismiss(data => {
-      if (data === 'archive') {
-        this.archive();
-      } else if (data === 'view-invoice') {
-        this.showInvoice();
+      switch (data) {
+        case 'archive':
+          return this.openArchiveSheet();
+        case 'view-invoice':
+          return this.showInvoice();
       }
     });
   }

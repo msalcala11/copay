@@ -89,6 +89,8 @@ export class PurchasedCardsPage {
     }
   }
 
+  addCard() {}
+
   private async initAmazon(): Promise<any> {
     if (!this.amazonProvider.currency) {
       this.onGoingProcessProvider.set('');
