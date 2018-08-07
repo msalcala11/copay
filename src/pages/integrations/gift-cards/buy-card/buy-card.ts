@@ -11,4 +11,6 @@ export class BuyCardPage {
   cancel() {
     this.nav.pop();
   }
+
+  enterAmount() {}
 }

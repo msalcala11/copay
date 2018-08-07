@@ -6,10 +6,26 @@
 
 <ion-content class="gift-card-content">
   <div class="wrapper">
-    <div class="header-extend">
+    <!-- <div class="header-extend">
+    </div> -->
+    <!-- <div class="content"> -->
+    <!-- <img class="card-image" src="assets/img/amazon/amazon-gift-card.png"> -->
+    <div class="header-extension"></div>
+    <div class="amount-box">
+      <div>
+        <img class="card-image" src="assets/img/amazon/amazon-gift-card.png">
+      </div>
+      <div class="amount-box__value">$0.00</div>
     </div>
-    <div class="content">
-      <img class="card-image" src="assets/img/amazon/amazon-gift-card.png">
+    <div class="buy-box">
+      <div class="buy-box__terms">
+        <div>Only redeemable on www.amazon.com (USA website)</div>
+        <div>Amazon.com Gift Cards never expire and can be redeemed towards millions of items at www.amazon.com.</div>
+      </div>
+      <button ion-button class="button-standard" (click)="enterAmount()">
+        {{'Enter Amount' | translate}}
+      </button>
     </div>
+    <!-- </div> -->
   </div>
 </ion-content>
