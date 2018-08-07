@@ -1,6 +1,6 @@
+$gift-card-page-background-color: white;
 buy-card-page {
-  $background-color: white;
-  @include fix-ios-bg-scroll($background-color);
+  @include fix-ios-bg-scroll($gift-card-page-background-color);
   .card-image {
     height: 200px;
     margin-top: 15px;
@@ -10,7 +10,7 @@ buy-card-page {
 .gift-card-content {
   .scroll-content {
     > div.wrapper {
-      background-color: $background-color;
+      background-color: $gift-card-page-background-color;
 
       .content {
         padding: 0 30px;
