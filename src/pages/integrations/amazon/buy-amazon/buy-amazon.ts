@@ -27,6 +27,7 @@ import {
   TransactionProposal,
   WalletProvider
 } from '../../../../providers/wallet/wallet';
+import { CardDetailsPage } from '../../gift-cards/card-details/card-details';
 
 @Component({
   selector: 'page-buy-amazon',
@@ -647,11 +648,7 @@ export class BuyAmazonPage {
     modal.onDidDismiss(async () => {
       await this.navCtrl.popToRoot({ animate: false });
       await this.navCtrl.parent.select(0);
-      await this.navCtrl.push(
-        AmazonPage,
-        { invoiceId: this.invoiceId, country: this.country },
-        { animate: false }
-      );
+      await this.navCtrl.push(CardDetailsPage, { card: this.amazonGiftCard });
     });
   }
 }
