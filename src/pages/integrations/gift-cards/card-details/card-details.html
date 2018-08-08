@@ -10,9 +10,8 @@
 
 <ion-content class="gift-card-content">
   <div class="wrapper">
-    <div class="header-extend">
-    </div>
-    <div class="content">
+    <div class="header-extension"></div>
+    <div class="main-content">
       <div class="balance">{{card.amount | formatCurrency:card.currency}}</div>
       <img class="card-image" src="assets/img/amazon/amazon-gift-card.png">
       <div class="card-info" (click)="copyClaimCode()" [copy-to-clipboard]="card.claimCode" [hide-toast]="true">
@@ -28,16 +27,15 @@
           {{"I've used this card" | translate}}
         </button>
       </div>
-      <div class="terms">
-        <!-- * -->
-        <a (click)="openExternalLink('http://amazon.com')">Amazon.com</a> is not a sponsor of this promotion. Except as required by law,
-        <a (click)="openExternalLink('http://amazon.com')">Amazon.com</a> Gift Cards ("GCs") cannot be transferred for value or redeemed for cash. GCs may be used only for
-        purchases of eligible goods at
-        <a (click)="openExternalLink('http://amazon.com')">Amazon.com</a> or certain of its affiliated websites. For complete terms and conditions, see
-        <a (click)="openExternalLink('https://www.amazon.com/gc-legal')">www.amazon.com/gc-legal</a>. GCs are issued by ACI Gift Cards, Inc., a Washington corporation. All Amazon &reg;,
-        &trade; &amp; &copy; are IP of
-        <a (click)="openExternalLink('http://amazon.com')">Amazon.com</a>, Inc. or its affiliates.
-      </div>
+    </div>
+    <div class="terms">
+      <a (click)="openExternalLink('http://amazon.com')">Amazon.com</a> is not a sponsor of this promotion. Except as required by law,
+      <a (click)="openExternalLink('http://amazon.com')">Amazon.com</a> Gift Cards ("GCs") cannot be transferred for value or redeemed for cash. GCs may be used only for purchases
+      of eligible goods at
+      <a (click)="openExternalLink('http://amazon.com')">Amazon.com</a> or certain of its affiliated websites. For complete terms and conditions, see
+      <a (click)="openExternalLink('https://www.amazon.com/gc-legal')">www.amazon.com/gc-legal</a>. GCs are issued by ACI Gift Cards, Inc., a Washington corporation. All Amazon &reg;, &trade;
+      &amp; &copy; are IP of
+      <a (click)="openExternalLink('http://amazon.com')">Amazon.com</a>, Inc. or its affiliates.
     </div>
   </div>
 </ion-content>

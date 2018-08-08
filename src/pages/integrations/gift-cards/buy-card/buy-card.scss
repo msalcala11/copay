@@ -4,55 +4,38 @@ buy-card-page {
   @include fix-ios-bg-scroll($gift-card-page-background-color);
   .card-image {
     height: 200px;
-    margin-top: 15px;
+    margin-top: -80px;
   }
 
-  .wrapper {
+  .amount-box {
+    background-image: linear-gradient(-180deg, #ffffff 0%, #ebedf8 100%);
     display: flex;
     flex-direction: column;
-    min-height: 100%;
-    text-align: center;
+    flex-grow: 1;
+    min-height: 180px;
 
-    .header-extension {
-      height: 100px;
-      background: $toolbar-background;
-      margin: 0 -1 * $gift-card-page-padding;
-    }
-
-    .amount-box {
-      background-image: linear-gradient(-180deg, #ffffff 0%, #ebedf8 100%);
-      display: flex;
-      flex-direction: column;
+    &__value {
+      @include center();
+      color: #1a3a8b;
       flex-grow: 1;
-      min-height: 180px;
-
-      .card-image {
-        margin-top: -80px;
-      }
-
-      &__value {
-        @include center();
-        color: #1a3a8b;
-        flex-grow: 1;
-        font-size: 50px;
-        font-weight: 500;
-        margin-top: -27px;
-      }
+      font-size: 50px;
+      font-weight: 500;
+      margin-top: -27px;
     }
+  }
 
-    .buy-box {
-      font-size: 16px;
-      padding: 10px 35px 20px;
+  .buy-box {
+    font-size: 16px;
+    padding: 10px 35px 20px;
 
-      &__terms {
-        text-align: left;
+    &__terms {
+      text-align: left;
 
-        > div {
-          margin: 20px 0;
-        }
-
-        margin-bottom: 30px;
+      > div {
+        margin: 20px 0;
       }
+
+      margin-bottom: 30px;
     }
   }
 }

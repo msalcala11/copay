@@ -3,17 +3,25 @@ $gift-card-page-padding: 30px;
 $gift-card-content-max-width: 315px;
 
 .gift-card-content {
-  .scroll-content {
-    > div.wrapper {
-      background-color: $gift-card-page-background-color;
+  .scroll-content > div.wrapper {
+    background-color: $gift-card-page-background-color;
+  }
 
-      .content {
-        padding: 0 $gift-card-page-padding;
-        position: relative;
-        text-align: center;
-        z-index: 1;
-      }
-    }
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    text-align: center;
+  }
+
+  .card-image {
+    height: 200px;
+  }
+
+  .header-extension {
+    height: 100px;
+    background: $toolbar-background;
+    margin: 0 -1 * $gift-card-page-padding;
   }
 
   .actions {
