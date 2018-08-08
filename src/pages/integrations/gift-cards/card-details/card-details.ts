@@ -11,6 +11,7 @@ export interface GiftCard {
   currency: string;
   date: number;
   invoiceUrl: string;
+  invoiceId: string;
 }
 
 @Component({

@@ -16,7 +16,7 @@ import { PopupProvider } from '../../../../providers/popup/popup';
 import { TimeProvider } from '../../../../providers/time/time';
 import { GiftCardNewData } from '../../gift-cards';
 import { BuyCardPage } from '../buy-card/buy-card';
-import { CardDetailsPage } from '../card-details/card-details';
+import { CardDetailsPage, GiftCard } from '../card-details/card-details';
 import { CardListItemComponent } from './card-list-item/card-list-item';
 
 @Component({
@@ -25,9 +25,9 @@ import { CardListItemComponent } from './card-list-item/card-list-item';
 })
 export class PurchasedCardsPage {
   public network: string;
-  public giftCards;
-  public currentGiftCards;
-  public archivedGiftCards;
+  public giftCards: { [invoiceId: string]: GiftCard };
+  public currentGiftCards: GiftCard[];
+  public archivedGiftCards: GiftCard[];
   public country: string;
   public pageTitle: string;
   public updatingPending;
@@ -145,9 +145,9 @@ export class PurchasedCardsPage {
   setGiftCards(giftCardMap) {
     this.giftCards = giftCardMap;
     const giftCardKeys = Object.keys(this.giftCards);
-    const giftCards = giftCardKeys.map(
-      giftCardId => this.giftCards[giftCardId]
-    );
+    const giftCards: GiftCard[] = giftCardKeys
+      .map(giftCardId => this.giftCards[giftCardId])
+      .sort((a: GiftCard, b: GiftCard) => (a.date > b.date ? 1 : -1));
     this.currentGiftCards = giftCards.filter(gc => !gc.archived);
     this.archivedGiftCards = this.currentGiftCards; // giftCards.filter(gc => gc.archived);
   }
