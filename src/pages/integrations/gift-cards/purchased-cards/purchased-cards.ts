@@ -147,7 +147,7 @@ export class PurchasedCardsPage {
     const giftCardKeys = Object.keys(this.giftCards);
     const giftCards: GiftCard[] = giftCardKeys
       .map(giftCardId => this.giftCards[giftCardId])
-      .sort((a: GiftCard, b: GiftCard) => (a.date > b.date ? 1 : -1));
+      .sort((a: GiftCard, b: GiftCard) => (a.date < b.date ? 1 : -1));
     this.currentGiftCards = giftCards.filter(gc => !gc.archived);
     this.archivedGiftCards = this.currentGiftCards; // giftCards.filter(gc => gc.archived);
   }
