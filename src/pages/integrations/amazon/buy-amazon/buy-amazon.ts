@@ -7,7 +7,6 @@ import { Logger } from '../../../../providers/logger/logger';
 
 // Pages
 import { FinishModalPage } from '../../../finish/finish';
-import { AmazonPage } from '../amazon';
 
 // Provider
 import { ActionSheetProvider } from '../../../../providers/action-sheet/action-sheet';
@@ -611,7 +610,7 @@ export class BuyAmazonPage {
     });
   }
 
-  private openFinishModal(): void {
+  private async openFinishModal() {
     let finishComment: string;
     let cssClass: string;
     if (this.amazonGiftCard.status == 'FAILURE') {
@@ -643,12 +642,10 @@ export class BuyAmazonPage {
       { finishText, finishComment, cssClass },
       { showBackdrop: true, enableBackdropDismiss: false }
     );
-    modal.present();
+    await modal.present();
 
-    modal.onDidDismiss(async () => {
-      await this.navCtrl.popToRoot({ animate: false });
-      await this.navCtrl.parent.select(0);
-      await this.navCtrl.push(CardDetailsPage, { card: this.amazonGiftCard });
-    });
+    await this.navCtrl.popToRoot({ animate: false });
+    await this.navCtrl.parent.select(0);
+    await this.navCtrl.push(CardDetailsPage, { card: this.amazonGiftCard });
   }
 }
