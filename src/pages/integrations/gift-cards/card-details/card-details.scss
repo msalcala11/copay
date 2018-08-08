@@ -56,4 +56,12 @@ card-details-page {
       max-width: $gift-card-content-max-width;
     }
   }
+
+  .terms {
+    font-size: 12px;
+    line-height: 18px;
+    color: rgba(58, 58, 58, 0.5);
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
 }
