@@ -646,6 +646,10 @@ export class BuyAmazonPage {
 
     await this.navCtrl.popToRoot({ animate: false });
     await this.navCtrl.parent.select(0);
-    await this.navCtrl.push(CardDetailsPage, { card: this.amazonGiftCard });
+    await this.navCtrl.push(
+      CardDetailsPage,
+      { card: this.amazonGiftCard },
+      { animate: false }
+    );
   }
 }
