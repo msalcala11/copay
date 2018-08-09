@@ -127,6 +127,7 @@ import { WalletTabsChild } from './wallet-tabs/wallet-tabs-child';
 
 import { BuyCardPage } from './integrations/gift-cards/buy-card/buy-card';
 import { CardDetailsPage } from './integrations/gift-cards/card-details/card-details';
+import { ConfirmCardPurchasePage } from './integrations/gift-cards/confirm-card-purchase/confirm-card-purchase';
 import { PURCHASED_CARDS_PAGE_COMPONENTS } from './integrations/gift-cards/purchased-cards/purchased-cards';
 
 export const PAGES = [
@@ -159,6 +160,7 @@ export const PAGES = [
   CreateWalletPage,
   CoinbasePage,
   CoinbaseTxDetailsPage,
+  ConfirmCardPurchasePage,
   CopayersPage,
   FeedbackCardPage,
   FeedbackPage,

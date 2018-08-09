@@ -33,7 +33,7 @@ export class BuyCardPage {
 
   enterAmount() {
     this.nav.push(AmountPage, {
-      nextPage: 'BuyAmazonPage',
+      nextPage: 'ConfirmCardPurchasePage',
       currency: this.amazonProvider.currency,
       fixedUnit: true,
       onlyIntegers: this.amazonProvider.onlyIntegers

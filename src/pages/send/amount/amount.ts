@@ -25,6 +25,7 @@ import { BuyAmazonPage } from '../../integrations/amazon/buy-amazon/buy-amazon';
 import { BitPayCardTopUpPage } from '../../integrations/bitpay-card/bitpay-card-topup/bitpay-card-topup';
 import { BuyCoinbasePage } from '../../integrations/coinbase/buy-coinbase/buy-coinbase';
 import { SellCoinbasePage } from '../../integrations/coinbase/sell-coinbase/sell-coinbase';
+import { ConfirmCardPurchasePage } from '../../integrations/gift-cards/confirm-card-purchase/confirm-card-purchase';
 import { BuyGlideraPage } from '../../integrations/glidera/buy-glidera/buy-glidera';
 import { SellGlideraPage } from '../../integrations/glidera/sell-glidera/sell-glidera';
 import { BuyMercadoLibrePage } from '../../integrations/mercado-libre/buy-mercado-libre/buy-mercado-libre';
@@ -271,6 +272,9 @@ export class AmountPage extends WalletTabsChild {
         break;
       case 'BuyAmazonPage':
         nextPage = BuyAmazonPage;
+        break;
+      case 'ConfirmCardPurchasePage':
+        nextPage = ConfirmCardPurchasePage;
         break;
       case 'BuyGlideraPage':
         nextPage = BuyGlideraPage;
