@@ -53,7 +53,6 @@ export class ConfirmCardPurchasePage {
   public totalAmount: number;
   public amazonGiftCard;
   public amountUnitStr: string;
-  // public limitPerDayMessage: string;
   public network: string;
   public walletSelectorTitle: string;
   public isOpenSelector: boolean;
@@ -111,20 +110,6 @@ export class ConfirmCardPurchasePage {
   ionViewWillEnter() {
     this.isOpenSelector = false;
     this.navCtrl.swipeBackEnabled = false;
-
-    // let limitPerDay = this.amazonProvider.limitPerDay;
-
-    // this.limitPerDayMessage = this.replaceParametersProvider.replace(
-    //   this.translate.instant(
-    //     'Purchase Amount is limited to {{limitPerDay}} {{currency}} per day'
-    //   ),
-    //   { limitPerDay, currency: this.currency }
-    // );
-
-    // if (this.amount > this.amazonProvider.limitPerDay) {
-    //   this.showErrorAndBack(null, this.limitPerDayMessage);
-    //   return;
-    // }
 
     this.network = this.amazonProvider.getNetwork();
     this.wallets = this.profileProvider.getWallets({

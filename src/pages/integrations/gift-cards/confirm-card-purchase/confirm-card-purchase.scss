@@ -18,7 +18,6 @@ confirm-card-purchase-page {
 
   .confirm-header {
     padding-top: 25px;
-    // height: 160px;
 
     ion-label {
       display: flex;
@@ -82,5 +81,9 @@ confirm-card-purchase-page {
 
   .last-item {
     margin-left: auto !important;
+  }
+
+  .terms {
+    margin: 5px 10px;
   }
 }

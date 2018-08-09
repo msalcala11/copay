@@ -125,10 +125,7 @@ import { CustomAmountPage } from '../pages/receive/custom-amount/custom-amount';
 import { WideHeaderPage } from './templates/wide-header-page/wide-header-page';
 import { WalletTabsChild } from './wallet-tabs/wallet-tabs-child';
 
-import { BuyCardPage } from './integrations/gift-cards/buy-card/buy-card';
-import { CardDetailsPage } from './integrations/gift-cards/card-details/card-details';
-import { ConfirmCardPurchasePage } from './integrations/gift-cards/confirm-card-purchase/confirm-card-purchase';
-import { PURCHASED_CARDS_PAGE_COMPONENTS } from './integrations/gift-cards/purchased-cards/purchased-cards';
+import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 
 export const PAGES = [
   ActivityPage,
@@ -151,16 +148,13 @@ export const PAGES = [
   BitPaySettingsPage,
   BitPayCardTopUpPage,
   BuyAmazonPage,
-  BuyCardPage,
   BuyCoinbasePage,
   BuyGlideraPage,
   BuyMercadoLibrePage,
-  CardDetailsPage,
   ChooseFeeLevelPage,
   CreateWalletPage,
   CoinbasePage,
   CoinbaseTxDetailsPage,
-  ConfirmCardPurchasePage,
   CopayersPage,
   FeedbackCardPage,
   FeedbackPage,
@@ -174,6 +168,7 @@ export const PAGES = [
   CustomAmountPage,
   DisclaimerPage,
   CollectEmailPage,
+  ...GIFT_CARD_PAGES,
   GlideraPage,
   GravatarPage,
   FingerprintModalPage,
@@ -187,7 +182,6 @@ export const PAGES = [
   PayProPage,
   GlideraTxDetailsPage,
   ...PIN_COMPONENTS,
-  ...PURCHASED_CARDS_PAGE_COMPONENTS,
   ProposalsPage,
   ReceivePage,
   ScanPage,
