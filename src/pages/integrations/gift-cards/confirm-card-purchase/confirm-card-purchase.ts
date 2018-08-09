@@ -142,6 +142,10 @@ export class ConfirmCardPurchasePage {
     this.showWallets(); // Show wallet selector
   }
 
+  public cancel() {
+    this.navCtrl.popToRoot();
+  }
+
   private checkFeeHigh(amount: number, fee: number) {
     let per = (fee / (amount + fee)) * 100;
 
