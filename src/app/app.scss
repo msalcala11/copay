@@ -172,6 +172,11 @@ ion-spinner * {
   background-repeat: no-repeat;
   background-clip: padding-box;
   background-size: 103%;
+
+  &.amazon {
+    background: black;
+    padding: 3px;
+  }
 }
 
 .custom-icon {

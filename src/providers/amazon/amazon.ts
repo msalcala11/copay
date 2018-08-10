@@ -279,7 +279,7 @@ export class AmazonProvider {
     this.homeIntegrationsProvider.register({
       name: 'amazon',
       title: 'Amazon Gift Cards',
-      icon: 'assets/img/amazon/icon-amazon.svg',
+      icon: 'assets/img/amazon/amazon-icon.svg',
       page: 'AmazonPage',
       show: showItem
     });
