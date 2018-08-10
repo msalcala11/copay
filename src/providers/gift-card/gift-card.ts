@@ -18,9 +18,9 @@ export class GiftCardProvider {
   getOfferedCards(): CardConifg[] {
     return [
       {
-        cardImage: 'assets/img/amazon/amazon-gift-card.png',
         currency: 'USD',
         icon: 'assets/img/amazon/amazon-icon.svg',
+        cardImage: 'assets/img/amazon/amazon-gift-card.png',
         maxAmount: 2000,
         minAmount: 1,
         name: 'Amazon'
@@ -29,7 +29,7 @@ export class GiftCardProvider {
         name: 'Mercado Livre',
         currency: 'BRL',
         icon: 'assets/img/mercado-libre/icon-ml.svg',
-        cardImage: 'assets/img/amazon/amazon-gift-card.png',
+        cardImage: 'assets/img/mercado-libre/mercado-livre-card.png',
         maxAmount: 2000,
         minAmount: 15
       }
