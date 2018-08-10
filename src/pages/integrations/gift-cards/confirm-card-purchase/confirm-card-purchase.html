@@ -9,15 +9,11 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content>
   <ion-list class="settings-list">
-
     <ion-item class="confirm-header">
-      <!-- <div> -->
       <div class="confirm-header__amount">
         <div class="gift-card-title">
-          <!-- {{pageTitle}} -->
           {{'Amazon'}} Gift Card
         </div>
         <div class="amount-label">
@@ -25,18 +21,7 @@
         </div>
       </div>
       <img class="card-list-item__icon amazon" src="assets/img/amazon/amazon-icon.svg">
-      <!-- </div> -->
     </ion-item>
-
-    <!-- <ion-item>
-      <div class="amazon-title">
-        <img src="assets/img/amazon/icon-amazon.svg"> {{pageTitle}}
-      </div>
-      <div class="amount-label">
-        <div class="amount">{{amountUnitStr}}</div>
-      </div>
-    </ion-item> -->
-
     <ion-item-group class="info">
       <button ion-item detail-none (click)="showWallets()" class="wallets-list">
         <div>{{'Sending From' | translate}}</div>
@@ -96,7 +81,6 @@
           </ion-note>
         </ion-item>
       </div>
-      <!-- <ion-item-divider></ion-item-divider> -->
       <ion-item>
         <card-terms></card-terms>
       </ion-item>
