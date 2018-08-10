@@ -91,7 +91,7 @@ export class PurchasedCardsPage {
   }
 
   addCard() {
-    this.navCtrl.push(BuyCardPage);
+    this.navCtrl.push(BuyCardPage, { cardName: 'Amazon' });
   }
 
   private async initAmazon(): Promise<any> {

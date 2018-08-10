@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { AmazonProvider } from '../../../../providers/amazon/amazon';
+import {
+  CardConifg,
+  GiftCardProvider
+} from '../../../../providers/gift-card/gift-card';
 import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
 import { AmountPage } from '../../../send/amount/amount';
 
@@ -9,11 +13,18 @@ import { AmountPage } from '../../../send/amount/amount';
   templateUrl: 'buy-card.html'
 })
 export class BuyCardPage {
+  cardConfig: CardConifg;
+
   constructor(
     private amazonProvider: AmazonProvider,
+    private giftCardProvider: GiftCardProvider,
     private nav: NavController,
+    private navParams: NavParams,
     private onGoingProcessProvider: OnGoingProcessProvider
-  ) {}
+  ) {
+    const cardName = this.navParams.get('cardName');
+    this.cardConfig = this.giftCardProvider.getCardConfig(cardName);
+  }
 
   ngOnInit() {
     this.initAmazon();

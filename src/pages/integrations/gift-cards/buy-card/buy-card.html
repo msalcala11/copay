@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Buy Amazon Gift Card</ion-title>
+    <ion-title>Buy {{cardConfig.name}} Gift Card</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -9,15 +9,12 @@
     <div class="header-extension"></div>
     <div class="amount-box">
       <div>
-        <img class="card-image" src="assets/img/amazon/amazon-gift-card.png">
+        <img class="card-image" src="{{cardConfig.cardImage}}">
       </div>
       <div class="amount-box__value">$0.00</div>
     </div>
     <div class="buy-box">
-      <div class="buy-box__terms">
-        <div>Only redeemable on www.amazon.com (USA website)</div>
-        <div>Amazon.com Gift Cards never expire and can be redeemed towards millions of items at www.amazon.com.</div>
-      </div>
+      <sales-pitch class="buy-box__terms" [cardName]="cardConfig.name"></sales-pitch>
       <div class="actions">
         <button ion-button class="button-standard" (click)="enterAmount()">
           {{'Enter Amount' | translate}}

@@ -17,7 +17,7 @@ import { BitPayCardPage } from '../integrations/bitpay-card/bitpay-card';
 import { BitPayCardIntroPage } from '../integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
 import { GlideraPage } from '../integrations/glidera/glidera';
-import { MercadoLibrePage } from '../integrations/mercado-libre/mercado-libre';
+// import { MercadoLibrePage } from '../integrations/mercado-libre/mercado-libre';
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { TxDetailsPage } from '../tx-details/tx-details';
 import { TxpDetailsPage } from '../txp-details/txp-details';
@@ -617,7 +617,7 @@ export class HomePage {
       // AmazonPage: !this.numAmazonGiftCards ? BuyCardPage : PurchasedCardsPage,
       BitPayCardIntroPage,
       CoinbasePage,
-      GlideraPage: BuyCardPage,
+      GlideraPage,
       // MercadoLibrePage,
       ShapeshiftPage
     };
@@ -629,7 +629,8 @@ export class HomePage {
   public buyGiftCard(cardName: string) {
     const numCards = cardName === 'amazon' ? this.numAmazonGiftCards : 0;
     const nextPage = !numCards ? BuyCardPage : PurchasedCardsPage;
-    this.navCtrl.push(nextPage, { cardName });
+    const fullName = cardName === 'amazon' ? 'Amazon' : 'Mercado Livre';
+    this.navCtrl.push(nextPage, { cardName: fullName });
   }
 
   public goToCard(cardId): void {
