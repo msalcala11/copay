@@ -608,18 +608,28 @@ export class HomePage {
     this.navCtrl.push(ActivityPage);
   }
 
-  public goTo(page: string): void {
+  public goTo(page: string, serviceName: string): void {
+    if (serviceName === 'amazon' || serviceName === 'mercadolibre') {
+      return this.buyGiftCard(serviceName);
+    }
+
     const pageMap = {
-      AmazonPage: !this.numAmazonGiftCards ? BuyCardPage : PurchasedCardsPage,
+      // AmazonPage: !this.numAmazonGiftCards ? BuyCardPage : PurchasedCardsPage,
       BitPayCardIntroPage,
       CoinbasePage,
-      GlideraPage,
-      MercadoLibrePage,
+      GlideraPage: BuyCardPage,
+      // MercadoLibrePage,
       ShapeshiftPage
     };
     // pageMap[page] = true;
     this.navCtrl.push(pageMap[page]);
     // this.navCtrl.push(PurchasedCardsPage);
+  }
+
+  public buyGiftCard(cardName: string) {
+    const numCards = cardName === 'amazon' ? this.numAmazonGiftCards : 0;
+    const nextPage = !numCards ? BuyCardPage : PurchasedCardsPage;
+    this.navCtrl.push(nextPage, { cardName });
   }
 
   public goToCard(cardId): void {
