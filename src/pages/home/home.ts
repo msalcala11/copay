@@ -44,6 +44,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { ReleaseProvider } from '../../providers/release/release';
 import { ReplaceParametersProvider } from '../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../providers/wallet/wallet';
+import { BuyCardPage } from '../integrations/gift-cards/buy-card/buy-card';
 import { PurchasedCardsPage } from '../integrations/gift-cards/purchased-cards/purchased-cards';
 import { SettingsPage } from '../settings/settings';
 
@@ -82,6 +83,8 @@ export class HomePage {
   private zone;
   private onResumeSubscription: Subscription;
   private onPauseSubscription: Subscription;
+
+  private numAmazonGiftCards: number;
 
   constructor(
     private plt: Platform,
@@ -131,7 +134,7 @@ export class HomePage {
     this._didEnter();
   }
 
-  private _willEnter() {
+  private async _willEnter() {
     this.recentTransactionsEnabled = this.configProvider.get().recentTransactions.enabled;
 
     // Update list of wallets, status and TXPs
@@ -148,6 +151,13 @@ export class HomePage {
 
     // Update Tx Notifications
     this.getNotifications();
+    this.getNumGiftCards();
+  }
+
+  private async getNumGiftCards() {
+    return this.amazonProvider
+      .getPurchasedCards()
+      .then(cards => (this.numAmazonGiftCards = cards.length));
   }
 
   private _didEnter() {
@@ -600,7 +610,7 @@ export class HomePage {
 
   public goTo(page: string): void {
     const pageMap = {
-      AmazonPage: PurchasedCardsPage,
+      AmazonPage: !this.numAmazonGiftCards ? BuyCardPage : PurchasedCardsPage,
       BitPayCardIntroPage,
       CoinbasePage,
       GlideraPage,

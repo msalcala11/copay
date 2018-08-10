@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { Logger } from '../../providers/logger/logger';
 
 // providers
+import { GiftCard } from '../../pages/integrations/gift-cards/card-details/card-details';
 import { ConfigProvider } from '../config/config';
 import { EmailNotificationsProvider } from '../email-notifications/email-notifications';
 import { HomeIntegrationsProvider } from '../home-integrations/home-integrations';
@@ -119,6 +120,17 @@ export class AmazonProvider {
       .catch(err => {
         return cb(err);
       });
+  }
+
+  public async getPurchasedCards() {
+    await this.setCurrencyByLocation();
+    const giftCardMap = await this.persistenceProvider.getAmazonGiftCards(
+      this.amazonNetwork
+    );
+    const invoiceIds = Object.keys(giftCardMap);
+    return invoiceIds
+      .map(invoiceId => giftCardMap[invoiceId] as GiftCard)
+      .sort((a, b) => (a.date < b.date ? 1 : -1));
   }
 
   public createBitPayInvoice(data, cb) {

@@ -57,7 +57,7 @@ export class PurchasedCardsPage {
   }
 
   ionViewDidLoad() {
-    this.logger.info('ionViewDidLoad AmazonPage');
+    this.logger.info('ionViewDidLoad PurchasedCardsPage');
     this.network = this.amazonProvider.getNetwork();
     this.initAmazon().then(() => {
       if (this.giftCards) {
@@ -104,13 +104,10 @@ export class PurchasedCardsPage {
     this.country = this.amazonProvider.country;
     this.pageTitle = this.amazonProvider.pageTitle;
     this.onlyIntegers = this.amazonProvider.onlyIntegers;
-    return new Promise(resolve => {
-      this.amazonProvider.getPendingGiftCards((err, gcds) => {
-        if (err) this.logger.error(err);
-        this.setGiftCards(gcds);
-        return resolve();
-      });
-    });
+    return this.amazonProvider
+      .getPurchasedCards()
+      .then(cards => this.setGiftCards(cards))
+      .catch(err => this.logger.error(err));
   }
 
   private checkIfCardNeedsUpdate(card) {
@@ -129,26 +126,17 @@ export class PurchasedCardsPage {
     return false;
   }
 
-  private updateGiftCards(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.amazonProvider.getPendingGiftCards((err, gcds) => {
-        if (err) {
-          this.popupProvider.ionicAlert('Could not get gift cards', err);
-          return reject(err);
-        }
-        this.setGiftCards(gcds);
-        return resolve();
-      });
-    });
+  private async updateGiftCards(): Promise<any> {
+    return this.amazonProvider
+      .getPurchasedCards()
+      .then(cards => this.setGiftCards(cards))
+      .catch(err =>
+        this.popupProvider.ionicAlert('Could not get gift cards', err)
+      );
   }
 
-  setGiftCards(giftCardMap) {
-    this.giftCards = giftCardMap;
-    const giftCardKeys = Object.keys(this.giftCards);
-    const giftCards = giftCardKeys
-      .map(giftCardId => this.giftCards[giftCardId] as GiftCard)
-      .sort((a, b) => (a.date < b.date ? 1 : -1));
-    this.currentGiftCards = giftCards.filter(gc => !gc.archived);
+  setGiftCards(allCards) {
+    this.currentGiftCards = allCards.filter(gc => !gc.archived);
     this.archivedGiftCards = this.currentGiftCards; // giftCards.filter(gc => gc.archived);
   }
 
