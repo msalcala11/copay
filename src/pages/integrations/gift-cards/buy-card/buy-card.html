@@ -11,7 +11,10 @@
       <div>
         <img class="card-image" src="{{cardConfig.cardImage}}">
       </div>
-      <div class="amount-box__value">$0.00</div>
+      <div class="amount-box__value">
+        <span *ngIf="cardConfig.currency === 'USD'">$0.00</span>
+        <span *ngIf="cardConfig.currency !== 'USD'">{{0 | formatCurrency:cardConfig.currency}}</span>
+      </div>
     </div>
     <div class="buy-box">
       <sales-pitch class="buy-box__terms" [cardName]="cardConfig.name"></sales-pitch>
