@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AmazonProvider } from '../amazon/amazon';
 
 export interface CardConifg {
   cardImage: string;
@@ -11,6 +12,10 @@ export interface CardConifg {
 
 @Injectable()
 export class GiftCardProvider {
+  constructor(private amazonProvider: AmazonProvider) {}
+
+  getPurchasedCards(cardName: string) {}
+
   getCardConfig(cardName: string) {
     return this.getOfferedCards().filter(c => c.name === cardName)[0];
   }
