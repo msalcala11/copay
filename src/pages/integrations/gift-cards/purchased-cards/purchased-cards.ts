@@ -2,10 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 
-// Pages
-import { AmountPage } from '../../../send/amount/amount';
-// import { AmazonCardDetailsPage } from './../amazon-card-details/amazon-card-details';
-
 // Providers
 import { AmazonProvider } from '../../../../providers/amazon/amazon';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
@@ -32,13 +28,9 @@ export class PurchasedCardsPage {
   public giftCards: { [invoiceId: string]: GiftCard };
   public currentGiftCards: GiftCard[];
   public archivedGiftCards: GiftCard[];
-  public country: string;
-  public pageTitle: string;
   public updatingPending;
   public card;
   public invoiceId: string;
-  public currency: string;
-  public onlyIntegers: boolean;
   public platformName: 'ios' | 'md' = 'md';
   public cardConfig: CardConifg;
 
@@ -49,7 +41,6 @@ export class PurchasedCardsPage {
     private externalLinkProvider: ExternalLinkProvider,
     private giftCardProvider: GiftCardProvider,
     private logger: Logger,
-    // private modalCtrl: ModalController,
     private navCtrl: NavController,
     private navParams: NavParams,
     public platformProvider: PlatformProvider,
@@ -89,7 +80,6 @@ export class PurchasedCardsPage {
             }
             this.updateGiftCard = this.checkIfCardNeedsUpdate(card);
             this.invoiceId = this.navParams.data.invoiceId = null;
-            // this.openCardModal(card);
           }
         })
         .catch(err => {
@@ -108,14 +98,6 @@ export class PurchasedCardsPage {
       await this.amazonProvider.setCurrencyByLocation();
       this.onGoingProcessProvider.clear();
     }
-    this.currency = this.amazonProvider.currency;
-    this.country = this.amazonProvider.country;
-    this.pageTitle = this.amazonProvider.pageTitle;
-    this.onlyIntegers = this.amazonProvider.onlyIntegers;
-    // return this.amazonProvider
-    //   .getPurchasedCards()
-    //   .then(cards => this.setGiftCards(cards))
-    //   .catch(err => this.logger.error(err));
     return this.giftCardProvider
       .getPurchasedCards(this.cardConfig.name)
       .then(cards => this.setGiftCards(cards))
@@ -217,35 +199,8 @@ export class PurchasedCardsPage {
     }
   );
 
-  // public openCardModal(card): void {
-  //   this.card = card;
-
-  //   let modal = this.modalCtrl.create(AmazonCardDetailsPage, {
-  //     card: this.card,
-  //     updateGiftCard: this.updateGiftCard
-  //   });
-  //   modal.present();
-
-  //   modal.onDidDismiss(() => {
-  //     this.updatePendingGiftCards();
-  //   });
-  // }
-
   public openExternalLink(url: string) {
     this.externalLinkProvider.open(url);
-  }
-
-  public goTo(page: string): void {
-    switch (page) {
-      case 'Amount':
-        this.navCtrl.push(AmountPage, {
-          nextPage: 'BuyAmazonPage',
-          currency: this.currency,
-          fixedUnit: true,
-          onlyIntegers: this.onlyIntegers
-        });
-        break;
-    }
   }
 
   public goToCardDetails(card) {
