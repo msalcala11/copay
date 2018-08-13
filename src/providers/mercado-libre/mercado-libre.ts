@@ -8,6 +8,7 @@ import { HomeIntegrationsProvider } from '../home-integrations/home-integrations
 import { PersistenceProvider } from '../persistence/persistence';
 
 import * as _ from 'lodash';
+import { GiftCard } from '../../pages/integrations/gift-cards/card-details/card-details';
 
 @Injectable()
 export class MercadoLibreProvider {
@@ -81,6 +82,17 @@ export class MercadoLibreProvider {
         var _gcds = giftCards ? giftCards : null;
         return cb(null, _gcds);
       });
+  }
+
+  public async getPurchasedCards() {
+    const network = this.getNetwork();
+    const giftCardMap = await this.persistenceProvider.getMercadoLibreGiftCards(
+      network
+    );
+    const invoiceIds = Object.keys(giftCardMap);
+    return invoiceIds
+      .map(invoiceId => giftCardMap[invoiceId] as GiftCard)
+      .sort((a, b) => (a.date < b.date ? 1 : -1));
   }
 
   public createBitPayInvoice(data, cb) {

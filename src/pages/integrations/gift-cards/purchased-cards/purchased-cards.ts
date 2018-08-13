@@ -9,6 +9,10 @@ import { AmountPage } from '../../../send/amount/amount';
 // Providers
 import { AmazonProvider } from '../../../../providers/amazon/amazon';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
+import {
+  CardConifg,
+  GiftCardProvider
+} from '../../../../providers/gift-card/gift-card';
 import { Logger } from '../../../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
 import { PlatformProvider } from '../../../../providers/platform/platform';
@@ -36,12 +40,14 @@ export class PurchasedCardsPage {
   public currency: string;
   public onlyIntegers: boolean;
   public platformName: 'ios' | 'md' = 'md';
+  public cardConfig: CardConifg;
 
   private updateGiftCard: boolean;
 
   constructor(
     private amazonProvider: AmazonProvider,
     private externalLinkProvider: ExternalLinkProvider,
+    private giftCardProvider: GiftCardProvider,
     private logger: Logger,
     // private modalCtrl: ModalController,
     private navCtrl: NavController,
@@ -54,6 +60,8 @@ export class PurchasedCardsPage {
 
   ngOnInit() {
     this.platformName = this.platformProvider.isIOS ? 'ios' : 'md';
+    const cardName = this.navParams.get('cardName');
+    this.cardConfig = this.giftCardProvider.getCardConfig(cardName);
   }
 
   ionViewDidLoad() {
@@ -104,8 +112,12 @@ export class PurchasedCardsPage {
     this.country = this.amazonProvider.country;
     this.pageTitle = this.amazonProvider.pageTitle;
     this.onlyIntegers = this.amazonProvider.onlyIntegers;
-    return this.amazonProvider
-      .getPurchasedCards()
+    // return this.amazonProvider
+    //   .getPurchasedCards()
+    //   .then(cards => this.setGiftCards(cards))
+    //   .catch(err => this.logger.error(err));
+    return this.giftCardProvider
+      .getPurchasedCards(this.cardConfig.name)
       .then(cards => this.setGiftCards(cards))
       .catch(err => this.logger.error(err));
   }
@@ -127,8 +139,8 @@ export class PurchasedCardsPage {
   }
 
   private async updateGiftCards(): Promise<any> {
-    return this.amazonProvider
-      .getPurchasedCards()
+    return this.giftCardProvider
+      .getPurchasedCards(this.cardConfig.name)
       .then(cards => this.setGiftCards(cards))
       .catch(err =>
         this.popupProvider.ionicAlert('Could not get gift cards', err)

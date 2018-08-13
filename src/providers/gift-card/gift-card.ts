@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { GiftCard } from '../../pages/integrations/gift-cards/card-details/card-details';
 import { AmazonProvider } from '../amazon/amazon';
+import { MercadoLibreProvider } from '../mercado-libre/mercado-libre';
 
 export interface CardConifg {
   cardImage: string;
@@ -12,9 +14,21 @@ export interface CardConifg {
 
 @Injectable()
 export class GiftCardProvider {
-  constructor(private amazonProvider: AmazonProvider) {}
+  constructor(
+    private amazonProvider: AmazonProvider,
+    private mercadoLibreProvider: MercadoLibreProvider
+  ) {}
 
-  getPurchasedCards(cardName: string) {}
+  getPurchasedCards(cardName: string): Promise<GiftCard[]> {
+    const methodMap = {
+      Amazon: this.amazonProvider.getPurchasedCards.bind(this.amazonProvider),
+      'Mercado Livre': this.mercadoLibreProvider.getPurchasedCards.bind(
+        this.mercadoLibreProvider
+      )
+    };
+    const method = methodMap[cardName];
+    return method();
+  }
 
   getCardConfig(cardName: string) {
     return this.getOfferedCards().filter(c => c.name === cardName)[0];
