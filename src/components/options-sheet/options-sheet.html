@@ -13,7 +13,6 @@
         </div>
         <div translate class="option-text">Share Address</div>
       </div>
-      <div (click)="dismiss()" class="cancel-btn">Cancel</div>
     </div>
     <div *ngSwitchCase="'gift-card-options'">
       <div class="option" (click)="optionClicked('archive')">
@@ -29,5 +28,6 @@
         <div translate class="option-text">View Invoice</div>
       </div>
     </div>
+    <div (click)="dismiss()" class="cancel-btn">Cancel</div>
   </div>
 </action-sheet>
