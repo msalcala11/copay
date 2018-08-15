@@ -24,7 +24,8 @@ import { setPrice } from '../../integrations';
   templateUrl: 'buy-glidera.html'
 })
 export class BuyGlideraPage {
-  @ViewChild('slideButton') slideButton;
+  @ViewChild('slideButton')
+  slideButton;
 
   public isCordova: boolean;
   public token: string;
@@ -247,7 +248,6 @@ export class BuyGlideraPage {
     modal.present();
     modal.onDidDismiss(async () => {
       await this.navCtrl.popToRoot({ animate: false });
-      await this.navCtrl.parent.select(0);
       await this.navCtrl.push(GlideraPage, null, { animate: false });
     });
   }

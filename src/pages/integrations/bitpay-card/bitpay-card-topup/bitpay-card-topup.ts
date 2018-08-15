@@ -35,7 +35,8 @@ const FEE_TOO_HIGH_LIMIT_PER = 15;
   templateUrl: 'bitpay-card-topup.html'
 })
 export class BitPayCardTopUpPage {
-  @ViewChild('slideButton') slideButton;
+  @ViewChild('slideButton')
+  slideButton;
 
   public cardId;
   public useSendMax: boolean;
@@ -611,7 +612,6 @@ export class BitPayCardTopUpPage {
     modal.present();
     modal.onDidDismiss(async () => {
       await this.navCtrl.popToRoot({ animate: false });
-      await this.navCtrl.parent.select(0);
       await this.navCtrl.push(
         BitPayCardPage,
         { id: this.cardId },
@@ -620,7 +620,33 @@ export class BitPayCardTopUpPage {
     });
   }
 
-  public openExternalLink(url: string) {
-    this.externalLinkProvider.open(url);
+  public openExternalLink(urlKey: string) {
+    let url: string;
+    let title: string;
+    switch (urlKey) {
+      case 'networkCost':
+        url =
+          'https://support.bitpay.com/hc/en-us/articles/115002990803-Why-Am-I-Being-Charged-an-Additional-Network-Cost-on-My-BitPay-Invoice-';
+        title = this.translate.instant('Network Cost');
+        break;
+      case 'minerFee':
+        url =
+          'https://support.bitpay.com/hc/en-us/articles/115003393863-What-are-bitcoin-miner-fees-Why-are-miner-fees-so-high-';
+        title = this.translate.instant('Miner Fee');
+        break;
+    }
+    let message = this.translate.instant(
+      'This information is available at the website.'
+    );
+    let okText = this.translate.instant('Open');
+    let cancelText = this.translate.instant('Go Back');
+    this.externalLinkProvider.open(
+      url,
+      true,
+      title,
+      message,
+      okText,
+      cancelText
+    );
   }
 }

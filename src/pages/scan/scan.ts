@@ -26,7 +26,8 @@ import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
 export class ScanPage {
   ngVersion = VERSION.full;
 
-  @ViewChild('scanner') scanner: ZXingScannerComponent;
+  @ViewChild('scanner')
+  scanner: ZXingScannerComponent;
 
   hasCameras = false;
   hasPermission: boolean;
@@ -50,6 +51,10 @@ export class ScanPage {
   public tabBarElement;
   public isCordova: boolean;
   public isCameraSelected: boolean;
+  public fromAddressbook: boolean;
+  public fromImport: boolean;
+  public fromJoin: boolean;
+  public fromSend: boolean;
 
   constructor(
     private navCtrl: NavController,
@@ -80,10 +85,6 @@ export class ScanPage {
     this.scannerIsRestricted = false;
     this.canOpenSettings = false;
     this.isCordova = this.platform.isCordova;
-    if (this.navParams.data.fromAddressbook) {
-      this.tabBarElement = document.querySelector('.tabbar.show-tabbar');
-      this.tabBarElement.style.display = 'none';
-    }
   }
 
   ionViewDidLoad() {
@@ -93,9 +94,6 @@ export class ScanPage {
   ionViewWillLeave() {
     this.events.unsubscribe('finishIncomingDataMenuEvent');
     this.events.unsubscribe('scannerServiceInitialized');
-    if (this.navParams.data.fromAddressbook) {
-      this.tabBarElement.style.display = 'flex';
-    }
     if (!this.isCordova) {
       this.scanner.resetScan();
     } else {
@@ -107,6 +105,13 @@ export class ScanPage {
   }
 
   ionViewWillEnter() {
+    this.fromAddressbook = this.navParams.data.fromAddressbook;
+    this.fromImport = this.navParams.data.fromImport;
+    this.fromJoin = this.navParams.data.fromJoin;
+    this.fromSend =
+      this.walletTabsProvider.getFromPage() &&
+      this.walletTabsProvider.getFromPage().fromSend;
+
     if (!env.activateScanner) {
       // test scanner visibility in E2E mode
       this.selectedDevice = true as any;
@@ -255,15 +260,20 @@ export class ScanPage {
 
   private handleSuccessfulScan(contents: string): void {
     this.logger.debug('Scan returned: "' + contents + '"');
-    let fromAddressbook = this.navParams.data.fromAddressbook;
-    if (fromAddressbook) {
+    if (this.fromAddressbook) {
       this.events.publish('update:address', { value: contents });
       this.navCtrl.pop();
+    } else if (this.fromImport) {
+      this.events.publish('update:words', { value: contents });
+      this.navCtrl.pop();
+    } else if (this.fromJoin) {
+      this.events.publish('update:invitationCode', { value: contents });
+      this.navCtrl.pop();
+    } else if (this.fromSend) {
+      this.events.publish('update:address', { value: contents });
+      this.close();
     } else {
-      const sendParams = this.walletTabsProvider.getSendParams();
-      const redirParms = sendParams
-        ? { activePage: 'SendPage', ...sendParams }
-        : { activePage: 'ScanPage' };
+      const redirParms = { activePage: 'ScanPage' };
       this.incomingDataProvider.redir(contents, redirParms);
     }
   }

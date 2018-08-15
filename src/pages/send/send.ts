@@ -3,23 +3,21 @@ import { Events, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 
 // Providers
+import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { AddressBookProvider } from '../../providers/address-book/address-book';
 import { AddressProvider } from '../../providers/address/address';
+import { AppProvider } from '../../providers/app/app';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { IncomingDataProvider } from '../../providers/incoming-data/incoming-data';
 import { Logger } from '../../providers/logger/logger';
 import { PopupProvider } from '../../providers/popup/popup';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { Coin, WalletProvider } from '../../providers/wallet/wallet';
+import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
 
 // Pages
-import { TxFormatProvider } from '../../providers/tx-format/tx-format';
-import { PaperWalletPage } from '../paper-wallet/paper-wallet';
-import { AddressbookAddPage } from '../settings/addressbook/add/add';
 import { WalletTabsChild } from '../wallet-tabs/wallet-tabs-child';
-import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
 import { AmountPage } from './amount/amount';
-import { ConfirmPage } from './confirm/confirm';
 
 export interface FlatWallet {
   color: string;
@@ -53,11 +51,11 @@ export class SendPage extends WalletTabsChild {
   public contactsShowMore: boolean;
   private CONTACTS_SHOW_LIMIT: number = 10;
   private currentContactsPage: number = 0;
+  private scannerOpened: boolean;
 
   public amount: string;
   public fiatAmount: number;
   public fiatCode: string;
-  public useSendMax: boolean;
   public invalidAddress: boolean;
 
   constructor(
@@ -71,26 +69,21 @@ export class SendPage extends WalletTabsChild {
     private popupProvider: PopupProvider,
     private addressProvider: AddressProvider,
     private events: Events,
+    walletTabsProvider: WalletTabsProvider,
+    private actionSheetProvider: ActionSheetProvider,
     private externalLinkProvider: ExternalLinkProvider,
-    private txFormatProvider: TxFormatProvider,
-    walletTabsProvider: WalletTabsProvider
+    private appProvider: AppProvider
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
   }
 
   ionViewDidLoad() {
-    this.amount = this.txFormatProvider.formatAmountStr(
-      this.navParams.get('coin'),
-      parseInt(this.navParams.get('amount'), 10)
-    );
-    this.fiatAmount = this.navParams.get('fiatAmount');
-    this.fiatCode = this.navParams.get('fiatCode');
-    this.useSendMax = this.navParams.get('useSendMax');
     this.logger.info('ionViewDidLoad SendPage');
-  }
 
-  ionViewWillLeave() {
-    this.events.unsubscribe('finishIncomingDataMenuEvent');
+    this.events.subscribe('update:address', data => {
+      this.search = data.value;
+      this.processInput();
+    });
   }
 
   ionViewWillEnter() {
@@ -98,47 +91,13 @@ export class SendPage extends WalletTabsChild {
     this.walletsBch = this.profileProvider.getWallets({ coin: 'bch' });
     this.hasBtcWallets = !_.isEmpty(this.walletsBtc);
     this.hasBchWallets = !_.isEmpty(this.walletsBch);
-
-    this.events.subscribe('finishIncomingDataMenuEvent', data => {
-      switch (data.redirTo) {
-        case 'AmountPage':
-          this.sendPaymentToAddress(data.value, data.coin);
-          break;
-        case 'AddressBookPage':
-          this.addToAddressBook(data.value);
-          break;
-        case 'OpenExternalLink':
-          this.goToUrl(data.value);
-          break;
-        case 'PaperWalletPage':
-          this.scanPaperWallet(data.value);
-          break;
-      }
-    });
-
     this.walletBchList = this.getBchWalletsList();
     this.walletBtcList = this.getBtcWalletsList();
     this.updateContactsList();
   }
 
-  ionViewDidEnter() {
-    this.search = '';
-  }
-
-  private goToUrl(url: string): void {
-    this.externalLinkProvider.open(url);
-  }
-
-  private sendPaymentToAddress(bitcoinAddress: string, coin: string): void {
-    this.navCtrl.push(AmountPage, { toAddress: bitcoinAddress, coin });
-  }
-
-  private addToAddressBook(bitcoinAddress: string): void {
-    this.navCtrl.push(AddressbookAddPage, { addressbookEntry: bitcoinAddress });
-  }
-
-  private scanPaperWallet(privateKey: string) {
-    this.navCtrl.push(PaperWalletPage, { privateKey });
+  ngOnDestroy() {
+    this.events.unsubscribe('update:address');
   }
 
   private getBchWalletsList(): FlatWallet[] {
@@ -218,12 +177,32 @@ export class SendPage extends WalletTabsChild {
   }
 
   public openScanner(): void {
+    this.scannerOpened = true;
     this.walletTabsProvider.setSendParams({
       amount: this.navParams.get('amount'),
-      coin: this.navParams.get('coin'),
-      useSendMax: this.useSendMax
+      coin: this.navParams.get('coin')
     });
+    this.walletTabsProvider.setFromPage({ fromSend: true });
     this.events.publish('ScanFromWallet');
+  }
+
+  private checkIfValidAddress(address): void {
+    const validAddress = this.addressProvider.checkCoinAndNetwork(
+      this.wallet.coin,
+      this.wallet.network,
+      address
+    );
+    if (validAddress) {
+      this.invalidAddress = false;
+      this.incomingDataProvider.redir(this.search, {
+        amount: this.navParams.get('amount'),
+        coin: this.navParams.get('coin')
+      });
+      this.search = '';
+    } else {
+      this.invalidAddress = true;
+      if (this.wallet.coin === 'bch') this.checkIfLegacy();
+    }
   }
 
   public processInput(): void {
@@ -235,21 +214,18 @@ export class SendPage extends WalletTabsChild {
         this.filteredContactsList.length === 0 &&
         this.filteredWallets.length === 0
       ) {
-        if (
-          !this.addressProvider.checkCoinAndNetwork(
-            this.wallet.coin,
-            this.wallet.network,
-            this.search
-          )
-        ) {
-          this.invalidAddress = true;
+        const validData = this.incomingDataProvider.parseData(this.search);
+        if (validData && validData.type == 'PayPro') {
+          this.incomingDataProvider
+            .getPayProDetails(this.search)
+            .then(payProDetails => {
+              this.checkIfValidAddress(payProDetails.toAddress);
+            })
+            .catch(err => {
+              this.logger.warn(err);
+            });
         } else {
-          this.invalidAddress = false;
-          this.incomingDataProvider.redir(this.search, {
-            amount: this.navParams.get('amount'),
-            coin: this.navParams.get('coin'),
-            useSendMax: this.useSendMax
-          });
+          this.checkIfValidAddress(this.search);
         }
       } else {
         this.invalidAddress = false;
@@ -257,6 +233,30 @@ export class SendPage extends WalletTabsChild {
     } else {
       this.updateContactsList();
       this.filteredWallets = [];
+    }
+  }
+
+  private checkIfLegacy() {
+    let usingLegacyAddress =
+      this.incomingDataProvider.isValidBitcoinCashLegacyAddress(this.search) ||
+      this.incomingDataProvider.isValidBitcoinCashUriWithLegacyAddress(
+        this.search
+      );
+
+    if (usingLegacyAddress) {
+      let appName = this.appProvider.info.nameCase;
+      const infoSheet = this.actionSheetProvider.createInfoSheet(
+        'legacy-address-info',
+        { appName }
+      );
+      infoSheet.present();
+      infoSheet.onDidDismiss(option => {
+        if (option) {
+          let url = 'https://bitpay.github.io/address-translator/';
+          this.externalLinkProvider.open(url);
+        }
+        this.search = '';
+      });
     }
   }
 
@@ -280,7 +280,7 @@ export class SendPage extends WalletTabsChild {
     });
   }
 
-  public goToConfirm(item): void {
+  public goToAmount(item): void {
     item
       .getAddress()
       .then((addr: string) => {
@@ -290,7 +290,7 @@ export class SendPage extends WalletTabsChild {
           return;
         }
         this.logger.debug('Got address:' + addr + ' | ' + item.name);
-        this.navCtrl.push(ConfirmPage, {
+        this.navCtrl.push(AmountPage, {
           recipientType: item.recipientType,
           amount: parseInt(this.navParams.data.amount, 10),
           toAddress: addr,
@@ -298,12 +298,17 @@ export class SendPage extends WalletTabsChild {
           email: item.email,
           color: item.color,
           coin: item.coin,
-          network: item.network,
-          useSendMax: this.useSendMax
+          network: item.network
         });
       })
       .catch(err => {
         this.logger.error('Send: could not getAddress', err);
       });
+  }
+
+  public closeCam(): void {
+    if (this.scannerOpened) this.events.publish('ExitScan');
+    else this.getParentTabs().dismiss();
+    this.scannerOpened = false;
   }
 }

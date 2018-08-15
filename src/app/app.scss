@@ -293,6 +293,7 @@ a.royal {
   .item-divider {
     background-color: #ffffff;
     margin-bottom: 5px;
+    min-height: 48px;
   }
   .item-block {
     padding: 5px 0 0px 24px;
@@ -491,4 +492,9 @@ ion-item.with-label.item {
       border-bottom: 0;
     }
   }
+}
+
+// Remove arrowhead from label
+label-tip.warn.no-arrowhead:before {
+  display: none;
 }

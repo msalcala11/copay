@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Events, NavParams } from 'ionic-angular';
 import { ReceivePage } from '../receive/receive';
-import { AmountPage } from '../send/amount/amount';
+import { SendPage } from '../send/send';
 import { WalletDetailsPage } from '../wallet-details/wallet-details';
 import { WalletTabsProvider } from './wallet-tabs.provider';
 
@@ -15,11 +15,12 @@ import { WalletTabsProvider } from './wallet-tabs.provider';
   `
 })
 export class WalletTabsPage {
-  @ViewChild('tabs') walletTabs: any;
+  @ViewChild('tabs')
+  walletTabs: any;
 
   receiveRoot = ReceivePage;
   activityRoot = WalletDetailsPage;
-  sendRoot = AmountPage;
+  sendRoot = SendPage;
 
   walletId: string;
 
@@ -53,7 +54,6 @@ export class WalletTabsPage {
     this.events.unsubscribe('Local/TxAction');
     this.events.unsubscribe('Wallet/updateAll');
     this.events.unsubscribe('Wallet/setAddress');
-    this.events.unsubscribe('Wallet/backupCompleted');
     this.events.unsubscribe('Wallet/disableHardwareKeyboard');
   }
 

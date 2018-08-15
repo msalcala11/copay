@@ -5,7 +5,8 @@ export enum AlertType {
   info = 'info',
   success = 'success',
   warning = 'warning',
-  danger = 'danger'
+  danger = 'danger',
+  love = 'love'
 }
 
 @Component({
@@ -13,7 +14,8 @@ export enum AlertType {
   templateUrl: 'info-sheet-template.html'
 })
 export class InfoSheetTemplate {
-  @Input() type: AlertType = AlertType.info;
+  @Input()
+  type: AlertType = AlertType.info;
 
   private dismissSubject = new Subject<void>();
   public onDismiss = this.dismissSubject.asObservable();

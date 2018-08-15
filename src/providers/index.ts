@@ -4,6 +4,7 @@ export { Clipboard } from '@ionic-native/clipboard';
 export { Device } from '@ionic-native/device';
 export { FCM } from '@ionic-native/fcm';
 export { File } from '@ionic-native/file';
+export { LaunchReview } from '@ionic-native/launch-review';
 export { QRScanner } from '@ionic-native/qr-scanner';
 export { ScreenOrientation } from '@ionic-native/screen-orientation';
 export { SocialSharing } from '@ionic-native/social-sharing';
@@ -29,6 +30,7 @@ export { BitPayCardProvider } from '../providers/bitpay-card/bitpay-card';
 export { BitPayProvider } from '../providers/bitpay/bitpay';
 export { BwcErrorProvider } from '../providers/bwc-error/bwc-error';
 export { BwcProvider } from '../providers/bwc/bwc';
+export { ClipboardProvider } from '../providers/clipboard/clipboard';
 export { CoinbaseProvider } from '../providers/coinbase/coinbase';
 export { ConfigProvider } from '../providers/config/config';
 export {

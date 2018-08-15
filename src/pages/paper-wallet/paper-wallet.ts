@@ -23,7 +23,8 @@ import { WalletOptions, WalletProvider } from '../../providers/wallet/wallet';
   templateUrl: 'paper-wallet.html'
 })
 export class PaperWalletPage {
-  @ViewChild('slideButton') slideButton;
+  @ViewChild('slideButton')
+  slideButton;
 
   public wallet;
   public walletName: string;
@@ -190,25 +191,27 @@ export class PaperWalletPage {
 
         this.wallets = _.filter(_.clone(this.wallets), w => available[w.coin]);
 
-        this.wallet = this.wallets[0];
+        if (this.wallets[0]) this.wallet = this.wallets[0];
 
         if (this.balances.length == 0) {
-          this.popupProvider.ionicAlert(
-            'Error',
-            this.translate.instant('No funds found')
-          );
-
-          this.navCtrl.pop();
+          this.popupProvider
+            .ionicAlert('Error', this.translate.instant('No funds found'))
+            .then(() => {
+              this.navCtrl.pop();
+            });
         }
       })
       .catch(err => {
         this.onGoingProcessProvider.clear();
         this.logger.error(err);
-        this.popupProvider.ionicAlert(
-          this.translate.instant('Error scanning funds:'),
-          this.bwcErrorProvider.msg(err)
-        );
-        this.navCtrl.pop();
+        this.popupProvider
+          .ionicAlert(
+            this.translate.instant('Error scanning funds:'),
+            this.bwcErrorProvider.msg(err)
+          )
+          .then(() => {
+            this.navCtrl.pop();
+          });
       });
   }
 

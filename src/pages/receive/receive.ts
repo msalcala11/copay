@@ -59,29 +59,9 @@ export class ReceivePage extends WalletTabsChild {
 
   ionViewDidLoad() {
     this.setAddress();
-    if (this.wallet.needsBackup) {
-      const infoSheet = this.actionSheetProvider.createInfoSheet(
-        'paper-key-unverified'
-      );
-      infoSheet.present();
-      infoSheet.onDidDismiss(option => {
-        if (option) this.goToBackup();
-      });
-    }
-  }
-
-  ionViewWillEnter() {
-    this.events.subscribe('Wallet/backupCompleted', () => {
-      this.setAddress();
-    });
     this.events.subscribe('Wallet/setAddress', () => {
       this.setAddress(true);
     });
-  }
-
-  ionViewWillLeave() {
-    this.events.unsubscribe('Wallet/backupCompleted');
-    this.events.unsubscribe('Wallet/setAddress');
   }
 
   public requestSpecificAmount(): void {

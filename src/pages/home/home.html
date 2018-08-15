@@ -45,7 +45,9 @@
       <ion-card-content class="check">
         <img class="announcement-logo" src="assets/img/amazon/japan/GCs-logo-japan-cllb.jpg" alt="Amazon.co.jp Gift Card">
         <div class="subtitle">
-          Amazonギフト券が利用可能になりました！ ビットコインとビットコインキャッシュでAmazon.co.jpのギフト券（コードタイプ）を購入できます。
+          Amazonギフト券が利用可能になりました！
+          <br> ビットコインとビットコインキャッシュでAmazon.co.jpのギフト券（コードタイプ)を
+          <br> 購入できます。
         </div>
         <div margin-top (click)="openAnnouncement()">
           <span ion-text color="primary">
@@ -91,6 +93,17 @@
         </div>
       </ion-card-content>
     </ion-card>
+
+    <div class="card" *ngIf="validDataFromClipboard">
+      <ion-item-divider>
+        <div class="title" item-start>
+          <img src="assets/img/paste-clipboard.svg" alt="Clipboard" width="20" />
+          <span>{{'Copied' | translate }} {{validDataFromClipboard.title}}</span>
+        </div>
+      </ion-item-divider>
+      <page-clipboard-card [remainingTimeStr]="remainingTimeStr" [payProDetailsData]="payProDetailsData" [validDataFromClipboard]="validDataFromClipboard"
+        (click)="processClipboardData(validDataFromClipboard.data)"></page-clipboard-card>
+    </div>
 
     <div class="card" *ngIf="txps && txps[0]">
       <ion-item-divider (click)="openProposalsPage()">
@@ -161,7 +174,7 @@
               Incomplete
             </span>
             <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
-              Paper key unverified
+              Paper Key Unverified
             </span>
             <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
               <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
@@ -217,7 +230,7 @@
               Incomplete
             </span>
             <span class="wallet-warning" *ngIf="wallet.isComplete() && wallet.needsBackup" translate>
-              Paper key unverified
+              Paper Key Unverified
             </span>
             <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
               <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
@@ -230,7 +243,7 @@
                 <span translate>Balance Hidden</span>]</span>
               <span *ngIf="wallet.credentials.m > 1">{{wallet.credentials.m}}-of-{{wallet.credentials.n}}</span>
               <ion-icon *ngIf="!wallet.balanceHidden && wallet.status && (wallet.status.totalBalanceSat != wallet.status.spendableAmount)"
-                name="timer"></ion-icon>
+                ios="ios-timer-outline" md="md-timer"></ion-icon>
               <span *ngIf="wallet.error" class="wallet-warning">{{wallet.error}}</span>
             </span>
           </div>

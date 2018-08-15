@@ -34,7 +34,8 @@ import {
   templateUrl: 'buy-mercado-libre.html'
 })
 export class BuyMercadoLibrePage {
-  @ViewChild('slideButton') slideButton;
+  @ViewChild('slideButton')
+  slideButton;
 
   private bitcoreCash;
   private amount: number;
@@ -590,7 +591,6 @@ export class BuyMercadoLibrePage {
     modal.present();
     modal.onDidDismiss(async () => {
       await this.navCtrl.popToRoot({ animate: false });
-      await this.navCtrl.parent.select(0);
       await this.navCtrl.push(
         MercadoLibrePage,
         { invoiceId: this.invoiceId },

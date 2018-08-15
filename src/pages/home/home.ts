@@ -19,6 +19,9 @@ import { CoinbasePage } from '../integrations/coinbase/coinbase';
 import { GlideraPage } from '../integrations/glidera/glidera';
 // import { MercadoLibrePage } from '../integrations/mercado-libre/mercado-libre';
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
+import { PaperWalletPage } from '../paper-wallet/paper-wallet';
+import { AmountPage } from '../send/amount/amount';
+import { AddressbookAddPage } from '../settings/addressbook/add/add';
 import { TxDetailsPage } from '../tx-details/tx-details';
 import { TxpDetailsPage } from '../txp-details/txp-details';
 import { ActivityPage } from './activity/activity';
@@ -26,15 +29,18 @@ import { ProposalsPage } from './proposals/proposals';
 
 // Providers
 import { AddressBookProvider } from '../../providers/address-book/address-book';
+import { AddressProvider } from '../../providers/address/address';
 import { AmazonProvider } from '../../providers/amazon/amazon';
 import { AppProvider } from '../../providers/app/app';
 import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
+import { ClipboardProvider } from '../../providers/clipboard/clipboard';
 import { ConfigProvider } from '../../providers/config/config';
 import { EmailNotificationsProvider } from '../../providers/email-notifications/email-notifications';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { HomeIntegrationsProvider } from '../../providers/home-integrations/home-integrations';
+import { IncomingDataProvider } from '../../providers/incoming-data/incoming-data';
 import { Logger } from '../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
@@ -53,7 +59,8 @@ import { SettingsPage } from '../settings/settings';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  @ViewChild('showCard') showCard;
+  @ViewChild('showCard')
+  showCard;
   public wallets;
   public walletsBtc;
   public walletsBch;
@@ -71,6 +78,9 @@ export class HomePage {
   public bitpayCardItems;
   public showBitPayCard: boolean = false;
   public showAnnouncement: boolean = false;
+  public validDataFromClipboard;
+  public payProDetailsData;
+  public remainingTimeStr: string;
 
   public showRateCard: boolean;
   public homeTip: boolean;
@@ -81,6 +91,7 @@ export class HomePage {
   private isNW: boolean;
   private updatingWalletId: object;
   private zone;
+  private countDown;
   private onResumeSubscription: Subscription;
   private onPauseSubscription: Subscription;
 
@@ -110,7 +121,10 @@ export class HomePage {
     private translate: TranslateService,
     private emailProvider: EmailNotificationsProvider,
     private replaceParametersProvider: ReplaceParametersProvider,
-    private amazonProvider: AmazonProvider
+    private amazonProvider: AmazonProvider,
+    private clipboardProvider: ClipboardProvider,
+    private incomingDataProvider: IncomingDataProvider,
+    private addressProvider: AddressProvider
   ) {
     this.updatingWalletId = {};
     this.addressbook = {};
@@ -124,6 +138,14 @@ export class HomePage {
       this._didEnter();
       this.subscribeBwsEvents();
     });
+
+    if (this.isNW) {
+      let gui = (window as any).require('nw.gui');
+      let win = gui.Window.get();
+      win.on('focus', () => {
+        this.checkClipboard();
+      });
+    }
   }
 
   ionViewWillEnter() {
@@ -165,7 +187,9 @@ export class HomePage {
     this.checkHomeTip();
     this.checkFeedbackInfo();
     this.checkAnnouncement();
+    this.checkClipboard();
 
+    this.subscribeIncomingDataMenuEvent();
     this.subscribeBwsEvents();
 
     // Show integrations
@@ -203,11 +227,14 @@ export class HomePage {
       this.getNotifications();
       this.updateTxps();
       this.setWallets();
+      this.subscribeIncomingDataMenuEvent();
       this.subscribeBwsEvents();
       this.subscribeStatusEvents();
+      this.checkClipboard();
     });
 
     this.onPauseSubscription = this.plt.pause.subscribe(() => {
+      this.events.unsubscribe('finishIncomingDataMenuEvent');
       this.events.unsubscribe('bwsEvent');
       this.events.unsubscribe('status:updated');
     });
@@ -219,6 +246,7 @@ export class HomePage {
   }
 
   ionViewWillLeave() {
+    this.events.unsubscribe('finishIncomingDataMenuEvent');
     this.events.unsubscribe('bwsEvent');
   }
 
@@ -238,6 +266,41 @@ export class HomePage {
       this.updateTxps();
       this.setWallets();
     });
+  }
+
+  private subscribeIncomingDataMenuEvent() {
+    this.events.subscribe('finishIncomingDataMenuEvent', data => {
+      switch (data.redirTo) {
+        case 'AmountPage':
+          this.sendPaymentToAddress(data.value, data.coin);
+          break;
+        case 'AddressBookPage':
+          this.addToAddressBook(data.value);
+          break;
+        case 'OpenExternalLink':
+          this.goToUrl(data.value);
+          break;
+        case 'PaperWalletPage':
+          this.scanPaperWallet(data.value);
+          break;
+      }
+    });
+  }
+
+  private goToUrl(url: string): void {
+    this.externalLinkProvider.open(url);
+  }
+
+  private sendPaymentToAddress(bitcoinAddress: string, coin: string): void {
+    this.navCtrl.push(AmountPage, { toAddress: bitcoinAddress, coin });
+  }
+
+  private addToAddressBook(bitcoinAddress: string): void {
+    this.navCtrl.push(AddressbookAddPage, { addressbookEntry: bitcoinAddress });
+  }
+
+  private scanPaperWallet(privateKey: string) {
+    this.navCtrl.push(PaperWalletPage, { privateKey });
   }
 
   private openEmailDisclaimer() {
@@ -354,6 +417,75 @@ export class HomePage {
         this.showCard.setShowRateCard(this.showRateCard);
       }
     });
+  }
+
+  public checkClipboard() {
+    return this.clipboardProvider
+      .getData()
+      .then(data => {
+        this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
+        if (!this.validDataFromClipboard) {
+          return;
+        }
+        const dataToIgnore = ['BitcoinAddress', 'BitcoinCashAddress'];
+        if (dataToIgnore.indexOf(this.validDataFromClipboard.type) > -1) {
+          this.validDataFromClipboard = null;
+          return;
+        }
+        if (this.validDataFromClipboard.type === 'PayPro') {
+          this.incomingDataProvider
+            .getPayProDetails(data)
+            .then(payProDetails => {
+              this.payProDetailsData = payProDetails;
+              this.payProDetailsData.coin = this.addressProvider.getCoin(
+                this.payProDetailsData.toAddress
+              );
+              this.clearCountDownInterval();
+              this.paymentTimeControl(this.payProDetailsData.expires);
+            })
+            .catch(err => {
+              this.validDataFromClipboard = null;
+              this.logger.warn('Error in Payment Protocol', err);
+              this.logger.warn(err);
+            });
+        }
+      })
+      .catch(() => {
+        this.logger.warn('Paste from clipboard err');
+      });
+  }
+
+  public processClipboardData(data): void {
+    this.validDataFromClipboard = null;
+    this.payProDetailsData = null;
+    this.clipboardProvider.clear();
+    this.clearCountDownInterval();
+    this.incomingDataProvider.redir(data);
+  }
+
+  private clearCountDownInterval(): void {
+    if (this.countDown) clearInterval(this.countDown);
+  }
+
+  private paymentTimeControl(expirationTime): void {
+    let setExpirationTime = (): void => {
+      let now = Math.floor(Date.now() / 1000);
+      if (now > expirationTime) {
+        this.remainingTimeStr = this.translate.instant('Expired');
+        this.clearCountDownInterval();
+        return;
+      }
+      let totalSecs = expirationTime - now;
+      let m = Math.floor(totalSecs / 60);
+      let s = totalSecs % 60;
+      this.remainingTimeStr = ('0' + m).slice(-2) + ':' + ('0' + s).slice(-2);
+    };
+
+    setExpirationTime();
+
+    this.countDown = setInterval(() => {
+      setExpirationTime();
+    }, 1000);
   }
 
   private initFeedBackInfo() {
@@ -512,6 +644,8 @@ export class HomePage {
 
   public goToWalletDetails(wallet): void {
     if (this.showReorderBtc || this.showReorderBch) return;
+    this.events.unsubscribe('finishIncomingDataMenuEvent');
+    this.events.unsubscribe('bwsEvent');
     this.events.publish('OpenWallet', wallet);
   }
 

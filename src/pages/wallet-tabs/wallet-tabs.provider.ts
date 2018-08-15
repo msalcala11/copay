@@ -5,13 +5,13 @@ import { Coin } from '../../providers/wallet/wallet';
 export interface SendParams {
   amount: string;
   coin: Coin;
-  useSendMax: boolean;
 }
 
 @Injectable()
 export class WalletTabsProvider {
   private tabNav: Tabs;
   private sendParams: SendParams;
+  private fromPage;
 
   goToTabIndex(index: number) {
     return this.tabNav.select(index);
@@ -33,8 +33,17 @@ export class WalletTabsProvider {
     return this.sendParams;
   }
 
+  setFromPage(page) {
+    this.fromPage = page;
+  }
+
+  getFromPage() {
+    return this.fromPage;
+  }
+
   clear() {
     this.tabNav = null;
     this.sendParams = null;
+    this.fromPage = null;
   }
 }

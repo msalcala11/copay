@@ -2,7 +2,7 @@
   <div class="info-container" [ngSwitch]="sheetType">
     <info-sheet-template *ngSwitchCase="'address-copied'" type="success">
       <span sheet-title-text translate>Copied {{params.coin | uppercase}} address</span>
-      <span sheet-text class="text-address" translate>{{params.address}}</span>
+      <span sheet-text class="text-address">{{params.address}}</span>
       <span sheet-button-text translate>OK</span>
     </info-sheet-template>
 
@@ -28,15 +28,6 @@
         stored on an exchange to your wallet address. Or other {{params.coinName}} users can send you money by scanning your
         QR code.</span>
       <span sheet-button-text translate>GOT IT</span>
-    </info-sheet-template>
-
-    <info-sheet-template *ngSwitchCase="'paper-key-unverified'" type="warning">
-      <span sheet-title-text translate>You could lose money</span>
-      <span sheet-text translate>
-        Without your wallet's paper key you could lose money if this device is damaged, this app is deleted, or you migrate to another
-        device. Neither you nor BitPay will be able recover your funds.</span>
-      <span sheet-button-text translate>Verify Now</span>
-      <span sheet-second-button-text translate>I understand</span>
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'paper-key-unverified-with-activity'" type="info">
@@ -75,8 +66,8 @@
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'default-error'" type="danger">
-      <span sheet-title-text translate>{{params.title}}</span>
-      <span sheet-text translate>{{params.msg}}</span>
+      <span sheet-title-text>{{params.title}}</span>
+      <span sheet-text>{{params.msg}}</span>
       <span sheet-button-text translate>GOT IT</span>
     </info-sheet-template>
 
@@ -109,7 +100,7 @@
 
     <info-sheet-template *ngSwitchCase="'copy-to-clipboard'" type="success">
       <span sheet-title-text translate>Copied to Clipboard</span>
-      <span sheet-text translate>{{params?.msg}}</span>
+      <span sheet-text>{{params?.msg}}</span>
       <span sheet-button-text translate>GOT IT</span>
     </info-sheet-template>
 
@@ -123,6 +114,24 @@
       <span sheet-title-text translate>Archive this card?</span>
       <span sheet-text translate>Have you redeemed the entire balance of this gift card?</span>
       <span sheet-button-text translate>YES</span>
+    </info-sheet-template>
+
+    <info-sheet-template *ngSwitchCase="'legacy-address-info'" type="info">
+      <span sheet-title-text translate>{{params.appName}} BCH wallets use the CashAddr format by default</span>
+      <span sheet-text translate>
+        If you need to send to "old" addresses, and you are SURE those are BCH addresses, you can "translate" them using the BCH
+        Translator tool.
+      </span>
+      <span sheet-button-text translate>Translate address</span>
+      <span sheet-second-button-text translate>GOT IT</span>
+    </info-sheet-template>
+
+    <info-sheet-template *ngSwitchCase="'appreciate-review'" type="love">
+      <span sheet-title-text translate>We appreciate your review</span>
+      <span sheet-text translate>5-star ratings help us get BitPay Wallet into more hands, and more users means more resources can be committed to the
+        app!
+      </span>
+      <span sheet-button-text translate>Continue to App Store</span>
     </info-sheet-template>
   </div>
 </action-sheet>
