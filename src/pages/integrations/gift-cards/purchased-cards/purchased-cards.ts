@@ -89,7 +89,7 @@ export class PurchasedCardsPage {
   }
 
   addCard() {
-    this.navCtrl.push(BuyCardPage, { cardName: 'Amazon' });
+    this.navCtrl.push(BuyCardPage, { cardName: this.cardConfig.name });
   }
 
   private async initAmazon(): Promise<any> {
@@ -130,6 +130,7 @@ export class PurchasedCardsPage {
   }
 
   setGiftCards(allCards) {
+    console.log('allCards', allCards);
     this.currentGiftCards = allCards.filter(gc => !gc.archived);
     this.archivedGiftCards = this.currentGiftCards; // giftCards.filter(gc => gc.archived);
   }

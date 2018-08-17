@@ -28,6 +28,7 @@ import { ActivityPage } from './activity/activity';
 import { ProposalsPage } from './proposals/proposals';
 
 // Providers
+import { GiftCardProvider } from '../../providers';
 import { AddressBookProvider } from '../../providers/address-book/address-book';
 import { AddressProvider } from '../../providers/address/address';
 import { AmazonProvider } from '../../providers/amazon/amazon';
@@ -96,6 +97,7 @@ export class HomePage {
   private onPauseSubscription: Subscription;
 
   private numAmazonGiftCards: number;
+  private numMercadoLibreGiftCards: number;
 
   constructor(
     private plt: Platform,
@@ -108,6 +110,7 @@ export class HomePage {
     private events: Events,
     private configProvider: ConfigProvider,
     private externalLinkProvider: ExternalLinkProvider,
+    private giftCardProvider: GiftCardProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private popupProvider: PopupProvider,
     private modalCtrl: ModalController,
@@ -177,9 +180,13 @@ export class HomePage {
   }
 
   private async getNumGiftCards() {
-    return this.amazonProvider
-      .getPurchasedCards()
-      .then(cards => (this.numAmazonGiftCards = cards.length));
+    const cardNames = ['Amazon', 'Mercado Livre'];
+    const promises = cardNames.map(c =>
+      this.giftCardProvider.getPurchasedCards(c)
+    );
+    const [amazonCards, mlCards] = await Promise.all(promises);
+    this.numAmazonGiftCards = amazonCards.length;
+    this.numMercadoLibreGiftCards = mlCards.length;
   }
 
   private _didEnter() {
@@ -761,7 +768,10 @@ export class HomePage {
   }
 
   public buyGiftCard(cardName: string) {
-    const numCards = cardName === 'amazon' ? this.numAmazonGiftCards : 0;
+    const numCards =
+      cardName === 'amazon'
+        ? this.numAmazonGiftCards
+        : this.numMercadoLibreGiftCards;
     const nextPage = !numCards ? BuyCardPage : PurchasedCardsPage;
     const fullName = cardName === 'amazon' ? 'Amazon' : 'Mercado Livre';
     this.navCtrl.push(nextPage, { cardName: fullName });
