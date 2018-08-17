@@ -91,7 +91,10 @@ export class MercadoLibreProvider {
     );
     const invoiceIds = Object.keys(giftCardMap);
     return invoiceIds
-      .map(invoiceId => giftCardMap[invoiceId] as GiftCard)
+      .map(invoiceId => {
+        const card = giftCardMap[invoiceId];
+        return { ...card, claimCode: card.pin } as GiftCard;
+      })
       .sort((a, b) => (a.date < b.date ? 1 : -1));
   }
 
