@@ -7,6 +7,7 @@ import { AmazonProvider } from '../../../../providers/amazon/amazon';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 import {
   CardConifg,
+  GiftCard,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
 import { Logger } from '../../../../providers/logger/logger';
@@ -16,7 +17,7 @@ import { PopupProvider } from '../../../../providers/popup/popup';
 import { TimeProvider } from '../../../../providers/time/time';
 import { GiftCardNewData } from '../../gift-cards';
 import { BuyCardPage } from '../buy-card/buy-card';
-import { CardDetailsPage, GiftCard } from '../card-details/card-details';
+import { CardDetailsPage } from '../card-details/card-details';
 import { CardListItemComponent } from './card-list-item/card-list-item';
 
 @Component({
