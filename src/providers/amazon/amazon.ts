@@ -4,9 +4,9 @@ import * as _ from 'lodash';
 import { Logger } from '../../providers/logger/logger';
 
 // providers
-import { GiftCard } from '../../pages/integrations/gift-cards/card-details/card-details';
 import { ConfigProvider } from '../config/config';
 import { EmailNotificationsProvider } from '../email-notifications/email-notifications';
+import { GiftCard } from '../gift-card/gift-card';
 import { HomeIntegrationsProvider } from '../home-integrations/home-integrations';
 import { PersistenceProvider } from '../persistence/persistence';
 

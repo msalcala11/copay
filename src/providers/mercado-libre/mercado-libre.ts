@@ -8,7 +8,7 @@ import { HomeIntegrationsProvider } from '../home-integrations/home-integrations
 import { PersistenceProvider } from '../persistence/persistence';
 
 import * as _ from 'lodash';
-import { GiftCard } from '../../pages/integrations/gift-cards/card-details/card-details';
+import { GiftCard } from '../gift-card/gift-card';
 
 @Injectable()
 export class MercadoLibreProvider {

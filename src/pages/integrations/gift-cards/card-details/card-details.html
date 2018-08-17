@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Amazon</ion-title>
+    <ion-title>{{card.name}}</ion-title>
     <ion-buttons right>
       <button (click)="showMoreOptions()" ion-button icon-only>
         <ion-icon class="horizontal-lg" name="more"></ion-icon>
@@ -14,7 +14,7 @@
     <div class="header-extension"></div>
     <div class="main-content">
       <div class="balance">{{card.amount | formatCurrency:card.currency}}</div>
-      <img class="card-image" src="assets/img/amazon/amazon-gift-card.png">
+      <img class="card-image" [src]="cardConfig.cardImage">
       <div class="card-info" (click)="copyClaimCode()" [copy-to-clipboard]="card.claimCode" [hide-toast]="true">
         <div class="card-info__title">Claim Code</div>
         <div class="card-info__claim-code">{{card.claimCode}}</div>

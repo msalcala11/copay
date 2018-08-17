@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { GiftCard } from '../../pages/integrations/gift-cards/card-details/card-details';
 import { AmazonProvider } from '../amazon/amazon';
 import { MercadoLibreProvider } from '../mercado-libre/mercado-libre';
 
@@ -12,6 +11,17 @@ export interface CardConifg {
   name: string;
 }
 
+export interface GiftCard {
+  amount: number;
+  archived: boolean;
+  claimCode: string;
+  currency: string;
+  date: number;
+  invoiceUrl: string;
+  invoiceId: string;
+  name: string;
+}
+
 @Injectable()
 export class GiftCardProvider {
   constructor(
@@ -19,7 +29,7 @@ export class GiftCardProvider {
     private mercadoLibreProvider: MercadoLibreProvider
   ) {}
 
-  getPurchasedCards(cardName: string): Promise<GiftCard[]> {
+  async getPurchasedCards(cardName: string): Promise<GiftCard[]> {
     const methodMap = {
       Amazon: this.amazonProvider.getPurchasedCards.bind(this.amazonProvider),
       'Mercado Livre': this.mercadoLibreProvider.getPurchasedCards.bind(
@@ -27,7 +37,8 @@ export class GiftCardProvider {
       )
     };
     const method = methodMap[cardName];
-    return method();
+    const cards = await method();
+    return cards.map(c => ({ ...c, name: cardName }));
   }
 
   getCardConfig(cardName: string) {
@@ -47,7 +58,9 @@ export class GiftCardProvider {
       {
         name: 'Mercado Livre',
         currency: 'BRL',
-        icon: 'assets/img/mercado-libre/icon-ml.svg',
+        // icon: 'assets/img/mercado-libre/meli-card-24px.png', // assets/img/mercado-libre/meli-card-24px.png
+
+        icon: 'assets/img/mercado-libre/icon-ml.svg', // assets/img/mercado-libre/meli-card-24px.png
         cardImage: 'assets/img/mercado-libre/mercado-livre-card.png',
         maxAmount: 2000,
         minAmount: 15

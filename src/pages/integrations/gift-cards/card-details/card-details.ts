@@ -3,16 +3,11 @@ import { NavParams } from 'ionic-angular';
 import { ActionSheetProvider } from '../../../../providers/action-sheet/action-sheet';
 import { AmazonProvider } from '../../../../providers/amazon/amazon';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
-
-export interface GiftCard {
-  amount: number;
-  archived: boolean;
-  claimCode: string;
-  currency: string;
-  date: number;
-  invoiceUrl: string;
-  invoiceId: string;
-}
+import {
+  CardConifg,
+  GiftCard,
+  GiftCardProvider
+} from '../../../../providers/gift-card/gift-card';
 
 @Component({
   selector: 'card-details-page',
@@ -20,16 +15,19 @@ export interface GiftCard {
 })
 export class CardDetailsPage {
   public card: GiftCard;
+  public cardConfig: CardConifg;
 
   constructor(
-    private navParams: NavParams,
     private amazonProvider: AmazonProvider,
     private actionSheetProvider: ActionSheetProvider,
-    private externalLinkProvider: ExternalLinkProvider
+    private externalLinkProvider: ExternalLinkProvider,
+    private giftCardProvider: GiftCardProvider,
+    private navParams: NavParams
   ) {}
 
   ngOnInit() {
     this.card = this.navParams.get('card');
+    this.cardConfig = this.giftCardProvider.getCardConfig(this.card.name);
   }
 
   copyClaimCode() {
