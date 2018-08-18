@@ -124,9 +124,9 @@ export class AmazonProvider {
 
   public async getPurchasedCards() {
     await this.setCurrencyByLocation();
-    const giftCardMap = await this.persistenceProvider.getAmazonGiftCards(
-      this.amazonNetwork
-    );
+    const giftCardMap =
+      (await this.persistenceProvider.getAmazonGiftCards(this.amazonNetwork)) ||
+      {};
     const invoiceIds = Object.keys(giftCardMap);
     return invoiceIds
       .map(invoiceId => giftCardMap[invoiceId] as GiftCard)

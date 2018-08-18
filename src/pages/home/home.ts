@@ -181,8 +181,8 @@ export class HomePage {
 
   private async getNumGiftCards() {
     const cardNames = ['Amazon', 'Mercado Livre'];
-    const promises = cardNames.map(c =>
-      this.giftCardProvider.getPurchasedCards(c)
+    const promises = cardNames.map(cardName =>
+      this.giftCardProvider.getPurchasedCards(cardName)
     );
     const [amazonCards, mlCards] = await Promise.all(promises);
     this.numAmazonGiftCards = amazonCards.length;

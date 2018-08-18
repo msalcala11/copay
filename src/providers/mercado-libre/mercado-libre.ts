@@ -86,9 +86,8 @@ export class MercadoLibreProvider {
 
   public async getPurchasedCards() {
     const network = this.getNetwork();
-    const giftCardMap = await this.persistenceProvider.getMercadoLibreGiftCards(
-      network
-    );
+    const giftCardMap =
+      (await this.persistenceProvider.getMercadoLibreGiftCards(network)) || {};
     const invoiceIds = Object.keys(giftCardMap);
     return invoiceIds
       .map(invoiceId => {
