@@ -15,6 +15,10 @@ import { BwcErrorProvider } from '../../../../providers/bwc-error/bwc-error';
 import { BwcProvider } from '../../../../providers/bwc/bwc';
 import { ConfigProvider } from '../../../../providers/config/config';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
+import {
+  CardConifg,
+  GiftCardProvider
+} from '../../../../providers/gift-card/gift-card';
 import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
 import { PayproProvider } from '../../../../providers/paypro/paypro';
 import { PlatformProvider } from '../../../../providers/platform/platform';
@@ -33,7 +37,8 @@ import { CardDetailsPage } from '../../gift-cards/card-details/card-details';
   templateUrl: 'confirm-card-purchase.html'
 })
 export class ConfirmCardPurchasePage {
-  @ViewChild('slideButton') slideButton;
+  @ViewChild('slideButton')
+  slideButton;
 
   private bitcoreCash;
   public amount: number;
@@ -63,12 +68,15 @@ export class ConfirmCardPurchasePage {
   // Platform info
   public isCordova: boolean;
 
+  public cardConfig: CardConifg;
+
   constructor(
     private actionSheetProvider: ActionSheetProvider,
     private amazonProvider: AmazonProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private bwcProvider: BwcProvider,
     private configProvider: ConfigProvider,
+    private giftCardProvider: GiftCardProvider,
     private replaceParametersProvider: ReplaceParametersProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private logger: Logger,
@@ -92,6 +100,9 @@ export class ConfirmCardPurchasePage {
     this.country = this.amazonProvider.country;
     this.pageTitle = this.amazonProvider.pageTitle;
     this.onlyIntegers = this.amazonProvider.onlyIntegers;
+    this.cardConfig = this.giftCardProvider.getCardConfig(
+      this.navParams.get('cardName')
+    );
   }
 
   ngOnInit() {

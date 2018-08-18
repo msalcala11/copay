@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 
 @Component({
@@ -6,7 +6,8 @@ import { ExternalLinkProvider } from '../../../../providers/external-link/extern
   templateUrl: 'card-terms.html'
 })
 export class CardTermsComponent {
-  cardName: string = 'Amazon';
+  @Input()
+  cardName: string;
 
   constructor(private externalLinkProvider: ExternalLinkProvider) {}
 

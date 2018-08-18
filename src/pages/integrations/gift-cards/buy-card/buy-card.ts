@@ -45,7 +45,8 @@ export class BuyCardPage {
   enterAmount() {
     this.nav.push(AmountPage, {
       nextPage: 'ConfirmCardPurchasePage',
-      currency: this.amazonProvider.currency,
+      cardName: this.cardConfig.name,
+      currency: this.cardConfig.currency,
       fixedUnit: true,
       onlyIntegers: this.amazonProvider.onlyIntegers
     });

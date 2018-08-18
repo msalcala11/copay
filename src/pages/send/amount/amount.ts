@@ -487,7 +487,8 @@ export class AmountPage extends WalletTabsChild {
         currency: unit.id.toUpperCase(),
         coin,
         useSendMax: this.useSendMax,
-        toWalletId: this.toWalletId
+        toWalletId: this.toWalletId,
+        cardName: this.navParams.get('cardName')
       };
     } else {
       let amount = _amount;
