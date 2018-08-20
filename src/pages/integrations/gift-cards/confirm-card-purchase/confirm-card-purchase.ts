@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ModalController, NavController, NavParams } from 'ionic-angular';
+import { App, ModalController, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Logger } from '../../../../providers/logger/logger';
@@ -9,6 +9,12 @@ import { Logger } from '../../../../providers/logger/logger';
 import { FinishModalPage } from '../../../finish/finish';
 
 // Provider
+import { DecimalPipe } from '@angular/common';
+import {
+  FeeProvider,
+  TxConfirmNotificationProvider,
+  WalletTabsProvider
+} from '../../../../providers';
 import { ActionSheetProvider } from '../../../../providers/action-sheet/action-sheet';
 import { AmazonProvider } from '../../../../providers/amazon/amazon';
 import { BwcErrorProvider } from '../../../../providers/bwc-error/bwc-error';
@@ -30,28 +36,20 @@ import {
   TransactionProposal,
   WalletProvider
 } from '../../../../providers/wallet/wallet';
+import { ConfirmPage } from '../../../send/confirm/confirm';
 import { CardDetailsPage } from '../../gift-cards/card-details/card-details';
 
 @Component({
   selector: 'confirm-card-purchase-page',
   templateUrl: 'confirm-card-purchase.html'
 })
-export class ConfirmCardPurchasePage {
-  @ViewChild('slideButton')
-  slideButton;
-
-  private bitcoreCash;
-  public amount: number;
+export class ConfirmCardPurchasePage extends ConfirmPage {
   public currency: string;
-  public createdTx;
   private message: string;
   private invoiceId: string;
   private configWallet;
   public currencyIsoCode: string;
-  private FEE_TOO_HIGH_LIMIT_PER: number;
 
-  public wallet;
-  public wallets;
   public totalAmountStr: string;
   public invoiceFee: number;
   public networkFee: number;
@@ -59,46 +57,66 @@ export class ConfirmCardPurchasePage {
   public amazonGiftCard;
   public amountUnitStr: string;
   public network: string;
-  public walletSelectorTitle: string;
-  public isOpenSelector: boolean;
-  public pageTitle: string;
   public country: string;
   public onlyIntegers: boolean;
-
-  // Platform info
-  public isCordova: boolean;
 
   public cardConfig: CardConifg;
 
   constructor(
-    private actionSheetProvider: ActionSheetProvider,
+    actionSheetProvider: ActionSheetProvider,
+    app: App,
     private amazonProvider: AmazonProvider,
-    private bwcErrorProvider: BwcErrorProvider,
-    private bwcProvider: BwcProvider,
-    private configProvider: ConfigProvider,
+    bwcErrorProvider: BwcErrorProvider,
+    bwcProvider: BwcProvider,
+    configProvider: ConfigProvider,
+    decimalPipe: DecimalPipe,
+    feeProvider: FeeProvider,
     private giftCardProvider: GiftCardProvider,
-    private replaceParametersProvider: ReplaceParametersProvider,
-    private externalLinkProvider: ExternalLinkProvider,
-    private logger: Logger,
-    private modalCtrl: ModalController,
-    private navCtrl: NavController,
-    private navParams: NavParams,
-    private onGoingProcessProvider: OnGoingProcessProvider,
-    private popupProvider: PopupProvider,
-    private profileProvider: ProfileProvider,
-    private txFormatProvider: TxFormatProvider,
-    private walletProvider: WalletProvider,
-    private translate: TranslateService,
+    replaceParametersProvider: ReplaceParametersProvider,
+    externalLinkProvider: ExternalLinkProvider,
+    logger: Logger,
+    modalCtrl: ModalController,
+    navCtrl: NavController,
+    navParams: NavParams,
+    onGoingProcessProvider: OnGoingProcessProvider,
+    popupProvider: PopupProvider,
+    profileProvider: ProfileProvider,
+    txConfirmNotificationProvider: TxConfirmNotificationProvider,
+    txFormatProvider: TxFormatProvider,
+    walletProvider: WalletProvider,
+    translate: TranslateService,
     private payproProvider: PayproProvider,
-    private platformProvider: PlatformProvider
+    platformProvider: PlatformProvider,
+    walletTabsProvider: WalletTabsProvider
   ) {
-    this.FEE_TOO_HIGH_LIMIT_PER = 15;
+    super(
+      actionSheetProvider,
+      app,
+      bwcErrorProvider,
+      bwcProvider,
+      configProvider,
+      decimalPipe,
+      externalLinkProvider,
+      feeProvider,
+      logger,
+      modalCtrl,
+      navCtrl,
+      navParams,
+      onGoingProcessProvider,
+      platformProvider,
+      profileProvider,
+      popupProvider,
+      replaceParametersProvider,
+      translate,
+      txConfirmNotificationProvider,
+      txFormatProvider,
+      walletProvider,
+      walletTabsProvider
+    );
+
     this.configWallet = this.configProvider.get().wallet;
     this.amazonGiftCard = null;
-    this.bitcoreCash = this.bwcProvider.getBitcoreCash();
-    this.isCordova = this.platformProvider.isCordova;
     this.country = this.amazonProvider.country;
-    this.pageTitle = this.amazonProvider.pageTitle;
     this.onlyIntegers = this.amazonProvider.onlyIntegers;
     this.cardConfig = this.giftCardProvider.getCardConfig(
       this.navParams.get('cardName')
@@ -110,12 +128,8 @@ export class ConfirmCardPurchasePage {
     this.currency = this.navParams.data.currency;
   }
 
-  ionViewWillLeave() {
-    this.navCtrl.swipeBackEnabled = true;
-  }
-
   ionViewDidLoad() {
-    this.logger.info('ionViewDidLoad BuyAmazonPage');
+    this.logger.info('ionViewDidLoad ConfirmCardPurchasePage');
   }
 
   ionViewWillEnter() {
@@ -143,15 +157,8 @@ export class ConfirmCardPurchasePage {
   }
 
   private checkFeeHigh(amount: number, fee: number) {
-    let per = (fee / (amount + fee)) * 100;
-
-    if (per > this.FEE_TOO_HIGH_LIMIT_PER) {
-      const coinName = this.wallet.coin === 'btc' ? 'Bitcoin' : 'Bitcoin Cash';
-      const minerFeeInfoSheet = this.actionSheetProvider.createInfoSheet(
-        'miner-fee',
-        { coinName }
-      );
-      minerFeeInfoSheet.present();
+    if (this.isHighFee(amount, fee)) {
+      this.showHighFeeSheet();
     }
   }
 
@@ -159,9 +166,9 @@ export class ConfirmCardPurchasePage {
     this.externalLinkProvider.open(url);
   }
 
-  private _resetValues() {
+  private resetValues() {
     this.totalAmountStr = this.invoiceFee = this.networkFee = this.totalAmount = this.wallet = null;
-    this.createdTx = this.message = this.invoiceId = null;
+    this.tx = this.message = this.invoiceId = null;
   }
 
   private showErrorAndBack(title: string, msg) {
@@ -186,60 +193,46 @@ export class ConfirmCardPurchasePage {
     });
   };
 
-  private publishAndSign(wallet, txp): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (!wallet.canSign() && !wallet.isPrivKeyExternal()) {
-        let err = this.translate.instant('No signing proposal: No private key');
-        return reject(err);
-      }
-
-      this.walletProvider
-        .publishAndSign(wallet, txp)
-        .then(txp => {
-          this.onGoingProcessProvider.clear();
-          return resolve(txp);
-        })
-        .catch(err => {
-          this.onGoingProcessProvider.clear();
-          return reject(err);
-        });
+  async publishAndSign(wallet, txp) {
+    if (!wallet.canSign() && !wallet.isPrivKeyExternal()) {
+      const err = this.translate.instant('No signing proposal: No private key');
+      return Promise.reject(err);
+    }
+    await this.walletProvider.publishAndSign(wallet, txp).catch(err => {
+      this.onGoingProcessProvider.clear();
+      throw err;
     });
+    return this.onGoingProcessProvider.clear();
   }
 
-  private satToFiat(coin: string, sat: number): Promise<any> {
-    return new Promise(resolve => {
-      this.txFormatProvider
-        .toFiat(coin, sat, this.currencyIsoCode)
-        .then((value: string) => {
-          return resolve(value);
-        });
-    });
+  private satToFiat(coin: string, sat: number) {
+    return this.txFormatProvider.toFiat(coin, sat, this.currencyIsoCode);
   }
 
-  private setTotalAmount(
+  private async setTotalAmount(
     wallet,
     amountSat: number,
     invoiceFeeSat: number,
     networkFeeSat: number
   ) {
-    this.satToFiat(wallet.coin, amountSat).then((a: string) => {
-      this.amount = Number(a);
+    const amount = await this.satToFiat(wallet.coin, amountSat);
+    this.amount = Number(amount);
 
-      this.satToFiat(wallet.coin, invoiceFeeSat).then((i: string) => {
-        this.invoiceFee = Number(i);
+    const invoiceFee = await this.satToFiat(wallet.coin, invoiceFeeSat);
+    this.invoiceFee = Number(invoiceFee);
 
-        this.satToFiat(wallet.coin, networkFeeSat).then((n: string) => {
-          this.networkFee = Number(n);
-          this.totalAmount = this.amount + this.invoiceFee + this.networkFee;
-        });
-      });
-    });
+    const networkFee = await this.satToFiat(wallet.coin, networkFeeSat);
+    this.networkFee = Number(networkFee);
+    this.totalAmount = this.amount + this.invoiceFee + this.networkFee;
   }
 
   private isCryptoCurrencySupported(wallet, invoice) {
-    let COIN = wallet.coin.toUpperCase();
-    if (!invoice['supportedTransactionCurrencies'][COIN]) return false;
-    return invoice['supportedTransactionCurrencies'][COIN].enabled;
+    const COIN = wallet.coin.toUpperCase();
+    return (
+      (invoice['supportedTransactionCurrencies'][COIN] &&
+        invoice['supportedTransactionCurrencies'][COIN].enabled) ||
+      false
+    );
   }
 
   private createInvoice(data): Promise<any> {
@@ -501,10 +494,10 @@ export class ConfirmCardPurchasePage {
                 this.onGoingProcessProvider.clear();
 
                 // Save in memory
-                this.createdTx = ctxp;
+                this.tx = ctxp;
                 this.invoiceId = invoice.id;
 
-                this.createdTx.giftData = {
+                this.tx.giftData = {
                   currency: dataSrc.currency,
                   amount: dataSrc.amount,
                   uuid: dataSrc.uuid,
@@ -533,7 +526,7 @@ export class ConfirmCardPurchasePage {
               })
               .catch(err => {
                 this.onGoingProcessProvider.clear();
-                this._resetValues();
+                this.resetValues();
                 this.showError(err.title, err.message);
                 return;
               });
@@ -556,7 +549,7 @@ export class ConfirmCardPurchasePage {
   }
 
   public buyConfirm() {
-    if (!this.createdTx) {
+    if (!this.tx) {
       this.showError(
         null,
         this.translate.instant('Transaction has not been created')
@@ -574,13 +567,13 @@ export class ConfirmCardPurchasePage {
           return;
         }
 
-        this.publishAndSign(this.wallet, this.createdTx)
+        this.publishAndSign(this.wallet, this.tx)
           .then(() => {
             this.onGoingProcessProvider.set('buyingGiftCard');
-            this.checkTransaction(1, this.createdTx.giftData);
+            this.checkTransaction(1, this.tx.giftData);
           })
           .catch(err => {
-            this._resetValues();
+            this.resetValues();
             this.showError(
               this.translate.instant('Could not send transaction'),
               this.bwcErrorProvider.msg(err)
@@ -613,7 +606,7 @@ export class ConfirmCardPurchasePage {
     });
   }
 
-  private async openFinishModal() {
+  async openFinishModal() {
     let finishComment: string;
     let cssClass: string;
     if (this.amazonGiftCard.status == 'FAILURE') {
