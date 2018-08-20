@@ -644,7 +644,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     await this.navCtrl.parent.select(0);
     await this.navCtrl.push(
       CardDetailsPage,
-      { card: this.amazonGiftCard },
+      { card: { ...this.amazonGiftCard, name: this.cardConfig.name } },
       { animate: false }
     );
   }
