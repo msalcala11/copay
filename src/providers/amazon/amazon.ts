@@ -5,7 +5,6 @@ import { Logger } from '../../providers/logger/logger';
 
 // providers
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { ConfigProvider } from '../config/config';
 import { EmailNotificationsProvider } from '../email-notifications/email-notifications';
 import { GiftCard } from '../gift-card/gift-card';
@@ -182,7 +181,7 @@ export class AmazonProvider {
   }
 
   public createGiftCard(data, cb) {
-    // this.createCard(data).subs
+    this.createCard(data).subscribe(data => cb(data));
     // var dataSrc = {
     //   clientId: data.uuid,
     //   invoiceId: data.invoiceId,
