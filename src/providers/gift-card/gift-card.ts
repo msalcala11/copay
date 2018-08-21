@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { from } from 'rxjs/observable/from';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { of } from 'rxjs/observable/of';
+import { combineLatest } from 'rxjs/operators';
 import { AmazonProvider } from '../amazon/amazon';
+import { Logger } from '../logger/logger';
 import { MercadoLibreProvider } from '../mercado-libre/mercado-libre';
+import { TimeProvider } from '../time/time';
 
 export interface CardConifg {
   cardImage: string;
@@ -20,13 +27,17 @@ export interface GiftCard {
   invoiceUrl: string;
   invoiceId: string;
   name: string;
+  status: string;
+  updating: boolean;
 }
 
 @Injectable()
 export class GiftCardProvider {
   constructor(
     private amazonProvider: AmazonProvider,
-    private mercadoLibreProvider: MercadoLibreProvider
+    private logger: Logger,
+    private mercadoLibreProvider: MercadoLibreProvider,
+    private timeProvider: TimeProvider
   ) {}
 
   async getPurchasedCards(cardName: string): Promise<GiftCard[]> {
@@ -43,6 +54,57 @@ export class GiftCardProvider {
 
   getCardConfig(cardName: string) {
     return this.getOfferedCards().filter(c => c.name === cardName)[0];
+  }
+
+  saveGiftCard() {}
+
+  updatePendingGiftCards(cards: GiftCard[]): Observable<GiftCard> {
+    const cardsNeedingUpdate = cards.filter(card =>
+      this.checkIfCardNeedsUpdate(card)
+    );
+    return from(cardsNeedingUpdate)
+      .mergeMap(card =>
+        this.amazonProvider
+          .createCard(card)
+          .catch(() => of({ ...card, status: 'FAILURE' }))
+      )
+      .mergeMap((updatedFields, index) => {
+        const card = cardsNeedingUpdate[index];
+        return updatedFields.status !== 'PENDING'
+          ? this.updatePreviouslyPendingCard(card, updatedFields)
+          : of(card);
+      });
+  }
+
+  updatePreviouslyPendingCard(
+    card: GiftCard,
+    updatedFields: Partial<GiftCard>
+  ) {
+    const updatedCard = {
+      ...card,
+      ...updatedFields
+    };
+    return fromPromise(
+      this.amazonProvider.saveGiftCard(updatedCard, {
+        remove: updatedFields.status === 'expired'
+      })
+    ).map(() => updatedCard as GiftCard);
+  }
+
+  private checkIfCardNeedsUpdate(card: GiftCard) {
+    // Continues normal flow (update card)
+    if (card.status == 'PENDING' || card.status == 'invalid') {
+      return true;
+    }
+    // Check if card status FAILURE for 24 hours
+    if (
+      card.status == 'FAILURE' &&
+      this.timeProvider.withinPastDay(card.date)
+    ) {
+      return true;
+    }
+    // Success: do not update
+    return false;
   }
 
   getOfferedCards(): CardConifg[] {

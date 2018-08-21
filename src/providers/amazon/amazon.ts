@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 import { Logger } from '../../providers/logger/logger';
 
 // providers
+import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { ConfigProvider } from '../config/config';
 import { EmailNotificationsProvider } from '../email-notifications/email-notifications';
 import { GiftCard } from '../gift-card/gift-card';
@@ -87,7 +89,11 @@ export class AmazonProvider {
   }
 
   public savePendingGiftCard(gc, opts, cb) {
-    this.persistenceProvider
+    this.saveGiftCard(gc, opts).then(() => cb());
+  }
+
+  public saveGiftCard(gc, opts) {
+    return this.persistenceProvider
       .getAmazonGiftCards(this.amazonNetwork)
       .then(oldGiftCards => {
         if (_.isString(oldGiftCards)) {
@@ -106,8 +112,10 @@ export class AmazonProvider {
         }
 
         inv = JSON.stringify(inv);
-        this.persistenceProvider.setAmazonGiftCards(this.amazonNetwork, inv);
-        return cb(null);
+        return this.persistenceProvider.setAmazonGiftCards(
+          this.amazonNetwork,
+          inv
+        );
       });
   }
 
@@ -174,31 +182,57 @@ export class AmazonProvider {
   }
 
   public createGiftCard(data, cb) {
-    var dataSrc = {
+    // this.createCard(data).subs
+    // var dataSrc = {
+    //   clientId: data.uuid,
+    //   invoiceId: data.invoiceId,
+    //   accessKey: data.accessKey
+    // };
+    // this.http
+    //   .post(this.credentials.BITPAY_API_URL + '/amazon-gift/redeem', dataSrc)
+    //   .subscribe(
+    //     (data: any) => {
+    //       var status =
+    //         data.status == 'new'
+    //           ? 'PENDING'
+    //           : data.status == 'paid'
+    //             ? 'PENDING'
+    //             : data.status;
+    //       data.status = status;
+    //       this.logger.info('Amazon Gift Card Create/Update: ' + status);
+    //       return cb(null, data);
+    //     },
+    //     data => {
+    //       this.logger.error('Amazon Gift Card Create/Update: ' + data.message);
+    //       return cb(data);
+    //     }
+    //   );
+  }
+
+  public createCard(data) {
+    const dataSrc = {
       clientId: data.uuid,
       invoiceId: data.invoiceId,
       accessKey: data.accessKey
     };
 
-    this.http
+    return this.http
       .post(this.credentials.BITPAY_API_URL + '/amazon-gift/redeem', dataSrc)
-      .subscribe(
-        (data: any) => {
-          var status =
-            data.status == 'new'
+      .catch(err => {
+        this.logger.error('Amazon Gift Card Create/Update: ' + data.message);
+        return Observable.throw(err);
+      })
+      .map((data: Partial<GiftCard>) => {
+        const status =
+          data.status == 'new'
+            ? 'PENDING'
+            : data.status == 'paid'
               ? 'PENDING'
-              : data.status == 'paid'
-                ? 'PENDING'
-                : data.status;
-          data.status = status;
-          this.logger.info('Amazon Gift Card Create/Update: ' + status);
-          return cb(null, data);
-        },
-        data => {
-          this.logger.error('Amazon Gift Card Create/Update: ' + data.message);
-          return cb(data);
-        }
-      );
+              : data.status;
+        data.status = status;
+        this.logger.info('Amazon Gift Card Create/Update: ' + status);
+        return data;
+      });
   }
 
   public cancelGiftCard(data, cb) {
