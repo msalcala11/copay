@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { from } from 'rxjs/observable/from';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
-import { combineLatest } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { AmazonProvider } from '../amazon/amazon';
 import { Logger } from '../logger/logger';
 import { MercadoLibreProvider } from '../mercado-libre/mercado-libre';
@@ -62,18 +62,20 @@ export class GiftCardProvider {
     const cardsNeedingUpdate = cards.filter(card =>
       this.checkIfCardNeedsUpdate(card)
     );
-    return from(cardsNeedingUpdate)
-      .mergeMap(card =>
-        this.amazonProvider
-          .createCard(card)
-          .catch(() => of({ ...card, status: 'FAILURE' }))
-      )
-      .mergeMap((updatedFields, index) => {
+    return from(cardsNeedingUpdate).pipe(
+      mergeMap(card =>
+        this.amazonProvider.createCard(card).catch(err => {
+          this.logger.error('Error creating gift card:', err);
+          return of({ ...card, status: 'FAILURE' });
+        })
+      ),
+      mergeMap((updatedFields, index) => {
         const card = cardsNeedingUpdate[index];
         return updatedFields.status !== 'PENDING'
           ? this.updatePreviouslyPendingCard(card, updatedFields)
           : of(card);
-      });
+      })
+    );
   }
 
   updatePreviouslyPendingCard(
@@ -88,17 +90,20 @@ export class GiftCardProvider {
       this.amazonProvider.saveGiftCard(updatedCard, {
         remove: updatedFields.status === 'expired'
       })
-    ).map(() => updatedCard as GiftCard);
+    ).map(() => {
+      this.logger.debug('Amazon gift card updated');
+      return updatedCard as GiftCard;
+    });
   }
 
   private checkIfCardNeedsUpdate(card: GiftCard) {
     // Continues normal flow (update card)
-    if (card.status == 'PENDING' || card.status == 'invalid') {
+    if (card.status === 'PENDING' || card.status === 'invalid') {
       return true;
     }
     // Check if card status FAILURE for 24 hours
     if (
-      card.status == 'FAILURE' &&
+      card.status === 'FAILURE' &&
       this.timeProvider.withinPastDay(card.date)
     ) {
       return true;
