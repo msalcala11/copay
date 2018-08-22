@@ -42,8 +42,7 @@ export class PurchasedCardsPage {
     this.platformName = this.platformProvider.isIOS ? 'ios' : 'md';
     const cardName = this.navParams.get('cardName');
     this.cardConfig = await this.giftCardProvider.getCardConfig(cardName);
-    console.log('this.cardConfig', this.cardConfig);
-    await this.initAmazon();
+    await this.getCards();
   }
 
   async ionViewDidLoad() {
@@ -54,7 +53,7 @@ export class PurchasedCardsPage {
     this.navCtrl.push(BuyCardPage, { cardName: this.cardConfig.name });
   }
 
-  private async initAmazon(): Promise<any> {
+  private async getCards(): Promise<any> {
     return this.giftCardProvider
       .getPurchasedCards(this.cardConfig.name)
       .then(cards => this.setGiftCards(cards))
@@ -62,7 +61,6 @@ export class PurchasedCardsPage {
   }
 
   setGiftCards(allCards) {
-    console.log('allCards', allCards);
     this.currentGiftCards = allCards.filter(gc => !gc.archived);
     this.archivedGiftCards = this.currentGiftCards; // giftCards.filter(gc => gc.archived);
     this.updatePendingCards(this.currentGiftCards);

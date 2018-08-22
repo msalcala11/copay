@@ -14,13 +14,13 @@
     <ion-item class="confirm-header">
       <div class="confirm-header__amount">
         <div class="gift-card-title">
-          {{cardConfig.name}} Gift Card
+          {{cardConfig?.name}} Gift Card
         </div>
         <div class="amount-label">
           <div class="amount">{{amount | formatCurrency:currency}}</div>
         </div>
       </div>
-      <img class="card-list-item__icon" [ngClass]="{amazon: cardConfig.name === 'Amazon'}" [src]="cardConfig.icon">
+      <img class="card-list-item__icon" [ngClass]="{amazon: cardConfig?.brand === amazonBrand}" [src]="cardConfig?.icon">
     </ion-item>
     <ion-item-group class="info">
       <button ion-item detail-none (click)="showWallets()" class="wallets-list">
@@ -82,7 +82,7 @@
         </ion-item>
       </div>
       <ion-item>
-        <card-terms [cardName]="cardConfig.name"></card-terms>
+        <card-terms [cardName]="cardConfig?.name"></card-terms>
       </ion-item>
     </ion-item-group>
   </ion-list>
