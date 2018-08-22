@@ -828,6 +828,7 @@ export class ConfirmPage extends WalletTabsChild {
         return this.openFinishModal();
       })
       .catch(err => {
+        if (this.isCordova) this.slideButton.isConfirmed(false);
         this.onGoingProcessProvider.clear();
         this.showErrorInfoSheet(err);
       });

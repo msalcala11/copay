@@ -8,9 +8,7 @@
 
     <info-sheet-template *ngSwitchCase="'custom-amount'" type="success">
       <span sheet-title-text translate>Copied</span>
-      <span sheet-text translate>
-        Requesting {{params.amount}} in {{params.address}}
-      </span>
+      <span sheet-text>{{params.qrAddress}}</span>
       <span sheet-button-text translate>OK</span>
     </info-sheet-template>
 
@@ -30,11 +28,11 @@
       <span sheet-button-text translate>GOT IT</span>
     </info-sheet-template>
 
-    <info-sheet-template *ngSwitchCase="'paper-key-unverified-with-activity'" type="info">
-      <span sheet-title-text translate>Paper Key Unverified</span>
+    <info-sheet-template *ngSwitchCase="'backup-needed-with-activity'" type="info">
+      <span sheet-title-text translate>Needs Backup</span>
       <span sheet-text translate>
-        Congratulations! It looks like you've recently received money. It's highly advised that you verify your paper key so that
-        your funds can be recovered in case your phone was lost or stolen.</span>
+        Congratulations! It looks like you've recently received money. It's highly advised that you verify your recovery phrase so
+        that your funds can be recovered in case your phone was lost or stolen.</span>
       <span sheet-button-text translate>Continue</span>
       <span sheet-second-button-text translate>Not right now</span>
     </info-sheet-template>
@@ -131,7 +129,24 @@
       <span sheet-text translate>5-star ratings help us get BitPay Wallet into more hands, and more users means more resources can be committed to the
         app!
       </span>
-      <span sheet-button-text translate>Rate in App Store</span>
+      <span sheet-button-text translate>Rate on the {{params?.storeName}}</span>
+    </info-sheet-template>
+
+    <info-sheet-template *ngSwitchCase="'backup-failed'" type="warning">
+      <span sheet-title-text translate>Uh oh...</span>
+      <span sheet-text translate>
+        It's important that you write your backup phrase down correctly. If something happens to your wallet, you'll need this backup
+        to recover your money. Please review your backup and try again.
+      </span>
+      <span sheet-button-text translate>GOT IT</span>
+    </info-sheet-template>
+
+    <info-sheet-template *ngSwitchCase="'payment-request'" type="info">
+      <span sheet-title-text translate>Payment Request info</span>
+      <span sheet-text translate>
+        Share this QR code to receive {{params.amount}} in your wallet {{params.name}}.
+      </span>
+      <span sheet-button-text translate>GOT IT</span>
     </info-sheet-template>
   </div>
 </action-sheet>

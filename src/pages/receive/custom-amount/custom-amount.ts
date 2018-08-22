@@ -100,8 +100,18 @@ export class CustomAmountPage {
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'custom-amount',
       {
-        address: this.address,
-        amount: this.amountUnitStr
+        qrAddress: this.qrAddress
+      }
+    );
+    infoSheet.present();
+  }
+
+  public showPaymentRequestInfo(): void {
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'payment-request',
+      {
+        amount: this.amountUnitStr,
+        name: this.wallet.name
       }
     );
     infoSheet.present();

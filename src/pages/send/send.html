@@ -43,6 +43,7 @@
         <span class="send-heading" translate>Recipient</span>
         <ion-item class="search-wrapper" [ngClass]="{'invalid': invalidAddress && search != ''}">
           <ion-input placeholder="{{'Search or enter bitcoin address' | translate}}" [(ngModel)]="search" (ngModelChange)="processInput()"></ion-input>
+          <ion-icon *ngIf="invalidAddress && search != ''" item-end class="backspace-icon" name="backspace" (click)="search = ''"></ion-icon>
           <ion-icon item-end class="scan-icon" (click)="openScanner()">
             <img src="assets/img/scan-ico.svg">
           </ion-icon>
@@ -85,7 +86,7 @@
               {{'Incomplete' | translate}}
             </ion-note>
             <ion-note class="wallet-warning" *ngIf="wallet.isComplete && wallet.needsBackup" item-end>
-              {{'Paper Key Unverified' | translate}}
+              {{'Needs Backup' | translate}}
             </ion-note>
             <ion-note *ngIf="wallet.m > 1 && wallet.isComplete && !wallet.needsBackup" item-end>
               {{wallet.m}}-{{wallet.n}}
@@ -113,7 +114,7 @@
               {{'Incomplete' | translate}}
             </ion-note>
             <ion-note class="wallet-warning" *ngIf="wallet.isComplete && wallet.needsBackup" item-end>
-              {{'Paper Key Unverified' | translate}}
+              {{'Needs Backup' | translate}}
             </ion-note>
             <ion-note *ngIf="wallet.m > 1 && wallet.isComplete && !wallet.needsBackup" item-end>
               {{wallet.m}}-{{wallet.n}}

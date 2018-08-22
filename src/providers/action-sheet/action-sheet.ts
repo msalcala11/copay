@@ -9,6 +9,9 @@ import { DomProvider } from '../../providers/dom/dom';
 export type InfoSheetType =
   | 'address-copied'
   | 'archive-gift-card'
+  | 'appreciate-review'
+  | 'backup-failed'
+  | 'backup-needed-with-activity'
   | 'backup-ready'
   | 'backup-warning'
   | 'copayers'
@@ -20,10 +23,9 @@ export type InfoSheetType =
   | 'legacy-address-info'
   | 'miner-fee'
   | 'miner-fee-notice'
-  | 'paper-key-unverified-with-activity'
+  | 'payment-request'
   | 'receiving-bitcoin'
-  | 'sensitive-info'
-  | 'appreciate-review';
+  | 'sensitive-info';
 
 export type OptionsSheetType =
   | 'address-options'

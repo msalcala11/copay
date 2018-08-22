@@ -12,6 +12,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { ActionSheetProvider } from '../../../../../providers/action-sheet/action-sheet';
 import { AppProvider } from '../../../../../providers/app/app';
 import { BackupProvider } from '../../../../../providers/backup/backup';
+import { ConfigProvider } from '../../../../../providers/config/config';
 import { PersistenceProvider } from '../../../../../providers/persistence/persistence';
 import { PlatformProvider } from '../../../../../providers/platform/platform';
 import { ProfileProvider } from '../../../../../providers/profile/profile';
@@ -39,6 +40,7 @@ export class WalletExportPage extends WalletTabsChild {
   public isIOS: boolean;
   public exportWalletInfo;
   public supported: boolean;
+  public showQrCode: boolean;
 
   constructor(
     public profileProvider: ProfileProvider,
@@ -56,7 +58,8 @@ export class WalletExportPage extends WalletTabsChild {
     public toastCtrl: ToastController,
     private translate: TranslateService,
     private actionSheetProvider: ActionSheetProvider,
-    public walletTabsProvider: WalletTabsProvider
+    public walletTabsProvider: WalletTabsProvider,
+    private configProvider: ConfigProvider
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.exportWalletForm = this.formBuilder.group(
@@ -120,11 +123,14 @@ export class WalletExportPage extends WalletTabsChild {
       this.segments = 'qr-code';
     }
 
+    this.showQrCode = false;
+
     this.getPassword()
       .then((password: string) => {
         this.walletProvider
           .getEncodedWalletInfo(this.wallet, password)
           .then(code => {
+            this.showQrCode = true;
             if (!code) this.supported = false;
             else {
               this.supported = true;
@@ -134,11 +140,15 @@ export class WalletExportPage extends WalletTabsChild {
             this.segments = 'qr-code';
           })
           .catch((err: string) => {
+            this.supported = false;
             if (err) this.showErrorInfoSheet(err);
           });
       })
-      .catch((err: string) => {
-        if (err) this.showErrorInfoSheet(err);
+      .catch(err => {
+        this.showQrCode = false;
+        this.segments = 'file/text';
+        if (err && err.message != 'FINGERPRINT_CANCELLED')
+          this.showErrorInfoSheet(err);
       });
   }
 
@@ -190,8 +200,9 @@ export class WalletExportPage extends WalletTabsChild {
             this.showErrorInfoSheet();
           });
       })
-      .catch((err: string) => {
-        if (err) this.showErrorInfoSheet(err);
+      .catch(err => {
+        if (err && err.message != 'FINGERPRINT_CANCELLED')
+          this.showErrorInfoSheet(err);
       });
   }
 
@@ -245,8 +256,9 @@ export class WalletExportPage extends WalletTabsChild {
               return resolve();
             });
         })
-        .catch((err: string) => {
-          if (err) this.showErrorInfoSheet(err);
+        .catch(err => {
+          if (err && err.message != 'FINGERPRINT_CANCELLED')
+            this.showErrorInfoSheet(err);
           return resolve();
         });
     });
@@ -283,8 +295,14 @@ export class WalletExportPage extends WalletTabsChild {
     showSuccess.present();
     let name =
       this.wallet.credentials.walletName || this.wallet.credentials.walletId;
-    if (this.wallet.alias) {
-      name = this.wallet.alias + ' [' + name + ']';
+
+    let config = this.configProvider.get();
+
+    let alias =
+      config.aliasFor && config.aliasFor[this.wallet.credentials.walletId];
+
+    if (alias) {
+      name = alias + ' [' + name + ']';
     }
     this.getBackup().then(backup => {
       let ew = backup;

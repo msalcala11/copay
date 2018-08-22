@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events, NavParams, ViewController } from 'ionic-angular';
+import { Events, NavParams, Platform, ViewController } from 'ionic-angular';
+import { Subscription } from 'rxjs';
+
+// Native
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 // Providers
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
@@ -27,7 +31,11 @@ export class CopayersPage {
   public copayers;
   public secret;
 
+  private onResumeSubscription: Subscription;
+  private onPauseSubscription: Subscription;
+
   constructor(
+    private plt: Platform,
     private appProvider: AppProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private events: Events,
@@ -36,6 +44,7 @@ export class CopayersPage {
     private platformProvider: PlatformProvider,
     private popupProvider: PopupProvider,
     private profileProvider: ProfileProvider,
+    private socialSharing: SocialSharing,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private walletProvider: WalletProvider,
     private translate: TranslateService,
@@ -50,10 +59,35 @@ export class CopayersPage {
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
   }
 
-  ionViewWillEnter() {
+  ionViewDidLoad() {
     this.logger.info('ionViewDidLoad CopayersPage');
-    this.updateWallet();
 
+    this.onResumeSubscription = this.plt.resume.subscribe(() => {
+      this.updateWallet();
+      this.subscribeEvents();
+    });
+
+    this.onPauseSubscription = this.plt.pause.subscribe(() => {
+      this.unsubscribeEvents();
+    });
+  }
+
+  ionViewWillEnter() {
+    this.updateWallet();
+    this.subscribeEvents();
+  }
+
+  ionViewWillLeave() {
+    this.unsubscribeEvents();
+  }
+
+  ngOnDestroy() {
+    this.events.publish('Home/reloadStatus');
+    this.onResumeSubscription.unsubscribe();
+    this.onPauseSubscription.unsubscribe();
+  }
+
+  private subscribeEvents(): void {
     this.events.subscribe('bwsEvent', (walletId, type) => {
       if (
         this.wallet &&
@@ -65,7 +99,7 @@ export class CopayersPage {
     });
   }
 
-  ionViewWillLeave() {
+  private unsubscribeEvents(): void {
     this.events.unsubscribe('bwsEvent');
   }
 
@@ -130,5 +164,9 @@ export class CopayersPage {
       secret: this.secret
     });
     infoSheet.present();
+  }
+
+  public shareAddress(): void {
+    this.socialSharing.share(this.secret);
   }
 }
