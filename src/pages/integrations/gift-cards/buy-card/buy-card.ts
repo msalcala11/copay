@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { AmazonProvider } from '../../../../providers/amazon/amazon';
 import {
   CardConifg,
   GiftCardProvider
@@ -15,7 +14,6 @@ export class BuyCardPage {
   cardConfig: CardConifg;
 
   constructor(
-    private amazonProvider: AmazonProvider,
     private giftCardProvider: GiftCardProvider,
     private nav: NavController,
     private navParams: NavParams
@@ -36,7 +34,7 @@ export class BuyCardPage {
       cardName: this.cardConfig.name,
       currency: this.cardConfig.currency,
       fixedUnit: true,
-      onlyIntegers: this.amazonProvider.onlyIntegers
+      onlyIntegers: this.cardConfig.currency === 'JPY'
     });
   }
 }
