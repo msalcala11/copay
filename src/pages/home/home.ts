@@ -177,7 +177,8 @@ export class HomePage {
     if (this.isNW) this.checkUpdate();
     this.checkHomeTip();
     this.checkFeedbackInfo();
-    this.checkAnnouncement();
+    // this.checkAnnouncement();
+    this.amazonProvider.getSupportedCurrency();
     this.checkClipboard();
 
     this.subscribeIncomingDataMenuEvent();
@@ -366,24 +367,24 @@ export class HomePage {
     this.homeTip = false;
   }
 
-  private async checkAnnouncement() {
-    if (!this.amazonProvider.currency)
-      await this.amazonProvider.setCurrencyByLocation();
-    if (this.amazonProvider.currency == 'JPY') {
-      this.persistenceProvider.getShowAmazonJapanAnnouncement().then(value => {
-        if (!value) this.showAnnouncement = true;
-      });
-    }
-  }
+  // private async checkAnnouncement() {
+  //   if (!this.amazonProvider.currency)
+  //     await this.amazonProvider.setCurrencyByLocation();
+  //   if (this.amazonProvider.currency == 'JPY') {
+  //     this.persistenceProvider.getShowAmazonJapanAnnouncement().then(value => {
+  //       if (!value) this.showAnnouncement = true;
+  //     });
+  //   }
+  // }
 
-  public hideAnnouncement(): void {
-    this.persistenceProvider.setShowAmazonJapanAnnouncement('hide');
-    this.showAnnouncement = false;
-  }
+  // public hideAnnouncement(): void {
+  //   this.persistenceProvider.setShowAmazonJapanAnnouncement('hide');
+  //   this.showAnnouncement = false;
+  // }
 
-  public openAnnouncement(): void {
-    this.navCtrl.push(AmazonPage);
-  }
+  // public openAnnouncement(): void {
+  //   this.navCtrl.push(AmazonPage);
+  // }
 
   private checkFeedbackInfo() {
     this.persistenceProvider.getFeedbackInfo().then(info => {

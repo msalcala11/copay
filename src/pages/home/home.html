@@ -45,7 +45,7 @@
       </ion-item>
     </ion-card>
 
-    <ion-card *ngIf="showAnnouncement">
+    <!-- <ion-card *ngIf="showAnnouncement">
       <ion-card-header class="wallet-ready">
         <ion-row>
           <button ion-button clear icon-only item-end color="grey" (click)="hideAnnouncement()">
@@ -66,7 +66,7 @@
           </span>
         </div>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
     <ion-card class="new-release" *ngIf="newRelease">
       <div class="new-release-icon">
@@ -280,8 +280,8 @@
             <img src="assets/img/icon-card.svg" class="icon-card" />
           </ion-icon>
           <div class="item-title">BitPay Visa&reg; Card ({{card.lastFourDigits}})</div>
-          <div class="item-subtitle">{{card.balance ? ((card.balance | number:'1.2-2') + ' ' + card.currency) : 'Add funds to get started'|translate}} {{card.updatedOn
-            ? (' &middot; ' + (card.updatedOn * 1000 | amTimeAgo)) : ''}}</div>
+          <div class="item-subtitle">{{card.balance ? ((card.balance | number:'1.2-2') + ' ' + card.currency) : 'Add funds to get started'|translate}}
+            {{card.updatedOn ? (' &middot; ' + (card.updatedOn * 1000 | amTimeAgo)) : ''}}</div>
         </button>
       </ion-list>
     </div>
