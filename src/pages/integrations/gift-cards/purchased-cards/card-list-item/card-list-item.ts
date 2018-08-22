@@ -10,7 +10,7 @@ import {
   template: `
   <button ion-item class="card-list-item">
     <ion-icon item-start>
-      <img class="card-list-item__icon" [ngClass]="{amazon: isAmazon()}" [src]="cardConfig.icon">
+      <img class="card-list-item__icon" [ngClass]="{amazon: isAmazon()}" [src]="cardConfig?.icon">
     </ion-icon>
     <ion-label>
       <div class="card-list-item__label">{{card.amount | formatCurrency:card.currency}}</div>
@@ -27,8 +27,8 @@ export class CardListItemComponent {
 
   constructor(private giftCardProvider: GiftCardProvider) {}
 
-  ngOnInit() {
-    this.cardConfig = this.giftCardProvider.getCardConfig(this.card.name);
+  async ngOnInit() {
+    this.cardConfig = await this.giftCardProvider.getCardConfig(this.card.name);
   }
 
   isAmazon() {

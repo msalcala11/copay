@@ -10,6 +10,7 @@ import { MercadoLibreProvider } from '../mercado-libre/mercado-libre';
 import { TimeProvider } from '../time/time';
 
 export interface CardConifg {
+  brand: string;
   cardImage: string;
   currency: string;
   icon: string;
@@ -52,8 +53,9 @@ export class GiftCardProvider {
     return cards.map(c => ({ ...c, name: cardName }));
   }
 
-  getCardConfig(cardName: string) {
-    return this.getOfferedCards().filter(c => c.name === cardName)[0];
+  async getCardConfig(cardName: string) {
+    const supportedCards = await this.getSupportedCards();
+    return supportedCards.filter(c => c.name === cardName)[0];
   }
 
   saveGiftCard() {}
@@ -112,9 +114,17 @@ export class GiftCardProvider {
     return false;
   }
 
+  async getSupportedCards() {
+    const supportedCurrency = await this.amazonProvider.getSupportedCurrency();
+    return this.getOfferedCards().filter(
+      card => card.currency === supportedCurrency || card.currency === 'BRL'
+    );
+  }
+
   getOfferedCards(): CardConifg[] {
     return [
       {
+        brand: 'Amazon',
         currency: 'USD',
         icon: 'assets/img/amazon/amazon-icon.svg',
         cardImage: 'assets/img/amazon/amazon-gift-card.png',
@@ -123,6 +133,16 @@ export class GiftCardProvider {
         name: 'Amazon'
       },
       {
+        brand: 'Amazon',
+        currency: 'JPY',
+        icon: 'assets/img/amazon/amazon-icon.svg',
+        cardImage: 'assets/img/amazon/amazon-gift-card.png',
+        maxAmount: 200000,
+        minAmount: 100,
+        name: 'Amazon'
+      },
+      {
+        brand: 'Mercado Livre',
         name: 'Mercado Livre',
         currency: 'BRL',
         // icon: 'assets/img/mercado-libre/meli-card-24px.png', // assets/img/mercado-libre/meli-card-24px.png

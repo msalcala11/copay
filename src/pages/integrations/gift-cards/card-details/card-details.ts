@@ -25,9 +25,9 @@ export class CardDetailsPage {
     private navParams: NavParams
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.card = this.navParams.get('card');
-    this.cardConfig = this.giftCardProvider.getCardConfig(this.card.name);
+    this.cardConfig = await this.giftCardProvider.getCardConfig(this.card.name);
   }
 
   copyClaimCode() {

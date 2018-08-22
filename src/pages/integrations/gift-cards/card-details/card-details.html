@@ -14,7 +14,7 @@
     <div class="header-extension"></div>
     <div class="main-content">
       <div class="balance">{{card.amount | formatCurrency:card.currency}}</div>
-      <img class="card-image" [src]="cardConfig.cardImage">
+      <img class="card-image" [src]="cardConfig?.cardImage">
       <div class="card-info" (click)="copyClaimCode()" [copy-to-clipboard]="card.claimCode" [hide-toast]="true">
         <div class="card-info__title">Claim Code</div>
         <div class="card-info__claim-code">{{card.claimCode}}</div>

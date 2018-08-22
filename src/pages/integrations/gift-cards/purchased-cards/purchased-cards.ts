@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
 // Providers
-import { AmazonProvider } from '../../../../providers/amazon/amazon';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 import {
   CardConifg,
@@ -10,7 +9,6 @@ import {
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
 import { Logger } from '../../../../providers/logger/logger';
-import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
 import { PlatformProvider } from '../../../../providers/platform/platform';
 import { BuyCardPage } from '../buy-card/buy-card';
 import { CardDetailsPage } from '../card-details/card-details';
@@ -32,25 +30,22 @@ export class PurchasedCardsPage {
   public cardConfig: CardConifg;
 
   constructor(
-    private amazonProvider: AmazonProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private giftCardProvider: GiftCardProvider,
     private logger: Logger,
     private navCtrl: NavController,
     private navParams: NavParams,
-    public platformProvider: PlatformProvider,
-    private onGoingProcessProvider: OnGoingProcessProvider
+    public platformProvider: PlatformProvider
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.platformName = this.platformProvider.isIOS ? 'ios' : 'md';
-    const cardName = this.navParams.get('cardName');
-    this.cardConfig = this.giftCardProvider.getCardConfig(cardName);
   }
 
   async ionViewDidLoad() {
     this.logger.info('ionViewDidLoad PurchasedCardsPage');
-    this.network = this.amazonProvider.getNetwork();
+    const cardName = this.navParams.get('cardName');
+    this.cardConfig = await this.giftCardProvider.getCardConfig(cardName);
     await this.initAmazon();
   }
 
@@ -59,11 +54,6 @@ export class PurchasedCardsPage {
   }
 
   private async initAmazon(): Promise<any> {
-    if (!this.amazonProvider.currency) {
-      this.onGoingProcessProvider.set('');
-      await this.amazonProvider.setCurrencyByLocation();
-      this.onGoingProcessProvider.clear();
-    }
     return this.giftCardProvider
       .getPurchasedCards(this.cardConfig.name)
       .then(cards => this.setGiftCards(cards))

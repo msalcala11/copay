@@ -22,6 +22,7 @@ export class AmazonProvider {
   public pageTitle: string;
   public onlyIntegers: boolean;
   public userInfo: object = { email: '' };
+  public supportedCurrency: 'USD' | 'JPY';
 
   constructor(
     private http: HttpClient,
@@ -48,18 +49,10 @@ export class AmazonProvider {
     return this.credentials.NETWORK;
   }
 
-  public async setCurrencyByLocation() {
-    return new Promise(resolve => {
-      this.getSupportedCards()
-        .then(currency => {
-          this.setCountryParameters(currency);
-          resolve();
-        })
-        .catch(() => {
-          this.setCountryParameters();
-          resolve();
-        });
-    });
+  public setCurrencyByLocation() {
+    return this.getSupportedCurrency()
+      .then(currency => this.setCountryParameters(currency))
+      .catch(() => this.setCountryParameters());
   }
 
   private setCountryParameters(currency?: string): void {
@@ -255,23 +248,23 @@ export class AmazonProvider {
       );
   }
 
-  private getSupportedCards(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get(this.credentials.BITPAY_API_URL + '/amazon-gift/supportedCards')
-        .subscribe(
-          data => {
+  public async getSupportedCurrency(): Promise<string> {
+    return this.supportedCurrency
+      ? Promise.resolve(this.supportedCurrency)
+      : this.http
+          .get(this.credentials.BITPAY_API_URL + '/amazon-gift/supportedCards')
+          .toPromise()
+          .then((data: any) => {
             this.logger.info('Amazon Gift Card Supported Cards: SUCCESS');
-            return resolve(data['supportedCards'][0]);
-          },
-          data => {
+            this.supportedCurrency = data.supportedCards[0];
+            return this.supportedCurrency;
+          })
+          .catch(err => {
             this.logger.error(
-              'Amazon Gift Card Supported Cards: ' + data.message
+              'Amazon Gift Card Supported Cards: ' + err.message
             );
-            return reject(data);
-          }
-        );
-    });
+            throw err;
+          });
   }
 
   public emailIsValid(email: string): boolean {

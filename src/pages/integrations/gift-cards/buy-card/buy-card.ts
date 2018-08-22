@@ -5,7 +5,6 @@ import {
   CardConifg,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
-import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
 import { AmountPage } from '../../../send/amount/amount';
 
 @Component({
@@ -19,27 +18,16 @@ export class BuyCardPage {
     private amazonProvider: AmazonProvider,
     private giftCardProvider: GiftCardProvider,
     private nav: NavController,
-    private navParams: NavParams,
-    private onGoingProcessProvider: OnGoingProcessProvider
-  ) {
-    const cardName = this.navParams.get('cardName');
-    this.cardConfig = this.giftCardProvider.getCardConfig(cardName);
-  }
+    private navParams: NavParams
+  ) {}
 
-  ngOnInit() {
-    this.initAmazon();
+  async ngOnInit() {
+    const cardName = this.navParams.get('cardName');
+    this.cardConfig = await this.giftCardProvider.getCardConfig(cardName);
   }
 
   cancel() {
     this.nav.pop();
-  }
-
-  private async initAmazon(): Promise<any> {
-    if (!this.amazonProvider.currency) {
-      this.onGoingProcessProvider.set('');
-      await this.amazonProvider.setCurrencyByLocation();
-      this.onGoingProcessProvider.clear();
-    }
   }
 
   enterAmount() {

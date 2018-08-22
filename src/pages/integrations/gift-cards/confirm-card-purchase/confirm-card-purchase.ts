@@ -118,14 +118,14 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     this.amazonGiftCard = null;
     this.country = this.amazonProvider.country;
     this.onlyIntegers = this.amazonProvider.onlyIntegers;
-    this.cardConfig = this.giftCardProvider.getCardConfig(
-      this.navParams.get('cardName')
-    );
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.amount = this.navParams.data.amount;
     this.currency = this.navParams.data.currency;
+    this.cardConfig = await this.giftCardProvider.getCardConfig(
+      this.navParams.get('cardName')
+    );
   }
 
   ionViewDidLoad() {
