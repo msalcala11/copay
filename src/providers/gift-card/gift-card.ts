@@ -9,6 +9,17 @@ import { Logger } from '../logger/logger';
 import { MercadoLibreProvider } from '../mercado-libre/mercado-libre';
 import { TimeProvider } from '../time/time';
 
+export enum CardBrand {
+  amazon = 'Amazon',
+  mercadoLibre = 'Mercado Livre'
+}
+
+export enum CardName {
+  amazon = 'Amazon.com',
+  amazonJapan = 'Amazon.co.jp',
+  mercadoLibre = 'Mercado Livre'
+}
+
 export interface CardConifg {
   brand: string;
   cardImage: string;
@@ -16,18 +27,19 @@ export interface CardConifg {
   icon: string;
   maxAmount: number;
   minAmount: number;
-  name: string;
+  name: CardName;
 }
 
 export interface GiftCard {
   amount: number;
+  brand: CardBrand;
   archived: boolean;
   claimCode: string;
   currency: string;
   date: number;
   invoiceUrl: string;
   invoiceId: string;
-  name: string;
+  name: CardName;
   status: string;
   updating: boolean;
 }
@@ -41,19 +53,26 @@ export class GiftCardProvider {
     private timeProvider: TimeProvider
   ) {}
 
-  async getPurchasedCards(cardName: string): Promise<GiftCard[]> {
+  async getPurchasedCards(cardName: CardName): Promise<GiftCard[]> {
+    const getAmazonCards = this.amazonProvider.getPurchasedCards.bind(
+      this.amazonProvider
+    );
     const methodMap = {
-      Amazon: this.amazonProvider.getPurchasedCards.bind(this.amazonProvider),
-      'Mercado Livre': this.mercadoLibreProvider.getPurchasedCards.bind(
+      [CardName.amazon]: getAmazonCards,
+      [CardName.amazonJapan]: getAmazonCards,
+      [CardName.mercadoLibre]: this.mercadoLibreProvider.getPurchasedCards.bind(
         this.mercadoLibreProvider
       )
     };
     const method = methodMap[cardName];
-    const cards = await method();
-    return cards.map(c => ({ ...c, name: cardName }));
+    const [cards, cardConfig] = await Promise.all([
+      method(),
+      this.getCardConfig(cardName)
+    ]);
+    return cards.map(c => ({ ...c, name: cardName, brand: cardConfig.brand }));
   }
 
-  async getCardConfig(cardName: string) {
+  async getCardConfig(cardName: CardName) {
     const supportedCards = await this.getSupportedCards();
     return supportedCards.filter(c => c.name === cardName)[0];
   }
@@ -124,33 +143,33 @@ export class GiftCardProvider {
   getOfferedCards(): CardConifg[] {
     return [
       {
-        brand: 'Amazon',
+        brand: CardBrand.amazon,
         currency: 'USD',
         icon: 'assets/img/amazon/amazon-icon.svg',
         cardImage: 'assets/img/amazon/amazon-gift-card.png',
         maxAmount: 2000,
         minAmount: 1,
-        name: 'Amazon'
+        name: CardName.amazon
       },
       {
-        brand: 'Amazon',
+        brand: CardBrand.amazon,
         currency: 'JPY',
         icon: 'assets/img/amazon/amazon-icon.svg',
         cardImage: 'assets/img/amazon/amazon-gift-card.png',
         maxAmount: 200000,
         minAmount: 100,
-        name: 'Amazon'
+        name: CardName.amazonJapan
       },
       {
-        brand: 'Mercado Livre',
-        name: 'Mercado Livre',
+        brand: CardBrand.mercadoLibre,
         currency: 'BRL',
         // icon: 'assets/img/mercado-libre/meli-card-24px.png', // assets/img/mercado-libre/meli-card-24px.png
 
         icon: 'assets/img/mercado-libre/icon-ml.svg', // assets/img/mercado-libre/meli-card-24px.png
         cardImage: 'assets/img/mercado-libre/mercado-livre-card.png',
         maxAmount: 2000,
-        minAmount: 15
+        minAmount: 15,
+        name: CardName.mercadoLibre
       }
     ];
   }

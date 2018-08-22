@@ -17,7 +17,6 @@ import { BitPayCardPage } from '../integrations/bitpay-card/bitpay-card';
 import { BitPayCardIntroPage } from '../integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
 import { GlideraPage } from '../integrations/glidera/glidera';
-// import { MercadoLibrePage } from '../integrations/mercado-libre/mercado-libre';
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { PaperWalletPage } from '../paper-wallet/paper-wallet';
 import { AmountPage } from '../send/amount/amount';
@@ -96,9 +95,6 @@ export class HomePage {
   private onResumeSubscription: Subscription;
   private onPauseSubscription: Subscription;
 
-  private numAmazonGiftCards: number;
-  private numMercadoLibreGiftCards: number;
-
   constructor(
     private plt: Platform,
     private navCtrl: NavController,
@@ -176,17 +172,6 @@ export class HomePage {
 
     // Update Tx Notifications
     this.getNotifications();
-    this.getNumGiftCards();
-  }
-
-  private async getNumGiftCards() {
-    const cardNames = ['Amazon', 'Mercado Livre'];
-    const promises = cardNames.map(cardName =>
-      this.giftCardProvider.getPurchasedCards(cardName)
-    );
-    const [amazonCards, mlCards] = await Promise.all(promises);
-    this.numAmazonGiftCards = amazonCards.length;
-    this.numMercadoLibreGiftCards = mlCards.length;
   }
 
   private _didEnter() {
@@ -751,30 +736,30 @@ export class HomePage {
 
   public goTo(page: string, serviceName: string): void {
     if (serviceName === 'amazon' || serviceName === 'mercadolibre') {
-      return this.buyGiftCard(serviceName);
+      this.buyGiftCard(serviceName);
+      return;
     }
-
     const pageMap = {
-      // AmazonPage: !this.numAmazonGiftCards ? BuyCardPage : PurchasedCardsPage,
       BitPayCardIntroPage,
       CoinbasePage,
       GlideraPage,
-      // MercadoLibrePage,
       ShapeshiftPage
     };
-    // pageMap[page] = true;
     this.navCtrl.push(pageMap[page]);
-    // this.navCtrl.push(PurchasedCardsPage);
   }
 
-  public buyGiftCard(cardName: string) {
-    const numCards =
-      cardName === 'amazon'
-        ? this.numAmazonGiftCards
-        : this.numMercadoLibreGiftCards;
-    const nextPage = !numCards ? BuyCardPage : PurchasedCardsPage;
-    const fullName = cardName === 'amazon' ? 'Amazon' : 'Mercado Livre';
-    this.navCtrl.push(nextPage, { cardName: fullName });
+  public async buyGiftCard(servicename: string) {
+    const brandNames = {
+      amazon: 'Amazon',
+      mercadolibre: 'Mercado Livre'
+    };
+    const supportedCards = await this.giftCardProvider.getSupportedCards();
+    const cardName = supportedCards.filter(
+      c => c.brand === brandNames[servicename]
+    )[0].name;
+    const cards = await this.giftCardProvider.getPurchasedCards(cardName);
+    const nextPage = !cards.length ? BuyCardPage : PurchasedCardsPage;
+    this.navCtrl.push(nextPage, { cardName });
   }
 
   public goToCard(cardId): void {

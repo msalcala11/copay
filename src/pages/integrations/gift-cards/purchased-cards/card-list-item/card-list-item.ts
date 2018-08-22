@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import {
+  CardBrand,
   CardConifg,
   GiftCard,
   GiftCardProvider
@@ -32,6 +33,6 @@ export class CardListItemComponent {
   }
 
   isAmazon() {
-    return this.card.name === 'Amazon';
+    return this.card.brand === CardBrand.amazon;
   }
 }

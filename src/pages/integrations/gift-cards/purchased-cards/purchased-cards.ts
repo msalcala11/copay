@@ -40,13 +40,14 @@ export class PurchasedCardsPage {
 
   async ngOnInit() {
     this.platformName = this.platformProvider.isIOS ? 'ios' : 'md';
+    const cardName = this.navParams.get('cardName');
+    this.cardConfig = await this.giftCardProvider.getCardConfig(cardName);
+    console.log('this.cardConfig', this.cardConfig);
+    await this.initAmazon();
   }
 
   async ionViewDidLoad() {
     this.logger.info('ionViewDidLoad PurchasedCardsPage');
-    const cardName = this.navParams.get('cardName');
-    this.cardConfig = await this.giftCardProvider.getCardConfig(cardName);
-    await this.initAmazon();
   }
 
   addCard() {
