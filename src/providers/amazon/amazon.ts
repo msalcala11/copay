@@ -174,7 +174,7 @@ export class AmazonProvider {
   }
 
   public createGiftCard(data, cb) {
-    this.createCard(data).subscribe(data => cb(data));
+    this.createCard(data).subscribe(data => cb(null, data), err => cb(err));
     // var dataSrc = {
     //   clientId: data.uuid,
     //   invoiceId: data.invoiceId,
