@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 
 // Pages
 import { AddPage } from '../add/add';
-import { AmazonPage } from '../integrations/amazon/amazon';
+// import { AmazonPage } from '../integrations/amazon/amazon';
 import { BitPayCardPage } from '../integrations/bitpay-card/bitpay-card';
 import { BitPayCardIntroPage } from '../integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
