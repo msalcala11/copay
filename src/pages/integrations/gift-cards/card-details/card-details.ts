@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { ActionSheetProvider } from '../../../../providers/action-sheet/action-sheet';
-import { AmazonProvider } from '../../../../providers/amazon/amazon';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 import {
   CardConifg,
@@ -18,7 +17,6 @@ export class CardDetailsPage {
   public cardConfig: CardConifg;
 
   constructor(
-    private amazonProvider: AmazonProvider,
     private actionSheetProvider: ActionSheetProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private giftCardProvider: GiftCardProvider,
@@ -34,7 +32,7 @@ export class CardDetailsPage {
     this.actionSheetProvider
       .createInfoSheet('copied-gift-card-claim-code', {
         claimCode: this.card.claimCode,
-        website: 'amazon.com'
+        website: this.cardConfig.website
       })
       .present();
   }
@@ -54,8 +52,11 @@ export class CardDetailsPage {
   }
 
   redeem() {
-    const url = `${this.amazonProvider.redeemAmazonUrl}${this.card.claimCode}`;
-    this.externalLinkProvider.open(url);
+    this.cardConfig.redeemUrl
+      ? this.externalLinkProvider.open(
+          `${this.cardConfig.redeemUrl}${this.card.claimCode}`
+        )
+      : this.copyClaimCode();
   }
 
   showInvoice() {

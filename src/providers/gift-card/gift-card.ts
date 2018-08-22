@@ -28,6 +28,8 @@ export interface CardConifg {
   maxAmount: number;
   minAmount: number;
   name: CardName;
+  redeemUrl: string;
+  website: string;
 }
 
 export interface GiftCard {
@@ -149,7 +151,9 @@ export class GiftCardProvider {
         cardImage: 'assets/img/amazon/amazon-gift-card.png',
         maxAmount: 2000,
         minAmount: 1,
-        name: CardName.amazon
+        name: CardName.amazon,
+        redeemUrl: 'https://www.amazon.com/gc/redeem?claimCode=',
+        website: 'amazon.com'
       },
       {
         brand: CardBrand.amazon,
@@ -158,7 +162,9 @@ export class GiftCardProvider {
         cardImage: 'assets/img/amazon/amazon-gift-card.png',
         maxAmount: 200000,
         minAmount: 100,
-        name: CardName.amazonJapan
+        name: CardName.amazonJapan,
+        redeemUrl: 'https://www.amazon.co.jp/gc/redeem?claimCode=',
+        website: 'amazon.co.jp'
       },
       {
         brand: CardBrand.mercadoLibre,
@@ -169,7 +175,9 @@ export class GiftCardProvider {
         cardImage: 'assets/img/mercado-libre/mercado-livre-card.png',
         maxAmount: 2000,
         minAmount: 15,
-        name: CardName.mercadoLibre
+        name: CardName.mercadoLibre,
+        redeemUrl: null,
+        website: 'mercadolivre.com.br'
       }
     ];
   }
