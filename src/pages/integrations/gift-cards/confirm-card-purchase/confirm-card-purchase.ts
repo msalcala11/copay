@@ -368,6 +368,9 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
   }
 
   private async promptEmail() {
+    if (!this.cardConfig.emailRequired) {
+      return Promise.resolve();
+    }
     const email = await this.amazonProvider.getUserEmail();
     if (email) return Promise.resolve(email);
     const title = this.translate.instant('Enter email address');
@@ -425,7 +428,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     if (!this.isCryptoCurrencySupported(wallet, invoice)) {
       this.onGoingProcessProvider.clear();
       let msg = this.translate.instant(
-        'Purchases with this cryptocurrency is not enabled'
+        'Purchases with this cryptocurrency are not enabled'
       );
       this.showErrorAndBack(null, msg);
       return;

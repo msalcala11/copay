@@ -25,6 +25,7 @@ export interface CardConifg {
   brand: string;
   cardImage: string;
   currency: string;
+  emailRequired: boolean;
   icon: string;
   maxAmount: number;
   minAmount: number;
@@ -199,6 +200,7 @@ export class GiftCardProvider {
         bitpayApiPath: 'amazon-gift', // hope to remove the need for bitpayApiPath when the api has a universal gift card enpoint
         brand: CardBrand.amazon,
         currency: 'USD',
+        emailRequired: true,
         icon: 'assets/img/amazon/amazon-icon.svg',
         cardImage: 'assets/img/amazon/amazon-gift-card.png',
         maxAmount: 2000,
@@ -211,6 +213,7 @@ export class GiftCardProvider {
         bitpayApiPath: 'amazon-gift',
         brand: CardBrand.amazon,
         currency: 'JPY',
+        emailRequired: true,
         icon: 'assets/img/amazon/amazon-icon.svg',
         cardImage: 'assets/img/amazon/amazon-gift-card.png',
         maxAmount: 200000,
@@ -223,6 +226,7 @@ export class GiftCardProvider {
         bitpayApiPath: 'mercado-libre-gift',
         brand: CardBrand.mercadoLibre,
         currency: 'BRL',
+        emailRequired: false,
         // icon: 'assets/img/mercado-libre/meli-card-24px.png', // assets/img/mercado-libre/meli-card-24px.png
 
         icon: 'assets/img/mercado-libre/icon-ml.svg', // assets/img/mercado-libre/meli-card-24px.png
