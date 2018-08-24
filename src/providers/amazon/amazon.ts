@@ -84,7 +84,7 @@ export class AmazonProvider {
     this.saveGiftCard(gc, opts).then(() => cb());
   }
 
-  public saveGiftCard(gc, opts) {
+  public saveGiftCard(gc, opts?) {
     return this.persistenceProvider
       .getAmazonGiftCards(this.amazonNetwork)
       .then(oldGiftCards => {

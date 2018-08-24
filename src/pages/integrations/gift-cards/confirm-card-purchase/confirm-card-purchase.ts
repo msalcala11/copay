@@ -24,6 +24,7 @@ import { ExternalLinkProvider } from '../../../../providers/external-link/extern
 import {
   CardBrand,
   CardConifg,
+  GiftCard,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
 import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
@@ -342,66 +343,30 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     });
   }
 
-  private checkTransaction = _.throttle(
-    (count: number, dataSrc) => {
-      this.amazonProvider.createGiftCard(dataSrc, (err, giftCard) => {
-        this.logger.debug('creating gift card ' + count);
-        if (err) {
-          giftCard = giftCard || {};
-          giftCard['status'] = 'FAILURE';
-        }
+  private async createGiftCard(purchaseDetails: any) {
+    const fullCard = await this.amazonProvider
+      .createCard(purchaseDetails)
+      .toPromise()
+      .catch(() => ({ status: 'FAILURE' }));
 
-        let now = moment().unix() * 1000;
+    const now = moment().unix() * 1000;
+    const newData = {
+      ...fullCard,
+      invoiceId: purchaseDetails.invoiceId,
+      accessKey: purchaseDetails.accessKey,
+      invoiceUrl: purchaseDetails.invoiceUrl,
+      amount: purchaseDetails.amount,
+      date: purchaseDetails.invoiceTime || now,
+      uuid: purchaseDetails.uuid
+    };
 
-        let newData = giftCard;
-        newData.invoiceId = dataSrc.invoiceId;
-        newData.accessKey = dataSrc.accessKey;
-        newData.invoiceUrl = dataSrc.invoiceUrl;
-        newData.amount = dataSrc.amount;
-        newData.date = dataSrc.invoiceTime || now;
-        newData.uuid = dataSrc.uuid;
+    await this.amazonProvider.saveGiftCard(newData);
 
-        if (newData.status == 'expired') {
-          this.amazonProvider.savePendingGiftCard(
-            newData,
-            {
-              remove: true
-            },
-            err => {
-              this.logger.error(err);
-              this.onGoingProcessProvider.clear();
-              this.showError(null, this.translate.instant('Gift card expired'));
-            }
-          );
-          return;
-        }
-
-        if (giftCard.status == 'PENDING' && count < 3) {
-          this.logger.debug('Waiting for payment confirmation');
-          this.amazonProvider.savePendingGiftCard(newData, null, () => {
-            this.logger.debug(
-              'Saving gift card with status: ' + newData.status
-            );
-          });
-          this.checkTransaction(count + 1, dataSrc);
-          return;
-        }
-
-        this.amazonProvider.savePendingGiftCard(newData, null, () => {
-          this.onGoingProcessProvider.clear();
-          this.logger.debug(
-            'Saved new gift card with status: ' + newData.status
-          );
-          this.amazonGiftCard = newData;
-          this.openFinishModal();
-        });
-      });
-    },
-    15000,
-    {
-      leading: true
-    }
-  );
+    this.onGoingProcessProvider.clear();
+    this.logger.debug('Saved new gift card with status: ' + newData.status);
+    this.amazonGiftCard = newData;
+    this.openFinishModal();
+  }
 
   private async promptEmail(): Promise<any> {
     let email = await this.amazonProvider.getUserEmail();
@@ -555,7 +520,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
         this.publishAndSign(this.wallet, this.tx)
           .then(() => {
             this.onGoingProcessProvider.set('buyingGiftCard');
-            this.checkTransaction(1, this.tx.giftData);
+            this.createGiftCard(this.tx.giftData);
           })
           .catch(err => {
             this.resetValues();
