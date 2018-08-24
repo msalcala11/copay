@@ -24,7 +24,6 @@ import { ExternalLinkProvider } from '../../../../providers/external-link/extern
 import {
   CardBrand,
   CardConifg,
-  GiftCard,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
 import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
@@ -498,7 +497,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       });
   }
 
-  public buyConfirm() {
+  public async buyConfirm() {
     if (!this.tx) {
       this.showError(
         null,
@@ -506,30 +505,31 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       );
       return;
     }
-    let title = this.translate.instant('Confirm');
-    let okText = this.translate.instant('OK');
-    let cancelText = this.translate.instant('Cancel');
-    this.popupProvider
-      .ionicConfirm(title, this.message, okText, cancelText)
-      .then(ok => {
-        if (!ok) {
-          if (this.isCordova) this.slideButton.isConfirmed(false);
-          return;
-        }
+    const title = this.translate.instant('Confirm');
+    const okText = this.translate.instant('OK');
+    const cancelText = this.translate.instant('Cancel');
+    const confirm = await this.popupProvider.ionicConfirm(
+      title,
+      this.message,
+      okText,
+      cancelText
+    );
+    if (!confirm) {
+      if (this.isCordova) this.slideButton.isConfirmed(false);
+      return;
+    }
 
-        this.publishAndSign(this.wallet, this.tx)
-          .then(() => {
-            this.onGoingProcessProvider.set('buyingGiftCard');
-            this.createGiftCard(this.tx.giftData);
-          })
-          .catch(err => {
-            this.resetValues();
-            this.showError(
-              this.translate.instant('Could not send transaction'),
-              this.bwcErrorProvider.msg(err)
-            );
-            return;
-          });
+    return this.publishAndSign(this.wallet, this.tx)
+      .then(() => {
+        this.onGoingProcessProvider.set('buyingGiftCard');
+        return this.createGiftCard(this.tx.giftData);
+      })
+      .catch(err => {
+        this.resetValues();
+        this.showError(
+          this.translate.instant('Could not send transaction'),
+          this.bwcErrorProvider.msg(err)
+        );
       });
   }
 
