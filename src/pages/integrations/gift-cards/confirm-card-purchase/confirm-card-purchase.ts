@@ -367,7 +367,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     this.openFinishModal();
   }
 
-  private async promptEmail(): Promise<string> {
+  private async promptEmail() {
     const email = await this.amazonProvider.getUserEmail();
     if (email) return Promise.resolve(email);
     const title = this.translate.instant('Enter email address');
@@ -521,7 +521,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
 
   public onWalletSelect(wallet): void {
     this.wallet = wallet;
-    this.initialize(wallet);
+    this.initialize(wallet).catch(() => {});
   }
 
   public showWallets(): void {
