@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { from } from 'rxjs/observable/from';
@@ -28,6 +29,7 @@ export interface CardConifg {
   maxAmount: number;
   minAmount: number;
   name: CardName;
+  bitpayApiPath: string;
   redeemUrl: string;
   website: string;
 }
@@ -48,12 +50,23 @@ export interface GiftCard {
 
 @Injectable()
 export class GiftCardProvider {
+  credentials: {
+    NETWORK: string;
+    BITPAY_API_URL: string;
+  } = {
+    NETWORK: 'livenet',
+    BITPAY_API_URL: 'https://bitpay.com'
+  };
+
   constructor(
     private amazonProvider: AmazonProvider,
+    private http: HttpClient,
     private logger: Logger,
     private mercadoLibreProvider: MercadoLibreProvider,
     private timeProvider: TimeProvider
-  ) {}
+  ) {
+    this.logger.info('GiftCardProvider initialized.');
+  }
 
   async getPurchasedCards(cardName: CardName): Promise<GiftCard[]> {
     const getAmazonCards = this.amazonProvider.getPurchasedCards.bind(
@@ -119,6 +132,44 @@ export class GiftCardProvider {
     });
   }
 
+  async createBitpayInvoice(data) {
+    const dataSrc = {
+      currency: data.currency,
+      amount: data.amount,
+      clientId: data.uuid,
+      email: data.email,
+      buyerSelectedTransactionCurrency: data.buyerSelectedTransactionCurrency
+    };
+    const config = await this.getCardConfig(data.cardName);
+    const url = `${this.credentials.BITPAY_API_URL}/${
+      config.bitpayApiPath
+    }/pay`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    const invoice = await this.http
+      .post(url, dataSrc, { headers })
+      .toPromise()
+      .catch(err => {
+        this.logger.error('BitPay Create Invoice: ERROR', JSON.stringify(data));
+        throw err;
+      });
+    this.logger.info('BitPay Create Invoice: SUCCESS');
+    return invoice as any;
+  }
+
+  public async getBitPayInvoice(id) {
+    const res: any = await this.http
+      .get(`${this.credentials.BITPAY_API_URL}/invoices/${id}`)
+      .toPromise()
+      .catch(err => {
+        this.logger.error('BitPay Get Invoice: ERROR ' + err.error.message);
+        throw err.error.message;
+      });
+    this.logger.info('BitPay Get Invoice: SUCCESS');
+    return res.data;
+  }
+
   private checkIfCardNeedsUpdate(card: GiftCard) {
     // Continues normal flow (update card)
     if (card.status === 'PENDING' || card.status === 'invalid') {
@@ -145,6 +196,7 @@ export class GiftCardProvider {
   getOfferedCards(): CardConifg[] {
     return [
       {
+        bitpayApiPath: 'amazon-gift', // hope to remove the need for bitpayApiPath when the api has a universal gift card enpoint
         brand: CardBrand.amazon,
         currency: 'USD',
         icon: 'assets/img/amazon/amazon-icon.svg',
@@ -156,6 +208,7 @@ export class GiftCardProvider {
         website: 'amazon.com'
       },
       {
+        bitpayApiPath: 'amazon-gift',
         brand: CardBrand.amazon,
         currency: 'JPY',
         icon: 'assets/img/amazon/amazon-icon.svg',
@@ -167,6 +220,7 @@ export class GiftCardProvider {
         website: 'amazon.co.jp'
       },
       {
+        bitpayApiPath: 'mercado-libre-gift',
         brand: CardBrand.mercadoLibre,
         currency: 'BRL',
         // icon: 'assets/img/mercado-libre/meli-card-24px.png', // assets/img/mercado-libre/meli-card-24px.png

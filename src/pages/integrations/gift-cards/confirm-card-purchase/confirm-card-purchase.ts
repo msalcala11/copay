@@ -237,126 +237,108 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     );
   }
 
-  private createInvoice(data): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.amazonProvider.createBitPayInvoice(data, (err, dataInvoice) => {
-        if (err) {
-          let err_title = this.translate.instant('Error creating the invoice');
-          let err_msg;
-          if (err && err.message && err.message.match(/suspended/i)) {
-            err_title = this.translate.instant('Service not available');
-            err_msg = this.translate.instant(
-              'Amazon.com is not available at this moment. Please try back later.'
-            );
-          } else if (err && err.message) {
-            err_msg = err.message;
-          } else {
-            err_msg = this.translate.instant('Could not access to Amazon.com');
-          }
+  private handleCreateInvoiceError(err) {
+    let err_title = this.translate.instant('Error creating the invoice');
+    let err_msg;
+    if (err && err.message && err.message.match(/suspended/i)) {
+      err_title = this.translate.instant('Service not available');
+      err_msg = this.translate.instant(
+        'Amazon.com is not available at this moment. Please try back later.'
+      );
+    } else if (err && err.message) {
+      err_msg = err.message;
+    } else {
+      err_msg = this.translate.instant('Could not access to Amazon.com');
+    }
 
-          return reject({
-            title: err_title,
-            message: err_msg
-          });
-        }
-
-        let accessKey = dataInvoice ? dataInvoice.accessKey : null;
-
-        if (!accessKey) {
-          return reject({
-            message: this.translate.instant('No access key defined')
-          });
-        }
-
-        this.amazonProvider.getBitPayInvoice(
-          dataInvoice.invoiceId,
-          (err, invoice) => {
-            if (err) {
-              return reject({
-                message: this.translate.instant('Could not get the invoice')
-              });
-            }
-
-            return resolve({ invoice, accessKey });
-          }
-        );
-      });
-    });
+    throw {
+      title: err_title,
+      message: err_msg
+    };
   }
 
-  private createTx(wallet, invoice, message: string): Promise<any> {
-    let COIN = wallet.coin.toUpperCase();
-    return new Promise((resolve, reject) => {
-      let payProUrl =
-        invoice && invoice.paymentCodes
-          ? invoice.paymentCodes[COIN].BIP73
-          : null;
+  public async createInvoice(data) {
+    const cardOrder = await this.giftCardProvider
+      .createBitpayInvoice(data)
+      .catch(err => this.handleCreateInvoiceError(err));
 
-      if (!payProUrl) {
-        return reject({
+    const accessKey = cardOrder && cardOrder.accessKey;
+    if (!accessKey) {
+      throw {
+        message: this.translate.instant('No access key defined')
+      };
+    }
+    const invoice = await this.giftCardProvider
+      .getBitPayInvoice(cardOrder.invoiceId)
+      .catch(() => {
+        throw {
+          message: this.translate.instant('Could not get the invoice')
+        };
+      });
+    return { invoice, accessKey };
+  }
+
+  private async createTx(wallet, invoice, message: string) {
+    const COIN = wallet.coin.toUpperCase();
+    const payProUrl =
+      invoice && invoice.paymentCodes ? invoice.paymentCodes[COIN].BIP73 : null;
+
+    if (!payProUrl) {
+      throw {
+        title: this.translate.instant('Error in Payment Protocol'),
+        message: this.translate.instant('Invalid URL')
+      };
+    }
+
+    const details = await this.payproProvider
+      .getPayProDetails(payProUrl, wallet.coin)
+      .catch(err => {
+        throw {
           title: this.translate.instant('Error in Payment Protocol'),
-          message: this.translate.instant('Invalid URL')
-        });
-      }
+          message: err
+        };
+      });
 
-      this.payproProvider
-        .getPayProDetails(payProUrl, wallet.coin)
-        .then(details => {
-          let txp: Partial<TransactionProposal> = {
-            amount: details.amount,
-            toAddress: details.toAddress,
-            outputs: [
-              {
-                toAddress: details.toAddress,
-                amount: details.amount,
-                message
-              }
-            ],
-            message,
-            customData: {
-              service: 'amazon'
-            },
-            payProUrl,
-            excludeUnconfirmedUtxos: this.configWallet.spendUnconfirmed
-              ? false
-              : true
-          };
+    const txp: Partial<TransactionProposal> = {
+      amount: details.amount,
+      toAddress: details.toAddress,
+      outputs: [
+        {
+          toAddress: details.toAddress,
+          amount: details.amount,
+          message
+        }
+      ],
+      message,
+      customData: {
+        service: 'amazon'
+      },
+      payProUrl,
+      excludeUnconfirmedUtxos: this.configWallet.spendUnconfirmed ? false : true
+    };
 
-          if (details.requiredFeeRate) {
-            txp.feePerKb = Math.ceil(details.requiredFeeRate * 1024);
-            this.logger.debug(
-              'Using merchant fee rate (for amazon gc):' + txp.feePerKb
-            );
-          } else {
-            txp.feeLevel = this.configWallet.settings.feeLevel || 'normal';
-          }
+    if (details.requiredFeeRate) {
+      txp.feePerKb = Math.ceil(details.requiredFeeRate * 1024);
+      this.logger.debug(
+        'Using merchant fee rate (for amazon gc):' + txp.feePerKb
+      );
+    } else {
+      txp.feeLevel = this.configWallet.settings.feeLevel || 'normal';
+    }
 
-          txp['origToAddress'] = txp.toAddress;
+    txp['origToAddress'] = txp.toAddress;
 
-          if (wallet.coin && wallet.coin == 'bch') {
-            // Use legacy address
-            txp.toAddress = this.bitcoreCash.Address(txp.toAddress).toString();
-            txp.outputs[0].toAddress = txp.toAddress;
-          }
+    if (wallet.coin && wallet.coin == 'bch') {
+      // Use legacy address
+      txp.toAddress = this.bitcoreCash.Address(txp.toAddress).toString();
+      txp.outputs[0].toAddress = txp.toAddress;
+    }
 
-          this.walletProvider
-            .createTx(wallet, txp)
-            .then(ctxp => {
-              return resolve(ctxp);
-            })
-            .catch(err => {
-              return reject({
-                title: this.translate.instant('Could not create transaction'),
-                message: this.bwcErrorProvider.msg(err)
-              });
-            });
-        })
-        .catch(err => {
-          return reject({
-            title: this.translate.instant('Error in Payment Protocol'),
-            message: err
-          });
-        });
+    return this.walletProvider.createTx(wallet, txp).catch(err => {
+      throw {
+        title: this.translate.instant('Could not create transaction'),
+        message: this.bwcErrorProvider.msg(err)
+      };
     });
   }
 
@@ -463,7 +445,8 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
           currency: parsedAmount.currency,
           uuid: wallet.id,
           email,
-          buyerSelectedTransactionCurrency: COIN
+          buyerSelectedTransactionCurrency: COIN,
+          cardName: this.cardConfig.name
         };
         this.onGoingProcessProvider.set('loadingTxInfo');
 
