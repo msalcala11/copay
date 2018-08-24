@@ -95,6 +95,34 @@ export class GiftCardProvider {
 
   saveGiftCard() {}
 
+  public createGiftCard(data) {
+    const dataSrc = {
+      clientId: data.uuid,
+      invoiceId: data.invoiceId,
+      accessKey: data.accessKey
+    };
+
+    const url = `${this.credentials.BITPAY_API_URL}/${
+      data.cardConfig.bitpayApiPath
+    }/redeem`;
+
+    return this.http
+      .post(url, dataSrc)
+      .catch(err => {
+        this.logger.error(
+          `${data.cardConfig.name} Gift Card Create/Update: ${err.message}`
+        );
+        return Observable.throw(err);
+      })
+      .map((card: GiftCard) => {
+        card.status = card.status === 'paid' ? 'PENDING' : card.status;
+        this.logger.info(
+          `${data.cardConfig.name} Gift Card Create/Update: ${card.status}`
+        );
+        return card;
+      });
+  }
+
   updatePendingGiftCards(cards: GiftCard[]): Observable<GiftCard> {
     const cardsNeedingUpdate = cards.filter(card =>
       this.checkIfCardNeedsUpdate(card)

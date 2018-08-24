@@ -58,7 +58,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
   public amazonGiftCard;
   public amountUnitStr: string;
   public network: string;
-  public country: string;
   public onlyIntegers: boolean;
 
   public amazonBrand: CardBrand.amazon = CardBrand.amazon;
@@ -118,7 +117,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
 
     this.configWallet = this.configProvider.get().wallet;
     this.amazonGiftCard = null;
-    this.country = this.amazonProvider.country;
     this.onlyIntegers = this.amazonProvider.onlyIntegers;
   }
 
@@ -343,8 +341,8 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
   }
 
   private async createGiftCard(purchaseDetails: any) {
-    const fullCard = await this.amazonProvider
-      .createCard(purchaseDetails)
+    const fullCard = await this.giftCardProvider
+      .createGiftCard({ ...purchaseDetails, cardConfig: this.cardConfig })
       .toPromise()
       .catch(() => ({ status: 'FAILURE' }));
 
