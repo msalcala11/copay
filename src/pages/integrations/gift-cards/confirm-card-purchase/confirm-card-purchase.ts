@@ -117,7 +117,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
 
     this.configWallet = this.configProvider.get().wallet;
     this.amazonGiftCard = null;
-    this.onlyIntegers = this.amazonProvider.onlyIntegers;
   }
 
   async ngOnInit() {
@@ -126,6 +125,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     this.cardConfig = await this.giftCardProvider.getCardConfig(
       this.navParams.get('cardName')
     );
+    this.onlyIntegers = this.cardConfig.currency === 'JPY';
   }
 
   ionViewDidLoad() {
