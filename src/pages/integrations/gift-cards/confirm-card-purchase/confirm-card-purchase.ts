@@ -54,7 +54,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
   public invoiceFee: number;
   public networkFee: number;
   public totalAmount: number;
-  public amazonGiftCard;
   public amountUnitStr: string;
   public network: string;
   public onlyIntegers: boolean;
@@ -114,7 +113,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     );
 
     this.configWallet = this.configProvider.get().wallet;
-    this.amazonGiftCard = null;
   }
 
   async ngOnInit() {
@@ -338,17 +336,16 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     });
   }
 
-  private async createGiftCard(purchaseDetails: GiftCard) {
+  private async createGiftCard(initialCard: GiftCard) {
     const card = await this.giftCardProvider
-      .createGiftCard(purchaseDetails, this.cardConfig)
+      .createGiftCard(initialCard, this.cardConfig)
       .toPromise()
-      .catch(() => ({ status: 'FAILURE' }));
+      .catch(() => ({ ...initialCard, status: 'FAILURE' }));
 
     await this.giftCardProvider.saveGiftCard(card);
     this.onGoingProcessProvider.clear();
     this.logger.debug('Saved new gift card with status: ' + card.status);
-    this.amazonGiftCard = card;
-    this.openFinishModal();
+    this.finish(card);
   }
 
   private async promptEmail() {
@@ -529,28 +526,28 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     });
   }
 
-  async openFinishModal() {
+  async finish(card: GiftCard) {
     let finishComment: string;
     let cssClass: string;
-    if (this.amazonGiftCard.status == 'FAILURE') {
+    if (card.status == 'FAILURE') {
       finishComment = this.translate.instant(
         'Your purchase could not be completed'
       );
       cssClass = 'danger';
     }
-    if (this.amazonGiftCard.status == 'PENDING') {
+    if (card.status == 'PENDING') {
       finishComment = this.translate.instant(
         'Your purchase was added to the list of pending'
       );
       cssClass = 'warning';
     }
-    if (this.amazonGiftCard.status == 'SUCCESS') {
+    if (card.status == 'SUCCESS') {
       finishComment = this.replaceParametersProvider.replace(
         this.translate.instant('Bought {{ amount }}'),
         { amount: this.amountUnitStr }
       );
     }
-    if (this.amazonGiftCard.status == 'SUCCESS') {
+    if (card.status == 'SUCCESS') {
       finishComment = this.translate.instant(
         'Gift card generated and ready to use.'
       );
@@ -565,10 +562,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
 
     await this.navCtrl.popToRoot({ animate: false });
     await this.navCtrl.parent.select(0);
-    await this.navCtrl.push(
-      CardDetailsPage,
-      { card: { ...this.amazonGiftCard, name: this.cardConfig.name } },
-      { animate: false }
-    );
+    await this.navCtrl.push(CardDetailsPage, { card }, { animate: false });
   }
 }
