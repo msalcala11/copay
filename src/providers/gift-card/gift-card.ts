@@ -155,8 +155,9 @@ export class GiftCardProvider {
       .map((card: GiftCard) => {
         const now = moment().unix() * 1000;
         const date = card.invoiceTime || now;
+        const name = cardConfig.name;
         const status = card.status === 'paid' ? 'PENDING' : card.status;
-        const fullCard = { ...card, ...data, date, status };
+        const fullCard = { ...card, ...data, date, name, status };
         // card.status = card.status === 'paid' ? 'PENDING' : card.status;
         // card.name = cardConfig.name;
         // card.invoiceId = data.invoiceId;
