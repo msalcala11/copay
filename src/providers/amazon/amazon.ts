@@ -181,30 +181,6 @@ export class AmazonProvider {
 
   public createGiftCard(data, cb) {
     this.createCard(data).subscribe(data => cb(null, data), err => cb(err));
-    // var dataSrc = {
-    //   clientId: data.uuid,
-    //   invoiceId: data.invoiceId,
-    //   accessKey: data.accessKey
-    // };
-    // this.http
-    //   .post(this.credentials.BITPAY_API_URL + '/amazon-gift/redeem', dataSrc)
-    //   .subscribe(
-    //     (data: any) => {
-    //       var status =
-    //         data.status == 'new'
-    //           ? 'PENDING'
-    //           : data.status == 'paid'
-    //             ? 'PENDING'
-    //             : data.status;
-    //       data.status = status;
-    //       this.logger.info('Amazon Gift Card Create/Update: ' + status);
-    //       return cb(null, data);
-    //     },
-    //     data => {
-    //       this.logger.error('Amazon Gift Card Create/Update: ' + data.message);
-    //       return cb(data);
-    //     }
-    //   );
   }
 
   public createCard(data) {

@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import {
-  CardBrand,
   CardConifg,
   GiftCard,
   GiftCardProvider
@@ -11,7 +10,7 @@ import {
   template: `
   <button ion-item class="card-list-item">
     <ion-icon item-start>
-      <img class="card-list-item__icon" [ngClass]="{amazon: isAmazon()}" [src]="cardConfig?.icon">
+      <img class="card-list-item__icon" [src]="cardConfig?.icon">
     </ion-icon>
     <ion-label>
       <div class="card-list-item__label">{{card.amount | formatCurrency:card.currency}}</div>
@@ -30,9 +29,5 @@ export class CardListItemComponent {
 
   async ngOnInit() {
     this.cardConfig = await this.giftCardProvider.getCardConfig(this.card.name);
-  }
-
-  isAmazon() {
-    return this.card.brand === CardBrand.amazon;
   }
 }

@@ -21,7 +21,6 @@ import { BwcProvider } from '../../../../providers/bwc/bwc';
 import { ConfigProvider } from '../../../../providers/config/config';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 import {
-  CardBrand,
   CardConifg,
   GiftCard,
   GiftCardProvider
@@ -60,7 +59,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
   public network: string;
   public onlyIntegers: boolean;
 
-  public amazonBrand: CardBrand.amazon = CardBrand.amazon;
   public cardConfig: CardConifg;
 
   constructor(
