@@ -47,31 +47,40 @@ export class MercadoLibreProvider {
     return this.credentials.NETWORK;
   }
 
+  public getCardMap() {
+    return this.persistenceProvider.getMercadoLibreGiftCards(this.getNetwork());
+  }
+
   public savePendingGiftCard(gc, opts, cb) {
-    let network = this.getNetwork();
-    this.persistenceProvider
-      .getMercadoLibreGiftCards(network)
-      .then(oldGiftCards => {
-        if (_.isString(oldGiftCards)) {
-          oldGiftCards = JSON.parse(oldGiftCards);
-        }
-        if (_.isString(gc)) {
-          gc = JSON.parse(gc);
-        }
-        let inv = oldGiftCards || {};
-        inv[gc.invoiceId] = gc;
-        if (opts && (opts.error || opts.status || opts.archived)) {
-          inv[gc.invoiceId] = _.assign(inv[gc.invoiceId], opts);
-        }
-        if (opts && opts.remove) {
-          delete inv[gc.invoiceId];
-        }
+    const network = this.getNetwork();
+    return this.getCardMap().then(oldGiftCards => {
+      if (_.isString(oldGiftCards)) {
+        oldGiftCards = JSON.parse(oldGiftCards);
+      }
+      if (_.isString(gc)) {
+        gc = JSON.parse(gc);
+      }
+      let inv = oldGiftCards || {};
+      inv[gc.invoiceId] = gc;
+      if (opts && (opts.error || opts.status || opts.archived)) {
+        inv[gc.invoiceId] = _.assign(inv[gc.invoiceId], opts);
+      }
+      if (opts && opts.remove) {
+        delete inv[gc.invoiceId];
+      }
 
-        inv = JSON.stringify(inv);
+      inv = JSON.stringify(inv);
 
-        this.persistenceProvider.setMercadoLibreGiftCards(network, inv);
-        return cb();
-      });
+      this.persistenceProvider.setMercadoLibreGiftCards(network, inv);
+      return cb();
+    });
+  }
+
+  public persistCards(cardMap) {
+    return this.persistenceProvider.setMercadoLibreGiftCards(
+      this.getNetwork(),
+      cardMap
+    );
   }
 
   public getPendingGiftCards(cb) {

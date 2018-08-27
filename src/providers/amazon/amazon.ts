@@ -104,11 +104,15 @@ export class AmazonProvider {
         }
 
         inv = JSON.stringify(inv);
-        return this.persistenceProvider.setAmazonGiftCards(
-          this.amazonNetwork,
-          inv
-        );
+        return this.persistCards(inv);
       });
+  }
+
+  public persistCards(cardMap) {
+    return this.persistenceProvider.setAmazonGiftCards(
+      this.amazonNetwork,
+      cardMap
+    );
   }
 
   public getPendingGiftCards(cb) {
@@ -122,11 +126,13 @@ export class AmazonProvider {
       });
   }
 
+  public getCardMap() {
+    return this.persistenceProvider.getAmazonGiftCards(this.amazonNetwork);
+  }
+
   public async getPurchasedCards() {
     await this.setCurrencyByLocation();
-    const giftCardMap =
-      (await this.persistenceProvider.getAmazonGiftCards(this.amazonNetwork)) ||
-      {};
+    const giftCardMap = (await this.getCardMap()) || {};
     const invoiceIds = Object.keys(giftCardMap);
     return invoiceIds
       .map(invoiceId => giftCardMap[invoiceId] as GiftCard)

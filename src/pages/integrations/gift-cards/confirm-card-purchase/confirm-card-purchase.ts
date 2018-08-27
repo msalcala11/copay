@@ -24,6 +24,7 @@ import { ExternalLinkProvider } from '../../../../providers/external-link/extern
 import {
   CardBrand,
   CardConifg,
+  GiftCard,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
 import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
@@ -136,7 +137,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     this.isOpenSelector = false;
     this.navCtrl.swipeBackEnabled = false;
 
-    this.network = this.amazonProvider.getNetwork();
+    this.network = this.giftCardProvider.getNetwork();
     this.wallets = this.profileProvider.getWallets({
       onlyComplete: true,
       network: this.network,
@@ -340,28 +341,16 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     });
   }
 
-  private async createGiftCard(purchaseDetails: any) {
-    const fullCard = await this.giftCardProvider
+  private async createGiftCard(purchaseDetails: GiftCard) {
+    const card = await this.giftCardProvider
       .createGiftCard({ ...purchaseDetails, cardConfig: this.cardConfig })
       .toPromise()
       .catch(() => ({ status: 'FAILURE' }));
 
-    const now = moment().unix() * 1000;
-    const newData = {
-      ...fullCard,
-      invoiceId: purchaseDetails.invoiceId,
-      accessKey: purchaseDetails.accessKey,
-      invoiceUrl: purchaseDetails.invoiceUrl,
-      amount: purchaseDetails.amount,
-      date: purchaseDetails.invoiceTime || now,
-      uuid: purchaseDetails.uuid
-    };
-
-    await this.amazonProvider.saveGiftCard(newData);
-
+    await this.giftCardProvider.saveGiftCard(card);
     this.onGoingProcessProvider.clear();
-    this.logger.debug('Saved new gift card with status: ' + newData.status);
-    this.amazonGiftCard = newData;
+    this.logger.debug('Saved new gift card with status: ' + card.status);
+    this.amazonGiftCard = card;
     this.openFinishModal();
   }
 

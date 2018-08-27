@@ -1,5 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { from } from 'rxjs/observable/from';
 import { fromPromise } from 'rxjs/observable/fromPromise';
@@ -36,17 +38,20 @@ export interface CardConifg {
 }
 
 export interface GiftCard {
+  accessKey: string;
   amount: number;
   brand: CardBrand;
   archived: boolean;
   claimCode: string;
   currency: string;
   date: number;
-  invoiceUrl: string;
   invoiceId: string;
+  invoiceTime?: number;
+  invoiceUrl: string;
   name: CardName;
   status: string;
-  updating: boolean;
+  uuid: string;
+  // updating: boolean;
 }
 
 @Injectable()
@@ -67,6 +72,10 @@ export class GiftCardProvider {
     private timeProvider: TimeProvider
   ) {
     this.logger.info('GiftCardProvider initialized.');
+  }
+
+  getNetwork() {
+    return this.credentials.NETWORK;
   }
 
   async getPurchasedCards(cardName: CardName): Promise<GiftCard[]> {
@@ -93,9 +102,38 @@ export class GiftCardProvider {
     return supportedCards.filter(c => c.name === cardName)[0];
   }
 
-  saveGiftCard() {}
+  async saveGiftCard(
+    gc,
+    opts?: Partial<{ error: string; status: string; remove: boolean }>
+  ) {
+    const providerMap = {
+      [CardName.amazon]: this.amazonProvider,
+      [CardName.amazonJapan]: this.amazonProvider,
+      [CardName.mercadoLibre]: this.mercadoLibreProvider
+    };
+    const provider = providerMap[gc.name];
+    const getCardMap = provider.getCardMap.bind(provider);
+    const persistCards = provider.persistCards.bind(provider);
+    let oldGiftCards = await getCardMap();
+    if (_.isString(oldGiftCards)) {
+      oldGiftCards = JSON.parse(oldGiftCards);
+    }
+    if (_.isString(gc)) {
+      gc = JSON.parse(gc);
+    }
+    let newMap = oldGiftCards || {};
+    newMap[gc.invoiceId] = gc;
+    if (opts && (opts.error || opts.status)) {
+      newMap[gc.invoiceId] = _.assign(newMap[gc.invoiceId], opts);
+    }
+    if (opts && opts.remove) {
+      delete newMap[gc.invoiceId];
+    }
+    newMap = JSON.stringify(newMap);
+    return persistCards(newMap);
+  }
 
-  public createGiftCard(data) {
+  public createGiftCard(data: GiftCard, cardConfig: CardConifg) {
     const dataSrc = {
       clientId: data.uuid,
       invoiceId: data.invoiceId,
@@ -103,23 +141,34 @@ export class GiftCardProvider {
     };
 
     const url = `${this.credentials.BITPAY_API_URL}/${
-      data.cardConfig.bitpayApiPath
+      cardConfig.bitpayApiPath
     }/redeem`;
 
     return this.http
       .post(url, dataSrc)
       .catch(err => {
         this.logger.error(
-          `${data.cardConfig.name} Gift Card Create/Update: ${err.message}`
+          `${cardConfig.name} Gift Card Create/Update: ${err.message}`
         );
         return Observable.throw(err);
       })
       .map((card: GiftCard) => {
-        card.status = card.status === 'paid' ? 'PENDING' : card.status;
+        const now = moment().unix() * 1000;
+        const date = card.invoiceTime || now;
+        const status = card.status === 'paid' ? 'PENDING' : card.status;
+        const fullCard = { ...card, ...data, date, status };
+        // card.status = card.status === 'paid' ? 'PENDING' : card.status;
+        // card.name = cardConfig.name;
+        // card.invoiceId = data.invoiceId;
+        // card.accessKey = data.accessKey;
+        // card.invoiceUrl = data.invoiceUrl;
+        // card.amount = data.amount;
+        // card.date = card.invoiceTime || now;
+        // card.uuid = data.uuid;
         this.logger.info(
-          `${data.cardConfig.name} Gift Card Create/Update: ${card.status}`
+          `${cardConfig.name} Gift Card Create/Update: ${fullCard.status}`
         );
-        return card;
+        return fullCard;
       });
   }
 
