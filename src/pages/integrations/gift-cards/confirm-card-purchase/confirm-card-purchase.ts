@@ -343,7 +343,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
 
   private async createGiftCard(purchaseDetails: GiftCard) {
     const card = await this.giftCardProvider
-      .createGiftCard({ ...purchaseDetails, cardConfig: this.cardConfig })
+      .createGiftCard(purchaseDetails, this.cardConfig)
       .toPromise()
       .catch(() => ({ status: 'FAILURE' }));
 

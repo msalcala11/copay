@@ -87,6 +87,7 @@ export class HomePage {
   public showReorderBtc: boolean;
   public showReorderBch: boolean;
   public showIntegration;
+  public hideHomeIntegrations: boolean;
 
   private isNW: boolean;
   private updatingWalletId: object;
