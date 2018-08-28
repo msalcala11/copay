@@ -43,6 +43,7 @@ export class PurchasedCardsPage {
     const cardName = this.navParams.get('cardName');
     this.cardConfig = await this.giftCardProvider.getCardConfig(cardName);
     await this.getCards();
+    this.giftCardProvider.cardUpdates$.subscribe(() => this.getCards());
   }
 
   async ionViewDidLoad() {

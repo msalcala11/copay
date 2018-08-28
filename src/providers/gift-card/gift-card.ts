@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { from } from 'rxjs/observable/from';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
@@ -62,6 +62,9 @@ export class GiftCardProvider {
     NETWORK: 'livenet',
     BITPAY_API_URL: 'https://bitpay.com'
   };
+
+  cardUpdatesSubject: Subject<GiftCard> = new Subject<GiftCard>();
+  cardUpdates$: Observable<GiftCard> = this.cardUpdatesSubject.asObservable();
 
   constructor(
     private amazonProvider: AmazonProvider,
@@ -218,6 +221,12 @@ export class GiftCardProvider {
       this.logger.debug('Amazon gift card updated');
       return updatedCard as GiftCard;
     });
+  }
+
+  async archiveCard(card: GiftCard) {
+    card.archived = true;
+    await this.saveGiftCard(card);
+    this.cardUpdatesSubject.next(card);
   }
 
   async createBitpayInvoice(data) {

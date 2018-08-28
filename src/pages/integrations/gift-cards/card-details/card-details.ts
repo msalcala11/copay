@@ -42,8 +42,7 @@ export class CardDetailsPage {
   }
 
   async archive() {
-    this.card.archived = true;
-    await this.giftCardProvider.saveGiftCard(this.card);
+    await this.giftCardProvider.archiveCard(this.card);
     this.nav.pop();
     this.showInfoSheet('gift-card-archived');
   }
