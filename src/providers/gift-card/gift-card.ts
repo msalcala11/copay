@@ -285,7 +285,7 @@ export class GiftCardProvider {
   getOfferedCards(): CardConifg[] {
     return [
       {
-        bitpayApiPath: 'amazon-gift', // hope to remove the need for bitpayApiPath when the api has a universal gift card enpoint
+        bitpayApiPath: 'amazon-gift', // Plan to remove bitpayApiPath when the api has a universal gift card enpoint
         brand: CardBrand.amazon,
         currency: 'USD',
         emailRequired: true,
@@ -315,10 +315,8 @@ export class GiftCardProvider {
         brand: CardBrand.mercadoLibre,
         currency: 'BRL',
         emailRequired: false,
-        // icon: 'assets/img/mercado-libre/meli-card-24px.png', // assets/img/mercado-libre/meli-card-24px.png
-        icon: 'assets/img/mercado-libre/mercado-livre-icon2.svg', // assets/img/mercado-libre/meli-card-24px.png
-        // icon: 'assets/img/mercado-libre/icon-ml.svg', // assets/img/mercado-libre/meli-card-24px.png
-        cardImage: 'assets/img/mercado-libre/mercado-livre-card2.png',
+        icon: 'assets/img/mercado-libre/mercado-livre-icon.svg',
+        cardImage: 'assets/img/mercado-libre/mercado-livre-card.png',
         maxAmount: 2000,
         minAmount: 15,
         name: CardName.mercadoLibre,

@@ -216,7 +216,7 @@ export class MercadoLibreProvider {
     this.homeIntegrationsProvider.register({
       name: 'mercadolibre',
       title: 'Mercado Livre Brazil Gift Cards',
-      icon: 'assets/img/mercado-libre/icon-ml.svg',
+      icon: 'assets/img/mercado-libre/mercado-livre-icon.svg',
       page: 'MercadoLibrePage',
       show: !!this.configProvider.get().showIntegration['mercadolibre']
     });
