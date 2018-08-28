@@ -49,6 +49,10 @@ export class AmazonProvider {
     return this.credentials.NETWORK;
   }
 
+  public setCredentials(credentials) {
+    this.credentials = credentials;
+  }
+
   public setCurrencyByLocation() {
     return this.getSupportedCurrency()
       .then(currency => this.setCountryParameters(currency))

@@ -542,12 +542,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       cssClass = 'warning';
     }
     if (card.status == 'SUCCESS') {
-      finishComment = this.replaceParametersProvider.replace(
-        this.translate.instant('Bought {{ amount }}'),
-        { amount: this.amountUnitStr }
-      );
-    }
-    if (card.status == 'SUCCESS') {
       finishComment = this.translate.instant(
         'Gift card generated and ready to use.'
       );

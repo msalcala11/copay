@@ -72,10 +72,20 @@ export class GiftCardProvider {
     private timeProvider: TimeProvider
   ) {
     this.logger.info('GiftCardProvider initialized.');
+    this.setCredentials();
   }
 
   getNetwork() {
     return this.credentials.NETWORK;
+  }
+
+  setCredentials() {
+    this.credentials.BITPAY_API_URL =
+      this.credentials.NETWORK === 'testnet'
+        ? 'https://test.bitpay.com'
+        : 'https://bitpay.com';
+    this.amazonProvider.setCredentials(this.credentials);
+    this.mercadoLibreProvider.setCredentials(this.credentials);
   }
 
   async getPurchasedCards(cardName: CardName): Promise<GiftCard[]> {
@@ -306,9 +316,9 @@ export class GiftCardProvider {
         currency: 'BRL',
         emailRequired: false,
         // icon: 'assets/img/mercado-libre/meli-card-24px.png', // assets/img/mercado-libre/meli-card-24px.png
-
-        icon: 'assets/img/mercado-libre/icon-ml.svg', // assets/img/mercado-libre/meli-card-24px.png
-        cardImage: 'assets/img/mercado-libre/mercado-livre-card.png',
+        icon: 'assets/img/mercado-libre/mercado-livre-icon2.svg', // assets/img/mercado-libre/meli-card-24px.png
+        // icon: 'assets/img/mercado-libre/icon-ml.svg', // assets/img/mercado-libre/meli-card-24px.png
+        cardImage: 'assets/img/mercado-libre/mercado-livre-card2.png',
         maxAmount: 2000,
         minAmount: 15,
         name: CardName.mercadoLibre,

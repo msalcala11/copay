@@ -47,6 +47,10 @@ export class MercadoLibreProvider {
     return this.credentials.NETWORK;
   }
 
+  public setCredentials(credentials) {
+    this.credentials = credentials;
+  }
+
   public getCardMap() {
     return this.persistenceProvider.getMercadoLibreGiftCards(this.getNetwork());
   }
