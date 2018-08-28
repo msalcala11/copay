@@ -19,6 +19,7 @@ export type InfoSheetType =
   | 'copied-gift-card-claim-code'
   | 'custom-amount'
   | 'default-error'
+  | 'gift-card-archived'
   | 'insufficient-funds'
   | 'legacy-address-info'
   | 'miner-fee'

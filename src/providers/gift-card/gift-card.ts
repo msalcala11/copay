@@ -40,8 +40,8 @@ export interface CardConifg {
 export interface GiftCard {
   accessKey: string;
   amount: number;
-  brand: CardBrand;
   archived: boolean;
+  brand: CardBrand;
   claimCode: string;
   currency: string;
   date: number;
@@ -51,7 +51,6 @@ export interface GiftCard {
   name: CardName;
   status: string;
   uuid: string;
-  // updating: boolean;
 }
 
 @Injectable()

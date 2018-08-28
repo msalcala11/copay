@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { NavParams } from 'ionic-angular';
-import { ActionSheetProvider } from '../../../../providers/action-sheet/action-sheet';
+import { NavController, NavParams } from 'ionic-angular';
+import {
+  ActionSheetProvider,
+  InfoSheetType
+} from '../../../../providers/action-sheet/action-sheet';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 import {
   CardConifg,
@@ -20,6 +23,7 @@ export class CardDetailsPage {
     private actionSheetProvider: ActionSheetProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private giftCardProvider: GiftCardProvider,
+    private nav: NavController,
     private navParams: NavParams
   ) {}
 
@@ -37,14 +41,21 @@ export class CardDetailsPage {
       .present();
   }
 
-  archive() {
-    console.log('archive', this.card);
+  async archive() {
+    this.card.archived = true;
+    await this.giftCardProvider.saveGiftCard(this.card);
+    this.nav.pop();
+    this.showInfoSheet('gift-card-archived');
   }
 
   openArchiveSheet() {
-    const sheet = this.actionSheetProvider.createInfoSheet('archive-gift-card');
+    this.showInfoSheet('archive-gift-card', () => this.archive());
+  }
+
+  showInfoSheet(sheetName: InfoSheetType, onDidDismiss: () => void = () => {}) {
+    const sheet = this.actionSheetProvider.createInfoSheet(sheetName);
     sheet.present();
-    sheet.onDidDismiss(() => this.archive());
+    sheet.onDidDismiss(() => onDidDismiss());
   }
 
   openExternalLink(url: string): void {

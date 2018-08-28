@@ -62,7 +62,7 @@ export class PurchasedCardsPage {
 
   setGiftCards(allCards) {
     this.currentGiftCards = allCards.filter(gc => !gc.archived);
-    this.archivedGiftCards = this.currentGiftCards; // giftCards.filter(gc => gc.archived);
+    this.archivedGiftCards = allCards.filter(gc => gc.archived);
     this.updatePendingCards(this.currentGiftCards);
   }
 

@@ -24,7 +24,7 @@
         <button ion-button class="button-standard" (click)="redeem()">
           {{'Redeem Now' | translate}}
         </button>
-        <button ion-button class="button-standard button-secondary" (click)="openArchiveSheet()">
+        <button ion-button class="button-standard button-secondary" (click)="openArchiveSheet()" *ngIf="!card.archived">
           {{"I've used this card" | translate}}
         </button>
       </div>

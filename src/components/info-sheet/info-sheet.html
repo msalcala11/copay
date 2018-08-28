@@ -109,9 +109,15 @@
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'archive-gift-card'" type="warning">
-      <span sheet-title-text translate>Archive this card?</span>
+      <span sheet-title-text translate>Archive this Card?</span>
       <span sheet-text translate>Have you redeemed the entire balance of this gift card?</span>
       <span sheet-button-text translate>YES</span>
+    </info-sheet-template>
+
+    <info-sheet-template *ngSwitchCase="'gift-card-archived'" type="success">
+      <span sheet-title-text translate>Card Archived</span>
+      <span sheet-text translate>You can continue to view your archived cards here if you need to access them.</span>
+      <span sheet-button-text translate>OK</span>
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'legacy-address-info'" type="info">
