@@ -43,7 +43,7 @@ export class CardDetailsPage {
 
   async archive() {
     await this.giftCardProvider.archiveCard(this.card);
-    await this.nav.pop();
+    this.nav.pop();
     this.showInfoSheet('gift-card-archived');
   }
 

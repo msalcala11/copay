@@ -49,10 +49,6 @@ export class PurchasedCardsPage {
 
   async ionViewDidLoad() {
     this.logger.info('ionViewDidLoad PurchasedCardsPage');
-
-    setTimeout(() => {
-      this.getCards();
-    });
   }
 
   listenForUpdates() {
