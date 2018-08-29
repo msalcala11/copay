@@ -311,7 +311,7 @@ export class GiftCardProvider {
         currency: 'JPY',
         emailRequired: true,
         icon: 'assets/img/amazon/amazon-icon.svg',
-        cardImage: 'assets/img/amazon/amazon-gift-card.png',
+        cardImage: 'assets/img/amazon/amazon-japan-gift-card.png',
         maxAmount: 200000,
         minAmount: 100,
         name: CardName.amazonJapan,
