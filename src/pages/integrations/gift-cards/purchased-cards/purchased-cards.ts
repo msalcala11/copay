@@ -21,6 +21,7 @@ import { CardListItemComponent } from './card-list-item/card-list-item';
 export class PurchasedCardsPage {
   public network: string;
   public giftCards: { [invoiceId: string]: GiftCard };
+  public allGiftCards: GiftCard[];
   public currentGiftCards: GiftCard[];
   public archivedGiftCards: GiftCard[];
   public updatingPending;
@@ -43,9 +44,7 @@ export class PurchasedCardsPage {
     const cardName = this.navParams.get('cardName');
     this.cardConfig = await this.giftCardProvider.getCardConfig(cardName);
     await this.getCards();
-    this.giftCardProvider.cardUpdates$.subscribe(card => {
-      console.log('card', card);
-    });
+    this.listenForUpdates();
   }
 
   async ionViewDidLoad() {
@@ -54,6 +53,17 @@ export class PurchasedCardsPage {
     setTimeout(() => {
       this.getCards();
     });
+  }
+
+  listenForUpdates() {
+    this.giftCardProvider.cardUpdates$.subscribe(card => this.updateCard(card));
+  }
+
+  updateCard(card: GiftCard) {
+    this.allGiftCards = this.allGiftCards.map(
+      oldCard => (oldCard.invoiceId === card.invoiceId ? card : oldCard)
+    );
+    this.setGiftCards(this.allGiftCards);
   }
 
   addCard() {
@@ -67,17 +77,17 @@ export class PurchasedCardsPage {
       .catch(err => this.logger.error(err));
   }
 
-  setGiftCards(cards: GiftCard[]) {
-    const allCards = cards.map(c => ({ ...c, archived: false }));
+  setGiftCards(allCards: GiftCard[]) {
+    this.allGiftCards = allCards;
     this.currentGiftCards = allCards.filter(gc => !gc.archived);
     this.archivedGiftCards = allCards.filter(gc => gc.archived);
     this.updatePendingCards(this.currentGiftCards);
   }
 
   public updatePendingCards(cards: GiftCard[]) {
-    this.giftCardProvider.updatePendingGiftCards(cards).subscribe(card => {
-      console.log('card', card);
-    });
+    this.giftCardProvider
+      .updatePendingGiftCards(cards)
+      .subscribe(card => this.updateCard(card));
   }
 
   public openExternalLink(url: string) {
