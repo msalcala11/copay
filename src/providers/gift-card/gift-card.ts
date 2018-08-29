@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { from } from 'rxjs/observable/from';
 import { fromPromise } from 'rxjs/observable/fromPromise';
@@ -59,7 +58,7 @@ export class GiftCardProvider {
     NETWORK: string;
     BITPAY_API_URL: string;
   } = {
-    NETWORK: 'livenet',
+    NETWORK: 'testnet',
     BITPAY_API_URL: 'https://bitpay.com'
   };
 
@@ -167,19 +166,9 @@ export class GiftCardProvider {
         return Observable.throw(err);
       })
       .map((card: GiftCard) => {
-        const now = moment().unix() * 1000;
-        const date = card.invoiceTime || now;
-        const name = cardConfig.name;
+        const date = card.invoiceTime || data.date;
         const status = card.status === 'paid' ? 'PENDING' : card.status;
         const fullCard = { ...card, ...data, date, name, status };
-        // card.status = card.status === 'paid' ? 'PENDING' : card.status;
-        // card.name = cardConfig.name;
-        // card.invoiceId = data.invoiceId;
-        // card.accessKey = data.accessKey;
-        // card.invoiceUrl = data.invoiceUrl;
-        // card.amount = data.amount;
-        // card.date = card.invoiceTime || now;
-        // card.uuid = data.uuid;
         this.logger.info(
           `${cardConfig.name} Gift Card Create/Update: ${fullCard.status}`
         );

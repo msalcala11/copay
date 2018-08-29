@@ -67,17 +67,17 @@ export class PurchasedCardsPage {
   }
 
   private async getCards(): Promise<any> {
-    return this.giftCardProvider
+    await this.giftCardProvider
       .getPurchasedCards(this.cardConfig.name)
       .then(cards => this.setGiftCards(cards))
       .catch(err => this.logger.error(err));
+    this.updatePendingCards(this.currentGiftCards);
   }
 
   setGiftCards(allCards: GiftCard[]) {
     this.allGiftCards = allCards;
     this.currentGiftCards = allCards.filter(gc => !gc.archived);
     this.archivedGiftCards = allCards.filter(gc => gc.archived);
-    this.updatePendingCards(this.currentGiftCards);
   }
 
   public updatePendingCards(cards: GiftCard[]) {
