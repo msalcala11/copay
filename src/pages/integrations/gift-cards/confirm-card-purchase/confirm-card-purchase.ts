@@ -38,6 +38,7 @@ import {
 } from '../../../../providers/wallet/wallet';
 import { ConfirmPage } from '../../../send/confirm/confirm';
 import { CardDetailsPage } from '../../gift-cards/card-details/card-details';
+import { PurchasedCardsPage } from '../purchased-cards/purchased-cards';
 
 @Component({
   selector: 'confirm-card-purchase-page',
@@ -556,6 +557,11 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
 
     await this.navCtrl.popToRoot({ animate: false });
     await this.navCtrl.parent.select(0);
+    await this.navCtrl.push(
+      PurchasedCardsPage,
+      { cardName: card.name },
+      { animate: false }
+    );
     await this.navCtrl.push(CardDetailsPage, { card }, { animate: false });
   }
 }
