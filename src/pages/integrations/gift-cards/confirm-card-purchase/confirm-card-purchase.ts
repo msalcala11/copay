@@ -338,8 +338,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
 
   private async createGiftCard(initialCard: GiftCard) {
     const card = await this.giftCardProvider
-      .createGiftCard(initialCard, this.cardConfig)
-      .toPromise()
+      .createGiftCard(initialCard)
       .catch(() => ({ ...initialCard, status: 'FAILURE' }));
 
     await this.giftCardProvider.saveGiftCard(card);
@@ -446,7 +445,8 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       accessKey,
       invoiceId: invoice.id,
       invoiceUrl: invoice.url,
-      invoiceTime: invoice.invoiceTime
+      invoiceTime: invoice.invoiceTime,
+      name: this.cardConfig.name
     };
     this.totalAmountStr = this.txFormatProvider.formatAmountStr(
       wallet.coin,

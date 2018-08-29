@@ -51,10 +51,13 @@ export class CardDetailsPage {
     this.showInfoSheet('archive-gift-card', () => this.archive());
   }
 
-  showInfoSheet(sheetName: InfoSheetType, onDidDismiss: () => void = () => {}) {
+  showInfoSheet(
+    sheetName: InfoSheetType,
+    onDidDismiss: (confirm?: boolean) => void = () => {}
+  ) {
     const sheet = this.actionSheetProvider.createInfoSheet(sheetName);
     sheet.present();
-    sheet.onDidDismiss(() => onDidDismiss());
+    sheet.onDidDismiss(confirm => confirm && onDidDismiss(confirm));
   }
 
   openExternalLink(url: string): void {

@@ -43,11 +43,17 @@ export class PurchasedCardsPage {
     const cardName = this.navParams.get('cardName');
     this.cardConfig = await this.giftCardProvider.getCardConfig(cardName);
     await this.getCards();
-    this.giftCardProvider.cardUpdates$.subscribe(() => this.getCards());
+    this.giftCardProvider.cardUpdates$.subscribe(card => {
+      console.log('card', card);
+    });
   }
 
   async ionViewDidLoad() {
     this.logger.info('ionViewDidLoad PurchasedCardsPage');
+
+    setTimeout(() => {
+      this.getCards();
+    });
   }
 
   addCard() {
@@ -61,7 +67,8 @@ export class PurchasedCardsPage {
       .catch(err => this.logger.error(err));
   }
 
-  setGiftCards(allCards) {
+  setGiftCards(cards: GiftCard[]) {
+    const allCards = cards.map(c => ({ ...c, archived: false }));
     this.currentGiftCards = allCards.filter(gc => !gc.archived);
     this.archivedGiftCards = allCards.filter(gc => gc.archived);
     this.updatePendingCards(this.currentGiftCards);

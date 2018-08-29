@@ -145,12 +145,14 @@ export class GiftCardProvider {
     return persistCards(newMap);
   }
 
-  public createGiftCard(data: GiftCard, cardConfig: CardConifg) {
+  public async createGiftCard(data: GiftCard) {
     const dataSrc = {
       clientId: data.uuid,
       invoiceId: data.invoiceId,
       accessKey: data.accessKey
     };
+
+    const cardConfig = await this.getCardConfig(data.name);
 
     const url = `${this.credentials.BITPAY_API_URL}/${
       cardConfig.bitpayApiPath
@@ -182,7 +184,8 @@ export class GiftCardProvider {
           `${cardConfig.name} Gift Card Create/Update: ${fullCard.status}`
         );
         return fullCard;
-      });
+      })
+      .toPromise();
   }
 
   updatePendingGiftCards(cards: GiftCard[]): Observable<GiftCard> {
@@ -191,7 +194,7 @@ export class GiftCardProvider {
     );
     return from(cardsNeedingUpdate).pipe(
       mergeMap(card =>
-        this.amazonProvider.createCard(card).catch(err => {
+        fromPromise(this.createGiftCard(card)).catch(err => {
           this.logger.error('Error creating gift card:', err);
           return of({ ...card, status: 'FAILURE' });
         })
@@ -214,7 +217,7 @@ export class GiftCardProvider {
       ...updatedFields
     };
     return fromPromise(
-      this.amazonProvider.saveGiftCard(updatedCard, {
+      this.saveGiftCard(updatedCard, {
         remove: updatedFields.status === 'expired'
       })
     ).map(() => {
