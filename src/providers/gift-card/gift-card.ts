@@ -58,7 +58,7 @@ export class GiftCardProvider {
     NETWORK: string;
     BITPAY_API_URL: string;
   } = {
-    NETWORK: 'testnet',
+    NETWORK: 'livenet',
     BITPAY_API_URL: 'https://bitpay.com'
   };
 
@@ -151,7 +151,8 @@ export class GiftCardProvider {
       accessKey: data.accessKey
     };
 
-    const cardConfig = await this.getCardConfig(data.name);
+    const name = data.name;
+    const cardConfig = await this.getCardConfig(name);
 
     const url = `${this.credentials.BITPAY_API_URL}/${
       cardConfig.bitpayApiPath
