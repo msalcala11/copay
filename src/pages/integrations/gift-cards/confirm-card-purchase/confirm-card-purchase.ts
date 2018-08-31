@@ -239,12 +239,16 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     if (err && err.message && err.message.match(/suspended/i)) {
       err_title = this.translate.instant('Service not available');
       err_msg = this.translate.instant(
-        'Amazon.com is not available at this moment. Please try back later.'
+        `${
+          this.cardConfig.brand
+        } gift card purchases are not available at this time. Please try back later.`
       );
     } else if (err && err.message) {
       err_msg = err.message;
     } else {
-      err_msg = this.translate.instant('Could not access to Amazon.com');
+      err_msg = this.translate.instant(
+        `Unable to complete your purchase at this time. Please try back later.`
+      );
     }
 
     throw {
@@ -256,7 +260,9 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
   public async createInvoice(data) {
     const cardOrder = await this.giftCardProvider
       .createBitpayInvoice(data)
-      .catch(err => this.handleCreateInvoiceError(err));
+      .catch(err => {
+        throw this.handleCreateInvoiceError(err);
+      });
 
     const accessKey = cardOrder && cardOrder.accessKey;
     if (!accessKey) {
@@ -307,7 +313,9 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       ],
       message,
       customData: {
-        service: 'amazon'
+        service: this.giftCardProvider.getLegacyServiceNameFromBrand(
+          this.cardConfig.brand
+        )
       },
       payProUrl,
       excludeUnconfirmedUtxos: this.configWallet.spendUnconfirmed ? false : true
@@ -315,9 +323,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
 
     if (details.requiredFeeRate) {
       txp.feePerKb = Math.ceil(details.requiredFeeRate * 1024);
-      this.logger.debug(
-        'Using merchant fee rate (for amazon gc):' + txp.feePerKb
-      );
+      this.logger.debug('Using merchant fee rate:' + txp.feePerKb);
     } else {
       txp.feeLevel = this.configWallet.settings.feeLevel || 'normal';
     }
@@ -357,21 +363,21 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     if (email) return Promise.resolve(email);
     const title = this.translate.instant('Enter email address');
     const message = this.translate.instant(
-      'Where do you want to receive your purchase receipt'
+      'Where do you want to receive your purchase receipt?'
     );
-    const opts = { type: 'email', defaultText: email || '' };
+    const opts = { type: 'email', defaultText: '' };
     const newEmail = await this.popupProvider.ionicPrompt(title, message, opts);
-    if (!newEmail || !this.amazonProvider.emailIsValid(newEmail)) {
+    if (!this.amazonProvider.emailIsValid(newEmail)) {
       this.throwEmailRequiredError();
     }
-    this.amazonProvider.storeEmail(email);
-    return email;
+    this.amazonProvider.storeEmail(newEmail);
+    return newEmail;
   }
 
   private throwEmailRequiredError() {
     const title = this.translate.instant('Error');
     const msg = this.translate.instant(
-      'Email address is needed to purchase Gift Cards'
+      'An email address is required for this purchase.'
     );
     this.onGoingProcessProvider.clear();
     this.showErrorAndBack(title, msg);

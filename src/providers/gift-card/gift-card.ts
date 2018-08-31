@@ -10,68 +10,16 @@ import { AmazonProvider } from '../amazon/amazon';
 import { Logger } from '../logger/logger';
 import { MercadoLibreProvider } from '../mercado-libre/mercado-libre';
 import { TimeProvider } from '../time/time';
+import {
+  CardBrand,
+  CardConifg,
+  CardName,
+  GiftCard,
+  LegacyCardServiceName,
+  RedeemResponse
+} from './gift-card.types';
 
-export enum CardBrand {
-  amazon = 'Amazon',
-  mercadoLibre = 'Mercado Livre'
-}
-
-export enum CardName {
-  amazon = 'Amazon.com',
-  amazonJapan = 'Amazon.co.jp',
-  mercadoLibre = 'Mercado Livre'
-}
-
-export interface CardConifg {
-  brand: string;
-  cardImage: string;
-  currency: string;
-  emailRequired: boolean;
-  icon: string;
-  maxAmount: number;
-  minAmount: number;
-  name: CardName;
-  bitpayApiPath: string;
-  redeemUrl: string;
-  website: string;
-}
-
-export interface GiftCard {
-  accessKey: string;
-  amount: number;
-  archived: boolean;
-  brand: CardBrand;
-  claimCode: string;
-  currency: string;
-  date: number;
-  invoiceId: string;
-  invoiceTime?: number;
-  invoiceUrl: string;
-  name: CardName;
-  status: string;
-  uuid: string;
-}
-
-/*
-  Hopefully we'll standardize our redeem endpoint and these temporary interfaces
-  will no longer be necessary.
-*/
-export interface TemporaryMercadoLibreResponse {
-  cardStatus: string;
-  pin: string;
-}
-
-export interface TemporaryAmazonResponse {
-  status: string;
-  gcId: string;
-  cardStatus: string;
-  amount: number;
-  currency: string;
-  claimCode: string;
-}
-
-export type RedeemResponse = TemporaryMercadoLibreResponse &
-  TemporaryAmazonResponse;
+export { CardBrand, CardConifg, CardName, GiftCard };
 
 @Injectable()
 export class GiftCardProvider {
@@ -266,7 +214,7 @@ export class GiftCardProvider {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const invoice = await this.http
+    const cardOrder = await this.http
       .post(url, dataSrc, { headers })
       .toPromise()
       .catch(err => {
@@ -274,7 +222,7 @@ export class GiftCardProvider {
         throw err;
       });
     this.logger.info('BitPay Create Invoice: SUCCESS');
-    return invoice as any;
+    return cardOrder as { accessKey: string; invoiceId: string };
   }
 
   public async getBitPayInvoice(id) {
@@ -310,6 +258,17 @@ export class GiftCardProvider {
     return this.getOfferedCards().filter(
       card => card.currency === supportedCurrency || card.currency === 'BRL'
     );
+  }
+
+  getLegacyServiceNameFromBrand(brand: CardBrand): LegacyCardServiceName {
+    /* Transaction custom data currently includes a 'service' key. 
+       For now, this method allows us to fetch the value for the service key in views that need it.
+       Going forward, we should use 'CardConfig.name' in transaction custom data.
+    */
+    return {
+      [CardBrand.amazon]: LegacyCardServiceName.amazon,
+      [CardBrand.mercadoLibre]: LegacyCardServiceName.mercadoLibre
+    }[brand];
   }
 
   getOfferedCards(): CardConifg[] {
