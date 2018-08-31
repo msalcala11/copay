@@ -361,7 +361,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     );
     const opts = { type: 'email', defaultText: email || '' };
     const newEmail = await this.popupProvider.ionicPrompt(title, message, opts);
-    if (!newEmail || !this.amazonProvider.emailIsValid(email)) {
+    if (!newEmail || !this.amazonProvider.emailIsValid(newEmail)) {
       this.throwEmailRequiredError();
     }
     this.amazonProvider.storeEmail(email);
