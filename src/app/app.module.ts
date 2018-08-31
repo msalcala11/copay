@@ -41,6 +41,7 @@ import { LongPress } from '../directives/long-press/long-press';
 import { NavbarBg } from '../directives/navbar-bg/navbar-bg';
 import { NoLowFee } from '../directives/no-low-fee/no-low-fee';
 import { RevealAtScrollPosition } from '../directives/reveal-at-scroll-pos/reveal-at-scroll-pos';
+import { WideHeaderBarButton } from '../pages/templates/wide-header-page/wide-header-bar-button';
 
 /* Components */
 import { COMPONENTS } from './../components/components';
@@ -83,6 +84,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
     NoLowFee,
     Animate,
     RevealAtScrollPosition,
+    WideHeaderBarButton,
     /* Pipes */
     FiatToUnitPipe,
     FormatCurrencyPipe,
