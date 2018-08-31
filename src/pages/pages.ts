@@ -71,6 +71,8 @@ import { ProposalsPage } from '../pages/home/proposals/proposals';
 
 /* Settings */
 import { FingerprintModalPage } from '../pages/fingerprint/fingerprint';
+import { AmazonSettingsPage } from '../pages/integrations/amazon/amazon-settings/amazon-settings';
+import { MercadoLibreSettingsPage } from '../pages/integrations/mercado-libre/mercado-libre-settings/mercado-libre-settings';
 import { PIN_COMPONENTS } from '../pages/pin/pin';
 import { AboutPage } from '../pages/settings/about/about';
 import { SessionLogPage } from '../pages/settings/about/session-log/session-log';
@@ -116,6 +118,8 @@ import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 export const PAGES = [
   ActivityPage,
   AddPage,
+  AmazonSettingsPage,
+  MercadoLibreSettingsPage,
   AmountPage,
   AddressbookPage,
   AddressbookAddPage,
