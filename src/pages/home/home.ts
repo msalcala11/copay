@@ -139,14 +139,6 @@ export class HomePage {
       this._willEnter();
       this._didEnter();
     });
-
-    if (this.isNW) {
-      let gui = (window as any).require('nw.gui');
-      let win = gui.Window.get();
-      win.on('focus', () => {
-        this.checkClipboard();
-      });
-    }
   }
 
   ionViewWillEnter() {
@@ -174,6 +166,11 @@ export class HomePage {
 
     // Update Tx Notifications
     this.getNotifications();
+
+    // Update Wallet on Focus
+    if (this.isNW) {
+      this.updateDesktopOnFocus();
+    }
   }
 
   private _didEnter() {
@@ -303,6 +300,16 @@ export class HomePage {
 
   private scanPaperWallet(privateKey: string) {
     this.navCtrl.push(PaperWalletPage, { privateKey });
+  }
+
+  private updateDesktopOnFocus() {
+    let gui = (window as any).require('nw.gui');
+    let win = gui.Window.get();
+    win.on('focus', () => {
+      this.checkClipboard();
+      this.getNotifications();
+      this.setWallets();
+    });
   }
 
   private openEmailDisclaimer() {
