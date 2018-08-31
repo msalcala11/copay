@@ -46,7 +46,6 @@ describe('Provider: AmazonProvider', () => {
           name: 'amazon',
           title: 'Amazon Gift Cards',
           icon: 'assets/img/amazon/icon-amazon.svg',
-          page: 'AmazonPage',
           show: true
         }
       ]);
