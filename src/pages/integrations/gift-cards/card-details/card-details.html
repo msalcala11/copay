@@ -17,11 +17,11 @@
       <img class="card-image" [src]="cardConfig?.cardImage">
       <div class="card-info" (click)="copyClaimCode()" [copy-to-clipboard]="card.claimCode" [hide-toast]="true" *ngIf="card.status !== 'PENDING'">
         <div class="card-info__title">Claim Code</div>
-        <div class="card-info__claim-code">{{card.claimCode}}</div>
+        <div class="card-info__body">{{card.claimCode}}</div>
         <div class="card-info__date">Created {{card.date | amTimeAgo}}</div>
       </div>
       <div class="card-info" *ngIf="card.status === 'PENDING'">
-        <div class="card-info__claim-code">Awaiting Payment to Confirm</div>
+        <div class="card-info__body">Awaiting Payment to Confirm</div>
       </div>
       <div class="actions" *ngIf="card.status !== 'PENDING'">
         <button ion-button class="button-standard" (click)="redeem()">
