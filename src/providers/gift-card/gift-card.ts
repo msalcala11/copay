@@ -52,6 +52,24 @@ export interface GiftCard {
   uuid: string;
 }
 
+/*
+  Hopefully we'll standardize our redeem endpoint and this interfaces
+  will no longer be necessary.
+*/
+export interface TemporaryMercadoLibreResponse {
+  cardStatus: string;
+  pin: string;
+}
+
+export interface TemporaryAmazonResponse {
+  status: string;
+  gcId: string;
+  cardStatus: string;
+  amount: number;
+  currency: string;
+  claimCode: string;
+}
+
 @Injectable()
 export class GiftCardProvider {
   credentials: {
@@ -166,16 +184,24 @@ export class GiftCardProvider {
         );
         return Observable.throw(err);
       })
-      .map((card: GiftCard) => {
-        const date = card.invoiceTime || data.date;
-        const status = card.status === 'paid' ? 'PENDING' : card.status;
-        const fullCard = { ...card, ...data, date, name, status };
+      .map((res: TemporaryAmazonResponse & TemporaryMercadoLibreResponse) => {
+        const claimCode = res.claimCode || res.pin;
+        const status = this.getCardStatus(res);
+        const fullCard = { ...res, ...data, name, status, claimCode };
         this.logger.info(
           `${cardConfig.name} Gift Card Create/Update: ${fullCard.status}`
         );
         return fullCard;
       })
       .toPromise();
+  }
+
+  getCardStatus(res: TemporaryAmazonResponse & TemporaryMercadoLibreResponse) {
+    /* Hope to deprecate this method when we have a standardized redeem endpoint */
+    const amazonCardStatus = res.status === 'paid' ? 'PENDING' : res.status;
+    const mlCardStatus =
+      res.cardStatus === 'active' ? 'SUCCESS' : res.cardStatus;
+    return amazonCardStatus || mlCardStatus;
   }
 
   updatePendingGiftCards(cards: GiftCard[]): Observable<GiftCard> {
