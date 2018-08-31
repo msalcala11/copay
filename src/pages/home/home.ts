@@ -8,7 +8,7 @@ import {
 } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 // Pages
 import { AddPage } from '../add/add';
@@ -81,6 +81,7 @@ export class HomePage {
   public validDataFromClipboard;
   public payProDetailsData;
   public remainingTimeStr: string;
+  public slideDown: boolean;
 
   public showRateCard: boolean;
   public homeTip: boolean;
@@ -126,6 +127,7 @@ export class HomePage {
     private incomingDataProvider: IncomingDataProvider,
     private addressProvider: AddressProvider
   ) {
+    this.slideDown = false;
     this.updatingWalletId = {};
     this.addressbook = {};
     this.cachedBalanceUpdateOn = '';
@@ -241,6 +243,13 @@ export class HomePage {
   ionViewWillLeave() {
     this.events.unsubscribe('finishIncomingDataMenuEvent');
     this.events.unsubscribe('bwsEvent');
+    this.resetValuesForAnimationCard();
+  }
+
+  private async resetValuesForAnimationCard() {
+    await Observable.timer(50).toPromise();
+    this.validDataFromClipboard = null;
+    this.slideDown = false;
   }
 
   private subscribeBwsEvents() {
@@ -415,12 +424,16 @@ export class HomePage {
   public checkClipboard() {
     return this.clipboardProvider
       .getData()
-      .then(data => {
+      .then(async data => {
         this.validDataFromClipboard = this.incomingDataProvider.parseData(data);
         if (!this.validDataFromClipboard) {
           return;
         }
-        const dataToIgnore = ['BitcoinAddress', 'BitcoinCashAddress'];
+        const dataToIgnore = [
+          'BitcoinAddress',
+          'BitcoinCashAddress',
+          'PlainUrl'
+        ];
         if (dataToIgnore.indexOf(this.validDataFromClipboard.type) > -1) {
           this.validDataFromClipboard = null;
           return;
@@ -437,21 +450,27 @@ export class HomePage {
               this.paymentTimeControl(this.payProDetailsData.expires);
             })
             .catch(err => {
-              this.validDataFromClipboard = null;
+              this.payProDetailsData = {};
+              this.payProDetailsData.error = err;
               this.logger.warn('Error in Payment Protocol', err);
               this.logger.warn(err);
             });
         }
+        await Observable.timer(50).toPromise();
+        this.slideDown = true;
       })
       .catch(() => {
         this.logger.warn('Paste from clipboard err');
       });
   }
 
-  public processClipboardData(data): void {
+  public hideClipboardCard() {
     this.validDataFromClipboard = null;
-    this.payProDetailsData = null;
     this.clipboardProvider.clear();
+    this.slideDown = false;
+  }
+
+  public processClipboardData(data): void {
     this.clearCountDownInterval();
     this.incomingDataProvider.redir(data, { fromHomeCard: true });
   }
@@ -768,7 +787,6 @@ export class HomePage {
   }
 
   public doRefresh(refresher) {
-    refresher.pullMin = 90;
     this.updateAllWallets();
     this.getNotifications();
     setTimeout(() => {

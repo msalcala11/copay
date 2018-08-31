@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalController, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 
 // native
 import { Device } from '@ionic-native/device';
@@ -89,13 +90,13 @@ export class SendFeedbackPage {
         );
         break;
       case 3:
-        this.reaction = 'Thanks!';
+        this.reaction = this.translate.instant('Thanks!');
         this.comment = this.translate.instant(
           "We're always listening for ways we can improve your experience. Feel free to leave us a review in the app store or request a new feature."
         );
         break;
       default:
-        this.reaction = 'Feedback!';
+        this.reaction = this.translate.instant('Feedback!');
         this.comment = this.translate.instant(
           "We're always listening for ways we can improve your experience. Feel free to leave us a review in the app store or request a new feature. Also, let us know if you experience any technical issues."
         );
@@ -120,12 +121,12 @@ export class SendFeedbackPage {
     });
   }
 
-  public leaveFeedback() {
+  public async leaveFeedback() {
     this.leavingFeedback = this.leavingFeedback ? false : true;
-    if (this.leavingFeedback)
-      setTimeout(() => {
-        this.feedbackTextarea.setFocus();
-      }, 50);
+    if (this.leavingFeedback) {
+      await Observable.timer(50).toPromise();
+      this.feedbackTextarea.setFocus();
+    }
   }
 
   public async openExternalLink(url: string): Promise<void> {
