@@ -53,7 +53,7 @@ export interface GiftCard {
 }
 
 /*
-  Hopefully we'll standardize our redeem endpoint and this interfaces
+  Hopefully we'll standardize our redeem endpoint and these temporary interfaces
   will no longer be necessary.
 */
 export interface TemporaryMercadoLibreResponse {
@@ -69,6 +69,9 @@ export interface TemporaryAmazonResponse {
   currency: string;
   claimCode: string;
 }
+
+export type RedeemResponse = TemporaryMercadoLibreResponse &
+  TemporaryAmazonResponse;
 
 @Injectable()
 export class GiftCardProvider {
@@ -184,7 +187,7 @@ export class GiftCardProvider {
         );
         return Observable.throw(err);
       })
-      .map((res: TemporaryAmazonResponse & TemporaryMercadoLibreResponse) => {
+      .map((res: RedeemResponse) => {
         const claimCode = res.claimCode || res.pin;
         const status = this.getCardStatus(res);
         const fullCard = { ...res, ...data, name, status, claimCode };
@@ -196,7 +199,7 @@ export class GiftCardProvider {
       .toPromise();
   }
 
-  getCardStatus(res: TemporaryAmazonResponse & TemporaryMercadoLibreResponse) {
+  getCardStatus(res: RedeemResponse) {
     /* Hope to deprecate this method when we have a standardized redeem endpoint */
     const amazonCardStatus = res.status === 'paid' ? 'PENDING' : res.status;
     const mlCardStatus =
@@ -345,7 +348,7 @@ export class GiftCardProvider {
         icon: 'assets/img/mercado-libre/mercado-livre-icon.svg',
         cardImage: 'assets/img/mercado-libre/mercado-livre-card.png',
         maxAmount: 2000,
-        minAmount: 15,
+        minAmount: 50,
         name: CardName.mercadoLibre,
         redeemUrl: null,
         website: 'mercadolivre.com.br'
