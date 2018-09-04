@@ -9,7 +9,6 @@ import {
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
 import { Logger } from '../../../../providers/logger/logger';
-import { PlatformProvider } from '../../../../providers/platform/platform';
 import { BuyCardPage } from '../buy-card/buy-card';
 import { CardDetailsPage } from '../card-details/card-details';
 import { CardListItemComponent } from './card-list-item/card-list-item';
@@ -35,12 +34,10 @@ export class PurchasedCardsPage {
     private giftCardProvider: GiftCardProvider,
     private logger: Logger,
     private navCtrl: NavController,
-    private navParams: NavParams,
-    public platformProvider: PlatformProvider
+    private navParams: NavParams
   ) {}
 
   async ngOnInit() {
-    this.platformName = this.platformProvider.isIOS ? 'ios' : 'md';
     const cardName = this.navParams.get('cardName');
     this.cardConfig = await this.giftCardProvider.getCardConfig(cardName);
     await this.getCards();

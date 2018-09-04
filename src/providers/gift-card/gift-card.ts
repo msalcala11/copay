@@ -58,18 +58,23 @@ export class GiftCardProvider {
     this.mercadoLibreProvider.setCredentials(this.credentials);
   }
 
-  async getPurchasedCards(cardName: CardName): Promise<GiftCard[]> {
-    const getAmazonCards = this.amazonProvider.getPurchasedCards.bind(
-      this.amazonProvider
-    );
-    const methodMap = {
-      [CardName.amazon]: getAmazonCards,
-      [CardName.amazonJapan]: getAmazonCards,
-      [CardName.mercadoLibre]: this.mercadoLibreProvider.getPurchasedCards.bind(
-        this.mercadoLibreProvider
-      )
+  async getCardConfig(cardName: CardName) {
+    const supportedCards = await this.getSupportedCards();
+    return supportedCards.filter(c => c.name === cardName)[0];
+  }
+
+  getCardProvider(cardName: CardName) {
+    const providerMap = {
+      [CardName.amazon]: this.amazonProvider,
+      [CardName.amazonJapan]: this.amazonProvider,
+      [CardName.mercadoLibre]: this.mercadoLibreProvider
     };
-    const method = methodMap[cardName];
+    return providerMap[cardName];
+  }
+
+  async getPurchasedCards(cardName: CardName): Promise<GiftCard[]> {
+    const provider = this.getCardProvider(cardName);
+    const method = provider.getPurchasedCards.bind(provider);
     const [cards, cardConfig] = await Promise.all([
       method(),
       this.getCardConfig(cardName)
@@ -77,21 +82,11 @@ export class GiftCardProvider {
     return cards.map(c => ({ ...c, name: cardName, brand: cardConfig.brand }));
   }
 
-  async getCardConfig(cardName: CardName) {
-    const supportedCards = await this.getSupportedCards();
-    return supportedCards.filter(c => c.name === cardName)[0];
-  }
-
   async saveGiftCard(
     gc,
     opts?: Partial<{ error: string; status: string; remove: boolean }>
   ) {
-    const providerMap = {
-      [CardName.amazon]: this.amazonProvider,
-      [CardName.amazonJapan]: this.amazonProvider,
-      [CardName.mercadoLibre]: this.mercadoLibreProvider
-    };
-    const provider = providerMap[gc.name];
+    const provider = this.getCardProvider(gc.name);
     const getCardMap = provider.getCardMap.bind(provider);
     const persistCards = provider.persistCards.bind(provider);
     let oldGiftCards = await getCardMap();
