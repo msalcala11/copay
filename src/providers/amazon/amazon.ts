@@ -84,34 +84,6 @@ export class AmazonProvider {
     this.logger.info('Set Amazon Gift Card to: ' + this.currency);
   }
 
-  public savePendingGiftCard(gc, opts, cb) {
-    this.saveGiftCard(gc, opts).then(() => cb());
-  }
-
-  public saveGiftCard(gc, opts?) {
-    return this.persistenceProvider
-      .getAmazonGiftCards(this.amazonNetwork)
-      .then(oldGiftCards => {
-        if (_.isString(oldGiftCards)) {
-          oldGiftCards = JSON.parse(oldGiftCards);
-        }
-        if (_.isString(gc)) {
-          gc = JSON.parse(gc);
-        }
-        var inv = oldGiftCards || {};
-        inv[gc.invoiceId] = gc;
-        if (opts && (opts.error || opts.status)) {
-          inv[gc.invoiceId] = _.assign(inv[gc.invoiceId], opts);
-        }
-        if (opts && opts.remove) {
-          delete inv[gc.invoiceId];
-        }
-
-        inv = JSON.stringify(inv);
-        return this.persistCards(inv);
-      });
-  }
-
   public persistCards(cardMap) {
     return this.persistenceProvider.setAmazonGiftCards(
       this.amazonNetwork,
@@ -143,50 +115,6 @@ export class AmazonProvider {
       .sort((a, b) => (a.date < b.date ? 1 : -1));
   }
 
-  public createBitPayInvoice(data, cb) {
-    var dataSrc = {
-      currency: data.currency,
-      amount: data.amount,
-      clientId: data.uuid,
-      email: data.email,
-      buyerSelectedTransactionCurrency: data.buyerSelectedTransactionCurrency
-    };
-
-    this.http
-      .post(this.credentials.BITPAY_API_URL + '/amazon-gift/pay', dataSrc)
-      .subscribe(
-        data => {
-          this.logger.info('BitPay Create Invoice: SUCCESS');
-          return cb(null, data);
-        },
-        data => {
-          this.logger.error(
-            'BitPay Create Invoice: ERROR ' + data.error.message
-          );
-          return cb(data.error);
-        }
-      );
-  }
-
-  public getBitPayInvoice(id, cb) {
-    this.http
-      .get(this.credentials.BITPAY_API_URL + '/invoices/' + id)
-      .subscribe(
-        (data: any) => {
-          this.logger.info('BitPay Get Invoice: SUCCESS');
-          return cb(null, data.data);
-        },
-        data => {
-          this.logger.error('BitPay Get Invoice: ERROR ' + data.error.message);
-          return cb(data.error.message);
-        }
-      );
-  }
-
-  public createGiftCard(data, cb) {
-    this.createCard(data).subscribe(data => cb(null, data), err => cb(err));
-  }
-
   public createCard(data) {
     const dataSrc = {
       clientId: data.uuid,
@@ -205,27 +133,6 @@ export class AmazonProvider {
         this.logger.info('Amazon Gift Card Create/Update: ' + status);
         return data;
       });
-  }
-
-  public cancelGiftCard(data, cb) {
-    var dataSrc = {
-      clientId: data.uuid,
-      invoiceId: data.invoiceId,
-      accessKey: data.accessKey
-    };
-
-    this.http
-      .post(this.credentials.BITPAY_API_URL + '/amazon-gift/cancel', dataSrc)
-      .subscribe(
-        data => {
-          this.logger.info('Amazon Gift Card Cancel: SUCCESS');
-          return cb(null, data);
-        },
-        data => {
-          this.logger.error('Amazon Gift Card Cancel: ' + data.message);
-          return cb(data);
-        }
-      );
   }
 
   public async getSupportedCurrency(): Promise<string> {
