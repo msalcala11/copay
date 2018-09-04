@@ -12,7 +12,6 @@ import { Observable, Subscription } from 'rxjs';
 
 // Pages
 import { AddPage } from '../add/add';
-// import { AmazonPage } from '../integrations/amazon/amazon';
 import { BitPayCardPage } from '../integrations/bitpay-card/bitpay-card';
 import { BitPayCardIntroPage } from '../integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { CoinbasePage } from '../integrations/coinbase/coinbase';
@@ -177,7 +176,6 @@ export class HomePage {
     if (this.isNW) this.checkUpdate();
     this.checkHomeTip();
     this.checkFeedbackInfo();
-    // this.checkAnnouncement();
     this.amazonProvider.getSupportedCurrency();
     this.checkClipboard();
 
@@ -383,25 +381,6 @@ export class HomePage {
     this.persistenceProvider.setHomeTipAccepted('accepted');
     this.homeTip = false;
   }
-
-  // private async checkAnnouncement() {
-  //   if (!this.amazonProvider.currency)
-  //     await this.amazonProvider.setCurrencyByLocation();
-  //   if (this.amazonProvider.currency == 'JPY') {
-  //     this.persistenceProvider.getShowAmazonJapanAnnouncement().then(value => {
-  //       if (!value) this.showAnnouncement = true;
-  //     });
-  //   }
-  // }
-
-  // public hideAnnouncement(): void {
-  //   this.persistenceProvider.setShowAmazonJapanAnnouncement('hide');
-  //   this.showAnnouncement = false;
-  // }
-
-  // public openAnnouncement(): void {
-  //   this.navCtrl.push(AmazonPage);
-  // }
 
   private checkFeedbackInfo() {
     this.persistenceProvider.getFeedbackInfo().then(info => {
