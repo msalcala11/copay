@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 import { Logger } from '../../providers/logger/logger';
 
 // providers
-import { Observable } from 'rxjs';
 import { ConfigProvider } from '../config/config';
 import { EmailNotificationsProvider } from '../email-notifications/email-notifications';
 import { GiftCard } from '../gift-card/gift-card';
@@ -91,17 +90,6 @@ export class AmazonProvider {
     );
   }
 
-  public getPendingGiftCards(cb) {
-    this.persistenceProvider
-      .getAmazonGiftCards(this.amazonNetwork)
-      .then(giftCards => {
-        return cb(null, giftCards && !_.isEmpty(giftCards) ? giftCards : null);
-      })
-      .catch(err => {
-        return cb(err);
-      });
-  }
-
   public getCardMap() {
     return this.persistenceProvider.getAmazonGiftCards(this.amazonNetwork);
   }
@@ -113,26 +101,6 @@ export class AmazonProvider {
     return invoiceIds
       .map(invoiceId => giftCardMap[invoiceId] as GiftCard)
       .sort((a, b) => (a.date < b.date ? 1 : -1));
-  }
-
-  public createCard(data) {
-    const dataSrc = {
-      clientId: data.uuid,
-      invoiceId: data.invoiceId,
-      accessKey: data.accessKey
-    };
-
-    return this.http
-      .post(this.credentials.BITPAY_API_URL + '/amazon-gift/redeem', dataSrc)
-      .catch(err => {
-        this.logger.error('Amazon Gift Card Create/Update: ' + data.message);
-        return Observable.throw(err);
-      })
-      .map((data: Partial<GiftCard>) => {
-        data.status = data.status === 'paid' ? 'PENDING' : data.status;
-        this.logger.info('Amazon Gift Card Create/Update: ' + status);
-        return data;
-      });
   }
 
   public async getSupportedCurrency(): Promise<string> {

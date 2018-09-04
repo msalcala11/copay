@@ -3,16 +3,13 @@ import { Logger } from '../../providers/logger/logger';
 
 // providers
 import { ConfigProvider } from '../config/config';
+import { GiftCard } from '../gift-card/gift-card';
 import { HomeIntegrationsProvider } from '../home-integrations/home-integrations';
 import { PersistenceProvider } from '../persistence/persistence';
-
-import * as _ from 'lodash';
-import { GiftCard } from '../gift-card/gift-card';
 
 @Injectable()
 export class MercadoLibreProvider {
   private credentials;
-  // private availableCountries;
 
   constructor(
     private persistenceProvider: PersistenceProvider,
@@ -21,13 +18,6 @@ export class MercadoLibreProvider {
     private configProvider: ConfigProvider
   ) {
     this.logger.info('MercadoLibreProvider initialized');
-    // Not used yet
-    /* this.availableCountries = [{
-      'country': 'Brazil',
-      'currency': 'BRL',
-      'name': 'Mercado Livre',
-      'url': 'https://www.mercadolivre.com.br'
-    }]; */
 
     this.credentials = {};
     /*
@@ -60,16 +50,6 @@ export class MercadoLibreProvider {
     );
   }
 
-  public getPendingGiftCards(cb) {
-    const network = this.getNetwork();
-    return this.persistenceProvider
-      .getMercadoLibreGiftCards(network)
-      .then(giftCards => {
-        var _gcds = giftCards ? giftCards : null;
-        return cb(null, _gcds);
-      });
-  }
-
   public async getPurchasedCards() {
     const network = this.getNetwork();
     const giftCardMap =
@@ -82,31 +62,6 @@ export class MercadoLibreProvider {
       })
       .sort((a, b) => (a.date < b.date ? 1 : -1));
   }
-
-  /*
- * Disabled for now *
- */
-  /*
-  public cancelGiftCard(data, cb) {
-
-    var dataSrc = {
-      "clientId": data.uuid,
-      "invoiceId": data.invoiceId,
-      "accessKey": data.accessKey
-    };
-    let url = this.credentials.BITPAY_API_URL + '/mercado-libre-gift/cancel';
-    let headers = {
-      'content-type': 'application/json'
-    };
-    this.http.post(url, dataSrc, headers).subscribe((data) => {
-      this.logger.info('Mercado Libre Gift Card Cancel: SUCCESS');
-      return cb(null, data);
-    }, (data) => {
-      this.logger.error('Mercado Libre Gift Card Cancel: ' + data.message);
-      return cb(data);
-    });
-  };
-  */
 
   public register() {
     this.homeIntegrationsProvider.register({
