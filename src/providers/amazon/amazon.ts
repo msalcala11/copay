@@ -161,7 +161,6 @@ export class AmazonProvider {
       name: 'amazon',
       title: 'Amazon Gift Cards',
       icon: 'assets/img/amazon/amazon-icon.svg',
-      page: 'AmazonPage',
       show: showItem
     });
   }
