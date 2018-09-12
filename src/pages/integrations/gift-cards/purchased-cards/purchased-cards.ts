@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
-// Providers
-import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 import {
   CardConifg,
   GiftCard,
@@ -18,18 +16,12 @@ import { CardListItemComponent } from './card-list-item/card-list-item';
   templateUrl: 'purchased-cards.html'
 })
 export class PurchasedCardsPage {
-  public network: string;
-  public giftCards: { [invoiceId: string]: GiftCard };
   public allGiftCards: GiftCard[];
   public currentGiftCards: GiftCard[];
   public archivedGiftCards: GiftCard[];
-  public updatingPending;
-  public card;
-  public invoiceId: string;
   public cardConfig: CardConifg;
 
   constructor(
-    private externalLinkProvider: ExternalLinkProvider,
     private giftCardProvider: GiftCardProvider,
     private logger: Logger,
     private navCtrl: NavController,
@@ -74,10 +66,6 @@ export class PurchasedCardsPage {
     this.allGiftCards = allCards;
     this.currentGiftCards = allCards.filter(gc => !gc.archived);
     this.archivedGiftCards = allCards.filter(gc => gc.archived);
-  }
-
-  public openExternalLink(url: string) {
-    this.externalLinkProvider.open(url);
   }
 
   public goToCardDetails(card) {

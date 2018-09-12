@@ -12,9 +12,13 @@ import {
     <ion-icon item-start>
       <img class="card-list-item__icon" [src]="cardConfig?.icon">
     </ion-icon>
-    <ion-label>
+    <ion-label *ngIf="!catalogListing">
       <div class="card-list-item__label">{{card.amount | formatCurrency:card.currency}}</div>
       <ion-note class="card-list-item__note">{{card.date | amTimeAgo}}</ion-note>
+    </ion-label>
+    <ion-label *ngIf="catalogListing">
+      <div class="card-list-item__label">{{card.brand}}</div>
+      <ion-note class="card-list-item__note">{{card.minAmount | formatCurrency:card.currency}} - {{card.maxAmount | formatCurrency:card.currency}}</ion-note>
     </ion-label>
   </button>
   `
@@ -23,7 +27,10 @@ export class CardListItemComponent {
   public cardConfig: CardConifg;
 
   @Input()
-  card: GiftCard;
+  card: GiftCard & CardConifg;
+
+  @Input()
+  catalogListing: true;
 
   constructor(private giftCardProvider: GiftCardProvider) {}
 

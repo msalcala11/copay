@@ -113,6 +113,7 @@ import { CustomAmountPage } from '../pages/receive/custom-amount/custom-amount';
 import { WideHeaderPage } from './templates/wide-header-page/wide-header-page';
 import { WalletTabsChild } from './wallet-tabs/wallet-tabs-child';
 
+import { CardCatalogPage } from './integrations/gift-cards/card-catalog/card-catalog';
 import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 
 export const PAGES = [
@@ -136,6 +137,7 @@ export const PAGES = [
   BitPayCardTopUpPage,
   BuyCoinbasePage,
   BuyGlideraPage,
+  CardCatalogPage,
   ChooseFeeLevelPage,
   CreateWalletPage,
   CoinbasePage,

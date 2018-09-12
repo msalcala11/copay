@@ -50,6 +50,7 @@ import { ReleaseProvider } from '../../providers/release/release';
 import { ReplaceParametersProvider } from '../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../providers/wallet/wallet';
 import { BuyCardPage } from '../integrations/gift-cards/buy-card/buy-card';
+import { CardCatalogPage } from '../integrations/gift-cards/card-catalog/card-catalog';
 import { PurchasedCardsPage } from '../integrations/gift-cards/purchased-cards/purchased-cards';
 import { SettingsPage } from '../settings/settings';
 
@@ -760,7 +761,8 @@ export class HomePage {
 
   public goTo(page: string, serviceName: string): void {
     if (serviceName === 'amazon' || serviceName === 'mercadolibre') {
-      this.buyGiftCard(serviceName);
+      console.log(this.buyGiftCard);
+      this.navCtrl.push(CardCatalogPage);
       return;
     }
     const pageMap = {
