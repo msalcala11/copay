@@ -761,7 +761,7 @@ export class HomePage {
 
   public goTo(page: string, serviceName: string): void {
     if (serviceName === 'amazon' || serviceName === 'mercadolibre') {
-      console.log(this.buyGiftCard);
+      // this.buyGiftCard(serviceName);
       this.navCtrl.push(CardCatalogPage);
       return;
     }
