@@ -17,11 +17,20 @@ card-catalog-page {
     border: 1px solid rgba(0, 0, 0, .03);
     border-radius: 6px;
     font-size: 16px;
-    padding: 0 20px;
+    padding: 0 20px 0 12px;
+
+    &:before {
+      content: url(../assets/img/controls-ico-search.svg);
+      opacity: .7;
+      position: absolute;
+      top: calc(50% + 2px);
+      transform: translate(0, -50%);
+    }
 
     input.text-input {
       margin-bottom: 12px;
       margin-top: 12px;
+      padding-left: 29px;
     }
   }
 }

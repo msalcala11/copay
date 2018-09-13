@@ -20,7 +20,7 @@ export class CardCatalogPage {
     private navCtrl: NavController
   ) {}
 
-  buyCard(cardConfig) {
+  buyCard(cardConfig: CardConifg) {
     this.navCtrl.push(BuyCardPage, { cardName: cardConfig.name });
   }
 
