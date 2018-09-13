@@ -1,11 +1,11 @@
 <wide-header-page title="Gift Cards">
   <div page-content>
     <div class="search-bar">
-      <ion-input placeholder="Search Gift Cards"></ion-input>
+      <ion-input placeholder="Search Gift Cards" (input)="onSearch($event.target.value)"></ion-input>
     </div>
     <ion-list class="settings-list">
-      <ion-item-divider>{{'Retailers' | translate}}</ion-item-divider>
-      <card-list-item *ngFor="let card of giftCards" [card]="card" [catalogListing]="true" (click)="buyCard(card)"></card-list-item>
+      <ion-item-divider *ngIf="visibleCards?.length">{{'Retailers' | translate}}</ion-item-divider>
+      <card-list-item *ngFor="let card of visibleCards" [card]="card" [catalogListing]="true" (click)="buyCard(card)"></card-list-item>
       <ion-item-divider></ion-item-divider>
     </ion-list>
   </div>

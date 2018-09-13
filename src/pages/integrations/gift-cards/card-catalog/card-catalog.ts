@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import { BuyCardPage } from '../buy-card/buy-card';
@@ -12,19 +12,27 @@ import {
   selector: 'card-catalog-page',
   templateUrl: 'card-catalog.html'
 })
-export class CardCatalogPage {
-  public giftCards: CardConifg[];
+export class CardCatalogPage implements OnInit {
+  public allCards: CardConifg[];
+  public visibleCards: CardConfig[];
 
   constructor(
     private giftCardProvider: GiftCardProvider,
     private navCtrl: NavController
   ) {}
 
-  buyCard(cardConfig: CardConifg) {
-    this.navCtrl.push(BuyCardPage, { cardName: cardConfig.name });
+  async ngOnInit() {
+    this.allCards = await this.giftCardProvider.getSupportedCards();
+    this.visibleCards = [...this.allCards];
   }
 
-  async ngOnInit() {
-    this.giftCards = await this.giftCardProvider.getSupportedCards();
+  onSearch(query: string) {
+    this.visibleCards = this.allCards.filter(
+      c => c.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+    );
+  }
+
+  buyCard(cardConfig: CardConifg) {
+    this.navCtrl.push(BuyCardPage, { cardName: cardConfig.name });
   }
 }
