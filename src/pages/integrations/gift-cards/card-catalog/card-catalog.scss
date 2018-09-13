@@ -7,8 +7,8 @@ card-catalog-page {
 
 .search-bar {
   background: white;
-  padding: 1rem;
   box-shadow: 1px 2px 8px rgba(0, 0, 0, .1);
+  padding: 1rem;
   position: relative;
   z-index: 2;
 
@@ -29,6 +29,7 @@ card-catalog-page {
 
     input.text-input {
       margin-bottom: 12px;
+      margin-left: 0;
       margin-top: 12px;
       padding-left: 29px;
     }
