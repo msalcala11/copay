@@ -1,0 +1,27 @@
+card-catalog-page {
+  .settings-list {
+    position: relative;
+    z-index: 0;
+  }
+}
+
+.search-bar {
+  background: white;
+  padding: 1rem;
+  box-shadow: 1px 2px 8px rgba(0, 0, 0, .1);
+  position: relative;
+  z-index: 2;
+
+  ion-input {
+    background: #F8F8F8;
+    border: 1px solid rgba(0, 0, 0, .03);
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 0 20px;
+
+    input.text-input {
+      margin-bottom: 12px;
+      margin-top: 12px;
+    }
+  }
+}
