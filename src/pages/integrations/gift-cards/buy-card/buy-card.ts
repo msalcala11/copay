@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import {
-  CardConifg,
+  CardConfig,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
 import { AmountPage } from '../../../send/amount/amount';
@@ -11,7 +11,7 @@ import { AmountPage } from '../../../send/amount/amount';
   templateUrl: 'buy-card.html'
 })
 export class BuyCardPage {
-  cardConfig: CardConifg;
+  cardConfig: CardConfig;
 
   constructor(
     private giftCardProvider: GiftCardProvider,

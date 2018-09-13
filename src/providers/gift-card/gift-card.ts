@@ -12,14 +12,14 @@ import { MercadoLibreProvider } from '../mercado-libre/mercado-libre';
 import { TimeProvider } from '../time/time';
 import {
   CardBrand,
-  CardConifg,
+  CardConfig,
   CardName,
   GiftCard,
   LegacyCardServiceName,
   RedeemResponse
 } from './gift-card.types';
 
-export { CardBrand, CardConifg, CardName, GiftCard };
+export { CardBrand, CardConfig, CardName, GiftCard };
 
 @Injectable()
 export class GiftCardProvider {
@@ -270,7 +270,7 @@ export class GiftCardProvider {
     }[brand];
   }
 
-  getOfferedCards(): CardConifg[] {
+  getOfferedCards(): CardConfig[] {
     return [
       {
         bitpayApiPath: 'amazon-gift', // Plan to remove bitpayApiPath when the api has a universal gift card enpoint

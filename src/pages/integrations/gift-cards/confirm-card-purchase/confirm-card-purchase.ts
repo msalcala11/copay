@@ -22,7 +22,7 @@ import { BwcProvider } from '../../../../providers/bwc/bwc';
 import { ConfigProvider } from '../../../../providers/config/config';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 import {
-  CardConifg,
+  CardConfig,
   GiftCard,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
@@ -60,7 +60,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
   public network: string;
   public onlyIntegers: boolean;
 
-  public cardConfig: CardConifg;
+  public cardConfig: CardConfig;
 
   constructor(
     actionSheetProvider: ActionSheetProvider,

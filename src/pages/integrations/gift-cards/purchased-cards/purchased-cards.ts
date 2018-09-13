@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
 import {
-  CardConifg,
+  CardConfig,
   GiftCard,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
@@ -19,7 +19,7 @@ export class PurchasedCardsPage {
   public allGiftCards: GiftCard[];
   public currentGiftCards: GiftCard[];
   public archivedGiftCards: GiftCard[];
-  public cardConfig: CardConifg;
+  public cardConfig: CardConfig;
 
   constructor(
     private giftCardProvider: GiftCardProvider,

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import {
-  CardConifg,
+  CardConfig,
   GiftCard,
   GiftCardProvider
 } from '../../../../../providers/gift-card/gift-card';
@@ -26,7 +26,7 @@ import {
   `
 })
 export class CardListItemComponent {
-  public cardConfig: CardConifg;
+  public cardConfig: CardConfig;
 
   @Input()
   card: GiftCard;

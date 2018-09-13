@@ -9,7 +9,7 @@ export enum CardName {
   mercadoLibre = 'Mercado Livre'
 }
 
-export interface CardConifg {
+export interface CardConfig {
   brand: CardBrand;
   cardImage: string;
   currency: string;

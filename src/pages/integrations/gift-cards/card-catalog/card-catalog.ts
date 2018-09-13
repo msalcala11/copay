@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 import { BuyCardPage } from '../buy-card/buy-card';
 
 import {
-  CardConifg,
+  CardConfig,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
 
@@ -13,8 +13,8 @@ import {
   templateUrl: 'card-catalog.html'
 })
 export class CardCatalogPage implements OnInit {
-  public allCards: CardConifg[];
   public visibleCards: CardConfig[];
+  public allCards: CardConfig[];
 
   constructor(
     private giftCardProvider: GiftCardProvider,
@@ -32,7 +32,7 @@ export class CardCatalogPage implements OnInit {
     );
   }
 
-  buyCard(cardConfig: CardConifg) {
+  buyCard(cardConfig: CardConfig) {
     this.navCtrl.push(BuyCardPage, { cardName: cardConfig.name });
   }
 }

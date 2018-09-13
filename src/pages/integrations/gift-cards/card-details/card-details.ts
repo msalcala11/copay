@@ -6,7 +6,7 @@ import {
 } from '../../../../providers/action-sheet/action-sheet';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 import {
-  CardConifg,
+  CardConfig,
   GiftCard,
   GiftCardProvider
 } from '../../../../providers/gift-card/gift-card';
@@ -17,7 +17,7 @@ import {
 })
 export class CardDetailsPage {
   public card: GiftCard;
-  public cardConfig: CardConifg;
+  public cardConfig: CardConfig;
 
   constructor(
     private actionSheetProvider: ActionSheetProvider,
