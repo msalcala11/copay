@@ -62,6 +62,17 @@ export const offeredGiftCards: BaseCardConfig[] = [
     website: 'delta.com'
   },
   {
+    brand: CardBrand.dsw,
+    cardImage: 'assets/img/gift-cards/home-depot/home-depot-card.png',
+    defaultClaimCodeType: 'barcode',
+    emailRequired: false,
+    icon: 'assets/img/gift-cards/home-depot/home-depot-icon.svg',
+    logo: 'assets/img/gift-cards/home-depot/home-depot-logo.svg',
+    logoBackgroundColor: '#000000',
+    name: CardName.dsw,
+    website: 'homedepot.com'
+  },
+  {
     brand: CardBrand.googlePlay,
     cardImage: 'assets/img/gift-cards/google-play/google-play-gift-card.png',
     defaultClaimCodeType: 'code',
