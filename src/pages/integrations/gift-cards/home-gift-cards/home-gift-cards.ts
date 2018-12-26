@@ -11,6 +11,7 @@ import { debounceTime } from 'rxjs/operators';
 import { ActionSheetProvider, AppProvider } from '../../../../providers';
 import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
 import {
+  CardBrand,
   CardName,
   GiftCard
 } from '../../../../providers/gift-card/gift-card.types';
@@ -58,6 +59,7 @@ export class HomeGiftCards implements OnInit {
   async ngOnInit() {
     this.appName = this.appProvider.info.userVisibleName;
     this.initGiftCards();
+    this.addMockCards();
   }
 
   public buyGiftCards() {
@@ -136,6 +138,30 @@ export class HomeGiftCards implements OnInit {
     const { activeCards } = this.getActiveGiftCards(purchasedBrands);
     this.updatePendingGiftCards(purchasedBrands);
     this.activeBrands = activeCards;
+  }
+
+  private addMockCards() {
+    const dswCard: GiftCard = {
+      name: CardName.dsw,
+      brand: CardBrand.dsw,
+      invoiceId: 'iNvOiCe1',
+      invoiceUrl: 'google.com',
+      currency: 'USD',
+      amount: 50,
+      accessKey: 'aCcEsSkEy',
+      // claimCode: '636 264 261 073 020 009 948 244 926 0',
+      // claimCode: '6362642610730200099482449260',
+      claimCode: '6156825125908294',
+
+      // claimCode: '636 264 261 073',
+      archived: false,
+      date: 1535675247000,
+      // pin: '52367',
+      pin: '05482649',
+      status: 'SUCCESS',
+      uuid: 'aaksj'
+    };
+    return this.giftCardProvider.saveGiftCard(dswCard);
   }
 }
 
