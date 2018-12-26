@@ -37,6 +37,18 @@ export const offeredGiftCards: BaseCardConfig[] = [
     website: 'amazon.co.jp'
   },
   {
+    brand: CardBrand.barnesNoble,
+    cardImage:
+      'assets/img/gift-cards/barnes-and-noble/barnes-and-noble-gift-card.png',
+    defaultClaimCodeType: 'barcode',
+    emailRequired: false,
+    icon: 'assets/img/gift-cards/barnes-and-noble/barnes-and-noble-icon.svg',
+    logo: 'assets/img/gift-cards/barnes-and-noble/barnes-and-noble-logo.svg',
+    logoBackgroundColor: '#356251',
+    name: CardName.barnesNoble,
+    website: 'barnesandnoble.com'
+  },
+  {
     brand: CardBrand.carnivalCruiseLine,
     cardImage:
       'assets/img/gift-cards/carnival-cruise-line/carnival-cruise-line-card.png',

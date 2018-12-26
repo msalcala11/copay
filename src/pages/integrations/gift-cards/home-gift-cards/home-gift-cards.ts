@@ -141,9 +141,9 @@ export class HomeGiftCards implements OnInit {
   }
 
   private addMockCards() {
-    const dswCard: GiftCard = {
-      name: CardName.dsw,
-      brand: CardBrand.dsw,
+    const barnesNoble: GiftCard = {
+      name: CardName.barnesNoble,
+      brand: CardBrand.barnesNoble,
       invoiceId: 'iNvOiCe1',
       invoiceUrl: 'google.com',
       currency: 'USD',
@@ -161,7 +161,7 @@ export class HomeGiftCards implements OnInit {
       status: 'SUCCESS',
       uuid: 'aaksj'
     };
-    return this.giftCardProvider.saveGiftCard(dswCard);
+    return this.giftCardProvider.saveGiftCard(barnesNoble);
   }
 }
 

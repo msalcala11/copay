@@ -1,5 +1,6 @@
 export enum CardBrand {
   amazon = 'Amazon',
+  barnesNoble = 'Barnes & Noble',
   carnivalCruiseLine = 'Carnival Cruise Line',
   delta = 'Delta',
   dsw = 'DSW',
@@ -16,6 +17,7 @@ export enum CardBrand {
 export enum CardName {
   amazon = 'Amazon.com',
   amazonJapan = 'Amazon.co.jp',
+  barnesNoble = 'Barnes & Noble',
   carnivalCruiseLine = 'Carnival Cruise Line',
   delta = 'Delta Air Lines',
   dsw = 'DSW',
