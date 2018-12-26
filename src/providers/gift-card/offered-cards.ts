@@ -63,14 +63,14 @@ export const offeredGiftCards: BaseCardConfig[] = [
   },
   {
     brand: CardBrand.dsw,
-    cardImage: 'assets/img/gift-cards/home-depot/home-depot-card.png',
+    cardImage: 'assets/img/gift-cards/dsw/dsw-gift-card.png',
     defaultClaimCodeType: 'barcode',
     emailRequired: false,
-    icon: 'assets/img/gift-cards/home-depot/home-depot-icon.svg',
-    logo: 'assets/img/gift-cards/home-depot/home-depot-logo.svg',
+    icon: 'assets/img/gift-cards/dsw/dsw-icon.svg',
+    logo: 'assets/img/gift-cards/dsw/dsw-logo.svg',
     logoBackgroundColor: '#000000',
     name: CardName.dsw,
-    website: 'homedepot.com'
+    website: 'dsw.com'
   },
   {
     brand: CardBrand.googlePlay,
