@@ -46,6 +46,7 @@ export const offeredGiftCards: BaseCardConfig[] = [
     brand: CardBrand.carnivalCruiseLine,
     defaultClaimCodeType: ClaimCodeType.code,
     emailRequired: false,
+    icon: `${GIFT_CARD_IMAGE_PATH}${CardName.carnivalCruiseLine}/icon.png`,
     logoBackgroundColor: '#ffffff',
     name: CardName.carnivalCruiseLine,
     website: 'carnival.com'
@@ -132,9 +133,17 @@ export const offeredGiftCards: BaseCardConfig[] = [
     name: CardName.uberEats,
     website: 'uber.com'
   }
-].map(c => ({
-  ...c,
-  cardImage: `${GIFT_CARD_IMAGE_PATH}${c.name}/card.png`,
-  icon: `${GIFT_CARD_IMAGE_PATH}${c.name}/icon.png`,
-  logo: `${GIFT_CARD_IMAGE_PATH}${c.name}/logo.png`
-}));
+]
+  .map(c => ({
+    ...c,
+    cardImage: `${GIFT_CARD_IMAGE_PATH}${c.name}/card.png`,
+    icon: `${GIFT_CARD_IMAGE_PATH}${c.name}/icon.svg`,
+    logo: `${GIFT_CARD_IMAGE_PATH}${c.name}/logo.svg`
+  }))
+  .map(c => ({
+    ...c,
+    icon:
+      c.name === CardName.carnivalCruiseLine || c.name === CardName.googlePlay
+        ? `${GIFT_CARD_IMAGE_PATH}${c.name}/icon.png`
+        : c.icon
+  }));
