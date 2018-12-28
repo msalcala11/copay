@@ -93,7 +93,7 @@ export const offeredGiftCards: BaseCardConfig[] = [
     logo: 'assets/img/gift-cards/gamestop/gamestop-logo.svg',
     logoBackgroundColor: '#000000',
     name: CardName.gamestop,
-    website: 'dsw.com'
+    website: 'gamestop.com'
   },
   {
     brand: CardBrand.googlePlay,
