@@ -12,7 +12,7 @@ gift-card-item {
     padding-left: $gift-card-item-side-padding;
     padding-right: $gift-card-item-side-padding;
 
-    >button {
+    > button {
       padding-left: 0;
     }
 
@@ -50,7 +50,6 @@ gift-card-item {
       height: $gift-card-item-height;
 
       ion-label {
-
         &.label-ios,
         &.label-md {
           display: flex;
