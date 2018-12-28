@@ -85,6 +85,17 @@ export const offeredGiftCards: BaseCardConfig[] = [
     website: 'dsw.com'
   },
   {
+    brand: CardBrand.gamestop,
+    cardImage: 'assets/img/gift-cards/gamestop/gamestop-gift-card.png',
+    defaultClaimCodeType: 'barcode',
+    emailRequired: false,
+    icon: 'assets/img/gift-cards/gamestop/gamestop-icon.svg',
+    logo: 'assets/img/gift-cards/gamestop/gamestop-logo.svg',
+    logoBackgroundColor: '#000000',
+    name: CardName.gamestop,
+    website: 'dsw.com'
+  },
+  {
     brand: CardBrand.googlePlay,
     cardImage: 'assets/img/gift-cards/google-play/google-play-gift-card.png',
     defaultClaimCodeType: 'code',
