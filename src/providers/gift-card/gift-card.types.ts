@@ -33,10 +33,16 @@ export enum CardName {
   venue = 'Venue USD'
 }
 
+export enum ClaimCodeType {
+  barcode = 'barcode',
+  code = 'code',
+  link = 'link'
+}
+
 export interface BaseCardConfig {
   brand: CardBrand;
   cardImage: string;
-  defaultClaimCodeType: 'barcode' | 'link' | 'code';
+  defaultClaimCodeType: ClaimCodeType;
   emailRequired: boolean;
   icon: string;
   logo: string;
