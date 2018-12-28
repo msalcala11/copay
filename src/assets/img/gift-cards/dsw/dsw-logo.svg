@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="79px" height="26px" viewBox="0 0 79 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="120px" height="73px" viewBox="0 0 120 73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
-    <title>DSW_logo</title>
+    <title>logo-box</title>
     <desc>Created with Sketch.</desc>
     <defs>
         <polygon id="path-1" points="0.00902857143 0.0185085714 41.1896971 0.0185085714 41.1896971 25.7756686 0.00902857143 25.7756686"></polygon>
     </defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Brand/Card/Small/DSW" transform="translate(-21.000000, -23.000000)">
+        <g id="Brand/Card/Small/DSW">
+            <g id="Mask"></g>
             <g id="DSW_logo" transform="translate(21.000000, 23.000000)">
                 <g id="Group-4">
                     <mask id="mask-2" fill="white">

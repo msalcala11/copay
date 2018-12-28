@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="140px" height="22px" viewBox="0 0 140 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="181px" height="73px" viewBox="0 0 181 73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
-    <title>Barnes&amp;Noble_logo</title>
+    <title>logo-box</title>
     <desc>Created with Sketch.</desc>
     <defs>
         <polygon id="path-1" points="0.0144478844 0.0286549708 92.3655659 0.0286549708 92.3655659 21.2656003 0.0144478844 21.2656003"></polygon>
     </defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Brand/Card/Small/Barnes&amp;Noble" transform="translate(-21.000000, -26.000000)">
+        <g id="Brand/Card/Small/Barnes&amp;Noble">
+            <g id="Mask"></g>
             <g id="Barnes&amp;Noble_logo" transform="translate(21.000000, 26.000000)">
                 <g id="Group-9" transform="translate(0.000000, 1.203990)">
                     <mask id="mask-2" fill="white">

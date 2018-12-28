@@ -18,7 +18,7 @@ export const offeredGiftCards: BaseCardConfig[] = [
     defaultClaimCodeType: 'code',
     emailRequired: true,
     icon: 'assets/img/gift-cards/amazon/amazon-icon.svg',
-    logo: 'assets/img/gift-cards/amazon/amazon-logo.png',
+    logo: 'assets/img/gift-cards/amazon/amazon-logo.svg',
     logoBackgroundColor: '#363636',
     name: CardName.amazon,
     redeemUrl: 'https://www.amazon.com/gc/redeem?claimCode=',
@@ -64,11 +64,11 @@ export const offeredGiftCards: BaseCardConfig[] = [
   },
   {
     brand: CardBrand.delta,
-    cardImage: 'assets/img/gift-cards/delta/delta-gift-card-white.png',
+    cardImage: 'assets/img/gift-cards/delta/delta-gift-card.png',
     defaultClaimCodeType: 'link',
     emailRequired: false,
-    icon: 'assets/img/gift-cards/delta/delta-icon-white.svg',
-    logo: 'assets/img/gift-cards/delta/delta-logo-white.svg',
+    icon: 'assets/img/gift-cards/delta/delta-icon.svg',
+    logo: 'assets/img/gift-cards/delta/delta-logo.svg',
     logoBackgroundColor: '#ffffff',
     name: CardName.delta,
     website: 'delta.com'
@@ -136,7 +136,7 @@ export const offeredGiftCards: BaseCardConfig[] = [
     defaultClaimCodeType: 'code',
     emailRequired: false,
     icon: 'assets/img/gift-cards/mercado-libre/mercado-livre-icon.svg',
-    logo: 'assets/img/gift-cards/mercado-libre/mercado-livre-logo.png',
+    logo: 'assets/img/gift-cards/mercado-libre/mercado-livre-logo.svg',
     logoBackgroundColor: '#ffffff',
     name: CardName.mercadoLibre,
     website: 'mercadolivre.com.br'
@@ -158,7 +158,7 @@ export const offeredGiftCards: BaseCardConfig[] = [
     defaultClaimCodeType: 'code',
     emailRequired: false,
     icon: 'assets/img/gift-cards/uber/uber-icon.svg',
-    logo: 'assets/img/gift-cards/uber/uber-logo.png',
+    logo: 'assets/img/gift-cards/uber/uber-logo.svg',
     logoBackgroundColor: '#000000',
     name: CardName.uber,
     website: 'uber.com'

@@ -12,6 +12,10 @@ gift-card-item {
     padding-left: $gift-card-item-side-padding;
     padding-right: $gift-card-item-side-padding;
 
+    >button {
+      padding-left: 0;
+    }
+
     ion-item-options {
       border-bottom: 0;
       padding-right: $gift-card-item-side-padding;
@@ -46,6 +50,7 @@ gift-card-item {
       height: $gift-card-item-height;
 
       ion-label {
+
         &.label-ios,
         &.label-md {
           display: flex;
@@ -60,44 +65,6 @@ gift-card-item {
 
         &.dark {
           color: $text-color;
-        }
-      }
-
-      img {
-        $img-x-translate: 6px;
-        max-height: 25px;
-        transform: translate($img-x-translate, 0);
-
-        &.Amazon {
-          transform: translate($img-x-translate, 2px);
-        }
-
-        &.CarnivalCruiseLine {
-          max-height: 30px;
-          margin-top: -8px;
-          margin-left: -2px;
-        }
-
-        &.Delta {
-          max-height: 17px;
-        }
-
-        &.HomeDepot {
-          max-height: 42px;
-          margin-left: -3px;
-        }
-
-        &.Hotelscom {
-          margin-left: -4px;
-          margin-top: -4px;
-          max-height: 32px;
-          height: 32px;
-        }
-
-        &.RoyalCaribbean {
-          margin-left: -1px;
-          margin-top: -1px;
-          max-height: 37px;
         }
       }
     }
