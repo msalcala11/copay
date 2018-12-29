@@ -136,14 +136,20 @@ export const offeredGiftCards: BaseCardConfig[] = [
 ]
   .map(c => ({
     ...c,
-    cardImage: `${GIFT_CARD_IMAGE_PATH}${c.name}/card.png`,
-    icon: `${GIFT_CARD_IMAGE_PATH}${c.name}/icon.svg`,
-    logo: `${GIFT_CARD_IMAGE_PATH}${c.name}/logo.svg`
+    cardImage: `${GIFT_CARD_IMAGE_PATH}${c.name
+      .toLowerCase()
+      .replace(/[^0-9a-z]/gi, '')}/card.png`,
+    icon: `${GIFT_CARD_IMAGE_PATH}${c.name
+      .toLowerCase()
+      .replace(/[^0-9a-z]/gi, '')}/icon.svg`,
+    logo: `${GIFT_CARD_IMAGE_PATH}${c.name
+      .toLowerCase()
+      .replace(/[^0-9a-z]/gi, '')}/logo.svg`
   }))
   .map(c => ({
     ...c,
     icon:
       c.name === CardName.carnivalCruiseLine || c.name === CardName.googlePlay
-        ? `${GIFT_CARD_IMAGE_PATH}${c.name}/icon.png`
+        ? c.icon.replace('svg', 'png')
         : c.icon
   }));
