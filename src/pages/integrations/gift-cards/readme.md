@@ -1,9 +1,8 @@
 # Adding a New Gift Card
 
 1. Ensure that the new gift card is included in the JSON response at https://bitpay.com/gift-cards/cards.
-2. Ask a designer to provide a `cardImage`, `logo`, and `icon` for the new gift card, and save them in `assets/img/gift-cards/[brand]`.
-3. Add the new gift card to `providers/gift-card/offered-cards.ts` (Provide all fields required by the typescript types including paths to the images you added in step 2).
-4. You may need to add a couple lines of css to adjust the size/position of the `logo` image within the `gift-card-item` element on the home page.
+2. Ask a designer to provide a `cardImage`, `logo`, and `icon` for the new gift card, and save them in `assets/img/gift-cards/[brand]` with filenames `card.png`, `logo.svg`, and `icon.svg` respectively.
+3. Add the new gift card to `providers/gift-card/offered-cards.ts` (Provide all fields required by the typescript types).
 
 ### Optional Adjustments
 
@@ -16,3 +15,7 @@ Gift card terms of use, description, and redeem instructions are automatically p
 ### Troubleshooting
 
 Is your card not showing up at https://bitpay.com/gift-cards/cards? The card might not be available in the country implied by your IP address. You can test which cards are available in specific countries by using a VPN.
+
+### Testnet
+
+To enable testnet mode, change `Network.livenet` to `Network.testnet` in `providers/gift-card/gift-card.ts`.
