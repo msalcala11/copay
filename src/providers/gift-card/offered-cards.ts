@@ -5,13 +5,14 @@ import {
   ClaimCodeType
 } from './gift-card.types';
 
-const GIFT_CARD_IMAGE_PATH = 'assets/img/gift-cards/';
-
-export const offeredGiftCards: BaseCardConfig[] = [
+export const offeredGiftCards: BaseCardConfig[] = ([
   {
     brand: CardBrand.venue, // For Testnet
-    defaultClaimCodeType: ClaimCodeType.code,
+    cardImage: `${getCardImageDirectory(CardName.venue)}/card.png`,
+    defaultClaimCodeType: 'code',
     emailRequired: false,
+    icon: `${getCardImageDirectory(CardName.venue)}/card.png`,
+    logo: `${getCardImageDirectory(CardName.venue)}/card.png`,
     logoBackgroundColor: '#913318',
     name: CardName.venue,
     website: 'venue.com'
@@ -46,7 +47,7 @@ export const offeredGiftCards: BaseCardConfig[] = [
     brand: CardBrand.carnivalCruiseLine,
     defaultClaimCodeType: ClaimCodeType.code,
     emailRequired: false,
-    icon: `${GIFT_CARD_IMAGE_PATH}${CardName.carnivalCruiseLine}/icon.png`,
+    icon: `${getCardImageDirectory(CardName.carnivalCruiseLine)}/icon.png`,
     logoBackgroundColor: '#ffffff',
     name: CardName.carnivalCruiseLine,
     website: 'carnival.com'
@@ -80,6 +81,7 @@ export const offeredGiftCards: BaseCardConfig[] = [
     defaultClaimCodeType: ClaimCodeType.code,
     emailRequired: false,
     hidePin: true,
+    icon: `${getCardImageDirectory(CardName.googlePlay)}/icon.png`,
     logoBackgroundColor: '#ffffff',
     name: CardName.googlePlay,
     redeemUrl: 'https://play.google.com/redeem?code=',
@@ -133,23 +135,16 @@ export const offeredGiftCards: BaseCardConfig[] = [
     name: CardName.uberEats,
     website: 'uber.com'
   }
-]
-  .map(c => ({
-    ...c,
-    cardImage: `${GIFT_CARD_IMAGE_PATH}${c.name
-      .toLowerCase()
-      .replace(/[^0-9a-z]/gi, '')}/card.png`,
-    icon: `${GIFT_CARD_IMAGE_PATH}${c.name
-      .toLowerCase()
-      .replace(/[^0-9a-z]/gi, '')}/icon.svg`,
-    logo: `${GIFT_CARD_IMAGE_PATH}${c.name
-      .toLowerCase()
-      .replace(/[^0-9a-z]/gi, '')}/logo.svg`
-  }))
-  .map(c => ({
-    ...c,
-    icon:
-      c.name === CardName.carnivalCruiseLine || c.name === CardName.googlePlay
-        ? c.icon.replace('svg', 'png')
-        : c.icon
-  }));
+] as BaseCardConfig[]).map(c => ({
+  ...c,
+  cardImage: c.cardImage || `${getCardImageDirectory(c.name)}card.png`,
+  icon: c.icon || `${getCardImageDirectory(c.name)}icon.svg`,
+  logo: c.logo || `${getCardImageDirectory(c.name)}logo.svg`
+}));
+
+function getCardImageDirectory(cardName: CardName) {
+  const cardImagePath = 'assets/img/gift-cards/';
+  return `${cardImagePath}${cardName
+    .toLowerCase()
+    .replace(/[^0-9a-z]/gi, '')}/`;
+}
