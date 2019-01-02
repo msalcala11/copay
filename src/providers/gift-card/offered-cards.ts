@@ -47,7 +47,7 @@ export const offeredGiftCards: BaseCardConfig[] = ([
     brand: CardBrand.carnivalCruiseLine,
     defaultClaimCodeType: ClaimCodeType.code,
     emailRequired: false,
-    icon: `${getCardImageDirectory(CardName.carnivalCruiseLine)}/icon.png`,
+    icon: `${getCardImageDirectory(CardName.carnivalCruiseLine)}icon.png`,
     logoBackgroundColor: '#ffffff',
     name: CardName.carnivalCruiseLine,
     website: 'carnival.com'
@@ -81,7 +81,7 @@ export const offeredGiftCards: BaseCardConfig[] = ([
     defaultClaimCodeType: ClaimCodeType.code,
     emailRequired: false,
     hidePin: true,
-    icon: `${getCardImageDirectory(CardName.googlePlay)}/icon.png`,
+    icon: `${getCardImageDirectory(CardName.googlePlay)}icon.png`,
     logoBackgroundColor: '#ffffff',
     name: CardName.googlePlay,
     redeemUrl: 'https://play.google.com/redeem?code=',
