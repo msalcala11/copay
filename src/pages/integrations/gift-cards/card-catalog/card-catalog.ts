@@ -5,7 +5,10 @@ import { BuyCardPage } from '../buy-card/buy-card';
 
 import { ActionSheetProvider } from '../../../../providers';
 import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
-import { CardConfig } from '../../../../providers/gift-card/gift-card.types';
+import {
+  CardConfig,
+  CardName
+} from '../../../../providers/gift-card/gift-card.types';
 import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-page';
 
 @Component({
@@ -15,6 +18,9 @@ import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-
 export class CardCatalogPage implements OnInit {
   public visibleCards: CardConfig[];
   public allCards: CardConfig[];
+  public featuredCards: CardConfig[];
+  public moreCards: CardConfig[];
+  public searchQuery: string;
 
   @ViewChild(WideHeaderPage)
   wideHeaderPage: WideHeaderPage;
@@ -31,9 +37,24 @@ export class CardCatalogPage implements OnInit {
       return [] as CardConfig[];
     });
     this.visibleCards = [...this.allCards];
+    const featuredCardNames = [
+      CardName.amazon,
+      CardName.amazonJapan,
+      CardName.delta,
+      CardName.hotelsCom,
+      CardName.uber,
+      CardName.uberEats
+    ];
+    this.featuredCards = this.allCards.filter(
+      c => featuredCardNames.indexOf(c.name) !== -1
+    );
+    this.moreCards = this.allCards.filter(
+      c => featuredCardNames.indexOf(c.name) === -1
+    );
   }
 
   onSearch(query: string) {
+    this.searchQuery = query;
     this.visibleCards = this.allCards.filter(
       c => c.name.toLowerCase().indexOf(query.toLowerCase()) > -1
     );
