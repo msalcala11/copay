@@ -41,6 +41,7 @@ export class CardCatalogPage implements OnInit {
       CardName.amazon,
       CardName.amazonJapan,
       CardName.delta,
+      CardName.googlePlay,
       CardName.hotelsCom,
       CardName.uber,
       CardName.uberEats
