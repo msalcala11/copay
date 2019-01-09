@@ -350,11 +350,10 @@ export class GiftCardProvider {
 
   async fetchAvailableCardMap() {
     const url = `${this.credentials.BITPAY_API_URL}/gift-cards/cards`;
-    const availableCardMapPromise = this.http.get(url).toPromise() as Promise<
+    this.availableCardMapPromise = this.http.get(url).toPromise() as Promise<
       AvailableCardMap
     >;
-    const availableCardMap = await availableCardMapPromise;
-    this.availableCardMapPromise = availableCardMapPromise;
+    const availableCardMap = await this.availableCardMapPromise;
     this.cacheApiCardConfig(availableCardMap);
     return this.availableCardMapPromise;
   }
@@ -374,7 +373,9 @@ export class GiftCardProvider {
       ...previousCache,
       ...apiCardConfigCache
     };
-    return this.persistenceProvider.setGiftCardConfigCache(newCache);
+    if (JSON.stringify(previousCache) !== JSON.stringify(newCache)) {
+      await this.persistenceProvider.setGiftCardConfigCache(newCache);
+    }
   }
 
   async fetchCachedApiCardConfig(): Promise<AvailableCardMap> {
