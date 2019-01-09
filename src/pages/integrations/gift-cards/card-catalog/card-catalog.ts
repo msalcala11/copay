@@ -43,6 +43,7 @@ export class CardCatalogPage implements OnInit {
       CardName.delta,
       CardName.googlePlay,
       CardName.hotelsCom,
+      CardName.mercadoLibre,
       CardName.uber,
       CardName.uberEats
     ];
