@@ -44,6 +44,14 @@ export const offeredGiftCards: BaseCardConfig[] = ([
     website: 'barnesandnoble.com'
   },
   {
+    brand: CardBrand.bassProShops,
+    defaultClaimCodeType: ClaimCodeType.barcode,
+    emailRequired: false,
+    logoBackgroundColor: '#FFFFFF',
+    name: CardName.bassProShops,
+    website: 'basspro.com'
+  },
+  {
     brand: CardBrand.carnivalCruiseLine,
     defaultClaimCodeType: ClaimCodeType.code,
     emailRequired: false,
