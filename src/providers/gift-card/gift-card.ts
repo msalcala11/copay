@@ -375,7 +375,13 @@ export class GiftCardProvider {
   }
 
   async getActiveCards(): Promise<GiftCard[]> {
-    return Promise.resolve([]);
+    const giftCardMap = await this.persistenceProvider.getActiveGiftCards(
+      this.getNetwork()
+    );
+    const invoiceIds = Object.keys(giftCardMap);
+    return invoiceIds
+      .map(invoiceId => giftCardMap[invoiceId] as GiftCard)
+      .sort(sortByDescendingDate);
   }
 
   async fetchAvailableCardMap() {
