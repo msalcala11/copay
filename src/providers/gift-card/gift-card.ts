@@ -120,10 +120,33 @@ export class GiftCardProvider {
     return purchasedCards.filter(brand => brand.length);
   }
 
-  async saveCard(giftCard, opts?: GiftCardSaveParams) {
+  async saveCard(giftCard: GiftCard, opts?: GiftCardSaveParams) {
     const oldGiftCards = await this.getCardMap(giftCard.name);
+    const oldGiftCard = oldGiftCards[giftCard.invoiceId];
     const newMap = this.getNewSaveableGiftCardMap(oldGiftCards, giftCard, opts);
-    return this.persistCards(giftCard.name, newMap);
+    const savePromise = this.persistCards(giftCard.name, newMap);
+    const saves =
+      oldGiftCard && giftCard.archived === oldGiftCard.archived
+        ? [savePromise]
+        : [savePromise, this.updateActiveCards([giftCard])];
+    await Promise.all(saves);
+  }
+
+  async updateActiveCards(giftCardsToUpdate: GiftCard[]) {
+    const oldActiveGiftCards: GiftCardMap = await this.persistenceProvider.getActiveGiftCards(
+      this.getNetwork()
+    );
+    const newMap = giftCardsToUpdate.reduce(
+      (updatedMap, c) =>
+        this.getNewSaveableGiftCardMap(updatedMap, c, {
+          remove: c.archived
+        }),
+      oldActiveGiftCards
+    );
+    return this.persistenceProvider.setActiveGiftCards(
+      this.getNetwork(),
+      JSON.stringify(newMap)
+    );
   }
 
   persistCards(cardName: CardName, newMap: GiftCardMap) {
@@ -186,7 +209,10 @@ export class GiftCardProvider {
       card.archived = true;
       return this.getNewSaveableGiftCardMap(newMap, card);
     }, oldGiftCards);
-    await this.persistCards(cardName, newMap);
+    await Promise.all([
+      this.persistCards(cardName, newMap),
+      this.updateActiveCards(activeCards.map(c => ({ ...c, archived: true })))
+    ]);
     activeCards
       .map(c => ({ ...c, archived: true }))
       .forEach(c => this.cardUpdatesSubject.next(c));
@@ -346,6 +372,10 @@ export class GiftCardProvider {
       ...(availableCards.find(c => c.name === cardConfig.name) ||
         cachedApiCardConfig[cardConfig.name])
     }));
+  }
+
+  async getActiveCards(): Promise<GiftCard[]> {
+    return Promise.resolve([]);
   }
 
   async fetchAvailableCardMap() {
