@@ -135,18 +135,24 @@ export class HomeGiftCards implements OnInit {
   private async loadGiftCards() {
     this.disableArchiveAnimation = true;
     const activeCards = await this.giftCardProvider.getActiveCards();
-    const activeBrands = activeCards.reduce(
-      (brands, c) => {
-        const brandCards = brands.find(b => b[0].name === c.name);
-        brandCards ? brandCards.push(c) : brands.push([c]);
-        return brands;
-      },
-      [] as GiftCard[][]
-    );
+    const activeBrands = this.groupCardsByBrand(activeCards);
     // const purchasedBrands = await this.giftCardProvider.getPurchasedBrands();
     // const { activeCards } = this.getActiveGiftCards(purchasedBrands);
     this.updatePendingGiftCards(activeBrands);
     this.activeBrands = activeBrands;
+  }
+
+  private groupCardsByBrand(cards: GiftCard[]): GiftCard[][] {
+    return cards
+      .reduce(
+        (brands, c) => {
+          const brandCards = brands.find(b => b[0].name === c.name);
+          brandCards ? brandCards.push(c) : brands.push([c]);
+          return brands;
+        },
+        [] as GiftCard[][]
+      )
+      .sort((a, b) => (a[0].name > b[0].name ? 1 : -1));
   }
 
   private addMockCards() {
@@ -170,7 +176,8 @@ export class HomeGiftCards implements OnInit {
       status: 'SUCCESS',
       uuid: 'aaksj'
     };
-    return this.giftCardProvider.saveGiftCard(gamestopCard);
+    console.log('gamestopCard', gamestopCard);
+    // return this.giftCardProvider.saveGiftCard(gamestopCard);
   }
 }
 

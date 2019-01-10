@@ -35,7 +35,7 @@ export class GiftCardProvider {
     NETWORK: Network;
     BITPAY_API_URL: string;
   } = {
-    NETWORK: Network.livenet,
+    NETWORK: Network.testnet,
     BITPAY_API_URL: 'https://bitpay.com'
   };
 
@@ -378,10 +378,27 @@ export class GiftCardProvider {
     const giftCardMap = await this.persistenceProvider.getActiveGiftCards(
       this.getNetwork()
     );
-    const invoiceIds = Object.keys(giftCardMap);
-    return invoiceIds
-      .map(invoiceId => giftCardMap[invoiceId] as GiftCard)
-      .sort(sortByDescendingDate);
+    return !giftCardMap
+      ? this.migrateAndFetchActiveCards()
+      : Object.keys(giftCardMap)
+          .map(invoiceId => giftCardMap[invoiceId] as GiftCard)
+          .sort(sortByDescendingDate);
+  }
+
+  async migrateAndFetchActiveCards(): Promise<GiftCard[]> {
+    const purchasedBrands = await this.getPurchasedBrands();
+    const activeCardsGroupedByBrand = purchasedBrands.filter(
+      cards => cards.filter(c => !c.archived).length
+    );
+    const activeCards = activeCardsGroupedByBrand
+      .reduce(
+        (allCards, brandCards) => [...allCards, ...brandCards],
+        [] as GiftCard[]
+      )
+      .filter(c => !c.archived);
+    await this.updateActiveCards(activeCards);
+    console.log('returning migrated active cards', activeCards);
+    return activeCards;
   }
 
   async fetchAvailableCardMap() {
