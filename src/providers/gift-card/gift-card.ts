@@ -397,7 +397,6 @@ export class GiftCardProvider {
       )
       .filter(c => !c.archived);
     await this.updateActiveCards(activeCards);
-    console.log('returning migrated active cards', activeCards);
     return activeCards;
   }
 
