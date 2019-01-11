@@ -177,7 +177,7 @@ export class HomeGiftCards implements OnInit {
       uuid: 'aaksj'
     };
     console.log('gamestopCard', gamestopCard);
-    return this.giftCardProvider.saveGiftCard(gamestopCard);
+    // return this.giftCardProvider.saveGiftCard(gamestopCard);
   }
 }
 

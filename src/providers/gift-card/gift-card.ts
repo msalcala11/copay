@@ -478,51 +478,23 @@ export class GiftCardProvider {
         };
         return fullCardConfig;
       });
-
-    const dswStub: CardConfig = {
-      ...offeredGiftCards.find(c => c.name === CardName.dsw),
-      ...{
-        currency: 'USD',
-        description: `Whole Foods Market is the leading organic and natural food retailer, dedicated to strict quality standards and excellent customer service. Gift Cards never expire and can buy anything at any of the 400 locations in the US and Canada.`,
-        minAmount: 1,
-        maxAmount: 500,
-        terms: `You can use this card to buy our greens, but it is not redeemable for cash except as required by law. The available balance will be applied toward your purchase from soup to nuts, but may not be used to purchase other gift cards. This card will not be replaced or refunded if lost or stolen, so handle it like a carton of eggs. This card is issued by WFM Gift Card, LLC (the “Issuer”), who is the sole obligor to card owner. This card may not be resold unless approved by the Issuer. Unlike milk, this card doesn’t have an expiration date, nor does it incur any fees for any reason. Purchase, acceptance or use of this card constitutes acceptance of the complete terms and conditions, available at wholefoodsmarket.com/terms. For balance or other questions, visit wholefoodsmarket.com/giftcards or call 844-936-2273.`
-      }
+    const baseStub = {
+      currency: 'USD',
+      description: `Whole Foods Market is the leading organic and natural food retailer, dedicated to strict quality standards and excellent customer service. Gift Cards never expire and can buy anything at any of the 400 locations in the US and Canada.`,
+      minAmount: 1,
+      maxAmount: 500,
+      terms: `You can use this card to buy our greens, but it is not redeemable for cash except as required by law. The available balance will be applied toward your purchase from soup to nuts, but may not be used to purchase other gift cards. This card will not be replaced or refunded if lost or stolen, so handle it like a carton of eggs. This card is issued by WFM Gift Card, LLC (the “Issuer”), who is the sole obligor to card owner. This card may not be resold unless approved by the Issuer. Unlike milk, this card doesn’t have an expiration date, nor does it incur any fees for any reason. Purchase, acceptance or use of this card constitutes acceptance of the complete terms and conditions, available at wholefoodsmarket.com/terms. For balance or other questions, visit wholefoodsmarket.com/giftcards or call 844-936-2273.`
     };
-    const barnesNobleStub: CardConfig = {
-      ...offeredGiftCards.find(c => c.name === CardName.barnesNoble),
-      ...{
-        currency: 'USD',
-        description: `Whole Foods Market is the leading organic and natural food retailer, dedicated to strict quality standards and excellent customer service. Gift Cards never expire and can buy anything at any of the 400 locations in the US and Canada.`,
-        minAmount: 1,
-        maxAmount: 500,
-        terms: `You can use this card to buy our greens, but it is not redeemable for cash except as required by law. The available balance will be applied toward your purchase from soup to nuts, but may not be used to purchase other gift cards. This card will not be replaced or refunded if lost or stolen, so handle it like a carton of eggs. This card is issued by WFM Gift Card, LLC (the “Issuer”), who is the sole obligor to card owner. This card may not be resold unless approved by the Issuer. Unlike milk, this card doesn’t have an expiration date, nor does it incur any fees for any reason. Purchase, acceptance or use of this card constitutes acceptance of the complete terms and conditions, available at wholefoodsmarket.com/terms. For balance or other questions, visit wholefoodsmarket.com/giftcards or call 844-936-2273.`
-      }
-    };
-    const gamestopStub: CardConfig = {
-      ...offeredGiftCards.find(c => c.name === CardName.gamestop),
-      ...{
-        currency: 'USD',
-        description: `Whole Foods Market is the leading organic and natural food retailer, dedicated to strict quality standards and excellent customer service. Gift Cards never expire and can buy anything at any of the 400 locations in the US and Canada.`,
-        minAmount: 1,
-        maxAmount: 500,
-        terms: `You can use this card to buy our greens, but it is not redeemable for cash except as required by law. The available balance will be applied toward your purchase from soup to nuts, but may not be used to purchase other gift cards. This card will not be replaced or refunded if lost or stolen, so handle it like a carton of eggs. This card is issued by WFM Gift Card, LLC (the “Issuer”), who is the sole obligor to card owner. This card may not be resold unless approved by the Issuer. Unlike milk, this card doesn’t have an expiration date, nor does it incur any fees for any reason. Purchase, acceptance or use of this card constitutes acceptance of the complete terms and conditions, available at wholefoodsmarket.com/terms. For balance or other questions, visit wholefoodsmarket.com/giftcards or call 844-936-2273.`
-      }
-    };
-    const bassProShops: CardConfig = {
-      ...offeredGiftCards.find(c => c.name === CardName.bassProShops),
-      ...{
-        currency: 'USD',
-        description: `Whole Foods Market is the leading organic and natural food retailer, dedicated to strict quality standards and excellent customer service. Gift Cards never expire and can buy anything at any of the 400 locations in the US and Canada.`,
-        minAmount: 1,
-        maxAmount: 500,
-        terms: `You can use this card to buy our greens, but it is not redeemable for cash except as required by law. The available balance will be applied toward your purchase from soup to nuts, but may not be used to purchase other gift cards. This card will not be replaced or refunded if lost or stolen, so handle it like a carton of eggs. This card is issued by WFM Gift Card, LLC (the “Issuer”), who is the sole obligor to card owner. This card may not be resold unless approved by the Issuer. Unlike milk, this card doesn’t have an expiration date, nor does it incur any fees for any reason. Purchase, acceptance or use of this card constitutes acceptance of the complete terms and conditions, available at wholefoodsmarket.com/terms. For balance or other questions, visit wholefoodsmarket.com/giftcards or call 844-936-2273.`
-      }
-    };
-    availableCards.push(barnesNobleStub);
-    availableCards.push(dswStub);
-    availableCards.push(gamestopStub);
-    availableCards.push(bassProShops);
+    const brandsToStub = [
+      CardName.barnesNoble,
+      CardName.bassProShops,
+      CardName.gamestop
+    ];
+    const stubbedCards = brandsToStub.map(b => ({
+      ...offeredGiftCards.find(c => c.name === b),
+      ...baseStub
+    }));
+    stubbedCards.forEach(s => availableCards.push(s));
     return availableCards.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
