@@ -54,6 +54,14 @@ export const offeredGiftCards: BaseCardConfig[] = ([
     website: 'basspro.com'
   },
   {
+    brand: CardBrand.burgerKing,
+    defaultClaimCodeType: ClaimCodeType.barcode,
+    emailRequired: false,
+    logoBackgroundColor: '#ffffff',
+    name: CardName.burgerKing,
+    website: 'bk.com'
+  },
+  {
     brand: CardBrand.carnivalCruiseLine,
     defaultClaimCodeType: ClaimCodeType.code,
     emailRequired: false,

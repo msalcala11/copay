@@ -488,6 +488,7 @@ export class GiftCardProvider {
     const brandsToStub = [
       CardName.barnesNoble,
       CardName.bassProShops,
+      CardName.burgerKing,
       CardName.gamestop,
       CardName.papaJohns,
       CardName.potteryBarn

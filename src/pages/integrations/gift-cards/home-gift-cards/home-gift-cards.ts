@@ -157,9 +157,9 @@ export class HomeGiftCards implements OnInit {
 
   private addMockCards() {
     const gamestopCard: GiftCard = {
-      name: CardName.papaJohns,
-      brand: CardBrand.papaJohns,
-      invoiceId: 'iNvOiCe1_papa',
+      name: CardName.burgerKing,
+      brand: CardBrand.burgerKing,
+      invoiceId: 'iNvOiCe1_burger',
       invoiceUrl: 'google.com',
       currency: 'USD',
       amount: 50,
