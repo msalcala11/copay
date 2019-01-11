@@ -14,6 +14,7 @@ export enum CardBrand {
   papaJohns = "Papa John's",
   potteryBarn = 'Pottery Barn',
   royalCaribbean = 'Royal Caribbean',
+  spotify = 'Spotify',
   uber = 'Uber',
   uberEats = 'Uber Eats',
   venue = 'Venue'
@@ -36,6 +37,7 @@ export enum CardName {
   papaJohns = "Papa John's",
   potteryBarn = 'Pottery Barn',
   royalCaribbean = 'Royal Caribbean',
+  spotify = 'Spotify',
   uber = 'Uber',
   uberEats = 'Uber Eats',
   venue = 'Venue USD'
