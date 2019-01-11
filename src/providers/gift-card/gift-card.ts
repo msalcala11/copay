@@ -488,7 +488,8 @@ export class GiftCardProvider {
     const brandsToStub = [
       CardName.barnesNoble,
       CardName.bassProShops,
-      CardName.gamestop
+      CardName.gamestop,
+      CardName.potteryBarn
     ];
     const stubbedCards = brandsToStub.map(b => ({
       ...offeredGiftCards.find(c => c.name === b),

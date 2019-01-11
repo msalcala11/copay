@@ -157,9 +157,9 @@ export class HomeGiftCards implements OnInit {
 
   private addMockCards() {
     const gamestopCard: GiftCard = {
-      name: CardName.bassProShops,
-      brand: CardBrand.bassProShops,
-      invoiceId: 'iNvOiCe1_basspro',
+      name: CardName.potteryBarn,
+      brand: CardBrand.potteryBarn,
+      invoiceId: 'iNvOiCe1_pottery',
       invoiceUrl: 'google.com',
       currency: 'USD',
       amount: 50,
@@ -177,7 +177,7 @@ export class HomeGiftCards implements OnInit {
       uuid: 'aaksj'
     };
     console.log('gamestopCard', gamestopCard);
-    // return this.giftCardProvider.saveGiftCard(gamestopCard);
+    return this.giftCardProvider.saveGiftCard(gamestopCard);
   }
 }
 

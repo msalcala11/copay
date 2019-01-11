@@ -122,6 +122,14 @@ export const offeredGiftCards: BaseCardConfig[] = ([
     website: 'mercadolivre.com.br'
   },
   {
+    brand: CardBrand.potteryBarn,
+    defaultClaimCodeType: ClaimCodeType.barcode,
+    emailRequired: false,
+    logoBackgroundColor: '#1E355E',
+    name: CardName.potteryBarn,
+    website: 'potterybarn.com'
+  },
+  {
     brand: CardBrand.royalCaribbean,
     defaultClaimCodeType: ClaimCodeType.link,
     emailRequired: false,
