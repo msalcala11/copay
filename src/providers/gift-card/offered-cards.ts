@@ -122,6 +122,16 @@ export const offeredGiftCards: BaseCardConfig[] = ([
     website: 'mercadolivre.com.br'
   },
   {
+    brand: CardBrand.papaJohns,
+    defaultClaimCodeType: ClaimCodeType.barcode,
+    emailRequired: false,
+    icon: `${getCardImageDirectory(CardName.papaJohns)}icon.png`,
+    logo: `${getCardImageDirectory(CardName.papaJohns)}logo.png`,
+    logoBackgroundColor: '#AC2A25',
+    name: CardName.papaJohns,
+    website: 'papajohns.com'
+  },
+  {
     brand: CardBrand.potteryBarn,
     defaultClaimCodeType: ClaimCodeType.barcode,
     emailRequired: false,

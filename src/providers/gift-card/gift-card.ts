@@ -489,6 +489,7 @@ export class GiftCardProvider {
       CardName.barnesNoble,
       CardName.bassProShops,
       CardName.gamestop,
+      CardName.papaJohns,
       CardName.potteryBarn
     ];
     const stubbedCards = brandsToStub.map(b => ({
