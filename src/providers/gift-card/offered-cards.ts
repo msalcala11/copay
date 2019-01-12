@@ -159,8 +159,6 @@ export const offeredGiftCards: BaseCardConfig[] = ([
     brand: CardBrand.spotify,
     defaultClaimCodeType: ClaimCodeType.code,
     emailRequired: false,
-    icon: `${getCardImageDirectory(CardName.spotify)}icon.png`,
-    logo: `${getCardImageDirectory(CardName.spotify)}logo.png`,
     logoBackgroundColor: '#ffffff',
     name: CardName.spotify,
     website: 'spotify.com'

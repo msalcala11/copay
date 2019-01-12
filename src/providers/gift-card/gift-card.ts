@@ -122,14 +122,9 @@ export class GiftCardProvider {
 
   async saveCard(giftCard: GiftCard, opts?: GiftCardSaveParams) {
     const oldGiftCards = await this.getCardMap(giftCard.name);
-    const oldGiftCard = oldGiftCards[giftCard.invoiceId];
     const newMap = this.getNewSaveableGiftCardMap(oldGiftCards, giftCard, opts);
     const savePromise = this.persistCards(giftCard.name, newMap);
-    const saves =
-      oldGiftCard && giftCard.archived === oldGiftCard.archived
-        ? [savePromise]
-        : [savePromise, this.updateActiveCards([giftCard])];
-    await Promise.all(saves);
+    await Promise.all([savePromise, this.updateActiveCards([giftCard])]);
   }
 
   async updateActiveCards(giftCardsToUpdate: GiftCard[]) {
