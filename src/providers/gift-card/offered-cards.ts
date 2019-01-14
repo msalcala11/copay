@@ -47,8 +47,8 @@ export const offeredGiftCards: BaseCardConfig[] = ([
     brand: CardBrand.bassProShops,
     defaultClaimCodeType: ClaimCodeType.barcode,
     emailRequired: false,
-    icon: `${getCardImageDirectory(CardName.bassProShops)}/icon.png`,
-    logo: `${getCardImageDirectory(CardName.bassProShops)}/logo.png`,
+    icon: `${getCardImageDirectory(CardName.bassProShops)}icon.png`,
+    logo: `${getCardImageDirectory(CardName.bassProShops)}logo.png`,
     logoBackgroundColor: '#ffffff',
     name: CardName.bassProShops,
     website: 'basspro.com'
