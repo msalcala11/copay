@@ -1,7 +1,7 @@
 <wide-header-page title="Gift Cards">
   <div page-content>
     <search-bar [scrollArea]="wideHeaderPage?.scrollArea" (search)="onSearch($event.target.value)" placeholder="Search Gift Cards"></search-bar>
-    <ion-list class="settings-list" *ngIf="!searchQuery">
+    <ion-list class="settings-list">
       <ion-item-group>
         <ion-item-divider sticky *ngIf="featuredCards?.length">{{'Featured Brands' | translate}}</ion-item-divider>
         <card-list-item *ngFor="let card of featuredCards" [card]="card" [catalogListing]="true" (click)="buyCard(card)"></card-list-item>
@@ -11,10 +11,6 @@
         <card-list-item *ngFor="let card of moreCards" [card]="card" [catalogListing]="true" (click)="buyCard(card)"></card-list-item>
       </ion-item-group>
       <ion-item-divider></ion-item-divider>
-    </ion-list>
-    <ion-list class="settings-list" *ngIf="searchQuery">
-      <ion-item-divider *ngIf="visibleCards?.length">{{'Brands' | translate}}</ion-item-divider>
-      <card-list-item *ngFor="let card of visibleCards" [card]="card" [catalogListing]="true" (click)="buyCard(card)"></card-list-item>
     </ion-list>
   </div>
 </wide-header-page>

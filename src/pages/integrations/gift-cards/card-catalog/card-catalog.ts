@@ -16,11 +16,10 @@ import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-
   templateUrl: 'card-catalog.html'
 })
 export class CardCatalogPage implements OnInit {
-  public visibleCards: CardConfig[];
   public allCards: CardConfig[];
   public featuredCards: CardConfig[];
   public moreCards: CardConfig[];
-  public searchQuery: string;
+  public searchQuery: string = '';
 
   @ViewChild(WideHeaderPage)
   wideHeaderPage: WideHeaderPage;
@@ -36,30 +35,20 @@ export class CardCatalogPage implements OnInit {
       this.showError();
       return [] as CardConfig[];
     });
-    this.visibleCards = [...this.allCards];
-    const featuredCardNames = [
-      CardName.amazon,
-      CardName.amazonJapan,
-      CardName.delta,
-      CardName.googlePlay,
-      CardName.hotelsCom,
-      CardName.mercadoLibre,
-      CardName.uber,
-      CardName.uberEats
-    ];
-    this.featuredCards = this.allCards.filter(
-      c => featuredCardNames.indexOf(c.name) !== -1
-    );
-    this.moreCards = this.allCards.filter(
-      c => featuredCardNames.indexOf(c.name) === -1
-    );
+    this.updateCardList();
   }
 
   onSearch(query: string) {
     this.searchQuery = query;
-    this.visibleCards = this.allCards.filter(
-      c => c.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+    this.updateCardList();
+  }
+
+  updateCardList() {
+    const matchingCards = this.allCards.filter(c =>
+      isCardInSearchResults(c, this.searchQuery)
     );
+    this.featuredCards = matchingCards.filter(c => isCardFeatured(c));
+    this.moreCards = matchingCards.filter(c => !isCardFeatured(c));
   }
 
   buyCard(cardConfig: CardConfig) {
@@ -73,4 +62,22 @@ export class CardCatalogPage implements OnInit {
     errorInfoSheet.present();
     errorInfoSheet.onDidDismiss(() => this.navCtrl.pop());
   }
+}
+
+export function isCardFeatured(c: CardConfig) {
+  const featuredCardNames = [
+    CardName.amazon,
+    CardName.amazonJapan,
+    CardName.delta,
+    CardName.googlePlay,
+    CardName.hotelsCom,
+    CardName.mercadoLibre,
+    CardName.uber,
+    CardName.uberEats
+  ];
+  return featuredCardNames.indexOf(c.name) !== -1;
+}
+
+export function isCardInSearchResults(c: CardConfig, search: string) {
+  return c.name.toLowerCase().indexOf(search.toLowerCase()) > -1;
 }
