@@ -23,6 +23,7 @@ import {
   BaseCardConfig,
   CardBrand,
   CardConfig,
+  CardConfigMap,
   CardName,
   GiftCard,
   GiftCardSaveParams
@@ -40,7 +41,7 @@ export class GiftCardProvider {
   };
 
   availableCardMapPromise: Promise<AvailableCardMap>;
-  cachedApiCardConfigPromise: Promise<AvailableCardMap>;
+  cachedApiCardConfigPromise: Promise<CardConfigMap>;
 
   cardUpdatesSubject: Subject<GiftCard> = new Subject<GiftCard>();
   cardUpdates$: Observable<GiftCard> = this.cardUpdatesSubject.asObservable();
@@ -360,13 +361,28 @@ export class GiftCardProvider {
   async getSupportedCards(): Promise<CardConfig[]> {
     const [availableCards, cachedApiCardConfig] = await Promise.all([
       this.getAvailableCards().catch(_ => [] as CardConfig[]),
-      this.getCachedApiCardConfig().catch(_ => ({} as AvailableCardMap))
+      this.getCachedApiCardConfig().catch(_ => ({} as CardConfigMap))
     ]);
-    return this.getOfferedCards().map(cardConfig => ({
-      ...cardConfig,
-      ...(availableCards.find(c => c.name === cardConfig.name) ||
-        cachedApiCardConfig[cardConfig.name])
-    }));
+    const cardNames = Object.keys(cachedApiCardConfig).concat(
+      availableCards.map(c => c.name)
+    );
+    const supportedCards = cardNames.map(cardName => {
+      const freshConfig = availableCards.find(c => c.name === cardName);
+      const cachedConfig = cachedApiCardConfig[cardName];
+      const config = freshConfig || cachedConfig;
+      const displayName = config.displayName || config.name;
+      return {
+        ...config,
+        displayName
+      };
+    });
+    console.log('supportedCards', supportedCards);
+    return supportedCards;
+    // return this.getOfferedCards().map(cardConfig => ({
+    //   ...cardConfig,
+    //   ...(availableCards.find(c => c.name === cardConfig.name) ||
+    //     cachedApiCardConfig[cardConfig.name])
+    // }));
   }
 
   async getActiveCards(): Promise<GiftCard[]> {
@@ -431,12 +447,12 @@ export class GiftCardProvider {
     }
   }
 
-  async fetchCachedApiCardConfig(): Promise<AvailableCardMap> {
+  async fetchCachedApiCardConfig(): Promise<CardConfigMap> {
     this.cachedApiCardConfigPromise = this.persistenceProvider.getGiftCardConfigCache();
     return this.cachedApiCardConfigPromise;
   }
 
-  async getCachedApiCardConfig(): Promise<AvailableCardMap> {
+  async getCachedApiCardConfig(): Promise<CardConfigMap> {
     const config = this.cachedApiCardConfigPromise
       ? await this.cachedApiCardConfigPromise
       : await this.fetchCachedApiCardConfig();
@@ -525,7 +541,6 @@ export class GiftCardProvider {
 function getCardConfigFromApiBrandConfig(
   apiBrandConfig: ApiBrandConfig
 ): ApiCardConfig {
-  console.log('apiBrandConfig', apiBrandConfig);
   const cards = apiBrandConfig;
   const [firstCard] = cards;
   const {

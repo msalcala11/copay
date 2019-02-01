@@ -64,14 +64,15 @@ export enum ClaimCodeType {
 }
 
 export interface BaseCardConfig {
-  brand: CardBrand;
+  brand: CardBrand; // deprecated
   cardImage: string;
   defaultClaimCodeType: ClaimCodeType;
+  displayName: string;
   emailRequired: boolean;
   icon: string;
   logo: string;
   logoBackgroundColor: string;
-  name: CardName;
+  name: string;
   redeemUrl?: string;
   hidePin?: boolean;
   website: string;
@@ -101,7 +102,7 @@ export interface GiftCard {
   invoiceId: string;
   invoiceTime?: number;
   invoiceUrl: string;
-  name: CardName;
+  name: string;
   pin?: string;
   status: string;
   uuid: string;
@@ -134,6 +135,14 @@ export interface ApiCard {
 
 export type ApiBrandConfig = ApiCard[];
 
-export type AvailableCardMap = {
-  [T in keyof typeof CardName]?: ApiBrandConfig
-};
+// export type AvailableCardMap = {
+//   [T in keyof typeof CardName]?: ApiBrandConfig
+// };
+
+export interface AvailableCardMap {
+  [cardName: string]: ApiBrandConfig;
+}
+
+export interface CardConfigMap {
+  [cardName: string]: CardConfig;
+}
