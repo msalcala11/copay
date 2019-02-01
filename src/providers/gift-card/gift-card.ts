@@ -66,7 +66,7 @@ export class GiftCardProvider {
     this.credentials.BITPAY_API_URL =
       this.credentials.NETWORK === Network.testnet
         ? 'https://test.bitpay.com'
-        : 'https://bitpay.com';
+        : 'https://marty.bp:8088';
   }
 
   async getCardConfig(cardName: CardName) {
@@ -525,9 +525,22 @@ export class GiftCardProvider {
 function getCardConfigFromApiBrandConfig(
   apiBrandConfig: ApiBrandConfig
 ): ApiCardConfig {
+  console.log('apiBrandConfig', apiBrandConfig);
   const cards = apiBrandConfig;
   const [firstCard] = cards;
-  const { currency, description, redeemInstructions, terms } = firstCard;
+  const {
+    currency,
+    description,
+    cardImage,
+    displayName,
+    defaultClaimCodeType,
+    icon,
+    logo,
+    logoBackgroundColor,
+    redeemInstructions,
+    redeemUrl,
+    terms
+  } = firstCard;
   const range = cards.find(
     c => !!(c.maxAmount || c.minAmount) && c.currency === currency
   );
@@ -545,7 +558,14 @@ function getCardConfigFromApiBrandConfig(
   const baseConfig = {
     currency,
     description,
+    cardImage,
+    displayName,
+    defaultClaimCodeType,
+    icon,
+    logo,
+    logoBackgroundColor,
     redeemInstructions,
+    redeemUrl,
     terms
   };
 

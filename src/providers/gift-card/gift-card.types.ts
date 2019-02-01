@@ -115,11 +115,19 @@ export type GiftCardSaveParams = Partial<{
 
 export interface ApiCard {
   amount?: number;
+  cardImage: string;
   currency: string;
   description: string;
+  defaultClaimCodeType: ClaimCodeType;
+  displayName: string;
+  emailRequired: boolean;
+  icon: string;
+  logo: string;
+  logoBackgroundColor: string;
   minAmount?: number;
   maxAmount?: number;
   redeemInstructions?: string;
+  redeemUrl?: string;
   terms: string;
   type: 'fixed' | 'range';
 }
