@@ -64,7 +64,7 @@ export enum ClaimCodeType {
 }
 
 export interface BaseCardConfig {
-  brand: CardBrand; // deprecated
+  brand: string; // deprecated
   cardImage: string;
   defaultClaimCodeType: ClaimCodeType;
   displayName: string;
@@ -94,7 +94,7 @@ export interface GiftCard {
   accessKey: string;
   amount: number;
   archived: boolean;
-  brand: CardBrand;
+  brand: string;
   claimCode: string;
   claimLink?: string;
   currency: string;
@@ -116,6 +116,7 @@ export type GiftCardSaveParams = Partial<{
 
 export interface ApiCard {
   amount?: number;
+  brand?: string; // deprecated
   cardImage: string;
   currency: string;
   description: string;
@@ -127,10 +128,12 @@ export interface ApiCard {
   logoBackgroundColor: string;
   minAmount?: number;
   maxAmount?: number;
+  name: string;
   redeemInstructions?: string;
   redeemUrl?: string;
   terms: string;
   type: 'fixed' | 'range';
+  website: string;
 }
 
 export type ApiBrandConfig = ApiCard[];

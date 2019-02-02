@@ -247,7 +247,7 @@ export const offeredGiftCards: BaseCardConfig[] = ([
   logo: c.logo || `${getCardImageDirectory(c.name)}logo.svg`
 }));
 
-function getCardImageDirectory(cardName: CardName) {
+function getCardImageDirectory(cardName: string) {
   const cardImagePath = 'assets/img/gift-cards/';
   return `${cardImagePath}${cardName
     .toLowerCase()

@@ -43,7 +43,7 @@ const Keys = {
   ACTIVE_GIFT_CARDS: (network: Network) => {
     return `activeGiftCards-${network}`;
   },
-  GIFT_CARDS: (cardName: CardName, network: Network) => {
+  GIFT_CARDS: (cardName: string, network: Network) => {
     const legacyGiftCardKey = getLegacyGiftCardKey(cardName, network);
     return legacyGiftCardKey || `giftCards-${cardName}-${network}`;
   },
@@ -470,11 +470,11 @@ export class PersistenceProvider {
       });
   }
 
-  setGiftCards(cardName: CardName, network: Network, gcs: string) {
+  setGiftCards(cardName: string, network: Network, gcs: string) {
     return this.storage.set(Keys.GIFT_CARDS(cardName, network), gcs);
   }
 
-  getGiftCards(cardName: CardName, network: Network): Promise<GiftCardMap> {
+  getGiftCards(cardName: string, network: Network): Promise<GiftCardMap> {
     return this.storage.get(Keys.GIFT_CARDS(cardName, network));
   }
 
@@ -551,7 +551,7 @@ export class PersistenceProvider {
   }
 }
 
-function getLegacyGiftCardKey(cardName: CardName, network: Network) {
+function getLegacyGiftCardKey(cardName: string, network: Network) {
   switch (cardName + network) {
     case CardName.amazon + Network.livenet:
       return 'amazonGiftCards-livenet';

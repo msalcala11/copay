@@ -18,7 +18,6 @@ import {
 import { TimeProvider } from '../time/time';
 import {
   ApiBrandConfig,
-  ApiCardConfig,
   AvailableCardMap,
   BaseCardConfig,
   CardBrand,
@@ -70,18 +69,18 @@ export class GiftCardProvider {
         : 'https://marty.bp:8088';
   }
 
-  async getCardConfig(cardName: CardName) {
+  async getCardConfig(cardName: string) {
     const supportedCards = await this.getSupportedCards();
     return supportedCards.find(c => c.name === cardName);
   }
 
-  async getCardMap(cardName: CardName) {
+  async getCardMap(cardName: string) {
     const network = this.getNetwork();
     const map = await this.persistenceProvider.getGiftCards(cardName, network);
     return map || {};
   }
 
-  async getPurchasedCards(cardName: CardName): Promise<GiftCard[]> {
+  async getPurchasedCards(cardName: string): Promise<GiftCard[]> {
     const [cardConfig, giftCardMap] = await Promise.all([
       this.getCardConfig(cardName),
       this.getCardMap(cardName)
@@ -98,8 +97,9 @@ export class GiftCardProvider {
       .sort(sortByDescendingDate);
   }
 
-  async getAllCardsOfBrand(cardBrand: CardBrand): Promise<GiftCard[]> {
-    const cardConfigs = this.getOfferedCards().filter(
+  async getAllCardsOfBrand(cardBrand: string): Promise<GiftCard[]> {
+    const supportedCards = await this.getSupportedCards();
+    const cardConfigs = supportedCards.filter(
       cardConfig => cardConfig.brand === cardBrand
     );
     const cardPromises = cardConfigs.map(cardConfig =>
@@ -145,7 +145,7 @@ export class GiftCardProvider {
     );
   }
 
-  persistCards(cardName: CardName, newMap: GiftCardMap) {
+  persistCards(cardName: string, newMap: GiftCardMap) {
     return this.persistenceProvider.setGiftCards(
       cardName,
       this.getNetwork(),
@@ -373,6 +373,7 @@ export class GiftCardProvider {
       const displayName = config.displayName || config.name;
       return {
         ...config,
+        brand: displayName,
         displayName
       };
     });
@@ -432,7 +433,7 @@ export class GiftCardProvider {
           availableCardMap[cardName] && availableCardMap[cardName].length
       )
       .map(cardName =>
-        getCardConfigFromApiBrandConfig(availableCardMap[cardName])
+        getCardConfigFromApiBrandConfig(cardName, availableCardMap[cardName])
       )
       .reduce((configMap, apiCardConfigMap, index) => {
         const name = cardNames[index];
@@ -468,22 +469,36 @@ export class GiftCardProvider {
   async getAvailableCards(): Promise<CardConfig[]> {
     const availableCardMap = await this.getAvailableCardMap();
     const availableCardNames = Object.keys(availableCardMap);
-    return this.getOfferedCards()
-      .filter(cardConfig => availableCardNames.indexOf(cardConfig.name) > -1)
+    const config = availableCardNames
+      .map(cardName => {
+        const apiBrandConfig = availableCardMap[cardName];
+        const apiCardConfig = getCardConfigFromApiBrandConfig(
+          cardName,
+          apiBrandConfig
+        );
+        return apiCardConfig;
+      })
       .filter(
-        cardConfig =>
-          availableCardMap[cardConfig.name] &&
-          availableCardMap[cardConfig.name].length
-      )
-      .map(cardConfig => {
-        const apiBrandConfig = availableCardMap[cardConfig.name];
-        const apiCardConfig = getCardConfigFromApiBrandConfig(apiBrandConfig);
-        const fullCardConfig = {
-          ...cardConfig,
-          ...apiCardConfig
-        };
-        return fullCardConfig;
-      });
+        cardConfig => cardConfig.logo && cardConfig.icon && cardConfig.cardImage
+      );
+    console.log('availableCards', config);
+    return config;
+    // return this.getOfferedCards()
+    //   .filter(cardConfig => availableCardNames.indexOf(cardConfig.name) > -1)
+    //   .filter(
+    //     cardConfig =>
+    //       availableCardMap[cardConfig.name] &&
+    //       availableCardMap[cardConfig.name].length
+    //   )
+    //   .map(cardConfig => {
+    //     const apiBrandConfig = availableCardMap[cardConfig.name];
+    //     const apiCardConfig = getCardConfigFromApiBrandConfig(apiBrandConfig);
+    //     const fullCardConfig = {
+    //       ...cardConfig,
+    //       ...apiCardConfig
+    //     };
+    //     return fullCardConfig;
+    //   });
   }
 
   getOfferedCards(): BaseCardConfig[] {
@@ -491,7 +506,8 @@ export class GiftCardProvider {
   }
 
   getIcon(cardName: CardName): string {
-    const cardConfig = this.getOfferedCards().find(c => c.name === cardName);
+    // const supportedCards = await this.getSupportedCards();
+    const cardConfig = offeredGiftCards.find(c => c.name === cardName);
     return cardConfig && cardConfig.icon;
   }
 
@@ -539,8 +555,9 @@ export class GiftCardProvider {
 }
 
 function getCardConfigFromApiBrandConfig(
+  cardName: string,
   apiBrandConfig: ApiBrandConfig
-): ApiCardConfig {
+): CardConfig {
   const cards = apiBrandConfig;
   const [firstCard] = cards;
   const {
@@ -549,12 +566,14 @@ function getCardConfigFromApiBrandConfig(
     cardImage,
     displayName,
     defaultClaimCodeType,
+    emailRequired,
     icon,
     logo,
     logoBackgroundColor,
     redeemInstructions,
     redeemUrl,
-    terms
+    terms,
+    website
   } = firstCard;
   const range = cards.find(
     c => !!(c.maxAmount || c.minAmount) && c.currency === currency
@@ -571,17 +590,21 @@ function getCardConfigFromApiBrandConfig(
     .sort((a, b) => a - b);
 
   const baseConfig = {
+    brand: displayName,
     currency,
     description,
     cardImage,
     displayName,
     defaultClaimCodeType,
+    emailRequired,
     icon,
     logo,
     logoBackgroundColor,
+    name: cardName,
     redeemInstructions,
     redeemUrl,
-    terms
+    terms,
+    website
   };
 
   return range
@@ -598,7 +621,7 @@ function sortByDescendingDate(a: GiftCard, b: GiftCard) {
 }
 
 function getCurrencyFromLegacySavedCard(
-  cardName: CardName
+  cardName: string
 ): 'USD' | 'JPY' | 'BRL' {
   switch (cardName) {
     case CardName.amazon:
