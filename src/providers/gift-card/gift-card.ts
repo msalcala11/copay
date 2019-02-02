@@ -19,14 +19,12 @@ import { TimeProvider } from '../time/time';
 import {
   ApiBrandConfig,
   AvailableCardMap,
-  BaseCardConfig,
   CardConfig,
   CardConfigMap,
   CardName,
   GiftCard,
   GiftCardSaveParams
 } from './gift-card.types';
-import { offeredGiftCards } from './offered-cards';
 
 @Injectable()
 export class GiftCardProvider {
@@ -400,7 +398,8 @@ export class GiftCardProvider {
     const giftCardMap = await this.persistenceProvider.getActiveGiftCards(
       this.getNetwork()
     );
-    const offeredCardNames = this.getOfferedCards().map(c => c.name);
+    const supportedCards = await this.getSupportedCards();
+    const offeredCardNames = supportedCards.map(c => c.name);
     return !giftCardMap
       ? this.migrateAndFetchActiveCards()
       : Object.keys(giftCardMap)
@@ -509,10 +508,6 @@ export class GiftCardProvider {
     //     };
     //     return fullCardConfig;
     //   });
-  }
-
-  getOfferedCards(): BaseCardConfig[] {
-    return offeredGiftCards.sort((a, b) => (a.brand > b.brand ? 1 : -1));
   }
 
   getApiPath() {
