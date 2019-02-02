@@ -20,7 +20,6 @@ import {
   ApiBrandConfig,
   AvailableCardMap,
   BaseCardConfig,
-  CardBrand,
   CardConfig,
   CardConfigMap,
   CardName,
@@ -194,7 +193,7 @@ export class GiftCardProvider {
     await this.saveGiftCard(card);
   }
 
-  async archiveAllCards(cardName: CardName) {
+  async archiveAllCards(cardName: string) {
     const activeCards = (await this.getPurchasedCards(cardName)).filter(
       c => !c.archived
     );
@@ -386,6 +385,17 @@ export class GiftCardProvider {
     // }));
   }
 
+  async getSupportedCardMap(): Promise<CardConfigMap> {
+    const supportedCards = await this.getSupportedCards();
+    return supportedCards.reduce(
+      (map, cardConfig) => ({
+        ...map,
+        [cardConfig.name]: cardConfig
+      }),
+      {}
+    );
+  }
+
   async getActiveCards(): Promise<GiftCard[]> {
     const giftCardMap = await this.persistenceProvider.getActiveGiftCards(
       this.getNetwork()
@@ -503,12 +513,6 @@ export class GiftCardProvider {
 
   getOfferedCards(): BaseCardConfig[] {
     return offeredGiftCards.sort((a, b) => (a.brand > b.brand ? 1 : -1));
-  }
-
-  getIcon(cardName: CardName): string {
-    // const supportedCards = await this.getSupportedCards();
-    const cardConfig = offeredGiftCards.find(c => c.name === cardName);
-    return cardConfig && cardConfig.icon;
   }
 
   getApiPath() {

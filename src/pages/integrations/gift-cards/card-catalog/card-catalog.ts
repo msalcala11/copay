@@ -65,7 +65,7 @@ export class CardCatalogPage implements OnInit {
 }
 
 export function isCardFeatured(c: CardConfig) {
-  const featuredCardNames = [
+  const featuredCardNames: string[] = [
     CardName.amazon,
     CardName.amazonJapan,
     CardName.delta,

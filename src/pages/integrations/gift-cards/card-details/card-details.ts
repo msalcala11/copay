@@ -117,7 +117,7 @@ export class CardDetailsPage {
   }
 
   hasPin() {
-    const legacyCardNames = [
+    const legacyCardNames: string[] = [
       CardName.amazon,
       CardName.amazonJapan,
       CardName.mercadoLibre
