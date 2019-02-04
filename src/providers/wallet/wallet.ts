@@ -75,7 +75,7 @@ export class WalletProvider {
   // Ratio of "many utxos" warning in total balance (fee/amount)
   private TOTAL_LOW_WARNING_RATIO: number = 0.3;
 
-  private WALLET_STATUS_MAX_TRIES: number = 7;
+  private WALLET_STATUS_MAX_TRIES: number = 3;
   private WALLET_STATUS_DELAY_BETWEEN_TRIES: number = 1.4 * 1000;
   private SOFT_CONFIRMATION_LIMIT: number = 12;
   private SAFE_CONFIRMATIONS: number = 6;
@@ -1423,8 +1423,7 @@ export class WalletProvider {
         .then(txpr => {
           this.invalidateCache(wallet);
           this.events.publish('Local/TxAction', {
-            walletId: wallet.id,
-            untilItChanges: true
+            walletId: wallet.id
           });
           return resolve(txpr);
         })
@@ -1491,8 +1490,7 @@ export class WalletProvider {
               });
           } else {
             this.events.publish('Local/TxAction', {
-              walletId: wallet.id,
-              untilItChanges: true
+              walletId: wallet.id
             });
             return resolve(signedTxp);
           }
