@@ -95,10 +95,6 @@ export class GiftCardItem {
     return this.cardConfig && this.numCurrencies === 1 && this.totalBalance;
   }
 
-  getBrandClass() {
-    return this.cardConfig && this.cardConfig.brand.replace(/\W/g, '');
-  }
-
   private async setBrandStyling() {
     this.cardConfig = await this.giftCardProvider.getCardConfig(this.cardName);
     const isGradient =

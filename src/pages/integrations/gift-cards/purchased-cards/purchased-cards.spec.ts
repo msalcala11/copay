@@ -25,7 +25,7 @@ describe('PurchasedCardsPage', () => {
         archived: false,
         accessKey: 'aAcCess',
         amount: 1,
-        brand: 'Amazon',
+        displayName: 'Amazon',
         claimCode: 'cLaImCoDe',
         currency: 'USD',
         date: Date.now() / 1000,

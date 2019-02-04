@@ -30,7 +30,10 @@ export class GiftCardsSettingsPage {
       'giftcards'
     );
     const purchasedCards = await this.giftCardProvider.getPurchasedBrands();
-    this.purchasedBrands = _.uniqBy(purchasedCards, ([cards]) => cards.brand);
+    this.purchasedBrands = _.uniqBy(
+      purchasedCards,
+      ([cards]) => cards.displayName
+    );
   }
 
   goToCardSettings(cardName: string) {

@@ -81,7 +81,7 @@ export class HomeGiftCards implements OnInit {
     const sheetName =
       brandCards.length === 1 ? 'archive-gift-card' : 'archive-all-gift-cards';
     const archiveSheet = this.actionSheetProvider.createInfoSheet(sheetName, {
-      brand: brandCards[0].brand
+      brand: brandCards[0].displayName
     });
     archiveSheet.present();
     archiveSheet.onDidDismiss(async confirm => {

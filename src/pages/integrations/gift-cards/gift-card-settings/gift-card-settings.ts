@@ -35,7 +35,7 @@ export class GiftCardSettingsPage extends PurchasedCardsPage {
 
   protected async getCards(): Promise<any> {
     await this.giftCardProvider
-      .getAllCardsOfBrand(this.cardConfig.brand)
+      .getAllCardsOfBrand(this.cardConfig.displayName)
       .then(cards => this.setGiftCards(cards))
       .catch(err => this.logger.error(err));
     this.giftCardProvider.updatePendingGiftCards(this.currentGiftCards);

@@ -87,7 +87,7 @@ export class GiftCardProvider {
       .map(c => ({
         ...c,
         name: cardName,
-        brand: cardConfig.brand,
+        displayName: cardConfig.displayName,
         currency: c.currency || getCurrencyFromLegacySavedCard(cardName)
       }))
       .sort(sortByDescendingDate);
@@ -96,7 +96,7 @@ export class GiftCardProvider {
   async getAllCardsOfBrand(cardBrand: string): Promise<GiftCard[]> {
     const supportedCards = await this.getSupportedCards();
     const cardConfigs = supportedCards.filter(
-      cardConfig => cardConfig.brand === cardBrand
+      cardConfig => cardConfig.displayName === cardBrand
     );
     const cardPromises = cardConfigs.map(cardConfig =>
       this.getPurchasedCards(cardConfig.name)
@@ -373,7 +373,7 @@ export class GiftCardProvider {
         const displayName = config.displayName || config.name;
         return {
           ...config,
-          brand: displayName,
+          // brand: displayName,
           displayName
         } as CardConfig;
       })
@@ -580,7 +580,7 @@ function getCardConfigFromApiBrandConfig(
     .sort((a, b) => a - b);
 
   const baseConfig = {
-    brand: displayName,
+    // brand: displayName,
     currency,
     description,
     cardImage,

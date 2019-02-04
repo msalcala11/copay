@@ -122,7 +122,7 @@ function saveGiftCards(
     accessKey: '',
     amount: 100,
     archived: false,
-    brand: 'Amazon',
+    displayName: 'Amazon',
     claimCode: 'cLaImCoDe',
     currency: 'USD',
     date: new Date(),

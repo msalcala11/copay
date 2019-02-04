@@ -26,7 +26,7 @@ import {
           }}</ion-note>
         </div>
         <div *ngIf="catalogListing && cardConfig">
-          <div class="card-list-item__label">{{ cardConfig.brand }}</div>
+          <div class="card-list-item__label">{{ cardConfig.displayName }}</div>
           <ion-note
             class="card-list-item__note"
             *ngIf="!cardConfig.supportedAmounts"
