@@ -489,7 +489,11 @@ export class GiftCardProvider {
         };
       })
       .filter(
-        cardConfig => cardConfig.logo && cardConfig.icon && cardConfig.cardImage
+        cardConfig =>
+          cardConfig.logo &&
+          cardConfig.icon &&
+          cardConfig.cardImage &&
+          !cardConfig.hidden
       )
       .sort(sortByDisplayName);
     return config;
@@ -552,6 +556,7 @@ function getCardConfigFromApiBrandConfig(
     defaultClaimCodeType,
     emailRequired,
     featured,
+    hidden,
     icon,
     logo,
     logoBackgroundColor,
@@ -583,6 +588,7 @@ function getCardConfigFromApiBrandConfig(
     defaultClaimCodeType,
     emailRequired,
     featured,
+    hidden,
     icon,
     logo,
     logoBackgroundColor,

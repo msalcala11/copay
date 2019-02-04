@@ -11,6 +11,7 @@ export interface BaseCardConfig {
   displayName: string;
   emailRequired: boolean;
   featured?: boolean;
+  hidden?: boolean;
   icon: string;
   logo: string;
   logoBackgroundColor: string;
@@ -66,6 +67,7 @@ export interface ApiCard {
   displayName: string;
   emailRequired: boolean;
   featured?: boolean;
+  hidden?: boolean;
   icon: string;
   logo: string;
   logoBackgroundColor: string;
