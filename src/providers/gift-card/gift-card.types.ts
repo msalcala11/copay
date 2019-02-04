@@ -138,10 +138,6 @@ export interface ApiCard {
 
 export type ApiBrandConfig = ApiCard[];
 
-// export type AvailableCardMap = {
-//   [T in keyof typeof CardName]?: ApiBrandConfig
-// };
-
 export interface AvailableCardMap {
   [cardName: string]: ApiBrandConfig;
 }
