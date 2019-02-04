@@ -360,20 +360,25 @@ export class GiftCardProvider {
       this.getAvailableCards().catch(_ => [] as CardConfig[]),
       this.getCachedApiCardConfig().catch(_ => ({} as CardConfigMap))
     ]);
-    const cardNames = Object.keys(cachedApiCardConfig).concat(
-      availableCards.map(c => c.name)
+    const cachedCardNames = Object.keys(cachedApiCardConfig);
+    const cardNames = cachedCardNames.concat(
+      availableCards
+        .map(c => c.name)
+        .filter(name => cachedCardNames.indexOf(name) === -1)
     );
-    const supportedCards = cardNames.map(cardName => {
-      const freshConfig = availableCards.find(c => c.name === cardName);
-      const cachedConfig = cachedApiCardConfig[cardName];
-      const config = freshConfig || cachedConfig;
-      const displayName = config.displayName || config.name;
-      return {
-        ...config,
-        brand: displayName,
-        displayName
-      };
-    });
+    const supportedCards = cardNames
+      .map(cardName => {
+        const freshConfig = availableCards.find(c => c.name === cardName);
+        const cachedConfig = cachedApiCardConfig[cardName];
+        const config = freshConfig || cachedConfig;
+        const displayName = config.displayName || config.name;
+        return {
+          ...config,
+          brand: displayName,
+          displayName
+        } as CardConfig;
+      })
+      .sort(sortByDisplayName);
     return supportedCards;
   }
 
@@ -479,11 +484,15 @@ export class GiftCardProvider {
           cardName,
           apiBrandConfig
         );
-        return apiCardConfig;
+        return {
+          ...apiCardConfig,
+          displayName: apiCardConfig.displayName || apiCardConfig.name
+        };
       })
       .filter(
         cardConfig => cardConfig.logo && cardConfig.icon && cardConfig.cardImage
-      );
+      )
+      .sort(sortByDisplayName);
     return config;
   }
 
@@ -596,6 +605,10 @@ function getCardConfigFromApiBrandConfig(
 
 function sortByDescendingDate(a: GiftCard, b: GiftCard) {
   return a.date < b.date ? 1 : -1;
+}
+
+function sortByDisplayName(a: CardConfig, b: CardConfig) {
+  return a.displayName > b.displayName ? 1 : -1;
 }
 
 function getCurrencyFromLegacySavedCard(

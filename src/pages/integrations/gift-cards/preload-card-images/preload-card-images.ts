@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-// import { CardName } from '../../../../providers/gift-card/gift-card.types';
 import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
 
 @Component({

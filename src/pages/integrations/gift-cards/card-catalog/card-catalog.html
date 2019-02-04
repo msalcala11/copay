@@ -7,7 +7,8 @@
         <card-list-item *ngFor="let card of featuredCards" [card]="card" [catalogListing]="true" (click)="buyCard(card)"></card-list-item>
       </ion-item-group>
       <ion-item-group>
-        <ion-item-divider sticky *ngIf="moreCards?.length">{{'More Brands' | translate}}</ion-item-divider>
+        <ion-item-divider sticky *ngIf="moreCards?.length && !numFeaturedCards">{{'Brands' | translate}}</ion-item-divider>
+        <ion-item-divider sticky *ngIf="moreCards?.length && numFeaturedCards">{{'More Brands' | translate}}</ion-item-divider>
         <card-list-item *ngFor="let card of moreCards" [card]="card" [catalogListing]="true" (click)="buyCard(card)"></card-list-item>
       </ion-item-group>
       <ion-item-divider></ion-item-divider>
