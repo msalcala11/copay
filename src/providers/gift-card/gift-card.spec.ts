@@ -3,7 +3,12 @@ import { inject } from '@angular/core/testing';
 import { TestUtils } from '../../test';
 import { PersistenceProvider } from '../persistence/persistence';
 import { GiftCardProvider } from './gift-card';
-import { AvailableCardMap, CardBrand, CardName } from './gift-card.types';
+import {
+  AvailableCardMap,
+  CardBrand,
+  CardName,
+  ClaimCodeType
+} from './gift-card.types';
 
 describe('GiftCardProvider', () => {
   beforeEach(() => {
@@ -96,7 +101,7 @@ function respondWithAvailableCards(
         currency: 'USD',
         cardImage: 'https://amazon-card-image',
         description: 'Buy these up.',
-        defaultClaimCodeType: 'code',
+        defaultClaimCodeType: ClaimCodeType.code,
         displayName: 'Amazon',
         emailRequired: true,
         icon: 'https://amazon-icon',
@@ -104,7 +109,7 @@ function respondWithAvailableCards(
         logoBackgroundColor: '#000000',
         redeemUrl: 'https://amazon-redeem',
         redeemInstructions: 'Redeem now.',
-        terms: 'Very nice terms for you.',
+        terms: 'Very nice terms for you',
         type: 'range',
         website: 'amazon.com'
       }
@@ -127,7 +132,7 @@ function saveGiftCards(
     amount: 100,
     archived: false,
     brand: CardBrand.amazon,
-    claimCode: '',
+    claimCode: 'cLaImCoDe',
     currency: 'USD',
     date: new Date(),
     invoiceId: '1',
