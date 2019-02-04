@@ -10,10 +10,7 @@ import { NavController } from 'ionic-angular';
 import { debounceTime } from 'rxjs/operators';
 import { ActionSheetProvider, AppProvider } from '../../../../providers';
 import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
-import {
-  CardName,
-  GiftCard
-} from '../../../../providers/gift-card/gift-card.types';
+import { GiftCard } from '../../../../providers/gift-card/gift-card.types';
 import { CardCatalogPage } from '../card-catalog/card-catalog';
 import { CardDetailsPage } from '../card-details/card-details';
 import { PurchasedCardsPage } from '../purchased-cards/purchased-cards';
@@ -70,7 +67,7 @@ export class HomeGiftCards implements OnInit {
       : this.showArchiveSheet(event);
   }
 
-  private async viewGiftCards(cardName: CardName, cards: GiftCard[]) {
+  private async viewGiftCards(cardName: string, cards: GiftCard[]) {
     const activeCards = cards.filter(c => !c.archived);
     activeCards.length === 1
       ? this.navCtrl.push(CardDetailsPage, { card: activeCards[0] })

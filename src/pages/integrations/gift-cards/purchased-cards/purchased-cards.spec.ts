@@ -3,7 +3,6 @@ import { TestUtils } from '../../../../test';
 
 import {
   CardBrand,
-  CardName,
   GiftCard
 } from '../../../../providers/gift-card/gift-card.types';
 import { PurchasedCardsPage } from './purchased-cards';
@@ -35,7 +34,7 @@ describe('PurchasedCardsPage', () => {
         date: Date.now() / 1000,
         invoiceId: '1',
         invoiceUrl: 'https://bitpay.com/i/iNvOiceId',
-        name: CardName.amazon,
+        name: 'Amazon.com',
         status: 'SUCCESS',
         uuid: 'uuid'
       };

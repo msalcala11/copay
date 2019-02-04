@@ -12,7 +12,6 @@ import * as _ from 'lodash';
 import { GiftCardProvider } from '../../../../../providers/gift-card/gift-card';
 import {
   CardConfig,
-  CardName,
   GiftCard
 } from '../../../../../providers/gift-card/gift-card.types';
 
@@ -45,14 +44,14 @@ export type CardItemAction = 'archive' | 'view';
 })
 export class GiftCardItem {
   @Input()
-  cardName: CardName;
+  cardName: string;
 
   @Input()
   giftCards: GiftCard[] = [];
 
   @Output()
   action: EventEmitter<{
-    cardName: CardName;
+    cardName: string;
     action: CardItemAction;
   }> = new EventEmitter();
 

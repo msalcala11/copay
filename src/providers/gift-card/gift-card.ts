@@ -21,7 +21,6 @@ import {
   AvailableCardMap,
   CardConfig,
   CardConfigMap,
-  CardName,
   GiftCard,
   GiftCardSaveParams
 } from './gift-card.types';
@@ -63,7 +62,7 @@ export class GiftCardProvider {
     this.credentials.BITPAY_API_URL =
       this.credentials.NETWORK === Network.testnet
         ? 'https://test.bitpay.com'
-        : 'https://marty.bp:8088';
+        : 'https://bitpay.com';
   }
 
   async getCardConfig(cardName: string) {
@@ -615,11 +614,11 @@ function getCurrencyFromLegacySavedCard(
   cardName: string
 ): 'USD' | 'JPY' | 'BRL' {
   switch (cardName) {
-    case CardName.amazon:
+    case 'Amazon.com':
       return 'USD';
-    case CardName.amazonJapan:
+    case 'Amazon.co.jp':
       return 'JPY';
-    case CardName.mercadoLibre:
+    case 'Mercado Livre':
       return 'BRL';
     default:
       return 'USD';

@@ -3,7 +3,7 @@ import { File } from '@ionic-native/file';
 import * as _ from 'lodash';
 import { Logger } from '../../providers/logger/logger';
 
-import { CardName, GiftCard } from '../gift-card/gift-card.types';
+import { GiftCard } from '../gift-card/gift-card.types';
 import { PlatformProvider } from '../platform/platform';
 import { FileStorage } from './storage/file-storage';
 import { LocalStorage } from './storage/local-storage';
@@ -553,17 +553,17 @@ export class PersistenceProvider {
 
 function getLegacyGiftCardKey(cardName: string, network: Network) {
   switch (cardName + network) {
-    case CardName.amazon + Network.livenet:
+    case 'Amazon.com' + Network.livenet:
       return 'amazonGiftCards-livenet';
-    case CardName.amazon + Network.testnet:
+    case 'Amazon.com' + Network.testnet:
       return 'amazonGiftCards-testnet';
-    case CardName.amazonJapan + Network.livenet:
+    case 'Amazon.co.jp' + Network.livenet:
       return 'amazonGiftCards-livenet-japan';
-    case CardName.amazonJapan + Network.testnet:
+    case 'Amazon.co.jp' + Network.testnet:
       return 'amazonGiftCards-testnet-japan';
-    case CardName.mercadoLibre + Network.livenet:
+    case 'Mercado Livre' + Network.livenet:
       return 'MercadoLibreGiftCards-livenet';
-    case CardName.mercadoLibre + Network.testnet:
+    case 'Mercado Livre' + Network.testnet:
       return 'MercadoLibreGiftCards-testnet';
     default:
       return undefined;

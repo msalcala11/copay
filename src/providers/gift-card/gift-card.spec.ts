@@ -3,12 +3,7 @@ import { inject } from '@angular/core/testing';
 import { TestUtils } from '../../test';
 import { PersistenceProvider } from '../persistence/persistence';
 import { GiftCardProvider } from './gift-card';
-import {
-  AvailableCardMap,
-  CardBrand,
-  CardName,
-  ClaimCodeType
-} from './gift-card.types';
+import { AvailableCardMap, CardBrand, ClaimCodeType } from './gift-card.types';
 
 describe('GiftCardProvider', () => {
   beforeEach(() => {
@@ -26,10 +21,10 @@ describe('GiftCardProvider', () => {
         giftCardProvider: GiftCardProvider,
         httpMock: HttpTestingController
       ) => {
-        const promise = giftCardProvider.getCardConfig(CardName.amazon);
+        const promise = giftCardProvider.getCardConfig('Amazon.com');
         respondWithAvailableCards(httpMock, giftCardProvider);
         const cardConfig = await promise;
-        expect(cardConfig.name).toBe(CardName.amazon);
+        expect(cardConfig.name).toBe('Amazon.com');
       }
     ));
   });
@@ -46,9 +41,7 @@ describe('GiftCardProvider', () => {
         giftCardProvider: GiftCardProvider,
         httpMock: HttpTestingController
       ) => {
-        const promise = giftCardProvider.getPurchasedCards(
-          CardName.amazonJapan
-        );
+        const promise = giftCardProvider.getPurchasedCards('Amazon.co.jp');
         respondWithAvailableCards(httpMock, giftCardProvider);
         const cards = await promise;
         expect(cards).toEqual([]);
@@ -60,7 +53,7 @@ describe('GiftCardProvider', () => {
         giftCardProvider: GiftCardProvider,
         httpMock: HttpTestingController
       ) => {
-        const promise = giftCardProvider.getPurchasedCards(CardName.amazon);
+        const promise = giftCardProvider.getPurchasedCards('Amazon.com');
         respondWithAvailableCards(httpMock, giftCardProvider);
         const cards = await promise;
         expect(cards[0].currency).toBe('USD');
@@ -80,12 +73,10 @@ describe('GiftCardProvider', () => {
         giftCardProvider: GiftCardProvider,
         httpMock: HttpTestingController
       ) => {
-        const archivePromise = giftCardProvider.archiveAllCards(
-          CardName.amazon
-        );
+        const archivePromise = giftCardProvider.archiveAllCards('Amazon.com');
         respondWithAvailableCards(httpMock, giftCardProvider);
         await archivePromise;
-        const cards = await giftCardProvider.getPurchasedCards(CardName.amazon);
+        const cards = await giftCardProvider.getPurchasedCards('Amazon.com');
         expect(cards.every(c => c.archived)).toBe(true);
       }
     ));
@@ -137,12 +128,12 @@ function saveGiftCards(
     date: new Date(),
     invoiceId: '1',
     invoiceUrl: '',
-    name: CardName.amazon,
+    name: 'Amazon.com',
     status: 'SUCCESS',
     uuid: ''
   };
   return persistenceProvider.setGiftCards(
-    CardName.amazon,
+    'Amazon.com',
     giftCardProvider.getNetwork(),
     JSON.stringify([
       {

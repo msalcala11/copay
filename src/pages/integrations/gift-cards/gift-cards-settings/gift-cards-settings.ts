@@ -7,10 +7,7 @@ import {
   GiftCardProvider,
   HomeIntegrationsProvider
 } from '../../../../providers';
-import {
-  CardName,
-  GiftCard
-} from '../../../../providers/gift-card/gift-card.types';
+import { GiftCard } from '../../../../providers/gift-card/gift-card.types';
 import { GiftCardSettingsPage } from '../gift-card-settings/gift-card-settings';
 
 @Component({
@@ -36,7 +33,7 @@ export class GiftCardsSettingsPage {
     this.purchasedBrands = _.uniqBy(purchasedCards, ([cards]) => cards.brand);
   }
 
-  goToCardSettings(cardName: CardName) {
+  goToCardSettings(cardName: string) {
     this.nav.push(GiftCardSettingsPage, { cardName });
   }
 
