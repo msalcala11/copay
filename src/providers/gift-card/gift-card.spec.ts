@@ -91,7 +91,24 @@ function respondWithAvailableCards(
   httpMock: HttpTestingController,
   giftCardProvider: GiftCardProvider,
   availableCardMap: AvailableCardMap = {
-    [CardName.amazon]: [{ currency: 'USD' }]
+    ['Amazon.com']: [
+      {
+        currency: 'USD',
+        cardImage: 'https://amazon-card-image',
+        description: 'Buy these up.',
+        defaultClaimCodeType: 'code',
+        displayName: 'Amazon',
+        emailRequired: true,
+        icon: 'https://amazon-icon',
+        logo: 'https://amazon-logo',
+        logoBackgroundColor: '#000000',
+        redeemUrl: 'https://amazon-redeem',
+        redeemInstructions: 'Redeem now.',
+        terms: 'Very nice terms for you.',
+        type: 'range',
+        website: 'amazon.com'
+      }
+    ]
   } as AvailableCardMap
 ) {
   httpMock

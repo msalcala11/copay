@@ -69,6 +69,7 @@ export interface BaseCardConfig {
   defaultClaimCodeType: ClaimCodeType;
   displayName: string;
   emailRequired: boolean;
+  featured?: boolean;
   icon: string;
   logo: string;
   logoBackgroundColor: string;
@@ -123,12 +124,12 @@ export interface ApiCard {
   defaultClaimCodeType: ClaimCodeType;
   displayName: string;
   emailRequired: boolean;
+  featured?: boolean;
   icon: string;
   logo: string;
   logoBackgroundColor: string;
   minAmount?: number;
   maxAmount?: number;
-  name: string;
   redeemInstructions?: string;
   redeemUrl?: string;
   terms: string;
