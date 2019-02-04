@@ -1,10 +1,7 @@
 import { async, ComponentFixture } from '@angular/core/testing';
 import { TestUtils } from '../../../../test';
 
-import {
-  CardBrand,
-  GiftCard
-} from '../../../../providers/gift-card/gift-card.types';
+import { GiftCard } from '../../../../providers/gift-card/gift-card.types';
 import { PurchasedCardsPage } from './purchased-cards';
 
 describe('PurchasedCardsPage', () => {
@@ -28,7 +25,7 @@ describe('PurchasedCardsPage', () => {
         archived: false,
         accessKey: 'aAcCess',
         amount: 1,
-        brand: CardBrand.amazon,
+        brand: 'Amazon',
         claimCode: 'cLaImCoDe',
         currency: 'USD',
         date: Date.now() / 1000,

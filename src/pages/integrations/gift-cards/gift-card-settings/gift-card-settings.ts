@@ -8,7 +8,6 @@ import {
   Logger,
   PopupProvider
 } from '../../../../providers';
-import { CardBrand } from '../../../../providers/gift-card/gift-card.types';
 import { PurchasedCardsPage } from '../purchased-cards/purchased-cards';
 
 @Component({
@@ -17,7 +16,6 @@ import { PurchasedCardsPage } from '../purchased-cards/purchased-cards';
 })
 export class GiftCardSettingsPage extends PurchasedCardsPage {
   email: string;
-  CardBrand = CardBrand;
 
   constructor(
     actionSheetProvider: ActionSheetProvider,

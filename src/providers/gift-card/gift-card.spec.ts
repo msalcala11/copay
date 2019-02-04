@@ -3,7 +3,7 @@ import { inject } from '@angular/core/testing';
 import { TestUtils } from '../../test';
 import { PersistenceProvider } from '../persistence/persistence';
 import { GiftCardProvider } from './gift-card';
-import { AvailableCardMap, CardBrand, ClaimCodeType } from './gift-card.types';
+import { AvailableCardMap, ClaimCodeType } from './gift-card.types';
 
 describe('GiftCardProvider', () => {
   beforeEach(() => {
@@ -122,7 +122,7 @@ function saveGiftCards(
     accessKey: '',
     amount: 100,
     archived: false,
-    brand: CardBrand.amazon,
+    brand: 'Amazon',
     claimCode: 'cLaImCoDe',
     currency: 'USD',
     date: new Date(),

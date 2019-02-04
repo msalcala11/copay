@@ -1,8 +1,8 @@
 <wide-header-page title="{{cardConfig?.brand}} Settings">
   <div page-content>
 
-    <ion-list class="settings-list" [ngClass]="{'top-padding': cardConfig?.brand === CardBrand.amazon}">
-      <button (click)="setEmail()" ion-item *ngIf="cardConfig?.brand === CardBrand.amazon">
+    <ion-list class="settings-list" [ngClass]="{'top-padding': cardConfig?.displayName === 'Amazon'}">
+      <button (click)="setEmail()" ion-item *ngIf="cardConfig?.displayName === 'Amazon'">
         <ion-label>{{ 'Receipt Email' | translate }}</ion-label>
         <ion-note item-end>
           {{ email || ('Not set' | translate) }}
