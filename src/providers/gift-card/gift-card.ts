@@ -374,13 +374,7 @@ export class GiftCardProvider {
         displayName
       };
     });
-    console.log('supportedCards', supportedCards);
     return supportedCards;
-    // return this.getOfferedCards().map(cardConfig => ({
-    //   ...cardConfig,
-    //   ...(availableCards.find(c => c.name === cardConfig.name) ||
-    //     cachedApiCardConfig[cardConfig.name])
-    // }));
   }
 
   async getSupportedCardMap(): Promise<CardConfigMap> {
@@ -490,24 +484,7 @@ export class GiftCardProvider {
       .filter(
         cardConfig => cardConfig.logo && cardConfig.icon && cardConfig.cardImage
       );
-    console.log('availableCards', config);
     return config;
-    // return this.getOfferedCards()
-    //   .filter(cardConfig => availableCardNames.indexOf(cardConfig.name) > -1)
-    //   .filter(
-    //     cardConfig =>
-    //       availableCardMap[cardConfig.name] &&
-    //       availableCardMap[cardConfig.name].length
-    //   )
-    //   .map(cardConfig => {
-    //     const apiBrandConfig = availableCardMap[cardConfig.name];
-    //     const apiCardConfig = getCardConfigFromApiBrandConfig(apiBrandConfig);
-    //     const fullCardConfig = {
-    //       ...cardConfig,
-    //       ...apiCardConfig
-    //     };
-    //     return fullCardConfig;
-    //   });
   }
 
   getApiPath() {
