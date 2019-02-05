@@ -82,8 +82,9 @@ export class GiftCardProvider {
       this.getCardMap(cardName)
     ]);
     const invoiceIds = Object.keys(giftCardMap);
-    return invoiceIds
+    const purchasedCards = invoiceIds
       .map(invoiceId => giftCardMap[invoiceId] as GiftCard)
+      .filter(c => c.invoiceId)
       .map(c => ({
         ...c,
         name: cardName,
@@ -91,6 +92,7 @@ export class GiftCardProvider {
         currency: c.currency || getCurrencyFromLegacySavedCard(cardName)
       }))
       .sort(sortByDescendingDate);
+    return purchasedCards;
   }
 
   async getAllCardsOfBrand(cardBrand: string): Promise<GiftCard[]> {
@@ -264,6 +266,7 @@ export class GiftCardProvider {
         mergeMap(card =>
           fromPromise(this.createGiftCard(card)).catch(err => {
             this.logger.error('Error creating gift card:', err);
+            this.logger.error('Gift card: ', JSON.stringify(card, null, 4));
             return of({ ...card, status: 'FAILURE' });
           })
         ),
@@ -407,6 +410,7 @@ export class GiftCardProvider {
   }
 
   async migrateAndFetchActiveCards(): Promise<GiftCard[]> {
+    await this.persistenceProvider.setActiveGiftCards(Network.livenet, {});
     const purchasedBrands = await this.getPurchasedBrands();
     const activeCardsGroupedByBrand = purchasedBrands.filter(
       cards => cards.filter(c => !c.archived).length
