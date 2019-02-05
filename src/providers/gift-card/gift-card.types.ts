@@ -4,28 +4,31 @@ export enum ClaimCodeType {
   link = 'link'
 }
 
-export interface CardConfig {
+export interface CommonCardConfig {
   brand?: string; // deprecated
   cardImage: string;
   currency: string;
-  description?: string;
-  minAmount?: number;
-  maxAmount?: number;
-  redeemInstructions?: string;
-  supportedAmounts?: number[];
-  terms: string;
   defaultClaimCodeType: ClaimCodeType;
+  description?: string;
   displayName: string;
   emailRequired: boolean;
   featured?: boolean;
   hidden?: boolean;
+  hidePin?: boolean;
   icon: string;
   logo: string;
   logoBackgroundColor: string;
-  name: string;
+  minAmount?: number;
+  maxAmount?: number;
+  redeemInstructions?: string;
   redeemUrl?: string;
-  hidePin?: boolean;
+  terms: string;
   website: string;
+}
+
+export interface CardConfig extends CommonCardConfig {
+  name: string;
+  supportedAmounts?: number[];
 }
 
 export interface GiftCard {
@@ -53,27 +56,9 @@ export type GiftCardSaveParams = Partial<{
   remove: boolean;
 }>;
 
-export interface ApiCard {
+export interface ApiCard extends CommonCardConfig {
   amount?: number;
-  brand?: string; // deprecated
-  cardImage: string;
-  currency: string;
-  description: string;
-  defaultClaimCodeType: ClaimCodeType;
-  displayName: string;
-  emailRequired: boolean;
-  featured?: boolean;
-  hidden?: boolean;
-  icon: string;
-  logo: string;
-  logoBackgroundColor: string;
-  minAmount?: number;
-  maxAmount?: number;
-  redeemInstructions?: string;
-  redeemUrl?: string;
-  terms: string;
   type: 'fixed' | 'range';
-  website: string;
 }
 
 export type ApiCardConfig = ApiCard[];

@@ -563,10 +563,8 @@ function getCardConfigFromApiBrandConfig(
     )
     .sort((a, b) => a - b);
 
-  const baseConfig = { ...firstCard, name: cardName };
-  delete baseConfig.type;
-  delete baseConfig.maxAmount;
-  delete baseConfig.minAmount;
+  const { amount, type, maxAmount, minAmount, ...config } = firstCard;
+  const baseConfig = { ...config, name: cardName };
 
   return range
     ? {
