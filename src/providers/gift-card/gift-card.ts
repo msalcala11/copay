@@ -17,7 +17,7 @@ import {
 } from '../persistence/persistence';
 import { TimeProvider } from '../time/time';
 import {
-  ApiBrandConfig,
+  ApiCardConfig,
   AvailableCardMap,
   CardConfig,
   CardConfigMap,
@@ -544,27 +544,11 @@ export class GiftCardProvider {
 
 function getCardConfigFromApiBrandConfig(
   cardName: string,
-  apiBrandConfig: ApiBrandConfig
+  apiBrandConfig: ApiCardConfig
 ): CardConfig {
   const cards = apiBrandConfig;
   const [firstCard] = cards;
-  const {
-    currency,
-    description,
-    cardImage,
-    displayName,
-    defaultClaimCodeType,
-    emailRequired,
-    featured,
-    hidden,
-    icon,
-    logo,
-    logoBackgroundColor,
-    redeemInstructions,
-    redeemUrl,
-    terms,
-    website
-  } = firstCard;
+  const { currency } = firstCard;
   const range = cards.find(
     c => !!(c.maxAmount || c.minAmount) && c.currency === currency
   );
@@ -579,25 +563,10 @@ function getCardConfigFromApiBrandConfig(
     )
     .sort((a, b) => a - b);
 
-  const baseConfig = {
-    // brand: displayName,
-    currency,
-    description,
-    cardImage,
-    displayName,
-    defaultClaimCodeType,
-    emailRequired,
-    featured,
-    hidden,
-    icon,
-    logo,
-    logoBackgroundColor,
-    name: cardName,
-    redeemInstructions,
-    redeemUrl,
-    terms,
-    website
-  };
+  const baseConfig = { ...firstCard, name: cardName };
+  delete baseConfig.type;
+  delete baseConfig.maxAmount;
+  delete baseConfig.minAmount;
 
   return range
     ? {

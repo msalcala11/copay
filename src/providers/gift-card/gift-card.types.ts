@@ -4,9 +4,16 @@ export enum ClaimCodeType {
   link = 'link'
 }
 
-export interface BaseCardConfig {
+export interface CardConfig {
   brand?: string; // deprecated
   cardImage: string;
+  currency: string;
+  description?: string;
+  minAmount?: number;
+  maxAmount?: number;
+  redeemInstructions?: string;
+  supportedAmounts?: number[];
+  terms: string;
   defaultClaimCodeType: ClaimCodeType;
   displayName: string;
   emailRequired: boolean;
@@ -20,18 +27,6 @@ export interface BaseCardConfig {
   hidePin?: boolean;
   website: string;
 }
-
-export interface ApiCardConfig {
-  currency: string;
-  description?: string;
-  minAmount?: number;
-  maxAmount?: number;
-  redeemInstructions?: string;
-  supportedAmounts?: number[];
-  terms: string;
-}
-
-export interface CardConfig extends BaseCardConfig, ApiCardConfig {}
 
 export interface GiftCard {
   accessKey: string;
@@ -81,10 +76,10 @@ export interface ApiCard {
   website: string;
 }
 
-export type ApiBrandConfig = ApiCard[];
+export type ApiCardConfig = ApiCard[];
 
 export interface AvailableCardMap {
-  [cardName: string]: ApiBrandConfig;
+  [cardName: string]: ApiCardConfig;
 }
 
 export interface CardConfigMap {
