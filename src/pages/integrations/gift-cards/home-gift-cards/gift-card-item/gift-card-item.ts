@@ -16,13 +16,14 @@ import {
 } from '../../../../../providers/gift-card/gift-card.types';
 
 export type CardItemAction = 'archive' | 'view';
+// <img class="logo" [src]="cardConfig?.logo" />
 
 @Component({
   selector: 'gift-card-item',
   template: `
     <ion-item-sliding #slidingItem>
       <button ion-item (click)="performAction('view')">
-        <img class="logo" [src]="cardConfig?.logo" />
+        <img-loader class="logo" [src]="cardConfig?.logo" useImg></img-loader>
         <ion-note
           item-end
           [ngClass]="{ dark: cardConfig?.logoBackgroundColor === '#ffffff' }"
