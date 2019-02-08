@@ -1,9 +1,11 @@
 .card-list-item {
   &__icon {
-    $icon-height: 50px;
-    height: $icon-height;
-    width: $icon-height;
-    margin: 3px 10px 3px 12px;
+    img {
+      $icon-height: 50px;
+      height: $icon-height;
+      width: $icon-height;
+      margin: 3px 10px 3px 12px;
+    }
 
     &.archived {
       opacity: 0.25;

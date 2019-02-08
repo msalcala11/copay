@@ -14,7 +14,6 @@ import {
           class="card-list-item__icon"
           [ngClass]="{ archived: card?.archived && !catalogListing }"
           [src]="cardConfig?.icon"
-          useImg
         ></img-loader>
       </ion-icon>
       <ion-label>

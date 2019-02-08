@@ -8,7 +8,6 @@ import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
       style="display: none"
       *ngFor="let image of (cardImages | async)"
       [src]="image"
-      useImg
     ></img-loader>
   `
 })

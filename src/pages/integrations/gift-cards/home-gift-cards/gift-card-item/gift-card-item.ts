@@ -22,7 +22,7 @@ export type CardItemAction = 'archive' | 'view';
   template: `
     <ion-item-sliding #slidingItem>
       <button ion-item (click)="performAction('view')">
-        <img-loader class="logo" [src]="cardConfig?.logo" useImg></img-loader>
+        <img-loader class="logo" [src]="cardConfig?.logo"></img-loader>
         <ion-note
           item-end
           [ngClass]="{ dark: cardConfig?.logoBackgroundColor === '#ffffff' }"
