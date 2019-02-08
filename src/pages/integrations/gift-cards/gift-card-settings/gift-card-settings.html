@@ -9,9 +9,9 @@
         </ion-note>
       </button>
       <ion-item-divider *ngIf="currentGiftCards && currentGiftCards.length">{{'Current Cards' | translate}}</ion-item-divider>
-      <card-list-item *ngFor="let card of currentGiftCards" [card]="card" (click)="goToCardDetails(card)"></card-list-item>
+      <card-list-item *ngFor="let card of currentGiftCards" [card]="card" type="purchased" (click)="goToCardDetails(card)"></card-list-item>
       <ion-item-divider *ngIf="archivedGiftCards && archivedGiftCards.length">{{'Archived Cards' | translate}}</ion-item-divider>
-      <card-list-item *ngFor="let card of archivedGiftCards" [card]="card" (click)="goToCardDetails(card)"></card-list-item>
+      <card-list-item *ngFor="let card of archivedGiftCards" [card]="card" type="purchased" (click)="goToCardDetails(card)"></card-list-item>
       <ion-item-divider></ion-item-divider>
     </ion-list>
   </div>

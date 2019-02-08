@@ -1,4 +1,6 @@
 .card-list-item {
+  min-height: 83px;
+
   &__icon {
     img {
       $icon-height: 50px;
@@ -16,6 +18,10 @@
     font-size: 19px;
     font-weight: 600;
     margin-bottom: 5px;
+
+    &.no-margin-bottom {
+      margin-bottom: 0;
+    }
   }
 
   &__note {
