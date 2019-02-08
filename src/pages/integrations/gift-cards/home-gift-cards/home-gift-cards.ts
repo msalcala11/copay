@@ -55,6 +55,7 @@ export class HomeGiftCards implements OnInit {
   async ngOnInit() {
     this.appName = this.appProvider.info.userVisibleName;
     this.initGiftCards();
+    this.giftCardProvider.preloadImages();
   }
 
   public buyGiftCards() {

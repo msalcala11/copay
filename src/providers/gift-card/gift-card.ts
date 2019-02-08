@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ImageLoader } from 'ionic-image-loader';
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { from } from 'rxjs/observable/from';
@@ -45,6 +46,7 @@ export class GiftCardProvider {
     private configProvider: ConfigProvider,
     private emailNotificationsProvider: EmailNotificationsProvider,
     private http: HttpClient,
+    private imageLoader: ImageLoader,
     private logger: Logger,
     private homeIntegrationsProvider: HomeIntegrationsProvider,
     private persistenceProvider: PersistenceProvider,
@@ -534,6 +536,17 @@ export class GiftCardProvider {
       .catch(_ => {});
   }
 
+  public async preloadImages(): Promise<void> {
+    const supportedCards = await this.getSupportedCards();
+    const imagesPerCard = supportedCards
+      .map(c => [c.icon, c.cardImage])
+      .filter(images => images[0] && images[1]);
+    const fetchBatches = imagesPerCard.map(images => async () =>
+      Promise.all(images.map(i => this.imageLoader.preload(i)))
+    );
+    await promiseSerial(fetchBatches);
+  }
+
   private setUserInfo(data: any): void {
     this.persistenceProvider.setGiftCardUserInfo(JSON.stringify(data));
   }
@@ -602,4 +615,14 @@ function getCurrencyFromLegacySavedCard(
     default:
       return 'USD';
   }
+}
+
+function promiseSerial(tasks: Array<() => Promise<any>>) {
+  return tasks.reduce(
+    (promise, currentTask) =>
+      promise.then(result =>
+        currentTask().then(Array.prototype.concat.bind(result))
+      ),
+    Promise.resolve([])
+  );
 }
