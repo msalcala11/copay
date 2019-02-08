@@ -7,6 +7,7 @@ import {
 } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { timer } from 'rxjs/observable/timer';
 import { debounceTime } from 'rxjs/operators';
 import { ActionSheetProvider, AppProvider } from '../../../../providers';
 import {
@@ -57,7 +58,8 @@ export class HomeGiftCards implements OnInit {
 
   async ngOnInit() {
     this.appName = this.appProvider.info.userVisibleName;
-    this.initGiftCards();
+    await this.initGiftCards();
+    await timer(3000).toPromise();
     this.giftCardProvider.preloadImages();
   }
 
