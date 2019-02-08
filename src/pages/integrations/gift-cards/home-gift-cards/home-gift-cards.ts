@@ -9,7 +9,10 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { debounceTime } from 'rxjs/operators';
 import { ActionSheetProvider, AppProvider } from '../../../../providers';
-import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
+import {
+  GiftCardProvider,
+  sortByDisplayName
+} from '../../../../providers/gift-card/gift-card';
 import { GiftCard } from '../../../../providers/gift-card/gift-card.types';
 import { CardCatalogPage } from '../card-catalog/card-catalog';
 import { CardDetailsPage } from '../card-details/card-details';
@@ -146,7 +149,7 @@ export class HomeGiftCards implements OnInit {
         },
         [] as GiftCard[][]
       )
-      .sort((a, b) => (a[0].name > b[0].name ? 1 : -1));
+      .sort((a, b) => sortByDisplayName(a[0], b[0]));
   }
 }
 

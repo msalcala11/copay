@@ -594,11 +594,14 @@ function getCardConfigFromApiBrandConfig(
     : { ...baseConfig, supportedAmounts };
 }
 
-function sortByDescendingDate(a: GiftCard, b: GiftCard) {
+export function sortByDescendingDate(a: GiftCard, b: GiftCard) {
   return a.date < b.date ? 1 : -1;
 }
 
-function sortByDisplayName(a: CardConfig | GiftCard, b: CardConfig | GiftCard) {
+export function sortByDisplayName(
+  a: CardConfig | GiftCard,
+  b: CardConfig | GiftCard
+) {
   return a.displayName > b.displayName ? 1 : -1;
 }
 
