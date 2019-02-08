@@ -184,8 +184,8 @@
                     <img class="icon-services" src="assets/img/gift-cards/mercado-libre/mercado-livre-icon.svg" *ngIf="tx.customData.service === 'mercadolibre'"
                       width="40">
                     <ng-container *ngIf="supportedCards | async as cardConfig">
-                      <img class="icon-services" *ngIf="tx.customData.service === 'giftcards'" [src]="cardConfig[tx.customData.giftCardName]?.icon"
-                        width="40">
+                      <img-loader class="icon-services" *ngIf="tx.customData.service === 'giftcards'" [src]="cardConfig[tx.customData.giftCardName]?.icon"
+                        width="40"></img-loader>
                     </ng-container>
                     <img class="icon-services" src="assets/img/bitpay-card/icon-bitpay.svg" *ngIf="tx.customData.service == 'debitcard'"
                       width="40">

@@ -117,6 +117,7 @@ export class CopayApp {
     private device: Device
   ) {
     this.imageLoaderConfig.enableDebugMode();
+    this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.initializeApp();
   }
 

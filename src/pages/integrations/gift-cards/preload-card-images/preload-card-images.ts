@@ -4,11 +4,12 @@ import { GiftCardProvider } from '../../../../providers/gift-card/gift-card';
 @Component({
   selector: 'preload-card-images',
   template: `
-    <img
+    <img-loader
       style="display: none"
       *ngFor="let image of (cardImages | async)"
       [src]="image"
-    />
+      useImg
+    ></img-loader>
   `
 })
 export class PreloadCardImages {

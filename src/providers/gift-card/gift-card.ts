@@ -62,7 +62,7 @@ export class GiftCardProvider {
     this.credentials.BITPAY_API_URL =
       this.credentials.NETWORK === Network.testnet
         ? 'https://test.bitpay.com'
-        : 'https://bitpay.com';
+        : 'https://marty.bp:8088';
   }
 
   async getCardConfig(cardName: string) {

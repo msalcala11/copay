@@ -16,7 +16,6 @@ import {
 } from '../../../../../providers/gift-card/gift-card.types';
 
 export type CardItemAction = 'archive' | 'view';
-// <img class="logo" [src]="cardConfig?.logo" />
 
 @Component({
   selector: 'gift-card-item',

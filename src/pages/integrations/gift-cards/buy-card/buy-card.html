@@ -9,7 +9,7 @@
     <div class="header-extension"></div>
     <div class="amount-box">
       <div>
-        <img class="card-image" src="{{cardConfig?.cardImage}}">
+        <img-loader class="card-image" src="{{cardConfig?.cardImage}}" useImg></img-loader>
       </div>
       <amount-picker *ngIf="cardConfig" [currency]="cardConfig.currency" [supportedAmounts]="cardConfig.supportedAmounts"
         (amountChange)="onAmountChange($event)" (click)="onAmountClick()"></amount-picker>

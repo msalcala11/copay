@@ -18,6 +18,7 @@ export class CardCatalogPage implements OnInit {
   public moreCards: CardConfig[];
   public searchQuery: string = '';
   public numFeaturedCards: number;
+  public numMoreCards: number;
 
   @ViewChild(WideHeaderPage)
   wideHeaderPage: WideHeaderPage;
@@ -35,6 +36,7 @@ export class CardCatalogPage implements OnInit {
     });
     this.updateCardList();
     this.numFeaturedCards = this.featuredCards.length;
+    this.numMoreCards = this.moreCards.length;
   }
 
   onSearch(query: string) {

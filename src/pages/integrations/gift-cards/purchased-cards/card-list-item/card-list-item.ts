@@ -10,11 +10,12 @@ import {
   template: `
     <button ion-item class="card-list-item">
       <ion-icon item-start>
-        <img
+        <img-loader
           class="card-list-item__icon"
           [ngClass]="{ archived: card?.archived && !catalogListing }"
           [src]="cardConfig?.icon"
-        />
+          useImg
+        ></img-loader>
       </ion-icon>
       <ion-label>
         <div *ngIf="!catalogListing">
