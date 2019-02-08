@@ -62,7 +62,7 @@ export class GiftCardProvider {
     this.credentials.BITPAY_API_URL =
       this.credentials.NETWORK === Network.testnet
         ? 'https://test.bitpay.com'
-        : 'https://marty.bp:8088';
+        : 'https://bitpay.com';
   }
 
   async getCardConfig(cardName: string) {
@@ -116,7 +116,9 @@ export class GiftCardProvider {
       this.getPurchasedCards(cardName)
     );
     const purchasedCards = await Promise.all(purchasedCardPromises);
-    return purchasedCards.filter(brand => brand.length);
+    return purchasedCards
+      .filter(brand => brand.length)
+      .sort((a, b) => sortByDisplayName(a[0], b[0]));
   }
 
   async saveCard(giftCard: GiftCard, opts?: GiftCardSaveParams) {
@@ -583,7 +585,7 @@ function sortByDescendingDate(a: GiftCard, b: GiftCard) {
   return a.date < b.date ? 1 : -1;
 }
 
-function sortByDisplayName(a: CardConfig, b: CardConfig) {
+function sortByDisplayName(a: CardConfig | GiftCard, b: CardConfig | GiftCard) {
   return a.displayName > b.displayName ? 1 : -1;
 }
 
