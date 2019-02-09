@@ -375,12 +375,13 @@ export class GiftCardProvider {
     const supportedCards = cardNames
       .map(cardName => {
         const freshConfig = availableCards.find(c => c.name === cardName);
-        const cachedConfig = cachedApiCardConfig[cardName];
+        const cachedConfig = appendFallbackImages(
+          cachedApiCardConfig[cardName]
+        );
         const config = freshConfig || cachedConfig;
         const displayName = config.displayName || config.name;
         return {
           ...config,
-          // brand: displayName,
           displayName
         } as CardConfig;
       })
@@ -603,6 +604,32 @@ export function sortByDisplayName(
   b: CardConfig | GiftCard
 ) {
   return a.displayName > b.displayName ? 1 : -1;
+}
+
+function appendFallbackImages(cardConfig: CardConfig) {
+  // For cards bought outside of the user's current IP catalog area before server-side
+  // catalog management was implemented and card images were stored locally.
+  const getBrandImagePath = brandName => {
+    const cardImagePath = `https://bitpay.com/gift-cards/assets/`;
+    const brandImageDirectory = brandName
+      .toLowerCase()
+      .replace(/[^0-9a-z]/gi, '');
+    return `${cardImagePath}${brandImageDirectory}/`;
+  };
+  const getImagesForBrand = brandName => {
+    const imagePath = getBrandImagePath(brandName);
+    return {
+      cardImage: `${imagePath}card.png`,
+      icon: `${imagePath}icon.svg`,
+      logo: `${imagePath}logo.svg`
+    };
+  };
+  const needsFallback =
+    cardConfig.cardImage &&
+    !cardConfig.cardImage.includes('https://bitpay.com');
+  return needsFallback
+    ? { ...cardConfig, ...getImagesForBrand(cardConfig.name) }
+    : cardConfig;
 }
 
 function getCurrencyFromLegacySavedCard(
