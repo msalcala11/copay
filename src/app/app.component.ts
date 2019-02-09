@@ -118,6 +118,7 @@ export class CopayApp {
   ) {
     this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.imageLoaderConfig.useImageTag(true);
+    this.imageLoaderConfig.enableSpinner(false);
     this.initializeApp();
   }
 
