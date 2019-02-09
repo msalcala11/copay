@@ -5,7 +5,6 @@ export enum ClaimCodeType {
 }
 
 export interface CommonCardConfig {
-  brand?: string; // deprecated
   cardImage: string;
   currency: string;
   defaultClaimCodeType: ClaimCodeType;
@@ -35,7 +34,6 @@ export interface GiftCard {
   accessKey: string;
   amount: number;
   archived: boolean;
-  brand?: string; // deprecated
   claimCode: string;
   claimLink?: string;
   currency: string;
