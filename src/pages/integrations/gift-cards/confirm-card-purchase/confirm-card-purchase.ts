@@ -340,6 +340,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
   }
 
   private async redeemGiftCard(initialCard: GiftCard) {
+    this.onGoingProcessProvider.set('buyingGiftCard');
     const card = await this.giftCardProvider
       .createGiftCard(initialCard)
       .catch(() => ({ ...initialCard, status: 'FAILURE' }));
@@ -499,41 +500,41 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       status: 'UNREDEEMED'
     });
     return this.publishAndSign(this.wallet, this.tx)
-      .then(() => {
-        this.onGoingProcessProvider.set('buyingGiftCard');
-        return this.redeemGiftCard(this.tx.giftData);
-      })
-      .catch(async () => {
-        // It is possible for the payment protocol request to return
-        // an error and for the payment to still succeed over p2p. So,
-        // Let's wait a little and try to redeem again after an error,
-        // to see if the payment actually succeeded.
-        await Observable.timer(10000).toPromise();
-        this.onGoingProcessProvider.clear();
-        this.onGoingProcessProvider.set('buyingGiftCard');
-        return this.redeemGiftCard(this.tx.giftData).catch(err =>
-          this.handlePurchaseError(err)
-        );
+      .then(() => this.redeemGiftCard(this.tx.giftData))
+      .catch(async err => {
+        if (this.isCredentialsError(err)) return;
+        return this.retryRedemption();
       });
   }
 
+  public async retryRedemption() {
+    // It is possible for the payment protocol request to return
+    // an error and for the payment to still succeed over p2p. So,
+    // Let's wait a little and try to redeem again after an error,
+    // to see if the payment actually succeeded.
+    await Observable.timer(10000).toPromise();
+    return this.redeemGiftCard(this.tx.giftData).catch(err =>
+      this.handlePurchaseError(err)
+    );
+  }
+
+  public isCredentialsError(err) {
+    const credentialsErrors = [
+      'FINGERPRINT_CANCELLED',
+      'PASSWORD_CANCELLED',
+      'NO_PASSWORD',
+      'WRONG_PASSWORD'
+    ];
+    const errorMessage = err && err.message;
+    return err && credentialsErrors.indexOf(errorMessage) !== -1;
+  }
+
   public async handlePurchaseError(err) {
-    await this.giftCardProvider.saveCard(this.tx.giftData, {
-      remove: true
-    });
-    if (
-      err &&
-      err.message != 'FINGERPRINT_CANCELLED' &&
-      err.message != 'PASSWORD_CANCELLED'
-    ) {
-      if (err.message != 'NO_PASSWORD' && err.message != 'WRONG_PASSWORD') {
-        this.resetValues();
-      }
-      this.showErrorInfoSheet(
-        this.bwcErrorProvider.msg(err),
-        this.translate.instant('Could not send transaction')
-      );
-    }
+    this.resetValues();
+    this.showErrorInfoSheet(
+      this.bwcErrorProvider.msg(err),
+      this.translate.instant('Could not send transaction')
+    );
   }
 
   public onWalletSelect(wallet): void {
