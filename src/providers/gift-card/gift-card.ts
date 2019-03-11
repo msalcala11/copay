@@ -33,7 +33,7 @@ export class GiftCardProvider {
     NETWORK: Network;
     BITPAY_API_URL: string;
   } = {
-    NETWORK: Network.livenet,
+    NETWORK: Network.testnet,
     BITPAY_API_URL: 'https://bitpay.com'
   };
 

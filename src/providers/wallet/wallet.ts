@@ -1483,6 +1483,7 @@ export class WalletProvider {
                   walletId: wallet.id,
                   untilItChanges: true
                 });
+                // return reject(broadcastedTxp);
                 return resolve(broadcastedTxp);
               })
               .catch(err => {
