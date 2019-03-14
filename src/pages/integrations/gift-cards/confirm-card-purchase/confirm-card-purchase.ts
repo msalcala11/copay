@@ -500,7 +500,11 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       status: 'UNREDEEMED'
     });
     return this.publishAndSign(this.wallet, this.tx)
-      .then(() => this.redeemGiftCard(this.tx.giftData))
+      .then(() =>
+        this.redeemGiftCard(this.tx.giftData).catch(err =>
+          this.handlePurchaseError(err)
+        )
+      )
       .catch(async err => {
         if (this.isCredentialsError(err)) return;
         return this.retryRedemption();
