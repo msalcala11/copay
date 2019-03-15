@@ -33,7 +33,7 @@ export class GiftCardProvider {
     NETWORK: Network;
     BITPAY_API_URL: string;
   } = {
-    NETWORK: Network.testnet,
+    NETWORK: Network.livenet,
     BITPAY_API_URL: 'https://bitpay.com'
   };
 
@@ -145,6 +145,13 @@ export class GiftCardProvider {
     return this.persistenceProvider.setActiveGiftCards(
       this.getNetwork(),
       JSON.stringify(newMap)
+    );
+  }
+
+  clearActiveGiftCards() {
+    return this.persistenceProvider.setActiveGiftCards(
+      this.getNetwork(),
+      JSON.stringify({})
     );
   }
 
@@ -433,7 +440,7 @@ export class GiftCardProvider {
   }
 
   async migrateAndFetchActiveCards(): Promise<GiftCard[]> {
-    await this.persistenceProvider.setActiveGiftCards(Network.livenet, {});
+    await this.clearActiveGiftCards();
     const purchasedBrands = await this.getPurchasedBrands();
     const activeCardsGroupedByBrand = purchasedBrands.filter(
       cards => cards.filter(c => !c.archived).length

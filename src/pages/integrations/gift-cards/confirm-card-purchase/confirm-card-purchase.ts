@@ -482,19 +482,6 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       );
       return;
     }
-    const title = this.translate.instant('Confirm');
-    const okText = this.translate.instant('OK');
-    const cancelText = this.translate.instant('Cancel');
-    const confirm = await this.popupProvider.ionicConfirm(
-      title,
-      this.message,
-      okText,
-      cancelText
-    );
-    if (!confirm) {
-      if (this.isCordova) this.slideButton.isConfirmed(false);
-      return;
-    }
     await this.giftCardProvider.saveGiftCard({
       ...this.tx.giftData,
       status: 'UNREDEEMED'
@@ -507,18 +494,18 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       )
       .catch(async err => {
         if (this.isCredentialsError(err)) return;
-        return this.retryRedemption();
+        return this.retryRedemption(err);
       });
   }
 
-  public async retryRedemption() {
+  public async retryRedemption(payProError) {
     // It is possible for the payment protocol request to return
     // an error and for the payment to still succeed over p2p. So,
     // Let's wait a little and try to redeem again after an error,
     // to see if the payment actually succeeded.
     await Observable.timer(10000).toPromise();
     return this.redeemGiftCard(this.tx.giftData).catch(err =>
-      this.handlePurchaseError(err)
+      this.handlePurchaseError(payProError)
     );
   }
 
