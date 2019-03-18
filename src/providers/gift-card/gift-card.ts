@@ -54,6 +54,7 @@ export class GiftCardProvider {
     private timeProvider: TimeProvider
   ) {
     this.logger.debug('GiftCardProvider initialized');
+    this.imageLoader.clearCache();
     this.setCredentials();
   }
 
@@ -467,7 +468,9 @@ export class GiftCardProvider {
 
   async cacheApiCardConfig(availableCardMap: AvailableCardMap) {
     const cardNames = Object.keys(availableCardMap);
-    const previousCache = await this.persistenceProvider.getGiftCardConfigCache();
+    const previousCache = await this.persistenceProvider.getGiftCardConfigCache(
+      this.getNetwork()
+    );
     const apiCardConfigCache = getCardConfigFromApiConfigMap(
       availableCardMap
     ).reduce((configMap, apiCardConfigMap, index) => {
@@ -479,12 +482,17 @@ export class GiftCardProvider {
       ...apiCardConfigCache
     };
     if (JSON.stringify(previousCache) !== JSON.stringify(newCache)) {
-      await this.persistenceProvider.setGiftCardConfigCache(newCache);
+      await this.persistenceProvider.setGiftCardConfigCache(
+        this.getNetwork(),
+        newCache
+      );
     }
   }
 
   async fetchCachedApiCardConfig(): Promise<CardConfigMap> {
-    this.cachedApiCardConfigPromise = this.persistenceProvider.getGiftCardConfigCache();
+    this.cachedApiCardConfigPromise = this.persistenceProvider.getGiftCardConfigCache(
+      this.getNetwork()
+    );
     return this.cachedApiCardConfigPromise;
   }
 
