@@ -33,7 +33,7 @@ export class GiftCardProvider {
     NETWORK: Network;
     BITPAY_API_URL: string;
   } = {
-    NETWORK: Network.livenet,
+    NETWORK: Network.testnet,
     BITPAY_API_URL: 'https://bitpay.com'
   };
 
@@ -54,7 +54,6 @@ export class GiftCardProvider {
     private timeProvider: TimeProvider
   ) {
     this.logger.debug('GiftCardProvider initialized');
-    this.imageLoader.clearCache();
     this.setCredentials();
   }
 
@@ -129,17 +128,20 @@ export class GiftCardProvider {
     const oldGiftCards = await this.getCardMap(giftCard.name);
     const newMap = this.getNewSaveableGiftCardMap(oldGiftCards, giftCard, opts);
     const savePromise = this.persistCards(giftCard.name, newMap);
-    await Promise.all([savePromise, this.updateActiveCards([giftCard])]);
+    await Promise.all([savePromise, this.updateActiveCards([giftCard], opts)]);
   }
 
-  async updateActiveCards(giftCardsToUpdate: GiftCard[]) {
+  async updateActiveCards(
+    giftCardsToUpdate: GiftCard[],
+    opts: GiftCardSaveParams = {}
+  ) {
     const oldActiveGiftCards: GiftCardMap =
       (await this.persistenceProvider.getActiveGiftCards(this.getNetwork())) ||
       {};
     const newMap = giftCardsToUpdate.reduce(
       (updatedMap, c) =>
         this.getNewSaveableGiftCardMap(updatedMap, c, {
-          remove: c.archived
+          remove: c.archived || opts.remove
         }),
       oldActiveGiftCards
     );
@@ -299,10 +301,9 @@ export class GiftCardProvider {
               this.getBitPayInvoice(card.invoiceId).then(invoice => ({
                 ...card,
                 status:
-                  (card.status === 'PENDING' ||
-                    (card.status === 'UNREDEEMED' &&
-                      invoice.status !== 'new')) &&
-                  invoice.status !== 'expired'
+                  invoice.status !== 'expired' &&
+                  invoice.status !== 'invalid' &&
+                  invoice.status !== 'new'
                     ? 'PENDING'
                     : 'expired'
               }))
