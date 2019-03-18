@@ -504,7 +504,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     // Let's wait a little and try to redeem again after an error,
     // to see if the payment actually succeeded.
     await Observable.timer(10000).toPromise();
-    return this.redeemGiftCard(this.tx.giftData).catch(err =>
+    return this.redeemGiftCard(this.tx.giftData).catch(_ =>
       this.handlePurchaseError(payProError)
     );
   }
