@@ -16,7 +16,6 @@ import { FinishModalPage } from '../../../finish/finish';
 
 // Provider
 import { DecimalPipe } from '@angular/common';
-import { Observable } from 'rxjs';
 import {
   FeeProvider,
   TxConfirmNotificationProvider,
@@ -488,25 +487,18 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     });
     return this.publishAndSign(this.wallet, this.tx)
       .then(() => this.redeemGiftCard(this.tx.giftData))
-      .catch(async err => {
-        if (this.isCredentialsError(err)) return;
-        return this.handlePurchaseError(err);
-      });
-  }
-
-  public isCredentialsError(err) {
-    const credentialsErrors = [
-      'FINGERPRINT_CANCELLED',
-      'PASSWORD_CANCELLED',
-      'NO_PASSWORD',
-      'WRONG_PASSWORD'
-    ];
-    const errorMessage = err && err.message;
-    return err && credentialsErrors.indexOf(errorMessage) !== -1;
+      .catch(err => this.handlePurchaseError(err));
   }
 
   public async handlePurchaseError(err) {
-    this.resetValues();
+    const errorMessage = err && err.message;
+    const canceledErrors = ['FINGERPRINT_CANCELLED', 'PASSWORD_CANCELLED'];
+    if (canceledErrors.indexOf(errorMessage) !== -1) {
+      return;
+    }
+    if (['NO_PASSWORD', 'WRONG_PASSWORD'].indexOf(errorMessage) === -1) {
+      this.resetValues();
+    }
     this.showErrorInfoSheet(
       this.bwcErrorProvider.msg(err),
       this.translate.instant('Could not send transaction')
