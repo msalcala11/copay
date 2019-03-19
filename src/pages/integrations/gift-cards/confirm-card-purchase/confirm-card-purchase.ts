@@ -487,10 +487,13 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     });
     return this.publishAndSign(this.wallet, this.tx)
       .then(() => this.redeemGiftCard(this.tx.giftData))
-      .catch(err => this.handlePurchaseError(err));
+      .catch(async err => this.handlePurchaseError(err));
   }
 
   public async handlePurchaseError(err) {
+    await this.giftCardProvider.saveCard(this.tx.giftData, {
+      remove: true
+    });
     const errorMessage = err && err.message;
     const canceledErrors = ['FINGERPRINT_CANCELLED', 'PASSWORD_CANCELLED'];
     if (canceledErrors.indexOf(errorMessage) !== -1) {
