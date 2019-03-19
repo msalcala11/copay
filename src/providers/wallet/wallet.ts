@@ -1483,7 +1483,6 @@ export class WalletProvider {
                   walletId: wallet.id,
                   untilItChanges: true
                 });
-                // return reject(broadcastedTxp);
                 return resolve(broadcastedTxp);
               })
               .catch(err => {
@@ -1536,7 +1535,6 @@ export class WalletProvider {
             this.onGoingProcessProvider.set('sendingTx');
             this.publishTx(wallet, txp)
               .then(publishedTxp => {
-                // return reject();
                 this.signAndBroadcast(wallet, publishedTxp, password)
                   .then(broadcastedTxp => {
                     return resolve(broadcastedTxp);
