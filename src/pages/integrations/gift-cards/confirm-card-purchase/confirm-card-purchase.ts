@@ -487,26 +487,11 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       status: 'UNREDEEMED'
     });
     return this.publishAndSign(this.wallet, this.tx)
-      .then(() =>
-        this.redeemGiftCard(this.tx.giftData).catch(err =>
-          this.handlePurchaseError(err)
-        )
-      )
+      .then(() => this.redeemGiftCard(this.tx.giftData))
       .catch(async err => {
         if (this.isCredentialsError(err)) return;
-        return this.retryRedemption(err);
+        return this.handlePurchaseError(err);
       });
-  }
-
-  public async retryRedemption(payProError) {
-    // It is possible for the payment protocol request to return
-    // an error and for the payment to still succeed over p2p. So,
-    // Let's wait a little and try to redeem again after an error,
-    // to see if the payment actually succeeded.
-    await Observable.timer(10000).toPromise();
-    return this.redeemGiftCard(this.tx.giftData).catch(_ =>
-      this.handlePurchaseError(payProError)
-    );
   }
 
   public isCredentialsError(err) {
