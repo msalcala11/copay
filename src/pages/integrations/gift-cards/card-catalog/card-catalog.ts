@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import { BuyCardPage } from '../buy-card/buy-card';
@@ -12,7 +12,7 @@ import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-
   selector: 'card-catalog-page',
   templateUrl: 'card-catalog.html'
 })
-export class CardCatalogPage implements OnInit {
+export class CardCatalogPage implements AfterViewInit {
   public allCards: CardConfig[];
   public featuredCards: CardConfig[];
   public moreCards: CardConfig[];
@@ -29,14 +29,19 @@ export class CardCatalogPage implements OnInit {
     private navCtrl: NavController
   ) {}
 
-  async ngOnInit() {
-    this.allCards = await this.giftCardProvider.getAvailableCards().catch(_ => {
-      this.showError();
-      return [] as CardConfig[];
-    });
-    this.updateCardList();
-    this.numFeaturedCards = this.featuredCards.length;
-    this.numMoreCards = this.moreCards.length;
+  ngAfterViewInit() {
+    this.giftCardProvider
+      .getAvailableCards()
+      .then(allCards => {
+        this.allCards = allCards;
+        this.updateCardList();
+        this.numFeaturedCards = this.featuredCards.length;
+        this.numMoreCards = this.moreCards.length;
+      })
+      .catch(_ => {
+        this.showError();
+        return [] as CardConfig[];
+      });
   }
 
   onSearch(query: string) {
