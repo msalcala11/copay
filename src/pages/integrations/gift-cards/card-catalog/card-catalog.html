@@ -5,12 +5,16 @@
       <ion-item-group>
         <ion-item-divider sticky *ngIf="featuredCards?.length && !numMoreCards">{{'Brands' | translate}}</ion-item-divider>
         <ion-item-divider sticky *ngIf="featuredCards?.length && numMoreCards">{{'Featured Brands' | translate}}</ion-item-divider>
-        <card-list-item *ngFor="let card of featuredCards" [card]="card" type="catalog" (click)="buyCard(card)"></card-list-item>
+        <!-- <ion-item *ngFor="let card of featuredCards">{{card.name}}</ion-item> -->
+        <card-list-item *ngFor="let card of featuredCards;" [card]="card" [config]="cardConfigMap[card.name]" type="catalog"
+          (click)="buyCard(card)"></card-list-item>
       </ion-item-group>
       <ion-item-group>
         <ion-item-divider sticky *ngIf="moreCards?.length && !numFeaturedCards">{{'Brands' | translate}}</ion-item-divider>
         <ion-item-divider sticky *ngIf="moreCards?.length && numFeaturedCards">{{'More Brands' | translate}}</ion-item-divider>
-        <card-list-item *ngFor="let card of moreCards" [card]="card" type="catalog" (click)="buyCard(card)"></card-list-item>
+        <!-- <ion-item *ngFor="let card of moreCards">{{card.name}}</ion-item> -->
+        <card-list-item *ngFor="let card of moreCards;" [card]="card" [config]="cardConfigMap[card.name]" type="catalog"
+          (click)="buyCard(card)"></card-list-item>
       </ion-item-group>
       <ion-item-divider></ion-item-divider>
     </ion-list>

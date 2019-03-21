@@ -2,8 +2,11 @@
   min-height: 83px;
 
   &__icon {
+    $icon-height: 50px;
+    height: $icon-height;
+    width: $icon-height;
+
     img {
-      $icon-height: 50px;
       height: $icon-height;
       width: $icon-height;
       margin: 3px 10px 3px 12px;

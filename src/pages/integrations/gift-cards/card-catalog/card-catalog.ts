@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import { BuyCardPage } from '../buy-card/buy-card';
@@ -12,13 +12,14 @@ import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-
   selector: 'card-catalog-page',
   templateUrl: 'card-catalog.html'
 })
-export class CardCatalogPage implements AfterViewInit {
+export class CardCatalogPage {
   public allCards: CardConfig[];
   public featuredCards: CardConfig[];
   public moreCards: CardConfig[];
   public searchQuery: string = '';
   public numFeaturedCards: number;
   public numMoreCards: number;
+  public cardConfigMap: { [name: string]: CardConfig };
 
   @ViewChild(WideHeaderPage)
   wideHeaderPage: WideHeaderPage;
@@ -29,10 +30,14 @@ export class CardCatalogPage implements AfterViewInit {
     private navCtrl: NavController
   ) {}
 
-  ngAfterViewInit() {
+  ionViewDidEnter() {
     this.giftCardProvider
       .getAvailableCards()
       .then(allCards => {
+        this.cardConfigMap = allCards.reduce(
+          (map, cardConfig) => ({ ...map, [cardConfig.name]: cardConfig }),
+          {}
+        );
         this.allCards = allCards;
         this.updateCardList();
         this.numFeaturedCards = this.featuredCards.length;

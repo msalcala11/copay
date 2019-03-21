@@ -38,6 +38,8 @@ export class GiftCardProvider {
   };
 
   availableCardsPromise: Promise<CardConfig[]>;
+  availableCardMapPromise: Promise<{ [name: string]: CardConfig }>;
+
   cachedApiCardConfigPromise: Promise<CardConfigMap>;
 
   cardUpdatesSubject: Subject<GiftCard> = new Subject<GiftCard>();
@@ -69,8 +71,26 @@ export class GiftCardProvider {
   }
 
   async getCardConfig(cardName: string) {
-    const supportedCards = await this.getSupportedCards();
-    return supportedCards.find(c => c.name === cardName);
+    console.log('getCardConfig called');
+    const cardConfigMap = await this.getCardConfigMap();
+    return cardConfigMap[cardName];
+  }
+
+  getCardConfigMap() {
+    return this.availableCardMapPromise
+      ? this.availableCardMapPromise
+      : this.fetchCardConfigMap();
+  }
+
+  async fetchCardConfigMap() {
+    this.availableCardMapPromise = this.getAvailableCards().then(
+      availableCards =>
+        availableCards.reduce(
+          (map, cardConfig) => ({ ...map, [cardConfig.name]: cardConfig }),
+          {}
+        )
+    );
+    return this.availableCardMapPromise;
   }
 
   async getCardMap(cardName: string) {

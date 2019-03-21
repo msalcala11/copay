@@ -14,6 +14,8 @@ import {
           class="card-list-item__icon"
           [ngClass]="{ archived: card?.archived && type === 'purchased' }"
           [src]="cardConfig?.icon"
+          [fallbackAsPlaceholder]="true"
+          [fallbackUrl]="iconFallback"
         ></img-loader>
       </ion-icon>
       <ion-label>
@@ -61,18 +63,26 @@ import {
 export class CardListItemComponent {
   public cardConfig: CardConfig;
 
+  public iconFallback =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAQAAAA38nkBAAAADklEQVR42mP8/4Vx8CEAn9BhqacD+5kAAAAASUVORK5CYII=';
+
   @Input()
   card: GiftCard;
 
   @Input()
   type: 'catalog' | 'purchased' | 'settings' = 'catalog';
 
+  @Input()
+  config: CardConfig;
+
   currency: string;
 
   constructor(private giftCardProvider: GiftCardProvider) {}
 
   async ngOnInit() {
-    this.cardConfig = await this.giftCardProvider.getCardConfig(this.card.name);
+    this.cardConfig = this.config
+      ? this.config
+      : await this.giftCardProvider.getCardConfig(this.card.name);
     this.currency =
       (this.card && this.card.currency) || this.cardConfig.currency;
   }
