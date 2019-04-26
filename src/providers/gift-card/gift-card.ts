@@ -8,6 +8,7 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { mergeMap } from 'rxjs/operators';
 import { promiseSerial } from '../../utils';
+import { AppProvider } from '../app/app';
 import { ConfigProvider } from '../config/config';
 import { EmailNotificationsProvider } from '../email-notifications/email-notifications';
 import { HomeIntegrationsProvider } from '../home-integrations/home-integrations';
@@ -49,6 +50,7 @@ export class GiftCardProvider {
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAQAAAA38nkBAAAADklEQVR42mP8/4Vx8CEAn9BhqacD+5kAAAAASUVORK5CYII=';
 
   constructor(
+    private appProvider: AppProvider,
     private configProvider: ConfigProvider,
     private emailNotificationsProvider: EmailNotificationsProvider,
     private http: HttpClient,
@@ -468,7 +470,9 @@ export class GiftCardProvider {
   async fetchAvailableCardMap() {
     const url = `${this.credentials.BITPAY_API_URL}/gift-cards/cards`;
     const availableCardMap = (await this.http
-      .get(url)
+      .get(url, {
+        headers: { 'x-bitpay-version': this.appProvider.info.version }
+      })
       .toPromise()) as AvailableCardMap;
     this.cacheApiCardConfig(availableCardMap);
     return availableCardMap;
