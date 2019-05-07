@@ -22,8 +22,9 @@
 <ion-content class="fullscreen-tab">
   <ion-toolbar class="home-header">
     <ion-buttons left class="add-button">
-      <button ion-button clear icon-only (click)="goToAddView()" *ngIf="wallets && wallets[0]">
-        <ion-icon name="add"></ion-icon>
+      <button ion-button clear (click)="goToAddView()" *ngIf="wallets && wallets[0]">
+        <img src="assets/img/plus.svg">
+        <!-- <ion-icon name="add"></ion-icon> -->
       </button>
     </ion-buttons>
     <ion-title>
@@ -34,7 +35,8 @@
         <ion-badge color="danger">{{txpsN}}</ion-badge>
       </button>
       <button class="modal-close-button" (click)="settings()" ion-button>
-        <img src="assets/img/icon-settings.svg">
+        <!-- <img src="assets/img/icon-settings.svg"> -->
+        <img src="assets/img/settings.svg">
       </button>
     </ion-buttons>
   </ion-toolbar>
