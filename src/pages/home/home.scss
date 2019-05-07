@@ -1,19 +1,35 @@
 page-home {
-  background: $toolbar-background;
+  // background: $toolbar-background;
+
+  ion-content {
+
+    &.content-ios,
+    &.content-md {
+      background: #F6F7FC;
+    }
+  }
+
+  .toolbar-background {
+    background: none;
+  }
 
   .home-header {
     .add-button {
       margin-left: 1rem;
+
       ion-icon {
         font-size: 3rem;
       }
     }
+
     .settings-button {
       margin-right: 1rem;
+
       img {
         opacity: 0.6;
       }
     }
+
     .home-logo {
       height: 24px;
       position: relative;
@@ -32,11 +48,11 @@ page-home {
       align-items: center;
       max-width: 70%;
 
-      > img {
+      >img {
         margin-right: 7px;
       }
 
-      > span {
+      >span {
         line-height: 18px;
       }
     }
@@ -53,7 +69,7 @@ page-home {
   .title {
     font-weight: 500;
 
-    > img {
+    >img {
       margin-right: 7px;
     }
   }
@@ -118,7 +134,7 @@ page-home {
 
   ion-refresher {
     height: 120px;
-    background: $toolbar-background;
+    // background: $toolbar-background;
 
     &-content {
       margin-top: -25px;
@@ -258,6 +274,7 @@ page-home {
         height: $gift-card-item-height;
 
         ion-label {
+
           &.label-ios,
           &.label-md {
             display: flex;
@@ -317,7 +334,7 @@ page-home {
     height: 73px;
   }
 
-  @include fix-ios-bg-scroll();
+  // @include fix-ios-bg-scroll();
 
   ion-fab {
     ion-icon.icon {
