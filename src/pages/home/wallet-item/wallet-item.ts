@@ -14,8 +14,9 @@ export type WalletItemAction = 'send' | 'receive';
   template: `
     <ion-item-sliding #slidingItem>
       <button ion-item (click)="performAction('view')">
-        <img src="" />
-        <ion-note item-start> Bitcoin Cash </ion-note>
+        <ion-avatar item-start> <img src="assets/img/bch.svg" /> </ion-avatar>
+        <ion-label item-start> Bitcoin Cash </ion-label>
+        <ion-note item-start> 1/1 </ion-note>
         <ion-note item-end> .012345 </ion-note>
       </button>
       <ion-item-options side="left">
