@@ -16,12 +16,14 @@ export type WalletItemAction = 'send' | 'receive';
       <button ion-item (click)="performAction('view')">
         <ion-avatar item-start> <img src="assets/img/bch.svg" /> </ion-avatar>
         <ion-label item-start>
-          Bitcoin Cash <ion-note item-start> 1/1 </ion-note>
+          <div class="primary-text" style="margin-bottom: 2px;">
+            Bitcoin Cash
+          </div>
+          <ion-note item-start class="secondary-text"> 1/1 </ion-note>
         </ion-label>
-
         <ion-note item-end>
-          <div>.012345</div>
-          <div>.012345</div>
+          <div class="primary-text">.012345</div>
+          <div class="secondary-text">$95.80 USD</div>
         </ion-note>
       </button>
       <ion-item-options side="left">
