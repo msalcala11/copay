@@ -6,7 +6,6 @@ import {
   ViewChild
 } from '@angular/core';
 import { Item, ItemSliding } from 'ionic-angular';
-import * as _ from 'lodash';
 
 export type WalletItemAction = 'send' | 'receive';
 
@@ -49,8 +48,6 @@ export class WalletItem {
   }> = new EventEmitter();
 
   currency: string;
-  numCurrencies: number;
-  totalBalance: number;
 
   @ViewChild(Item)
   item: Item;
@@ -67,6 +64,6 @@ export class WalletItem {
       walletId: this.wallet.id,
       action
     });
-    // this.slidingItem.close();
+    this.slidingItem.close();
   }
 }
