@@ -5,7 +5,7 @@ page-home {
 
     &.content-ios,
     &.content-md {
-      background: #F6F7FC;
+      background: #FBFBFF; //#F6F7FC;
     }
   }
 
@@ -245,8 +245,15 @@ page-home {
 
     ion-item-options {
       border-bottom: 0;
-      padding-right: $gift-card-item-side-padding;
       height: $gift-card-item-height;
+
+      &[side*="right"] {
+        padding-right: $gift-card-item-side-padding;
+      }
+
+      &[side*="left"] {
+        padding-left: $gift-card-item-side-padding;
+      }
 
       button.button {
         border-radius: 5px;
