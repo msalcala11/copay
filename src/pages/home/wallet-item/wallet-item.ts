@@ -15,9 +15,14 @@ export type WalletItemAction = 'send' | 'receive';
     <ion-item-sliding #slidingItem>
       <button ion-item (click)="performAction('view')">
         <ion-avatar item-start> <img src="assets/img/bch.svg" /> </ion-avatar>
-        <ion-label item-start> Bitcoin Cash </ion-label>
-        <ion-note item-start> 1/1 </ion-note>
-        <ion-note item-end> .012345 </ion-note>
+        <ion-label item-start>
+          Bitcoin Cash <ion-note item-start> 1/1 </ion-note>
+        </ion-label>
+
+        <ion-note item-end>
+          <div>.012345</div>
+          <div>.012345</div>
+        </ion-note>
       </button>
       <ion-item-options side="left">
         <button ion-button (click)="performAction('archive')" color="info">
