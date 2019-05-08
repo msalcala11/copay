@@ -24,7 +24,7 @@ export type WalletItemAction = 'send' | 'receive';
           <div class="archive__icon">
             <ion-icon ios="md-close" md="md-close"></ion-icon>
           </div>
-          <div class="archive__text">&nbsp;&nbsp;Send&nbsp;&nbsp;</div>
+          <div class="archive__text">Send</div>
         </button>
       </ion-item-options>
       <ion-item-options side="right">
