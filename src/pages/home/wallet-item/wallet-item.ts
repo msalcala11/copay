@@ -35,7 +35,10 @@ export type WalletItemAction = 'send' | 'receive';
                 : lastKnownBalance
             }}
           </div>
-          <div class="secondary-text">$95.80 USD</div>
+          <div class="secondary-text">
+            {{ wallet?.cachedStatus?.totalBalanceAlternative }}
+            {{ wallet?.cachedStatus?.alternativeIsoCode }}
+          </div>
         </ion-note>
       </button>
       <ion-item-options side="left">
