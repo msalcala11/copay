@@ -91,7 +91,7 @@ export class WalletItem implements OnInit, OnChanges {
   }
 
   recalculateValues() {
-    this.currency = 'BCH';
+    this.currency = this.wallet.coin.toUpperCase();
     this.lastKnownBalance =
       this.wallet.lastKnownBalance &&
       this.wallet.lastKnownBalance.replace(` ${this.currency}`, '');
