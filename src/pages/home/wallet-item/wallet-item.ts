@@ -9,6 +9,12 @@ import { Item, ItemSliding } from 'ionic-angular';
 
 export type WalletItemAction = 'send' | 'receive';
 
+// {{
+//   wallet.cachedStatus && wallet.cachedStatus.totalBalanceStr
+//     ? wallet.cachedStatus.totalBalanceStr
+//     : wallet.lastKnownBalance
+// }}
+
 @Component({
   selector: 'wallet-item',
   template: `
@@ -16,11 +22,19 @@ export type WalletItemAction = 'send' | 'receive';
       <button ion-item (click)="performAction('view')">
         <ion-avatar item-start> <img src="assets/img/bch.svg" /> </ion-avatar>
         <ion-label item-start>
-          <div class="primary-text wallet-name">Bitcoin Cash</div>
+          <div class="primary-text wallet-name">
+            {{ wallet.name || 'Bitcoin Cash' }}
+          </div>
           <ion-note item-start class="secondary-text"> 1/1 </ion-note>
         </ion-label>
         <ion-note item-end>
-          <div class="primary-text">.012345</div>
+          <div class="primary-text">
+            {{
+              wallet.cachedStatus && totalBalanceStr
+                ? totalBalanceStr
+                : lastKnownBalance
+            }}
+          </div>
           <div class="secondary-text">$95.80 USD</div>
         </ion-note>
       </button>
@@ -57,16 +71,26 @@ export class WalletItem {
     action: WalletItemAction;
   }> = new EventEmitter();
 
-  currency: string;
-
   @ViewChild(Item)
   item: Item;
 
   @ViewChild(ItemSliding)
   slidingItem: ItemSliding;
 
+  currency: string;
+  lastKnownBalance: string;
+  totalBalanceStr: string;
+
   async ngAfterViewInit() {
     this.currency = 'BCH';
+    this.lastKnownBalance = this.wallet.lastKnownBalance.replace(
+      ` ${this.currency}`,
+      ''
+    );
+    this.totalBalanceStr = this.wallet.cachedStatus.totalBalanceStr.replace(
+      ` ${this.currency}`,
+      ''
+    );
   }
 
   performAction(action: WalletItemAction) {
