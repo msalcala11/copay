@@ -371,7 +371,13 @@ export class HomePage {
   }
 
   public onWalletAction(event) {
-    event.action === 'view' && this.goToWalletDetails(event.wallet);
+    const tabMap = {
+      receive: 0,
+      view: 1,
+      send: 2
+    };
+    const selectedTabIndex = tabMap[event.action];
+    this.goToWalletDetails(event.wallet, { selectedTabIndex });
   }
 
   public checkClipboard() {
@@ -704,7 +710,7 @@ export class HomePage {
     this.navCtrl.push(AddPage);
   }
 
-  public goToWalletDetails(wallet): void {
+  public goToWalletDetails(wallet, params): void {
     if (
       this.showReorderBtc ||
       this.showReorderBch ||
@@ -712,7 +718,7 @@ export class HomePage {
     )
       return;
 
-    this.events.publish('OpenWallet', wallet);
+    this.events.publish('OpenWallet', wallet, params);
   }
 
   public reorderBtc(): void {
