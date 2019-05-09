@@ -26,10 +26,18 @@ wallet-item {
 
     &--receive {
       background-color: #edf7f9;
+
+      &.activated {
+        background-color: #e8f4f7;
+      }
     }
 
     &--send {
-      background-color: #eff1fe
+      background-color: #eff1fe;
+
+      &.activated {
+        background-color: #e9ebf9;
+      }
     }
 
     &__icon {
