@@ -319,7 +319,12 @@ export class HomePage {
     */
 
     this.profileProvider.setLastKnownBalance();
-    this.wallets = this.profileProvider.getWallets();
+    this.wallets = this.profileProvider.getWallets().sort((a, b) => {
+      const aSortValue = a.network === 'livenet' ? 0 : 1;
+      const bSortValue = b.network === 'livenet' ? 0 : 1;
+      return aSortValue - bSortValue;
+    });
+
     console.log('this.wallets', this.wallets);
     this.vaultWallets = this.profileProvider.getVaultWallets();
     this.walletsBtc = _.filter(this.wallets, (x: any) => {
