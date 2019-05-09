@@ -364,6 +364,10 @@ export class HomePage {
     });
   }
 
+  public onWalletAction(event) {
+    this.goToWalletDetails(event.wallet);
+  }
+
   public checkClipboard() {
     return this.clipboardProvider
       .getData()

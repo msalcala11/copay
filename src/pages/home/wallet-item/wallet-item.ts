@@ -1,8 +1,8 @@
 import {
-  AfterViewInit,
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild
@@ -10,12 +10,6 @@ import {
 import { Item, ItemSliding } from 'ionic-angular';
 
 export type WalletItemAction = 'send' | 'receive';
-
-// {{
-//   wallet.cachedStatus && wallet.cachedStatus.totalBalanceStr
-//     ? wallet.cachedStatus.totalBalanceStr
-//     : wallet.lastKnownBalance
-// }}
 
 @Component({
   selector: 'wallet-item',
@@ -49,7 +43,7 @@ export type WalletItemAction = 'send' | 'receive';
         <button
           class="action action--send"
           ion-button
-          (click)="performAction('archive')"
+          (click)="performAction('send')"
         >
           <div class="action__icon"><img src="assets/img/send.svg" /></div>
           <div class="action__text">Send</div>
@@ -59,7 +53,7 @@ export type WalletItemAction = 'send' | 'receive';
         <button
           class="action action--receive"
           ion-button
-          (click)="performAction('archive')"
+          (click)="performAction('receive')"
         >
           <div class="action__icon"><img src="assets/img/receive.svg" /></div>
           <div class="action__text">Receive</div>
@@ -68,13 +62,13 @@ export type WalletItemAction = 'send' | 'receive';
     </ion-item-sliding>
   `
 })
-export class WalletItem implements OnInit, AfterViewInit {
+export class WalletItem implements OnInit, OnChanges {
   @Input()
   wallet: any = { id: 'adfjk' };
 
   @Output()
   action: EventEmitter<{
-    walletId: string;
+    wallet: any;
     action: WalletItemAction;
   }> = new EventEmitter();
 
@@ -89,6 +83,14 @@ export class WalletItem implements OnInit, AfterViewInit {
   totalBalanceStr: string;
 
   ngOnInit() {
+    this.recalculateValues();
+  }
+
+  ngOnChanges() {
+    this.recalculateValues();
+  }
+
+  recalculateValues() {
     this.currency = 'BCH';
     this.lastKnownBalance =
       this.wallet.lastKnownBalance &&
@@ -99,11 +101,9 @@ export class WalletItem implements OnInit, AfterViewInit {
       this.wallet.cachedStatus.totalBalanceStr.replace(` ${this.currency}`, '');
   }
 
-  async ngAfterViewInit() {}
-
   performAction(action: WalletItemAction) {
     this.action.emit({
-      walletId: this.wallet.id,
+      wallet: this.wallet,
       action
     });
     this.slidingItem.close();

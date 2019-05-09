@@ -137,7 +137,8 @@
       <br>
       <ion-list>
         <div class="section-header" translate>Wallets</div>
-        <wallet-item *ngFor="let wallet of walletsBch" class="sliding-container" [wallet]="wallet"></wallet-item>
+        <wallet-item *ngFor="let wallet of walletsBch" class="sliding-container" [wallet]="wallet"
+          (action)="onWalletAction($event)"></wallet-item>
       </ion-list>
 
       <!-- TODO Optimize code to list wallets -->
