@@ -1,7 +1,9 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   ViewChild
 } from '@angular/core';
@@ -25,7 +27,9 @@ export type WalletItemAction = 'send' | 'receive';
           <div class="primary-text wallet-name">
             {{ wallet.name || 'Bitcoin Cash' }}
           </div>
-          <ion-note item-start class="secondary-text"> 1/1 </ion-note>
+          <ion-note item-start class="secondary-text">
+            {{ wallet.credentials.m }}/{{ wallet.credentials.n }}
+          </ion-note>
         </ion-label>
         <ion-note item-end>
           <div class="primary-text">
@@ -64,7 +68,7 @@ export type WalletItemAction = 'send' | 'receive';
     </ion-item-sliding>
   `
 })
-export class WalletItem {
+export class WalletItem implements OnInit, AfterViewInit {
   @Input()
   wallet: any = { id: 'adfjk' };
 
@@ -84,17 +88,18 @@ export class WalletItem {
   lastKnownBalance: string;
   totalBalanceStr: string;
 
-  async ngAfterViewInit() {
+  ngOnInit() {
     this.currency = 'BCH';
-    this.lastKnownBalance = this.wallet.lastKnownBalance.replace(
-      ` ${this.currency}`,
-      ''
-    );
-    this.totalBalanceStr = this.wallet.cachedStatus.totalBalanceStr.replace(
-      ` ${this.currency}`,
-      ''
-    );
+    this.lastKnownBalance =
+      this.wallet.lastKnownBalance &&
+      this.wallet.lastKnownBalance.replace(` ${this.currency}`, '');
+    this.totalBalanceStr =
+      this.wallet.cachedStatus &&
+      this.wallet.cachedStatus.totalBalanceStr &&
+      this.wallet.cachedStatus.totalBalanceStr.replace(` ${this.currency}`, '');
   }
+
+  async ngAfterViewInit() {}
 
   performAction(action: WalletItemAction) {
     this.action.emit({
