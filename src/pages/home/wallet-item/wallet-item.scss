@@ -14,6 +14,10 @@ wallet-item {
     font-size: 14px;
   }
 
+  .testnet {
+    filter: grayscale(100%);
+  }
+
   .item-inner {
     text-align: right;
   }

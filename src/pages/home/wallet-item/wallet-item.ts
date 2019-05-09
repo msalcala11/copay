@@ -11,12 +11,21 @@ import { Item, ItemSliding } from 'ionic-angular';
 
 export type WalletItemAction = 'send' | 'receive';
 
+// <img
+// src="assets/img/currencies/{{wallet.network === 'testnet' ? 'testnet/' : ''}}{{wallet.coin}}.svg"
+// />
+
 @Component({
   selector: 'wallet-item',
   template: `
     <ion-item-sliding #slidingItem>
       <button ion-item (click)="performAction('view')">
-        <ion-avatar item-start> <img src="assets/img/bch.svg" /> </ion-avatar>
+        <ion-avatar item-start>
+          <img
+            [ngClass]="{ testnet: wallet.network === 'testnet' }"
+            src="assets/img/currencies/{{wallet.coin}}.svg"
+          />
+        </ion-avatar>
         <ion-label item-start>
           <div class="primary-text wallet-name">
             {{ wallet.name || 'Bitcoin Cash' }}
