@@ -34,7 +34,7 @@ export type WalletItemAction = 'send' | 'receive';
             {{ wallet.credentials.m }}/{{ wallet.credentials.n }}
           </ion-note>
         </ion-label>
-        <ion-note item-end>
+        <ion-note item-end *ngIf="!hasZeroBalance">
           <div class="primary-text">
             {{
               wallet.cachedStatus && totalBalanceStr
@@ -45,6 +45,12 @@ export type WalletItemAction = 'send' | 'receive';
           <div class="secondary-text" *ngIf="wallet.cachedStatus">
             {{ wallet?.cachedStatus.totalBalanceAlternative }}
             {{ wallet?.cachedStatus.alternativeIsoCode }}
+          </div>
+        </ion-note>
+        <ion-note item-end *ngIf="hasZeroBalance">
+          <div class="primary-text">0</div>
+          <div class="secondary-text" *ngIf="wallet.cachedStatus">
+            0 {{ wallet?.cachedStatus.alternativeIsoCode }}
           </div>
         </ion-note>
       </button>
@@ -88,6 +94,7 @@ export class WalletItem implements OnInit, OnChanges {
   slidingItem: ItemSliding;
 
   currency: string;
+  hasZeroBalance: boolean;
   lastKnownBalance: string;
   totalBalanceStr: string;
 
@@ -104,10 +111,13 @@ export class WalletItem implements OnInit, OnChanges {
     this.lastKnownBalance =
       this.wallet.lastKnownBalance &&
       this.wallet.lastKnownBalance.replace(` ${this.currency}`, '');
+    if (!this.wallet.cachedStatus) return;
     this.totalBalanceStr =
-      this.wallet.cachedStatus &&
       this.wallet.cachedStatus.totalBalanceStr &&
       this.wallet.cachedStatus.totalBalanceStr.replace(` ${this.currency}`, '');
+    this.hasZeroBalance =
+      this.wallet.cachedStatus.totalBalanceSat === 0 ||
+      this.lastKnownBalance === '0.00';
   }
 
   performAction(action: WalletItemAction) {
