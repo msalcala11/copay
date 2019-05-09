@@ -222,8 +222,10 @@ page-home {
   }
 
   .section-header {
-    text-transform: uppercase;
-    font-size: 13px;
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: -2px;
   }
 
   // Styles for gift cards and Bitpay cards

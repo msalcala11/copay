@@ -5,6 +5,10 @@ wallet-item {
     margin-bottom: 4px;
   }
 
+  .wallet-name {
+    margin-bottom: 2px;
+  }
+
   .secondary-text {
     color: #AAAEB6;
     font-size: 14px;
@@ -13,4 +17,34 @@ wallet-item {
   .item-inner {
     text-align: right;
   }
+
+  .action {
+
+    &.button.button-default {
+      padding: 0;
+    }
+
+    &--receive {
+      background-color: #edf7f9;
+    }
+
+    &--send {
+      background-color: #eff1fe
+    }
+
+    &__icon {
+      img {
+        height: 35px;
+      }
+    }
+
+    &__text {
+      color: #434d59;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 3px;
+    }
+
+  }
+
 }

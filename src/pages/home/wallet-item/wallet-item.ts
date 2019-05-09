@@ -16,9 +16,7 @@ export type WalletItemAction = 'send' | 'receive';
       <button ion-item (click)="performAction('view')">
         <ion-avatar item-start> <img src="assets/img/bch.svg" /> </ion-avatar>
         <ion-label item-start>
-          <div class="primary-text" style="margin-bottom: 2px;">
-            Bitcoin Cash
-          </div>
+          <div class="primary-text wallet-name">Bitcoin Cash</div>
           <ion-note item-start class="secondary-text"> 1/1 </ion-note>
         </ion-label>
         <ion-note item-end>
@@ -27,19 +25,23 @@ export type WalletItemAction = 'send' | 'receive';
         </ion-note>
       </button>
       <ion-item-options side="left">
-        <button ion-button (click)="performAction('archive')" color="info">
-          <div class="archive__icon">
-            <ion-icon ios="md-close" md="md-close"></ion-icon>
-          </div>
-          <div class="archive__text">Send</div>
+        <button
+          class="action action--send"
+          ion-button
+          (click)="performAction('archive')"
+        >
+          <div class="action__icon"><img src="assets/img/send.svg" /></div>
+          <div class="action__text">Send</div>
         </button>
       </ion-item-options>
       <ion-item-options side="right">
-        <button ion-button (click)="performAction('archive')" color="success">
-          <div class="archive__icon">
-            <ion-icon ios="md-close" md="md-close"></ion-icon>
-          </div>
-          <div class="archive__text">Receive</div>
+        <button
+          class="action action--receive"
+          ion-button
+          (click)="performAction('archive')"
+        >
+          <div class="action__icon"><img src="assets/img/receive.svg" /></div>
+          <div class="action__text">Receive</div>
         </button>
       </ion-item-options>
     </ion-item-sliding>
