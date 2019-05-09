@@ -365,7 +365,7 @@ export class HomePage {
   }
 
   public onWalletAction(event) {
-    this.goToWalletDetails(event.wallet);
+    event.action === 'view' && this.goToWalletDetails(event.wallet);
   }
 
   public checkClipboard() {
