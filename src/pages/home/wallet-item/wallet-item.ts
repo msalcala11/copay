@@ -42,9 +42,9 @@ export type WalletItemAction = 'send' | 'receive';
                 : lastKnownBalance
             }}
           </div>
-          <div class="secondary-text">
-            {{ wallet?.cachedStatus?.totalBalanceAlternative }}
-            {{ wallet?.cachedStatus?.alternativeIsoCode }}
+          <div class="secondary-text" *ngIf="wallet.cachedStatus">
+            {{ wallet?.cachedStatus.totalBalanceAlternative }}
+            {{ wallet?.cachedStatus.alternativeIsoCode }}
           </div>
         </ion-note>
       </button>
