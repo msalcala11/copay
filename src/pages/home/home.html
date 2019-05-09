@@ -134,8 +134,7 @@
             </button>
           </ion-item-options>
         </ion-item-sliding> -->
-      <br>
-      <ion-list>
+      <ion-list style="margin-top: 20px;">
         <div class="section-header" translate>Wallets</div>
         <wallet-item *ngFor="let wallet of wallets" class="sliding-container" [wallet]="wallet"
           (action)="onWalletAction($event)"></wallet-item>
@@ -200,7 +199,7 @@
         </ion-list>
       </div>
 
-      <div class="card" *ngIf="walletsBtc && walletsBtc[0]">
+      <div class="card" *ngIf="walletsBtc && walletsBtc[0]" [hidden]="true">
         <ion-item-divider>
           <div class="title wallets-list-title" item-start>
             <img src="assets/img/icon-bitcoin.svg" alt="Bitcoin Wallets" width="18" />
@@ -257,7 +256,7 @@
         </ion-list>
       </div>
 
-      <div class="card" *ngIf="walletsBch && walletsBch[0]">
+      <div class="card" *ngIf="walletsBch && walletsBch[0]" [hidden]="true">
         <ion-item-divider>
           <div class="title wallets-list-title" item-start>
             <img src="assets/img/bitcoin-cash-logo.svg" alt="Bitcoin Cash Wallets" width="22" />
