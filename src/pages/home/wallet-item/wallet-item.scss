@@ -1,4 +1,8 @@
 wallet-item {
+  &.sliding-container {
+    margin: 10px auto;
+  }
+
   .primary-text {
     color: black;
     font-size: 16px;
@@ -60,6 +64,11 @@ wallet-item {
       margin-top: 3px;
     }
 
+  }
+
+  ion-item-sliding.item-wrapper button.item.item-block {
+    // box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.03);
+    box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.03);
   }
 
 }
