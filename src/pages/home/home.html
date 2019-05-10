@@ -134,7 +134,7 @@
             </button>
           </ion-item-options>
         </ion-item-sliding> -->
-      <ion-list style="margin-top: 20px;">
+      <ion-list style="margin-top: 20px;" *ngIf="wallets && wallets.length">
         <div class="section-header" translate>Wallets</div>
         <wallet-item *ngFor="let wallet of wallets" class="sliding-container" [wallet]="wallet"
           (action)="onWalletAction($event)"></wallet-item>
