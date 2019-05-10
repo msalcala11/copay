@@ -141,7 +141,7 @@
       </ion-list>
 
       <!-- TODO Optimize code to list wallets -->
-      <div class="card" *ngIf="vaultWallets && vaultWallets[0]">
+      <div class="card" *ngIf="vaultWallets && vaultWallets[0]" [hidden]="true">
         <ion-item-divider>
           <div class="title wallets-list-title" item-start>
             <span>Vault</span>

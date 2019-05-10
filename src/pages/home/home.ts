@@ -1,4 +1,5 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
+import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Events, NavController, Platform } from 'ionic-angular';
 import * as _ from 'lodash';
@@ -95,7 +96,8 @@ export class HomePage {
     private translate: TranslateService,
     private emailProvider: EmailNotificationsProvider,
     private clipboardProvider: ClipboardProvider,
-    private incomingDataProvider: IncomingDataProvider
+    private incomingDataProvider: IncomingDataProvider,
+    private statusBar: StatusBar
   ) {
     this.slideDown = false;
     this.isElectron = this.platformProvider.isElectron;
@@ -118,6 +120,7 @@ export class HomePage {
   }
 
   private _willEnter() {
+    this.statusBar.styleDefault();
     // Update list of wallets, status and TXPs
     this.setWallets();
 
