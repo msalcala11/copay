@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
   ViewChild
@@ -10,10 +9,6 @@ import {
 import { Item, ItemSliding } from 'ionic-angular';
 
 export type WalletItemAction = 'send' | 'receive';
-
-// <img
-// src="assets/img/currencies/{{wallet.network === 'testnet' ? 'testnet/' : ''}}{{wallet.coin}}.svg"
-// />
 
 @Component({
   selector: 'wallet-item',
@@ -27,27 +22,19 @@ export type WalletItemAction = 'send' | 'receive';
           />
         </ion-avatar>
         <ion-label item-start>
-          <div class="primary-text wallet-name">
-            {{ wallet.name || 'Bitcoin Cash' }}
-          </div>
+          <div class="primary-text wallet-name ellipsis">{{ wallet.name }}</div>
           <ion-note item-start class="secondary-text">
             {{ wallet.credentials.m }}/{{ wallet.credentials.n }}
           </ion-note>
         </ion-label>
-        <ion-note item-end *ngIf="!hasZeroBalance">
-          <div class="primary-text">
-            {{
-              wallet.cachedStatus && totalBalanceStr
-                ? totalBalanceStr
-                : lastKnownBalance
-            }}
-          </div>
+        <ion-note item-end *ngIf="!hasZeroBalance()">
+          <div class="primary-text">{{ getBalance() }}</div>
           <div class="secondary-text" *ngIf="wallet.cachedStatus">
             {{ wallet?.cachedStatus.totalBalanceAlternative }}
             {{ wallet?.cachedStatus.alternativeIsoCode }}
           </div>
         </ion-note>
-        <ion-note item-end *ngIf="hasZeroBalance">
+        <ion-note item-end *ngIf="hasZeroBalance()">
           <div class="primary-text">0</div>
           <div class="secondary-text" *ngIf="wallet.cachedStatus">
             0 {{ wallet?.cachedStatus.alternativeIsoCode }}
@@ -77,9 +64,9 @@ export type WalletItemAction = 'send' | 'receive';
     </ion-item-sliding>
   `
 })
-export class WalletItem implements OnInit, OnChanges {
+export class WalletItem implements OnInit {
   @Input()
-  wallet: any = { id: 'adfjk' };
+  wallet: any;
 
   @Output()
   action: EventEmitter<{
@@ -94,30 +81,35 @@ export class WalletItem implements OnInit, OnChanges {
   slidingItem: ItemSliding;
 
   currency: string;
-  hasZeroBalance: boolean;
   lastKnownBalance: string;
   totalBalanceStr: string;
 
   ngOnInit() {
-    this.recalculateValues();
-  }
-
-  ngOnChanges() {
-    this.recalculateValues();
-  }
-
-  recalculateValues() {
     this.currency = this.wallet.coin.toUpperCase();
-    this.lastKnownBalance =
-      this.wallet.lastKnownBalance &&
-      this.wallet.lastKnownBalance.replace(` ${this.currency}`, '');
-    if (!this.wallet.cachedStatus) return;
-    this.totalBalanceStr =
+  }
+
+  getBalance() {
+    const lastKnownBalance = this.getLastKownBalance();
+    const totalBalanceStr =
+      this.wallet.cachedStatus &&
       this.wallet.cachedStatus.totalBalanceStr &&
       this.wallet.cachedStatus.totalBalanceStr.replace(` ${this.currency}`, '');
-    this.hasZeroBalance =
-      this.wallet.cachedStatus.totalBalanceSat === 0 ||
-      this.lastKnownBalance === '0.00';
+    return totalBalanceStr || lastKnownBalance;
+  }
+
+  getLastKownBalance() {
+    return (
+      this.wallet.lastKnownBalance &&
+      this.wallet.lastKnownBalance.replace(` ${this.currency}`, '')
+    );
+  }
+
+  hasZeroBalance() {
+    return (
+      (this.wallet.cachedStatus &&
+        this.wallet.cachedStatus.totalBalanceSat === 0) ||
+      this.getLastKownBalance() === '0.00'
+    );
   }
 
   performAction(action: WalletItemAction) {
