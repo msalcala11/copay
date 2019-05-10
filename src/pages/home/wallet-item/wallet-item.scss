@@ -38,7 +38,8 @@ wallet-item {
     &--receive {
       background-color: #edf7f9;
 
-      &.activated {
+      &.activated,
+      &:hover:not(.disable-hover) {
         background-color: #e8f4f7;
       }
     }
@@ -46,7 +47,8 @@ wallet-item {
     &--send {
       background-color: #eff1fe;
 
-      &.activated {
+      &.activated,
+      &:hover:not(.disable-hover) {
         background-color: #e9ebf9;
       }
     }
