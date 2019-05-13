@@ -347,11 +347,45 @@ page-home {
     height: 73px;
   }
 
+  .scan-button {
+    position: absolute;
+    z-index: 999;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    // padding: 20px;
+    // padding: 27px 22px;
+    padding: 27px 22px 26px 19px;
+    border-radius: 30px;
+    box-shadow: 0 7px 31px 0 rgba(0, 0, 0, 0.17);
+    color: white;
+    font-weight: 500;
+
+    ion-avatar {
+      margin-top: -3px;
+      margin-right: 10px;
+    }
+  }
+
   // @include fix-ios-bg-scroll();
 
   ion-fab {
     ion-icon.icon {
       font-size: 0;
+    }
+
+    width: 100px;
+    border-radius: 30px;
+
+    button {
+      padding: 0px 50px 0px 55px;
+      border-radius: 30px;
+
+      .fab-text {
+        margin-left: 5px;
+        font-weight: 500;
+        font-size: 16px;
+      }
     }
   }
 
