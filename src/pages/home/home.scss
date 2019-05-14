@@ -335,8 +335,8 @@ page-home {
 
   .add-card-button {
     @include center;
-    background: rgba(235, 237, 248, 0.57);
-    color: rgb(79, 110, 247);
+    background: #F4F5FB; //rgba(235, 237, 248, 0.57);
+    color: #5F7BF7;
     border-radius: 7px;
     // color: #060606;
     cursor: pointer;
