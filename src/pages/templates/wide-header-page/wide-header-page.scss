@@ -14,7 +14,6 @@ card-catalog-page {
 
     ion-title .toolbar-title {
       font-weight: 400;
-      color: black;
     }
 
     &__title {
@@ -51,5 +50,10 @@ card-catalog-page {
 
 card-catalog-page,
 page-settings {
+  @include fix-ios-bg-scroll($top-color: white);
   @include toolbar-button-color();
+
+  ion-title .toolbar-title {
+    color: black;
+  }
 }
