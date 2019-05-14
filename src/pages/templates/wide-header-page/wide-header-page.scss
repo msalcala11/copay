@@ -1,7 +1,7 @@
 wide-header-page,
 card-catalog-page {
   @include fix-ios-bg-scroll();
-  @include toolbar-button-color();
+  // @include toolbar-button-color();
 
   expandable-header-primary {
     line-height: 1.2;
@@ -47,4 +47,9 @@ card-catalog-page {
       }
     }
   }
+}
+
+card-catalog-page,
+page-settings {
+  @include toolbar-button-color();
 }

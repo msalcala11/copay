@@ -1,4 +1,6 @@
 page-wallet-settings {
+  @include toolbar-button-color(white);
+
   .assertive {
     color: color($colors, danger);
 
@@ -9,6 +11,10 @@ page-wallet-settings {
 
   .item-text {
     font-size: 12.5px;
+  }
+
+  wide-header-page .wide-header__title {
+    color: white;
   }
 
   .settings-color-block {
