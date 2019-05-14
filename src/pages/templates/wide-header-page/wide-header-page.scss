@@ -49,6 +49,7 @@ card-catalog-page {
 }
 
 card-catalog-page,
+page-add,
 page-settings {
   @include fix-ios-bg-scroll($top-color: white);
   @include toolbar-button-color();
