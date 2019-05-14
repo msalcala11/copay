@@ -1,4 +1,8 @@
 expandable-header {
   display: block;
   overflow: hidden;
+
+  .toolbar-background {
+    background: white;
+  }
 }

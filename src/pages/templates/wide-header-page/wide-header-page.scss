@@ -1,18 +1,25 @@
 wide-header-page,
 card-catalog-page {
   @include fix-ios-bg-scroll();
+  @include toolbar-button-color();
 
   expandable-header-primary {
     line-height: 1.2;
   }
 
   .wide-header {
+    .toolbar-background {
+      background: white;
+    }
+
     ion-title .toolbar-title {
       font-weight: 400;
+      color: black;
     }
 
     &__title {
-      color: white;
+      // color: white;
+      color: black;
       font-size: 25px;
       font-weight: 500;
       padding-top: 30px;

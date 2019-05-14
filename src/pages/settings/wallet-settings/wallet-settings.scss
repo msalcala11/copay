@@ -1,13 +1,16 @@
 page-wallet-settings {
   .assertive {
     color: color($colors, danger);
+
     ion-label {
       white-space: inherit;
     }
   }
+
   .item-text {
     font-size: 12.5px;
   }
+
   .settings-color-block {
     display: inline-block;
     width: 15px;
