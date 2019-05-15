@@ -8,6 +8,7 @@
     width: 100% !important;
     height: 100% !important;
   }
+
   ion-backdrop {
     visibility: visible !important;
   }
@@ -20,6 +21,7 @@
 
 .wallet-details-modal {
   transition: opacity 300ms ease;
+
   &.scanning {
     opacity: 0;
     pointer-events: none;
@@ -29,4 +31,5 @@
 button.modal-close-button.bar-button {
   font-size: 20px;
   margin-left: 0.3rem;
+  color: white !important;
 }

@@ -13,6 +13,7 @@ page-wallet-details {
     }
 
     .refresher-refreshing {
+
       .spinner-crescent circle,
       .spinner-ios line {
         stroke: white;
@@ -121,11 +122,13 @@ page-wallet-details {
           padding: 0 !important;
         }
       }
+
       ion-label {
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
+
       .txps-badge {
         margin-right: 1rem;
       }
@@ -371,4 +374,15 @@ page-wallet-details {
 
 .icon-services {
   overflow: hidden;
+}
+
+page-wallet-details,
+page-wallet-settings,
+page-receive,
+page-send {
+  @include toolbar-button-color(white);
+
+  ion-title .toolbar-title {
+    color: white;
+  }
 }
