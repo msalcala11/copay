@@ -380,7 +380,8 @@ page-wallet-details,
 page-wallet-settings,
 page-receive,
 page-send,
-page-bitpay-card-intro {
+page-bitpay-card-intro,
+page-bitpay-card {
   @include toolbar-button-color(white);
 
   ion-title .toolbar-title {
