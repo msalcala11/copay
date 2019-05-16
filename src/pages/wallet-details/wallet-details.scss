@@ -381,7 +381,15 @@ page-wallet-settings,
 page-receive,
 page-send,
 page-bitpay-card-intro,
-page-bitpay-card {
+page-bitpay-card,
+page-wallet-addresses,
+page-wallet-color,
+page-wallet-delete,
+page-wallet-export,
+page-wallet-information,
+page-wallet-name,
+page-wallet-transaction-history,
+page-wallet-service-url {
   @include toolbar-button-color(white);
 
   ion-title .toolbar-title {
