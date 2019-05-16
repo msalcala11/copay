@@ -145,13 +145,16 @@ $button-md-text-transform: none;
   overflow-y: auto;
 }
 
-// Removes border-bottom
-// .md ion-list>.item:last-child,
-// .md ion-list>.item-wrapper:last-child .item,
-// .ios ion-list>.item:last-child,
-// .ios ion-list>.item-wrapper:last-child .item {
-//   border-bottom: none;
-// }
+// Removes border-bottom 
+.card {
+
+  .md ion-list>.item:last-child,
+  .md ion-list>.item-wrapper:last-child .item,
+  .ios ion-list>.item:last-child,
+  .ios ion-list>.item-wrapper:last-child .item {
+    border-bottom: none;
+  }
+}
 
 /* Fix iPhone X screen */
 
