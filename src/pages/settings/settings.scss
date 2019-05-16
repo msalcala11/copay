@@ -1,4 +1,5 @@
 page-settings {
+
   ion-label,
   .item-title {
     white-space: normal;
@@ -10,15 +11,18 @@ page-settings {
     box-orient: vertical;
     -webkit-box-orient: vertical;
   }
+
   .icon-wallet,
   .icon-services {
     width: 25px;
     height: 25px;
   }
+
   .icon-card {
     width: 25px;
     height: 25px;
   }
+
   .icon-services {
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.2);
     padding: 0rem;
