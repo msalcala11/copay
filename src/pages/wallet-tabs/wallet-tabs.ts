@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { StatusBar } from '@ionic-native/status-bar';
 import { Events, NavParams } from 'ionic-angular';
 
 // Pages
@@ -48,7 +49,8 @@ export class WalletTabsPage {
     private navParams: NavParams,
     private walletTabsProvider: WalletTabsProvider,
     private events: Events,
-    private platformProvider: PlatformProvider
+    private platformProvider: PlatformProvider,
+    private statusBar: StatusBar
   ) {
     this.isElectron = this.platformProvider.isElectron;
     if (typeof this.navParams.get('selectedTabIndex') !== 'undefined') {
@@ -62,6 +64,14 @@ export class WalletTabsPage {
     if (this.isElectron) {
       this.updateDesktopOnFocus();
     }
+  }
+
+  ionViewWillEnter() {
+    setTimeout(() => this.statusBar.styleLightContent(), 300);
+  }
+
+  ionViewWillLeave() {
+    this.statusBar.styleDefault();
   }
 
   private updateDesktopOnFocus() {
