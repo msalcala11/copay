@@ -4,9 +4,17 @@ page-select-currency {
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: none;
+
+    ion-icon {
+      img {
+        height: 40px;
+      }
+    }
+
     .item-inner {
       border: none !important;
     }
+
     .item-title {
       font-weight: bold;
     }
