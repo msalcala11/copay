@@ -383,7 +383,7 @@ export class ConfirmPage extends WalletTabsChild {
     }
   }
 
-  private paymentTimeControl(expires: string): void {
+  protected paymentTimeControl(expires: string): void {
     const expirationTime = Math.floor(new Date(expires).getTime() / 1000);
     this.paymentExpired = false;
     this.setExpirationTime(expirationTime);
@@ -881,6 +881,12 @@ export class ConfirmPage extends WalletTabsChild {
         if (this.isCordova) this.slideButton.isConfirmed(false);
         this.onGoingProcessProvider.clear();
         this.showErrorInfoSheet(err);
+        if (txp.payProUrl) {
+          this.logger.warn('Paypro error: removing payment proposal');
+          this.walletProvider.removeTx(wallet, txp).catch(() => {
+            this.logger.warn('Could not delete payment proposal');
+          });
+        }
       });
   }
 
@@ -920,7 +926,8 @@ export class ConfirmPage extends WalletTabsChild {
     this.clipboardProvider.clearClipboardIfValidData([
       'PayPro',
       'BitcoinUri',
-      'BitcoinCashUri'
+      'BitcoinCashUri',
+      'InvoiceUri'
     ]);
 
     if (this.isWithinWalletTabs()) {
