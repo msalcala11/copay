@@ -26,7 +26,6 @@
 
       <button ion-item (click)="openNotificationsPage()">
         <ion-icon class="item-img settings-icon" item-start>
-          <!-- <img src="assets/img/settings-icons/notifications.svg" width="22"> -->
           <img src="assets/img/settings-icons/icon-notifications.svg" width="22">
         </ion-icon>
         <span translate>Notifications</span>
@@ -66,9 +65,8 @@
       </button>
 
       <button ion-item *ngIf="isCordova" (click)="openLockPage()">
-        <ion-icon class="custom-icon item-img" *ngIf="lockMethod != 'disabled'" name="ios-lock-outline" item-start>
-        </ion-icon>
-        <ion-icon class="custom-icon item-img" *ngIf="lockMethod == 'disabled'" name="ios-unlock-outline" item-start>
+        <ion-icon class="item-img settings-icon" item-start>
+          <img src="assets/img/settings-icons/icon-lock.svg" width="22">
         </ion-icon>
         <ion-label>
           {{'Lock' | translate}}
