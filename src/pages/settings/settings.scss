@@ -23,14 +23,18 @@ page-settings {
     height: 25px;
   }
 
-  .settings-icon {
+  .settings-icon.item-img {
     opacity: .5;
   }
 
   .settings-list {
     button.item {
       // padding: 10px 20px;
-      padding: 10px 0 10px 22px;
+      padding: 12px 0 12px 22px;
+
+      .item-inner {
+        margin-left: 8px;
+      }
     }
   }
 
