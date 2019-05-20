@@ -151,7 +151,7 @@
           <img src="{{integration.icon}}" class="icon-services" />
         </ion-icon>
         <span>{{integration.title}}</span>
-        <ion-note item-end>
+        <ion-note item-end *ngIf="integration.linked">
           <span *ngIf="integration.linked" translate>Linked</span>
           <span *ngIf="!integration.linked">
             {{integration.show ? ('On'|translate) : ('Off'|translate)}}

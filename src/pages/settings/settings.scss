@@ -39,6 +39,14 @@ page-settings {
 
       .item-inner {
         margin-left: 8px;
+
+        ion-note.note {
+          background: #F4F5FB;
+          color: #565D6D;
+          font-weight: 300;
+          padding: 6px 10px;
+          border-radius: 4px;
+        }
       }
 
       // &:after {
