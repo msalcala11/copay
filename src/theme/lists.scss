@@ -72,10 +72,16 @@
   }
 
   .item {
-    border-bottom: 0.55px solid #f4f4f4;
+    // border-bottom: 0.55px solid #f4f4f4;
 
     &.item-ios,
     &.item-md {
+      border: 0;
+
+      &:last-child {
+        border: 0;
+      }
+
       .item-inner {
         border: none;
         padding-top: 4px;
@@ -85,6 +91,22 @@
       &.item-ios {
         font-size: 16px;
       }
+
+      &:not(.item-divider) {
+        &:after {
+          display: block;
+          content: '';
+          height: 1px;
+          background: transparent;
+          position: absolute;
+          bottom: 0;
+          $side-padding: 15px;
+          left: $side-padding;
+          width: calc(100% - #{2*$side-padding});
+          border-bottom: .55px solid #ebedf8f7;
+        }
+      }
+
     }
   }
 }
