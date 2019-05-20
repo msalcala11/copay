@@ -3,14 +3,14 @@
     <ion-list class="settings-list">
       <button ion-item (click)="openAddressBookPage()">
         <ion-icon class="item-img settings-icon" item-start>
-          <img src="assets/img/settings-icons/address-book.svg" width="22">
+          <img src="assets/img/settings-icons/icon-address-book.svg" width="22">
         </ion-icon>
         <span translate>Address book</span>
       </button>
 
       <button ion-item (click)="openHelpExternalLink()">
         <ion-icon class="item-img settings-icon" item-start>
-          <img src="assets/img/settings-icons/help-support.svg" width="22">
+          <img src="assets/img/settings-icons/icon-help-support.svg" width="22">
         </ion-icon>
         <span translate>Help &amp; support</span>
       </button>
@@ -26,14 +26,15 @@
 
       <button ion-item (click)="openNotificationsPage()">
         <ion-icon class="item-img settings-icon" item-start>
-          <img src="assets/img/settings-icons/notifications.svg" width="22">
+          <!-- <img src="assets/img/settings-icons/notifications.svg" width="22"> -->
+          <img src="assets/img/settings-icons/icon-notifications.svg" width="22">
         </ion-icon>
         <span translate>Notifications</span>
       </button>
 
       <button ion-item (click)="openLanguagePage()">
         <ion-icon class="item-img settings-icon" item-start>
-          <img src="assets/img/settings-icons/language.svg" width="22">
+          <img src="assets/img/settings-icons/icon-language.svg" width="22">
         </ion-icon>
         <ion-label>
           <span translate>Language</span>
@@ -45,7 +46,7 @@
 
       <button ion-item (click)="openAltCurrencyPage()">
         <ion-icon class="item-img settings-icon" item-start>
-          <img src="assets/img/settings-icons/currency.svg" width="22">
+          <img src="assets/img/settings-icons/icon-currency.svg" width="22">
         </ion-icon>
         <ion-label>
           {{'Alternative currency' | translate}}
@@ -57,7 +58,7 @@
 
       <button ion-item (click)="openFeePolicyPage()">
         <ion-icon class="item-img settings-icon" item-start>
-          <img src="assets/img/settings-icons/network.svg" width="22">
+          <img src="assets/img/settings-icons/icon-network.svg" width="22">
         </ion-icon>
         <ion-label>
           {{'Bitcoin network fee policy' | translate}}
@@ -171,7 +172,7 @@
 
       <button ion-item (click)="openAboutPage()">
         <ion-icon class="item-img settings-icon" item-start>
-          <img src="assets/img/settings-icons/info.svg" width="22">
+          <img src="assets/img/settings-icons/icon-info.svg" width="22">
         </ion-icon>
         <span translate>About</span> {{appName}}
       </button>
