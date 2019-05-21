@@ -3,6 +3,13 @@ wallet-item {
     margin: 10px auto;
   }
 
+  button.item {
+
+    &.activated {
+      background-color: #f7f7f7;
+    }
+  }
+
   .primary-text {
     color: black;
     font-size: 16px;
