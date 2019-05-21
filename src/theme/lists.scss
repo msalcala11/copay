@@ -72,14 +72,13 @@
   }
 
   .item {
-    // border-bottom: 0.55px solid #f4f4f4;
     border: 0;
 
     &.item-ios,
     &.item-md {
       border: 0;
-      // color: black;
 
+      &.item-block,
       &:last-child {
         border: 0;
       }
