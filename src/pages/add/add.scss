@@ -1,8 +1,4 @@
 page-add {
-  ion-list {
-    padding-left: 3px;
-  }
-
   .list-button {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -19,10 +15,14 @@ page-add {
       white-space: normal;
     }
 
-    img {
-      $icon-dimension: 40px;
-      height: $icon-dimension;
-      width: $icon-dimension;
+    ion-icon.item-icon {
+      margin-left: 3px;
+
+      img {
+        $icon-dimension: 40px;
+        height: $icon-dimension;
+        width: $icon-dimension;
+      }
     }
   }
 }

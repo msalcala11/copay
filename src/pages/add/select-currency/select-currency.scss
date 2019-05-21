@@ -1,13 +1,11 @@
 page-select-currency {
-  ion-list {
-    padding-left: 3px;
-  }
-
   .list-button {
     padding-top: 10px;
     padding-bottom: 10px;
 
-    ion-icon {
+    ion-icon.item-icon {
+      margin-left: 3px;
+
       img {
         height: 40px;
       }
