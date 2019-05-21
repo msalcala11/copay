@@ -37,6 +37,12 @@ page-home {
       position: relative;
       top: 3px;
     }
+
+    button.copay {
+      img {
+        filter: grayscale(100%)
+      }
+    }
   }
 
   .toolbar-title-ios {

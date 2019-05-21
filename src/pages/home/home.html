@@ -1,12 +1,13 @@
 <ion-header>
   <ion-navbar class="home-header">
     <ion-buttons left class="add-button">
-      <button ion-button clear (click)="goToAddView()" *ngIf="wallets && wallets[0]">
+      <button ion-button clear (click)="goToAddView()" *ngIf="wallets && wallets[0]"
+        [ngClass]="{copay: appProvider.info.name === 'copay'}">
         <img src="assets/img/plus.svg" />
       </button>
     </ion-buttons>
     <ion-title>
-      <img class="home-logo" src="assets/img/app/logo-blue.svg" />
+      <img class="home-logo" src="assets/img/app/logo.svg" />
     </ion-title>
     <ion-buttons right class="settings-button">
       <button ion-button clear icon-only color="grey" *ngIf="txpsN > 0" (click)="openProposalsPage()">
