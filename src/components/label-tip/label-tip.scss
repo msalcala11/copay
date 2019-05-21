@@ -8,6 +8,8 @@ label-tip {
   left: 25px;
   border-radius: 15px;
 
+  margin-bottom: 20px;
+
   &:before {
     $arrow-height: 18px;
     $arrow-width: $arrow-height * 0.8;

@@ -115,7 +115,7 @@
           </ion-note>
         </button>
 
-        <ion-item class="with-label">
+        <ion-item class="with-label no-border">
           <ion-label>{{'Request Encrypt Password' | translate}}</ion-label>
           <ion-toggle [(ngModel)]="encryptEnabled" (ionChange)="encryptChange()"
             [disabled]="vault.needsBackup && !encryptEnabled"></ion-toggle>
