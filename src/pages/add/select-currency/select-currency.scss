@@ -1,9 +1,7 @@
 page-select-currency {
   .list-button {
-    margin-top: 1rem;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: none;
 
     ion-icon {
       img {
@@ -11,12 +9,10 @@ page-select-currency {
       }
     }
 
-    .item-inner {
-      border: none !important;
-    }
-
     .item-title {
-      font-weight: bold;
+      color: black;
+      font-size: 18px;
+      font-weight: 500;
     }
   }
 }
