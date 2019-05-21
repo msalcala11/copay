@@ -94,7 +94,7 @@
         font-size: 16px;
       }
 
-      &:not(.item-divider) {
+      &:not(.item-divider):not(.no-border) {
         &:after {
           display: block;
           content: '';
