@@ -1,6 +1,5 @@
 wallet-item {
   &.sliding-container {
-    // margin: 10px auto;
     height: auto;
     margin: -4px auto;
   }
@@ -8,7 +7,7 @@ wallet-item {
   button.item {
 
     &.activated {
-      background-color: $feather; //#f7f7f7;
+      background-color: $feather;
     }
   }
 
@@ -78,7 +77,6 @@ wallet-item {
   }
 
   ion-item-sliding.item-wrapper button.item.item-block {
-    // box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.03);
     box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.03);
   }
 
