@@ -3,7 +3,8 @@
 @font-face {
   font-family: 'icomoon';
   src: url(../assets/fonts/icomoon/icomoon.eot?742bhq);
-  src: url(../assets/fonts/icomoon/icomoon.eot?742bhq#iefix) format('embedded-opentype'),
+  src: url(../assets/fonts/icomoon/icomoon.eot?742bhq#iefix)
+      format('embedded-opentype'),
     url(../assets/fonts/icomoon/icomoon.ttf?742bhq) format('truetype'),
     url(../assets/fonts/icomoon/icomoon.woff?742bhq) format('woff'),
     url(../assets/fonts/icomoon/icomoon.svg?742bhq#icomoon) format('svg');
@@ -33,7 +34,6 @@
 }
 
 @mixin makeIcon($arg, $val, $size: 20px) {
-
   .ion-ios-#{$arg}:before,
   .ion-ios-#{$arg}-circle:before,
   .ion-ios-#{$arg}-circle-outline:before,

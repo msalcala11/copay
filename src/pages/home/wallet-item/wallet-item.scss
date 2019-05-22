@@ -5,7 +5,6 @@ wallet-item {
   }
 
   button.item {
-
     &.activated {
       background-color: $feather;
     }
@@ -25,7 +24,7 @@ wallet-item {
   }
 
   .secondary-text {
-    color: #AAAEB6;
+    color: #aaaeb6;
     font-size: 14px;
   }
 
@@ -38,7 +37,6 @@ wallet-item {
   }
 
   .action {
-
     &.button.button-default {
       padding: 0;
     }
@@ -73,7 +71,6 @@ wallet-item {
       font-weight: 500;
       margin-top: 3px;
     }
-
   }
 
   ion-item-sliding.item-wrapper button.item.item-block {
@@ -85,5 +82,4 @@ wallet-item {
     width: calc(92% - 10px);
     left: calc(4% + 5px);
   }
-
 }

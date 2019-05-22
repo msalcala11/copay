@@ -1,5 +1,4 @@
 page-settings {
-
   ion-label,
   .item-title {
     white-space: normal;
@@ -24,7 +23,7 @@ page-settings {
   }
 
   .settings-icon.item-img {
-    opacity: .5;
+    opacity: 0.5;
   }
 
   .settings-list {
@@ -40,8 +39,8 @@ page-settings {
         margin-left: 8px;
 
         ion-note.note {
-          background: #F4F5FB;
-          color: #565D6D;
+          background: #f4f5fb;
+          color: #565d6d;
           font-weight: 300;
           padding: 6px 10px;
           border-radius: 4px;
@@ -49,7 +48,6 @@ page-settings {
       }
 
       &:last-child {
-
         &:after {
           width: 100%;
         }

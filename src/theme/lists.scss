@@ -103,11 +103,10 @@
           bottom: 0;
           $side-padding: 15px;
           left: $side-padding;
-          width: calc(100% - #{2*$side-padding});
-          border-bottom: .55px solid #ebedf8f7;
+          width: calc(100% - #{2 * $side-padding});
+          border-bottom: 0.55px solid #ebedf8f7;
         }
       }
-
     }
   }
 }

@@ -1,7 +1,5 @@
 page-home {
-
   ion-content {
-
     &.content-ios,
     &.content-md {
       background: $feather;
@@ -52,7 +50,7 @@ page-home {
 
     button.copay {
       img {
-        filter: grayscale(100%)
+        filter: grayscale(100%);
       }
     }
   }
@@ -72,11 +70,11 @@ page-home {
       align-items: center;
       max-width: 70%;
 
-      >img {
+      > img {
         margin-right: 7px;
       }
 
-      >span {
+      > span {
         line-height: 18px;
       }
     }
@@ -93,7 +91,7 @@ page-home {
   .title {
     font-weight: 500;
 
-    >img {
+    > img {
       margin-right: 7px;
     }
   }
@@ -271,11 +269,11 @@ page-home {
       border-bottom: 0;
       height: $gift-card-item-height;
 
-      &[side*="right"] {
+      &[side*='right'] {
         padding-right: $gift-card-item-side-padding;
       }
 
-      &[side*="left"] {
+      &[side*='left'] {
         padding-left: $gift-card-item-side-padding;
       }
 
@@ -308,7 +306,6 @@ page-home {
         height: $gift-card-item-height;
 
         ion-label {
-
           &.label-ios,
           &.label-md {
             display: flex;
@@ -356,8 +353,8 @@ page-home {
 
   .add-card-button {
     @include center;
-    background: #F4F5FB;
-    color: #5F7BF7;
+    background: #f4f5fb;
+    color: #5f7bf7;
     border-radius: 7px;
     cursor: pointer;
     font-size: 18px;
