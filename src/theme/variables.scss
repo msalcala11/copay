@@ -41,7 +41,7 @@ $background-colors: (warning: #fff7f2,
   success: #bfffeb,
   info: #eff1f8);
 // App background color
-$background-color: white; //#f8f8f9;
+$background-color: white;
 // Item list background color
 $list-background-color: #ffffff;
 $feather-dark: #f8f8f9;
@@ -51,7 +51,7 @@ $refresher-icon-color: color($colors, primary);
 $refresher-icon-font-size: 14px;
 $refresher-height: 140px;
 // Toolbar
-$toolbar-text-color: color($colors, light); //#464D5F; //color($colors, light);
+$toolbar-text-color: color($colors, light);
 // Main color
 $text-color: color($colors, dark);
 // Border light
