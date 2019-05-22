@@ -327,6 +327,8 @@ export class HomePage {
       return aSortValue - bSortValue;
     });
 
+    console.log('this.wallets', this.wallets);
+
     this.walletsBtc = _.filter(this.wallets, (x: any) => {
       return x.credentials.coin == 'btc';
     });

@@ -1,6 +1,8 @@
 wallet-item {
   &.sliding-container {
-    margin: 10px auto;
+    // margin: 10px auto;
+    height: auto;
+    margin: -4px auto;
   }
 
   button.item {
@@ -78,6 +80,12 @@ wallet-item {
   ion-item-sliding.item-wrapper button.item.item-block {
     // box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.03);
     box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.03);
+  }
+
+  label-tip {
+    margin-top: 12px;
+    width: calc(92% - 10px);
+    left: calc(4% + 5px);
   }
 
 }

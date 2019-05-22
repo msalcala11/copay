@@ -62,6 +62,14 @@ export type WalletItemAction = 'send' | 'receive';
         </button>
       </ion-item-options>
     </ion-item-sliding>
+    <label-tip type="info" *ngIf="!wallet.isComplete()">
+      <span label-tip-title translate>Wallet Incomplete</span>
+      <div label-tip-body>
+        <span translate
+          >This wallet is waiting for authorized users/devices to join.</span
+        >
+      </div>
+    </label-tip>
   `
 })
 export class WalletItem implements OnInit {
