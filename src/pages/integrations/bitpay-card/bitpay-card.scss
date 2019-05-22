@@ -1,6 +1,8 @@
 page-bitpay-card {
+  $bitpay-card-primary-color: #2a3f90;
+
   .toolbar-background {
-    background: #2a3f90;
+    background: $bitpay-card-primary-color;
   }
 
   .initial-message {
@@ -14,7 +16,7 @@ page-bitpay-card {
   }
 
   .balance-card {
-    background: #2a3f90; //$toolbar-background;
+    background: $bitpay-card-primary-color;
   }
 
   .balance-header {
