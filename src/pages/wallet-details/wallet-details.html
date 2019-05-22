@@ -138,7 +138,7 @@
           <span *ngIf="requiresMultipleSignatures" translate>Pending Proposals</span>
           <span *ngIf="!requiresMultipleSignatures" translate>Unsent transactions</span>
           <button ion-button clear icon-only class="txps-badge" *ngIf="txps.length > 0" (click)="openProposalsPage()">
-            <ion-badge color="danger">{{txps.length}}</ion-badge>
+            <ion-badge>{{txps.length}}</ion-badge>
           </button>
         </ion-item-divider>
         <div *ngFor="let txp of txpsPending;  let i=index">
