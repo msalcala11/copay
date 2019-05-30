@@ -239,6 +239,16 @@ page-home {
     }
   }
 
+  .wallets ion-item-sliding.reorder-active {
+    box-shadow: none;
+
+    button.item.item-block {
+      box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.06);
+      transform: scale3d(1.05, 1.05, 1.05);
+      transition: box-shadow 300ms ease, transform 300ms ease;
+    }
+  }
+
   ion-item-sliding.item-wrapper {
     $gift-card-item-side-padding: 4%;
     $gift-card-item-height: 59px;
