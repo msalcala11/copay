@@ -448,6 +448,7 @@ page-home {
     }
 
     .wallet-name-and-credentials {
+      flex: .8;
       margin-right: 3px;
     }
 
@@ -503,12 +504,6 @@ page-home {
       }
     }
 
-    label-tip {
-      margin-top: 12px;
-      width: calc(92% - 10px);
-      left: calc(4% + 5px);
-    }
-
     ion-item-sliding.item-wrapper {
       &:last-child {
         height: 93px;
@@ -523,6 +518,18 @@ page-home {
         }
       }
     }
+
+    ion-reorder {
+      flex-basis: 60px;
+    }
+
+    label-tip {
+      margin-top: 12px;
+      width: calc(92% - 10px);
+      left: calc(4% + 5px);
+    }
+
+
   }
 
 
