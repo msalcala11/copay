@@ -102,12 +102,12 @@
       </ion-card-content>
     </ion-card>
 
-    <div style="margin-top: 20px;" *ngIf="wallets && wallets.length">
+    <div class="wallets-container" *ngIf="wallets && wallets.length">
       <div class="section-header">
         <span translate>
           Wallets
         </span>
-        <span *ngIf="!showReorder && wallets.length > 1" (click)="reorder()">
+        <span *ngIf="!showReorder && wallets.length > 1" (click)="reorder()" class="reorder-button" tappable>
           <img src="assets/img/sort.svg">
         </span>
         <span *ngIf="showReorder" (click)="reorder()" class="reorder-done" tappable>

@@ -441,6 +441,19 @@ page-home {
     color: color($colors, primary);
   }
 
+  .reorder-button {
+    display: flex;
+  }
+
+  .wallets-container {
+    margin-top: 20px;
+    margin-bottom: -15px;
+
+    .section-header {
+      margin-bottom: 18px;
+    }
+  }
+
   .sliding-container {
     height: auto;
 
