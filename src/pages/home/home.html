@@ -121,7 +121,7 @@
               <img [ngClass]="{ testnet: wallet.network === 'testnet' }"
                 src="assets/img/currencies/{{wallet.coin}}.svg" />
             </ion-avatar>
-            <ion-label item-start>
+            <ion-label item-start class="wallet-name-and-credentials">
               <div class="primary-text wallet-name ellipsis">{{ wallet.name }}</div>
               <ion-note item-start class="secondary-text">
                 {{ wallet.credentials.m }}/{{ wallet.credentials.n }}
