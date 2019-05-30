@@ -429,6 +429,10 @@ page-home {
     }
   }
 
+  .reorder-done {
+    color: color($colors, primary);
+  }
+
   .sliding-container {
     height: auto;
 
@@ -448,7 +452,6 @@ page-home {
     }
 
     .wallet-name-and-credentials {
-      flex: .8;
       margin-right: 3px;
     }
 
@@ -456,6 +459,22 @@ page-home {
       color: #aaaeb6;
       font-size: 14px;
       margin-top: 4px;
+
+      @media(max-width: 330px) {
+        font-size: 13px;
+      }
+    }
+
+    &.reorder-enabled .wallet-amount {
+      .secondary-text {
+        @media(max-width: 400px) {
+          font-size: 11px;
+        }
+      }
+
+      @media(max-width: 330px) {
+        display: none;
+      }
     }
 
     .testnet {
@@ -464,7 +483,7 @@ page-home {
 
     .item-inner {
       text-align: right;
-      margin: 8px 0px 8px 0;
+      margin: 8px 2px 8px 0;
     }
 
     .action {
@@ -521,6 +540,7 @@ page-home {
 
     ion-reorder {
       flex-basis: 60px;
+      margin-left: 2px;
     }
 
     label-tip {

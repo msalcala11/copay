@@ -110,7 +110,7 @@
         <span *ngIf="!showReorder && wallets.length > 1" (click)="reorder()">
           <img src="assets/img/sort.svg">
         </span>
-        <span *ngIf="showReorder" (click)="reorder()">
+        <span *ngIf="showReorder" (click)="reorder()" class="reorder-done">
           {{'Done' | translate}}
         </span>
       </div>
@@ -127,7 +127,7 @@
                 {{ wallet.credentials.m }}/{{ wallet.credentials.n }}
               </ion-note>
             </ion-label>
-            <ion-note item-end>
+            <ion-note item-end class="wallet-amount">
               <div *ngIf="!hasZeroBalance(wallet, wallet.coin.toUpperCase()) && !wallet.balanceHidden">
                 <div class="primary-text">{{ getBalance(wallet, wallet.coin.toUpperCase()) }}</div>
                 <div class="secondary-text" *ngIf="wallet.cachedStatus">
