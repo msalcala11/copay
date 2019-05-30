@@ -533,18 +533,20 @@ page-home {
       }
     }
 
-    ion-item-sliding.item-wrapper {
-      &:last-child {
-        height: 93px;
-      }
-    }
 
     &.wallets {
+      margin-top: 16px;
+
       button.item.item-block {
         div.item-inner {
           display: flex;
           align-items: center;
         }
+      }
+
+      ion-item-sliding.item-wrapper {
+        height: 93px;
+        margin: -8px 0;
       }
     }
 
