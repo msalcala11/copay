@@ -110,7 +110,7 @@
         <span *ngIf="!showReorder && wallets.length > 1" (click)="reorder()">
           <img src="assets/img/sort.svg">
         </span>
-        <span *ngIf="showReorder" (click)="reorder()" class="reorder-done">
+        <span *ngIf="showReorder" (click)="reorder()" class="reorder-done" tappable>
           {{'Done' | translate}}
         </span>
       </div>
