@@ -347,6 +347,7 @@ page-home {
     text-align: center;
     width: 92%;
     margin: 15px auto;
+    margin-top: 0;
     height: 73px;
   }
 
@@ -506,6 +507,12 @@ page-home {
       margin-top: 12px;
       width: calc(92% - 10px);
       left: calc(4% + 5px);
+    }
+
+    ion-item-sliding.item-wrapper {
+      &:last-child {
+        height: 93px;
+      }
     }
 
     &.wallets {
