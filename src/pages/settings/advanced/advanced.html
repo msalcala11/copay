@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list class="settings-list">
+  <ion-list class="settings-list bp-list">
     <ion-item class="with-label no-border">
       <ion-label>{{'Use Unconfirmed Funds' | translate}}</ion-label>
       <ion-toggle [(ngModel)]="spendUnconfirmed" (ionChange)="spendUnconfirmedChange()"></ion-toggle>
@@ -13,14 +13,16 @@
     <label-tip class="info" type="info" header="no-header">
       <div label-tip-body>
         <div translate>If enabled, wallets will also try to spend unconfirmed funds.</div>
-        <div *ngIf="!isCopay" translate>However, unconfirmed funds are not allowed for spending with merchants, BitPay Card loads, or BitPay in-app gift card purchases.</div>
+        <div *ngIf="!isCopay" translate>However, unconfirmed funds are not allowed for spending with merchants, BitPay
+          Card loads, or BitPay in-app gift card purchases.</div>
       </div>
     </label-tip>
   </ion-list>
-  <ion-list class="settings-list">
+  <ion-list class="settings-list bp-list">
     <ion-item class="with-label no-border">
       <ion-label>{{'Support Wallets with Different Keys' | translate}}</ion-label>
-      <ion-toggle [(ngModel)]="allowMultiplePrimaryWallets" (ionChange)="allowMultiplePrimaryWalletsChange()"></ion-toggle>
+      <ion-toggle [(ngModel)]="allowMultiplePrimaryWallets" (ionChange)="allowMultiplePrimaryWalletsChange()">
+      </ion-toggle>
     </ion-item>
     <label-tip class="info" type="info" header="no-header">
       <div label-tip-body>

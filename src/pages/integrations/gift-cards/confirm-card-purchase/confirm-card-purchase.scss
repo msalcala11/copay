@@ -1,5 +1,6 @@
 confirm-card-purchase-page {
   ion-content {
+
     .fixed-content,
     .scroll-content {
       margin-bottom: 90px;
@@ -16,7 +17,7 @@ confirm-card-purchase-page {
     border: none;
   }
 
-  .settings-list ion-item-divider {
+  .bp-list ion-item-divider {
     padding-left: 16px;
   }
 
@@ -92,7 +93,7 @@ confirm-card-purchase-page {
   }
 
   .terms {
-    > p {
+    >p {
       margin-left: 10px;
       margin-right: 10px;
     }

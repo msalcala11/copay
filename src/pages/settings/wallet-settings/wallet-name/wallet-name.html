@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list class="settings-list">
+  <ion-list class="settings-list bp-list">
     <div class="settings-explanation">
       <div class="settings-heading" translate>What do you call this wallet?</div>
       <div class="settings-description">
@@ -15,7 +15,8 @@
     <form [formGroup]="walletNameForm">
       <ion-item>
         <ion-label stacked>{{'Name' | translate}}</ion-label>
-        <ion-input type="text" formControlName="walletName" [value]="walletNameForm.value.walletName" required></ion-input>
+        <ion-input type="text" formControlName="walletName" [value]="walletNameForm.value.walletName" required>
+        </ion-input>
       </ion-item>
       <button ion-button class="button-standard" (click)="save()" [disabled]="!walletNameForm.valid">
         {{'Save' | translate}}

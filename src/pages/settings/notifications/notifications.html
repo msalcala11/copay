@@ -7,7 +7,7 @@
 
 
 <ion-content>
-  <ion-list class="settings-list">
+  <ion-list class="settings-list bp-list">
     <div *ngIf="usePushNotifications">
       <ion-item>
         <ion-label>{{ 'Enable push notifications' | translate }}</ion-label>
@@ -24,7 +24,8 @@
     <div *ngIf="usePushNotifications && pushNotifications">
       <ion-item>
         <ion-label>{{ 'Notify me when transactions are confirmed' | translate }}</ion-label>
-        <ion-toggle [(ngModel)]="confirmedTxsNotifications" (ionChange)="confirmedTxsNotificationsChange()"></ion-toggle>
+        <ion-toggle [(ngModel)]="confirmedTxsNotifications" (ionChange)="confirmedTxsNotificationsChange()">
+        </ion-toggle>
       </ion-item>
     </div>
 
@@ -42,7 +43,8 @@
 
     <label-tip *ngIf="emailNotifications" type="info" header="no-header">
       <div label-tip-body translate>
-        By providing your email address, you give explicit consent to BitPay to use your email address to send you email notifications about payments.
+        By providing your email address, you give explicit consent to BitPay to use your email address to send you email
+        notifications about payments.
         <br>
         <a (click)="openPrivacyPolicy()" translate>View Privacy Policy</a>
       </div>
