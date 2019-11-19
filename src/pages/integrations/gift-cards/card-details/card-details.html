@@ -33,7 +33,7 @@
                   bc-text-position="bottom" bc-font-size="20"></ngx-barcode>
                 <ngx-qrcode *ngIf="!card.barcodeImage && barcodeFormat === 'QR'" hide-toast="true"
                   [qrc-value]="barcodeData" qrc-class="aclass" qrc-errorCorrectionLevel="M"></ngx-qrcode>
-                <img *ngIf="card.barcodeImage" class="card-info__body barcode-image">
+                <img *ngIf="card.barcodeImage" [src]="card.barcodeImage" class="card-info__body barcode-image">
               </ng-container>
               <div class="card-info__body" [ngClass]="{long: card.claimCode.length > 20 }" *ngIf="showBarcode()">
                 {{card.claimCode}}
