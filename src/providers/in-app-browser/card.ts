@@ -21,7 +21,7 @@ import { BitPayProvider } from '../bitpay/bitpay';
 export class IABCardProvider {
   private cardIAB_Ref: InAppBrowserRef;
   private NETWORK = 'testnet';
-  private BITPAY_API_URL = 'https://test.bitpay.com';
+  private BITPAY_API_URL = 'https://10.10.11.92:8088';
 
   public user = new BehaviorSubject({});
   public user$ = this.user.asObservable();

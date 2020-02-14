@@ -10,6 +10,7 @@ import { mergeMap } from 'rxjs/operators';
 import { promiseSerial } from '../../utils';
 import { AnalyticsProvider } from '../analytics/analytics';
 import { AppProvider } from '../app/app';
+import { BitPayIdProvider } from '../bitpay-id/bitpay-id';
 import { ConfigProvider } from '../config/config';
 import { EmailNotificationsProvider } from '../email-notifications/email-notifications';
 import { HomeIntegrationsProvider } from '../home-integrations/home-integrations';
@@ -48,6 +49,7 @@ export class GiftCardProvider extends InvoiceProvider {
   constructor(
     private analyticsProvider: AnalyticsProvider,
     private appProvider: AppProvider,
+    private bitpayIdProvider: BitPayIdProvider,
     private configProvider: ConfigProvider,
     private imageLoader: ImageLoader,
     private homeIntegrationsProvider: HomeIntegrationsProvider,
@@ -456,16 +458,32 @@ export class GiftCardProvider extends InvoiceProvider {
   }
 
   async fetchAvailableCardMap() {
+    const user = this.persistenceProvider.getBitPayIdUserInfo(
+      this.getNetwork()
+    );
+    const availableCardMap = user
+      ? await this.fetchAuthenticatedAvailableCardMap()
+      : await this.fetchPublicAvailableCardMap();
+    this.cacheApiCardConfig(availableCardMap);
+    return availableCardMap;
+  }
+
+  async fetchPublicAvailableCardMap(): Promise<AvailableCardMap> {
     const url = `${this.credentials.BITPAY_API_URL}/gift-cards/cards`;
-    const availableCardMap = (await this.http
+    return this.http
       .get(url, {
         headers: {
           'x-bitpay-version': this.appProvider.info.version
         }
       })
-      .toPromise()) as AvailableCardMap;
-    this.cacheApiCardConfig(availableCardMap);
-    return availableCardMap;
+      .toPromise() as Promise<AvailableCardMap>;
+  }
+
+  async fetchAuthenticatedAvailableCardMap(): Promise<AvailableCardMap> {
+    return this.bitpayIdProvider.apiCall('getGiftCardCatalog', {
+      bitpayVersion: this.appProvider.info.version,
+      country: 'GB'
+    });
   }
 
   async cacheApiCardConfig(availableCardMap: AvailableCardMap) {
