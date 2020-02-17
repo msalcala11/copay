@@ -215,9 +215,11 @@ export class CopayApp {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
 
       // Only overlay for iOS
-      if (this.platform.is('ios')) this.statusBar.overlaysWebView(true);
+      if (this.platform.is('ios')) {
+        this.statusBar.overlaysWebView(true);
+        this.statusBar.styleDefault();
+      }
 
-      this.statusBar.styleDefault();
       this.splashScreen.hide();
 
       // Subscribe Resume
@@ -276,7 +278,7 @@ export class CopayApp {
       let token;
       try {
         token = await this.persistenceProvider.getBitPayIdPairingToken(
-          Network[this.NETWORK]
+          Network['testnet']
         );
       } catch (err) {
         this.logger.log(err);
@@ -287,7 +289,11 @@ export class CopayApp {
           .createIABInstance(
             'card',
             CARD_IAB_CONFIG,
+<<<<<<< HEAD
             'https://10.10.11.92:4200/wallet-card?context=bpa',
+=======
+            'https://test.bitpay.com/wallet-card?context=bpa',
+>>>>>>> abb1419fefdaafdac38a5c55df4db56038bff0e0
             `sessionStorage.setItem('isPaired', ${!!token})`
           )
           .then(ref => {

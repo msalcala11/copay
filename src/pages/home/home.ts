@@ -8,6 +8,7 @@ import { SimplexBuyPage } from '../../pages/integrations/simplex/simplex-buy/sim
 import { FormatCurrencyPipe } from '../../pipes/format-currency';
 import {
   AppProvider,
+  BitPayCardProvider,
   ExternalLinkProvider,
   FeedbackProvider,
   GiftCardProvider,
@@ -66,11 +67,11 @@ export class HomePage {
       title: 'Get a BitPay Card',
       body: 'Leverage your crypto with a reloadable BitPay card.',
       app: 'bitpay',
-      linkText: 'Buy Now',
+      linkText: 'Order now',
       link: BitPayCardIntroPage,
       dismissible: true,
       /* imgSrc: TODO 'assets/img/bitpay-card-solid.svg' */
-      imgSrc: 'assets/img/bitpay-card/bitpay-card-visa.svg'
+      imgSrc: 'assets/img/icon-bpcard.svg'
     },
     {
       name: 'merchant-directory',
@@ -79,7 +80,7 @@ export class HomePage {
       app: 'bitpay',
       linkText: 'View Directory',
       link: 'https://bitpay.com/directory/?hideGiftCards=true',
-      imgSrc: 'assets/img/gumball-3.svg',
+      imgSrc: 'assets/img/icon-merch-dir.svg',
       dismissible: true
     },
     {
@@ -96,12 +97,13 @@ export class HomePage {
   public totalBalanceAlternative: string;
   public totalBalanceAlternativeIsoCode: string;
   public averagePrice: number;
-  public balanceHidden: boolean = true;
+  public showBalance: boolean = true;
   public homeIntegrations;
   public fetchingStatus: boolean;
   public showRateCard: boolean;
   public accessDenied: boolean;
   public discountedCard: CardConfig;
+  public showBitPayCardAdvertisement: boolean = true;
 
   private lastWeekRatesArray;
   private zone;
@@ -124,7 +126,8 @@ export class HomePage {
     private feedbackProvider: FeedbackProvider,
     private homeIntegrationsProvider: HomeIntegrationsProvider,
     private tabProvider: TabProvider,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private bitPayCardProvider: BitPayCardProvider
   ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
   }
@@ -138,7 +141,7 @@ export class HomePage {
     this.showSurveyCard();
     this.checkFeedbackInfo();
 
-    this.isBalanceHidden();
+    this.isBalanceShown();
     this.fetchStatus();
     await this.setDiscountedCard();
     this.fetchAdvertisements();
@@ -147,6 +150,10 @@ export class HomePage {
       .get()
       .filter(i => i.show)
       .filter(i => i.name !== 'giftcards' && i.name !== 'debitcard');
+
+    this.bitPayCardProvider.get({ noHistory: true }).then(cards => {
+      this.showBitPayCardAdvertisement = cards ? false : true;
+    });
 
     // Hide BitPay if linked
     setTimeout(() => {
@@ -291,7 +298,7 @@ export class HomePage {
 
           let walletTotalBalanceAlternative = 0;
           let walletTotalBalanceAlternativeLastWeek = 0;
-          if (status.wallet.network === 'livenet') {
+          if (status.wallet.network === 'livenet' && !wallet.hidden) {
             const balance =
               status.wallet.coin === 'xrp'
                 ? status.availableBalanceSat
@@ -418,7 +425,11 @@ export class HomePage {
       this.persistenceProvider
         .getAdvertisementDismissed(advertisement.name)
         .then((value: string) => {
-          if (value === 'dismissed') {
+          if (
+            value === 'dismissed' ||
+            (!this.showBitPayCardAdvertisement &&
+              advertisement.name == 'bitpay-card')
+          ) {
             this.removeAdvertisement(advertisement.name);
             return;
           }
@@ -496,12 +507,12 @@ export class HomePage {
     });
   }
 
-  private isBalanceHidden() {
+  private isBalanceShown() {
     this.profileProvider
-      .getHideTotalBalanceFlag()
-      .then(isHidden => {
+      .getShowTotalBalanceFlag()
+      .then(isShown => {
         this.zone.run(() => {
-          this.balanceHidden = isHidden;
+          this.showBalance = isShown;
         });
       })
       .catch(err => {
