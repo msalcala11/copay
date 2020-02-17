@@ -289,11 +289,7 @@ export class CopayApp {
           .createIABInstance(
             'card',
             CARD_IAB_CONFIG,
-<<<<<<< HEAD
             'https://10.10.11.92:4200/wallet-card?context=bpa',
-=======
-            'https://test.bitpay.com/wallet-card?context=bpa',
->>>>>>> abb1419fefdaafdac38a5c55df4db56038bff0e0
             `sessionStorage.setItem('isPaired', ${!!token})`
           )
           .then(ref => {

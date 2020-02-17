@@ -81,6 +81,7 @@ export class HomeGiftCards implements OnInit {
   ) {}
 
   async ngOnInit() {
+    console.log('this.bitpayIdProvider', this.bitpayIdProvider);
     this.appName = this.appProvider.info.userVisibleName;
     await this.initGiftCards();
     const availableCards = await this.giftCardProvider.getAvailableCards();
