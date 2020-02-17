@@ -94,7 +94,7 @@ export class GiftCardProvider extends InvoiceProvider {
   }
 
   public async createBitpayInvoice(data) {
-    const dataSrc = {
+    const params = {
       brand: data.cardName,
       currency: data.currency,
       amount: data.amount,
@@ -102,23 +102,34 @@ export class GiftCardProvider extends InvoiceProvider {
       discounts: data.discounts,
       email: data.email
     };
-    const url = `${this.getApiPath()}/pay`;
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+    const user = this.persistenceProvider.getBitPayIdUserInfo(
+      this.getNetwork()
+    );
+    const promise = user
+      ? this.createAuthenticatedBitpayInvoice(params)
+      : this.createUnauthenticatedBitpayInvoice(params);
+    const cardOrder = await promise.catch(err => {
+      this.logger.error('BitPay Create Invoice: ERROR', JSON.stringify(data));
+      throw err;
     });
-    const cardOrder = await this.http
-      .post(url, dataSrc, { headers })
-      .toPromise()
-      .catch(err => {
-        this.logger.error('BitPay Create Invoice: ERROR', JSON.stringify(data));
-        throw err;
-      });
     this.logger.info('BitPay Create Invoice: SUCCESS');
     return cardOrder as {
       accessKey: string;
       invoiceId: string;
       totalDiscount: number;
     };
+  }
+
+  public async createUnauthenticatedBitpayInvoice(params) {
+    const url = `${this.getApiPath()}/pay`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(url, params, { headers }).toPromise();
+  }
+
+  public async createAuthenticatedBitpayInvoice(params) {
+    return this.bitpayIdProvider.apiCall('createGiftCardInvoice', params);
   }
 
   async getActiveCards(): Promise<GiftCard[]> {
@@ -481,8 +492,8 @@ export class GiftCardProvider extends InvoiceProvider {
 
   async fetchAuthenticatedAvailableCardMap(): Promise<AvailableCardMap> {
     return this.bitpayIdProvider.apiCall('getGiftCardCatalog', {
-      bitpayVersion: this.appProvider.info.version,
-      country: 'GB'
+      bitpayVersion: this.appProvider.info.version
+      // country: 'GB'
     });
   }
 
