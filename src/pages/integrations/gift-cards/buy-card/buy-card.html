@@ -9,17 +9,15 @@
     <div class="amount-box">
       <div>
         <img-loader class="card-image" src="{{cardConfig?.cardImage}}">
-          <div class="discount" *ngIf="hasPercentageDiscount">
-            Save <gift-card-discount-text [cardConfig]="cardConfig" [discount]="cardConfig.discounts[0]">
-            </gift-card-discount-text>
-          </div>
         </img-loader>
       </div>
       <amount-picker *ngIf="cardConfig" [currency]="cardConfig.currency"
         [supportedAmounts]="cardConfig.supportedAmounts" (amountChange)="onAmountChange($event)"
         (click)="onAmountClick()"></amount-picker>
-      <div class="discount-header">
-        <img src="assets/img/badge.svg"> Save 3% off your purchase amount
+      <div class="discount-header" *ngIf="hasPercentageDiscount">
+        <img src="assets/img/badge.svg"> Save&nbsp;<gift-card-discount-text [cardConfig]="cardConfig"
+          [discount]="cardConfig.discounts[0]">
+        </gift-card-discount-text>&nbsp;off your purchase amount
       </div>
     </div>
     <div class="buy-box">
