@@ -38,7 +38,7 @@
             <div class="card-list-item__label ellipsis">
               {{ cardConfigMap[card.name].displayName }}
             </div>
-            <ion-note class="card-list-item__note" *ngIf="!cardConfigMap[card.name].supportedAmounts">
+            <ion-note class="card-list-item__note ellipsis" *ngIf="!cardConfigMap[card.name].supportedAmounts">
               {{ cardConfigMap[card.name].minAmount | formatCurrency: cardConfigMap[card.name].currency:0 }} —
               {{ cardConfigMap[card.name].maxAmount | formatCurrency: cardConfigMap[card.name].currency:0 }}
             </ion-note>
@@ -74,7 +74,7 @@
             <div class="card-list-item__label ellipsis">
               {{ cardConfigMap[card.name].displayName }}
             </div>
-            <ion-note class="card-list-item__note" *ngIf="!cardConfigMap[card.name].supportedAmounts">
+            <ion-note class="card-list-item__note ellipsis" *ngIf="!cardConfigMap[card.name].supportedAmounts">
               {{ cardConfigMap[card.name].minAmount | formatCurrency: cardConfigMap[card.name].currency:0 }} —
               {{ cardConfigMap[card.name].maxAmount | formatCurrency: cardConfigMap[card.name].currency:0 }}
             </ion-note>
