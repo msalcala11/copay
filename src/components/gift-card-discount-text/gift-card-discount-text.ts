@@ -11,7 +11,9 @@ import {
       discount.amount | formatCurrency: cardConfig.currency:'minimal'
     }}</span>
     <span *ngIf="discount.type === 'percentage'">
-      <span *ngIf="showConcisePercentage">{{ concisePercentage }}%</span>
+      <span *ngIf="showConcisePercentage"
+        >{{ math.floor(discount.amount) }}%</span
+      >
       <span *ngIf="!showConcisePercentage">{{ discount.amount }}%</span>
     </span>
   `
@@ -26,15 +28,7 @@ export class GiftCardDiscountText {
   @Input()
   showConcisePercentage: boolean = false;
 
-  concisePercentage: number;
-
-  ngOnInit() {
-    this.concisePercentage = Math.floor(this.discount.amount);
-    // if (this.cardConfig.brand === 'DoorDash') {
-    //   console.log('doordash discount.amount', this.discount.amount);
-    //   console.log('this.concisePercentage', this.concisePercentage);
-    // }
-  }
+  math = Math;
 
   constructor() {}
 }
