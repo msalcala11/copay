@@ -70,7 +70,10 @@ export class GiftCardProvider extends InvoiceProvider {
     return cardConfigMap[cardName];
   }
 
-  getCardConfigMap() {
+  getCardConfigMap(bustCache: boolean = false) {
+    if (bustCache) {
+      this.availableCardMapPromise = undefined;
+    }
     return this.availableCardMapPromise
       ? this.availableCardMapPromise
       : this.fetchCardConfigMap();
@@ -102,7 +105,7 @@ export class GiftCardProvider extends InvoiceProvider {
       discounts: data.discounts,
       email: data.email
     };
-    const user = this.persistenceProvider.getBitPayIdUserInfo(
+    const user = await this.persistenceProvider.getBitPayIdUserInfo(
       this.getNetwork()
     );
     const promise = user
@@ -469,9 +472,10 @@ export class GiftCardProvider extends InvoiceProvider {
   }
 
   async fetchAvailableCardMap() {
-    const user = this.persistenceProvider.getBitPayIdUserInfo(
+    const user = await this.persistenceProvider.getBitPayIdUserInfo(
       this.getNetwork()
     );
+    console.log('user', user);
     const availableCardMap = user
       ? await this.fetchAuthenticatedAvailableCardMap()
       : await this.fetchPublicAvailableCardMap();
@@ -616,7 +620,7 @@ function getCardConfigFromApiConfigMap(
 function removeDiscountsIfNotMobile(cardConfig: CardConfig, isCordova) {
   return {
     ...cardConfig,
-    discounts: isCordova ? cardConfig.discounts : undefined
+    discounts: isCordova || true ? cardConfig.discounts : undefined
   };
 }
 
