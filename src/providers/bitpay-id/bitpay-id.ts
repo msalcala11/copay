@@ -15,7 +15,7 @@ import { PlatformProvider } from '../platform/platform';
 @Injectable()
 export class BitPayIdProvider {
   private NETWORK = 'testnet';
-  private BITPAY_API_URL = 'https://10.10.11.92:8088';
+  private BITPAY_API_URL = 'https://test.bitpay.com'; // 'https://marty.bp:8088'; // 'https://10.10.11.92:8088';
   private deviceName = 'unknown device';
 
   constructor(

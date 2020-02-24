@@ -183,9 +183,15 @@ export class SettingsPage {
   }
 
   public openBitPayIdPage(): void {
+    console.log(
+      'openBitPayIdPage called',
+      JSON.stringify(this.bitPayIdUserInfo, null, 4)
+    );
     if (this.bitPayIdUserInfo) {
+      console.log('pushing');
       this.navCtrl.push(BitPayIdPage, this.bitPayIdUserInfo);
     } else {
+      console.log('calling postMessage');
       this.cardIAB_Ref.executeScript(
         {
           code: `window.postMessage(${JSON.stringify({
