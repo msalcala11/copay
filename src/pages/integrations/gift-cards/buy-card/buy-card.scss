@@ -44,7 +44,10 @@ buy-card-page {
       display: flex;
 
       padding-left: 15px;
-      // justify-content: center;
+
+      div {
+        text-align: left;
+      }
 
       img {
         margin-right: 10px;
