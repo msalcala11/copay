@@ -7,6 +7,7 @@ import {
   ActionSheetProvider,
   BitPayIdProvider,
   Logger,
+  PersistenceProvider,
   PopupProvider
 } from '../../../providers';
 import { InAppBrowserProvider } from '../../../providers/in-app-browser/in-app-browser';
@@ -17,6 +18,9 @@ import { InAppBrowserProvider } from '../../../providers/in-app-browser/in-app-b
 })
 export class BitPayIdPage {
   public userBasicInfo;
+  public network;
+  public originalBitpayIdSettings: string;
+  public bitpayIdSettings = this.getDefaultBitPayIdSettings();
 
   constructor(
     private events: Events,
@@ -25,16 +29,44 @@ export class BitPayIdPage {
     private bitPayIdProvider: BitPayIdProvider,
     private navCtrl: NavController,
     private popupProvider: PopupProvider,
+    private persistenceProvider: PersistenceProvider,
     private actionSheetProvider: ActionSheetProvider,
     private changeDetectorRef: ChangeDetectorRef,
     private translate: TranslateService,
     private iab: InAppBrowserProvider
   ) {}
 
-  ionViewDidLoad() {
+  async ionViewDidLoad() {
     this.userBasicInfo = this.navParams.data;
     this.changeDetectorRef.detectChanges();
+    this.network = this.bitPayIdProvider.getEnvironment().network;
+    this.bitpayIdSettings =
+      (await this.persistenceProvider.getBitPayIdSettings(this.network)) ||
+      this.getDefaultBitPayIdSettings();
+    this.originalBitpayIdSettings = JSON.stringify(this.bitpayIdSettings);
     this.logger.info('Loaded: BitPayID page');
+  }
+
+  ionViewWillLeave() {
+    const settingsChanged =
+      this.originalBitpayIdSettings !== JSON.stringify(this.bitpayIdSettings);
+    if (settingsChanged) {
+      this.events.publish('BitPayId/SettingsChanged');
+    }
+  }
+
+  getDefaultBitPayIdSettings() {
+    return {
+      syncGiftCardPurchases: false
+    };
+  }
+
+  async onSettingsChange() {
+    console.log('this.bitpayIdSettings', this.bitpayIdSettings);
+    await this.persistenceProvider.setBitPayIdSettings(
+      this.network,
+      this.bitpayIdSettings
+    );
   }
 
   disconnectBitPayID() {

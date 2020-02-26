@@ -16,6 +16,18 @@
       <div class="row bitpay-id__email">{{userBasicInfo?.email}}</div>
     </div>
   </div>
+  <ion-list class="bp-list bitpay-id__settings-list">
+    <ion-item>
+      <ion-label>{{'Sync gift card purchases' | translate}}</ion-label>
+      <ion-toggle [(ngModel)]="bitpayIdSettings.syncGiftCardPurchases" (ionChange)="onSettingsChange()"></ion-toggle>
+    </ion-item>
+    <label-tip type="info" header="no-header">
+      <div label-tip-body>
+        <span translate>If enabled, your gift card purchases will be associated with your BitPay ID, allowing you to
+          sync your gift cards across other devices associated with this BitPay ID.</span>
+      </div>
+    </label-tip>
+  </ion-list>
   <button ion-button class="button-standard button-secondary bitpay-id__disconnect-button"
     (click)="disconnectBitPayID()">
     {{'Disconnect' | translate}}

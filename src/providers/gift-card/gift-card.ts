@@ -70,9 +70,15 @@ export class GiftCardProvider extends InvoiceProvider {
 
   listenForAuthChanges() {
     this.events.subscribe('BitPayId/Connected', async () => {
+      await this.persistenceProvider.setBitPayIdSettings(this.getNetwork(), {
+        syncGiftCardPurchases: true
+      });
       await this.getCardConfigMap(true);
     });
     this.events.subscribe('BitPayId/Disconnected', async () => {
+      await this.getCardConfigMap(true);
+    });
+    this.events.subscribe('BitPayId/SettingsChanged', async () => {
       await this.getCardConfigMap(true);
     });
   }
@@ -109,6 +115,14 @@ export class GiftCardProvider extends InvoiceProvider {
     return map || {};
   }
 
+  public async shouldSyncGiftCardPurchasesWithBitPayId() {
+    const [user, userSettings] = await Promise.all([
+      this.persistenceProvider.getBitPayIdUserInfo(this.getNetwork()),
+      this.persistenceProvider.getBitPayIdSettings(this.getNetwork())
+    ]);
+    return user && userSettings.syncGiftCardPurchases;
+  }
+
   public async createBitpayInvoice(data) {
     const params = {
       brand: data.cardName,
@@ -118,10 +132,8 @@ export class GiftCardProvider extends InvoiceProvider {
       discounts: data.discounts,
       email: data.email
     };
-    const user = await this.persistenceProvider.getBitPayIdUserInfo(
-      this.getNetwork()
-    );
-    const promise = user
+    const shouldSync = await this.shouldSyncGiftCardPurchasesWithBitPayId();
+    const promise = shouldSync
       ? this.createAuthenticatedBitpayInvoice(params)
       : this.createUnauthenticatedBitpayInvoice(params);
     const cardOrder = await promise.catch(err => {
@@ -485,11 +497,8 @@ export class GiftCardProvider extends InvoiceProvider {
   }
 
   async fetchAvailableCardMap() {
-    const user = await this.persistenceProvider.getBitPayIdUserInfo(
-      this.getNetwork()
-    );
-    console.log('user in fetchAvailableCardMap', JSON.stringify(user, null, 4));
-    const availableCardMap = user
+    const shouldSync = await this.shouldSyncGiftCardPurchasesWithBitPayId();
+    const availableCardMap = shouldSync
       ? await this.fetchAuthenticatedAvailableCardMap()
       : await this.fetchPublicAvailableCardMap();
     this.cacheApiCardConfig(availableCardMap);
@@ -553,14 +562,12 @@ export class GiftCardProvider extends InvoiceProvider {
   }
 
   async getAvailableCards(): Promise<CardConfig[]> {
-    console.log('in getAvailableCards');
     return this.availableCardsPromise
       ? this.availableCardsPromise
       : this.fetchAvailableCards();
   }
 
   async fetchAvailableCards(): Promise<CardConfig[]> {
-    console.log('in fetchAvailableCards');
     this.availableCardsPromise = this.fetchAvailableCardMap().then(
       availableCardMap =>
         getCardConfigFromApiConfigMap(
