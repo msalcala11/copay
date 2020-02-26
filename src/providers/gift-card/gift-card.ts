@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Events } from 'ionic-angular';
 import { ImageLoader } from 'ionic-image-loader';
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
@@ -51,6 +52,7 @@ export class GiftCardProvider extends InvoiceProvider {
     private appProvider: AppProvider,
     private bitpayIdProvider: BitPayIdProvider,
     private configProvider: ConfigProvider,
+    private events: Events,
     private imageLoader: ImageLoader,
     private homeIntegrationsProvider: HomeIntegrationsProvider,
     private timeProvider: TimeProvider,
@@ -63,6 +65,16 @@ export class GiftCardProvider extends InvoiceProvider {
     super(emailNotificationsProvider, http, logger, persistenceProvider);
     this.logger.debug('GiftCardProvider initialized');
     this.setCredentials();
+    this.listenForAuthChanges();
+  }
+
+  listenForAuthChanges() {
+    this.events.subscribe('BitPayId/Connected', async () => {
+      await this.getCardConfigMap(true);
+    });
+    this.events.subscribe('BitPayId/Disconnected', async () => {
+      await this.getCardConfigMap(true);
+    });
   }
 
   async getCardConfig(cardName: string) {
@@ -73,6 +85,7 @@ export class GiftCardProvider extends InvoiceProvider {
   getCardConfigMap(bustCache: boolean = false) {
     if (bustCache) {
       this.availableCardMapPromise = undefined;
+      this.availableCardsPromise = undefined;
     }
     return this.availableCardMapPromise
       ? this.availableCardMapPromise
@@ -475,7 +488,7 @@ export class GiftCardProvider extends InvoiceProvider {
     const user = await this.persistenceProvider.getBitPayIdUserInfo(
       this.getNetwork()
     );
-    console.log('user', user);
+    console.log('user in fetchAvailableCardMap', JSON.stringify(user, null, 4));
     const availableCardMap = user
       ? await this.fetchAuthenticatedAvailableCardMap()
       : await this.fetchPublicAvailableCardMap();
@@ -540,12 +553,14 @@ export class GiftCardProvider extends InvoiceProvider {
   }
 
   async getAvailableCards(): Promise<CardConfig[]> {
+    console.log('in getAvailableCards');
     return this.availableCardsPromise
       ? this.availableCardsPromise
       : this.fetchAvailableCards();
   }
 
   async fetchAvailableCards(): Promise<CardConfig[]> {
+    console.log('in fetchAvailableCards');
     this.availableCardsPromise = this.fetchAvailableCardMap().then(
       availableCardMap =>
         getCardConfigFromApiConfigMap(

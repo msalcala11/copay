@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 
 // providers
 import { TranslateService } from '@ngx-translate/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Events, NavController, NavParams } from 'ionic-angular';
 import {
   ActionSheetProvider,
   BitPayIdProvider,
@@ -19,6 +19,7 @@ export class BitPayIdPage {
   public userBasicInfo;
 
   constructor(
+    private events: Events,
     private logger: Logger,
     private navParams: NavParams,
     private bitPayIdProvider: BitPayIdProvider,
@@ -68,6 +69,7 @@ export class BitPayIdPage {
                   this.navCtrl.popToRoot();
                 }
               );
+              this.events.publish('BitPayId/Disconnected');
             },
             err => {
               this.logger.log(err);
