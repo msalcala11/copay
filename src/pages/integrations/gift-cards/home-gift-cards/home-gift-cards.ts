@@ -12,7 +12,6 @@ import { debounceTime } from 'rxjs/operators';
 import {
   ActionSheetProvider,
   AppProvider,
-  BitPayIdProvider,
   PersistenceProvider
 } from '../../../../providers';
 import {
@@ -24,7 +23,6 @@ import {
   CardConfig,
   GiftCard
 } from '../../../../providers/gift-card/gift-card.types';
-// import { Network } from '../../../../providers/persistence/persistence';
 import { BuyCardPage } from '../buy-card/buy-card';
 import { CardCatalogPage } from '../card-catalog/card-catalog';
 import { CardDetailsPage } from '../card-details/card-details';
@@ -74,14 +72,12 @@ export class HomeGiftCards implements OnInit {
   constructor(
     private actionSheetProvider: ActionSheetProvider,
     private appProvider: AppProvider,
-    private bitpayIdProvider: BitPayIdProvider,
     private giftCardProvider: GiftCardProvider,
     private navCtrl: NavController,
     private persistenceProvider: PersistenceProvider
   ) {}
 
   async ngOnInit() {
-    console.log('this.bitpayIdProvider', this.bitpayIdProvider);
     this.appName = this.appProvider.info.userVisibleName;
     await this.initGiftCards();
     const availableCards = await this.giftCardProvider.getAvailableCards();
