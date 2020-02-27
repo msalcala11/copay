@@ -33,7 +33,7 @@ export interface CommonCardConfig {
   hidden?: boolean;
   hidePin?: boolean;
   icon: string;
-  integersOnly: boolean;
+  integersOnly?: boolean;
   logo: string;
   logoBackgroundColor: string;
   minAmount?: number;
