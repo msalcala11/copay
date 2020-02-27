@@ -519,7 +519,6 @@ export class GiftCardProvider extends InvoiceProvider {
   async fetchAuthenticatedAvailableCardMap(): Promise<AvailableCardMap> {
     return this.bitpayIdProvider.apiCall('getGiftCardCatalog', {
       bitpayVersion: this.appProvider.info.version
-      // country: 'GB'
     });
   }
 

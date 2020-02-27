@@ -15,7 +15,7 @@ import { PlatformProvider } from '../platform/platform';
 @Injectable()
 export class BitPayIdProvider {
   private NETWORK = 'testnet';
-  private BITPAY_API_URL = 'https://test.bitpay.com'; // 'https://marty.bp:8088'; // 'https://10.10.11.92:8088';
+  private BITPAY_API_URL = 'https://test.bitpay.com';
   private deviceName = 'unknown device';
 
   constructor(
@@ -141,21 +141,16 @@ export class BitPayIdProvider {
 
   public async apiCall(method: string, params: any = {}) {
     const url = `${this.BITPAY_API_URL}/api/v2/`;
-
     const token = await this.persistenceProvider.getBitPayIdPairingToken(
       Network[this.NETWORK]
     );
-
     const json = {
       method,
       params: JSON.stringify(params),
       token
     };
-
     const dataToSign = `${url}${token}${JSON.stringify(json)}`;
-
     const appIdentity = (await this.getAppIdentity()) as any;
-
     const signedData = bitauthService.sign(dataToSign, appIdentity.priv);
 
     let headers = new HttpHeaders().set('content-type', 'application/json');

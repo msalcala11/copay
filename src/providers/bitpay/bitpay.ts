@@ -24,7 +24,7 @@ export class BitPayProvider {
     this.BITPAY_API_URL =
       this.NETWORK == 'livenet'
         ? 'https://bitpay.com'
-        : 'https://test.bitpay.com'; // 'https://10.10.11.92:8088';
+        : 'https://test.bitpay.com';
   }
 
   public getEnvironment() {
