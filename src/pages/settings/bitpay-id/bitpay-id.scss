@@ -29,10 +29,9 @@
   }
 
   &__settings-list {
-    .item {
+    ion-item.item {
       padding-left: 25px;
       padding-right: 10px;
     }
   }
-
 }
