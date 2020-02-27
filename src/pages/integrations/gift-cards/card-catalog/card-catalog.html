@@ -19,7 +19,7 @@
     </expandable-header>
 
     <search-bar [scrollArea]="wideHeaderPage?.scrollArea" (search)="onSearch($event.target.value)"
-      placeholder="Search Gift Cards"></search-bar>
+      placeholder="{{ 'Search Gift Cards' | translate }}"></search-bar>
     <ion-list class="bp-list" [virtualScroll]="allCards" [approxItemHeight]="'87px'" [virtualTrackBy]="trackBy"
       [headerFn]="getHeaderFn" [hidden]="searchQuery">
 
