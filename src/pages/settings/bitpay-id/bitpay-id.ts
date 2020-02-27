@@ -62,7 +62,6 @@ export class BitPayIdPage {
   }
 
   async onSettingsChange() {
-    console.log('this.bitpayIdSettings', this.bitpayIdSettings);
     await this.persistenceProvider.setBitPayIdSettings(
       this.network,
       this.bitpayIdSettings
