@@ -79,7 +79,7 @@ export class WalletDetailsPage {
   public txpsPending: any[];
   public lowUtxosWarning: boolean;
   public associatedWallet: string;
-  public showShareButton: boolean;
+  private isCordova: boolean;
 
   public supportedCards: Promise<CardConfigMap>;
 
@@ -109,15 +109,16 @@ export class WalletDetailsPage {
     private errorsProvider: ErrorsProvider
   ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
-    this.showShareButton = this.platformProvider.isCordova;
+    this.isCordova = this.platformProvider.isCordova;
     this.cardIAB_Ref = this.iab.refs.card;
   }
 
-  ionViewDidLoad() {
+  async ionViewDidLoad() {
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
+    this.supportedCards = this.giftCardProvider.getSupportedCardMap();
+
     const redirectionParam = this.navParams.get('redir');
-    const { redir } = redirectionParam;
-    if (redir && redir === 'wc') {
+    if (redirectionParam && redirectionParam.redir === 'wc') {
       setTimeout(() => {
         this.cardIAB_Ref.executeScript(
           {
@@ -146,7 +147,6 @@ export class WalletDetailsPage {
     }
 
     this.requiresMultipleSignatures = this.wallet.credentials.m > 1;
-    this.supportedCards = this.giftCardProvider.getSupportedCardMap();
 
     this.addressbookProvider
       .list()
@@ -612,14 +612,12 @@ export class WalletDetailsPage {
   }
 
   public showMoreOptions(): void {
-    const showShare =
-      this.showShareButton &&
-      this.wallet &&
-      this.wallet.isComplete() &&
-      !this.wallet.needsBackup;
+    const showRequest =
+      this.wallet && this.wallet.isComplete() && !this.wallet.needsBackup;
+    const showShare = showRequest && this.isCordova;
     const optionsSheet = this.actionSheetProvider.createOptionsSheet(
-      'address-options',
-      { showShare }
+      'wallet-options',
+      { showShare, showRequest }
     );
     optionsSheet.present();
 
@@ -645,7 +643,7 @@ export class WalletDetailsPage {
   }
 
   public shareAddress(): void {
-    if (!this.showShareButton) return;
+    if (!this.isCordova) return;
     this.walletProvider.getAddress(this.wallet, false).then(addr => {
       this.socialSharing.share(addr);
     });

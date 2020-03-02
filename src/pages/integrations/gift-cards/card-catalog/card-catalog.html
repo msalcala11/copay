@@ -19,7 +19,7 @@
     </expandable-header>
 
     <search-bar [scrollArea]="wideHeaderPage?.scrollArea" (search)="onSearch($event.target.value)"
-      placeholder="Search Gift Cards"></search-bar>
+      placeholder="{{ 'Search Gift Cards' | translate }}"></search-bar>
     <ion-list class="bp-list" [virtualScroll]="allCards" [approxItemHeight]="'87px'" [virtualTrackBy]="trackBy"
       [headerFn]="getHeaderFn" [hidden]="searchQuery">
 
@@ -38,7 +38,7 @@
             <div class="card-list-item__label ellipsis">
               {{ cardConfigMap[card.name].displayName }}
             </div>
-            <ion-note class="card-list-item__note" *ngIf="!cardConfigMap[card.name].supportedAmounts">
+            <ion-note class="card-list-item__note ellipsis" *ngIf="!cardConfigMap[card.name].supportedAmounts">
               {{ cardConfigMap[card.name].minAmount | formatCurrency: cardConfigMap[card.name].currency:0 }} —
               {{ cardConfigMap[card.name].maxAmount | formatCurrency: cardConfigMap[card.name].currency:0 }}
             </ion-note>
@@ -53,8 +53,10 @@
             </ion-note>
           </div>
         </ion-label>
-        <ion-note item-end class="discount" *ngIf="hasPercentageDiscount(card)">Save <gift-card-discount-text
-            [cardConfig]="card" [discount]="card.discounts[0]"></gift-card-discount-text>
+        <ion-note item-end class="discount" *ngIf="hasPercentageDiscount(card)"><span class="discount-prefix">Save
+          </span>
+          <gift-card-discount-text [showConcisePercentage]="true" [cardConfig]="card" [discount]="card.discounts[0]">
+          </gift-card-discount-text><span class="discount-suffix"> Off</span>
         </ion-note>
 
       </button>
@@ -74,7 +76,7 @@
             <div class="card-list-item__label ellipsis">
               {{ cardConfigMap[card.name].displayName }}
             </div>
-            <ion-note class="card-list-item__note" *ngIf="!cardConfigMap[card.name].supportedAmounts">
+            <ion-note class="card-list-item__note ellipsis" *ngIf="!cardConfigMap[card.name].supportedAmounts">
               {{ cardConfigMap[card.name].minAmount | formatCurrency: cardConfigMap[card.name].currency:0 }} —
               {{ cardConfigMap[card.name].maxAmount | formatCurrency: cardConfigMap[card.name].currency:0 }}
             </ion-note>
@@ -89,8 +91,10 @@
             </ion-note>
           </div>
         </ion-label>
-        <ion-note item-end class="discount" *ngIf="hasPercentageDiscount(card)">Save
-          <gift-card-discount-text [cardConfig]="card" [discount]="card.discounts[0]"></gift-card-discount-text>
+        <ion-note item-end class="discount" *ngIf="hasPercentageDiscount(card)"><span class="discount-prefix">Save
+          </span>
+          <gift-card-discount-text [showConcisePercentage]="true" [cardConfig]="card" [discount]="card.discounts[0]">
+          </gift-card-discount-text><span class="discount-suffix"> Off</span>
         </ion-note>
       </button>
 

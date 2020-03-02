@@ -116,7 +116,7 @@ ion-header.bp-header .toolbar {
   opacity: 0.6;
   border-radius: none;
   background-color: transparent !important;
-  margin-right: 13px;
+  margin-right: 5px;
   color: #434d5a;
   &.activated,
   &:hover:not(.disable-hover) {
@@ -188,7 +188,7 @@ ion-spinner * {
     min-width: 41px;
   }
   .back-button {
-    margin-left: 13px;
+    margin-left: 10px;
     height: 41px;
     width: 41px;
     border-radius: 50%;
@@ -270,7 +270,7 @@ button.item {
 }
 
 .background_xrp.testnet {
-  filter: opacity(0.5);
+  filter: opacity(0.4);
 }
 
 .icon-card {
@@ -444,6 +444,20 @@ a.royal {
   }
 }
 
+ion-searchbar {
+  background: white;
+  box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+  .searchbar-input-container {
+    input.searchbar-input {
+      background: #f8f8f8;
+      font-size: 16px;
+      border-radius: 8px;
+      box-shadow: none;
+    }
+  }
+}
+
 // Set backgrounds transparent so the QR Scanner can be seen behind the app.
 html,
 body,
@@ -547,11 +561,10 @@ ion-alert .alert-message {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #434d5a;
+  color: #9b9bab;
   font-size: 16px;
   font-weight: 500;
-  opacity: 50%;
-  margin: 20px 0px 10px 20px;
+  margin: 20px 16px 10px 20px;
 }
 
 .key-name {
@@ -594,6 +607,14 @@ ion-alert .alert-message {
       height: 100%;
       width: 100%;
       opacity: 0.715;
+    }
+  }
+
+  .bp-qr-card {
+    width: 100%;
+    img {
+      height: auto;
+      width: 100%;
     }
   }
 
@@ -733,6 +754,7 @@ page-bitpay-card,
 }
 
 .tabbar {
+  height: 10vh;
   .tabs-md &,
   .tabs-ios & {
     background: white;
@@ -756,6 +778,16 @@ page-bitpay-card,
       display: block;
     }
   }
+}
+
+ion-tabs:after {
+  // Workaround to prevent tabs from disappearing when activated
+  position: absolute;
+  display: none;
+  content: url('../assets/img/tab-icons/tab-home-active.svg')
+    url('../assets/img/tab-icons/tab-wallets-active.svg')
+    url('../assets/img/tab-icons/tab-cards-active.svg')
+    url('../assets/img/tab-icons/tab-settings-active.svg');
 }
 
 $home-active: url('../assets/img/tab-icons/tab-home-active.svg') no-repeat 50%

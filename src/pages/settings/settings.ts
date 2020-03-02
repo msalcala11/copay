@@ -72,12 +72,13 @@ export class SettingsPage {
   public touchIdEnabled: boolean;
   public touchIdPrevValue: boolean;
   public walletsGroups: any[];
-  public cardExperimentEnabled: boolean;
+  public bitpayIdPairingEnabled: boolean;
   public bitPayIdUserInfo: any;
   private cardIAB_Ref: InAppBrowserRef;
   private network = Network[this.bitPayIdProvider.getEnvironment().network];
   private user$: Observable<User>;
   public showBalance: boolean;
+  public useLegacyQrCode: boolean;
 
   constructor(
     private navCtrl: NavController,
@@ -111,8 +112,8 @@ export class SettingsPage {
 
   ionViewWillEnter() {
     this.persistanceProvider
-      .getCardExperimentFlag()
-      .then(res => (this.cardExperimentEnabled = res === 'enabled'));
+      .getBitpayIdPairingFlag()
+      .then(res => (this.bitpayIdPairingEnabled = res === 'enabled'));
 
     this.cardIAB_Ref = this.iab.refs.card;
 
@@ -156,6 +157,8 @@ export class SettingsPage {
       this.config && this.config.lock && this.config.lock.method
         ? this.config.lock.method.toLowerCase()
         : null;
+
+    this.useLegacyQrCode = this.config.useLegacyQrCode;
   }
 
   ionViewDidEnter() {
@@ -358,5 +361,12 @@ export class SettingsPage {
 
   public toggleShowBalanceFlag(): void {
     this.profileProvider.setShowTotalBalanceFlag(this.showBalance);
+  }
+
+  public toggleQrCodeLegacyFlag(): void {
+    let opts = {
+      useLegacyQrCode: this.useLegacyQrCode
+    };
+    this.configProvider.set(opts);
   }
 }
