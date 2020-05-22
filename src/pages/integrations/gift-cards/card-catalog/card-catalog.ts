@@ -41,7 +41,7 @@ export class CardCatalogPage extends WideHeaderPage {
   }
 
   ngOnInit() {
-    this.title = 'Gift Cards';
+    this.title = 'Shop';
   }
 
   ionViewWillEnter() {
