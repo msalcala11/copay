@@ -91,9 +91,14 @@ export class CardCatalogPage extends WideHeaderPage {
   }
 
   updateCardList() {
-    this.visibleCards = this.allCards.filter(c =>
-      isCardInSearchResults(c, this.searchQuery)
-    );
+    // console.log('this.allCards', this.allCards);
+    this.visibleCards = this.allCards
+      .slice()
+      .reverse()
+      // .filter(c => isCardInSearchResults(c, this.searchQuery))
+      .slice(this.allCards.length - 3)
+      .reverse();
+    // console.log('this.visibleCards', this.visibleCards);
   }
 
   buyCard(cardConfig: CardConfig) {
