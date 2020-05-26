@@ -21,12 +21,24 @@
     <search-bar [scrollArea]="wideHeaderPage?.scrollArea" (search)="onSearch($event.target.value)"
       placeholder="{{ 'Search for a brand' | translate }}"></search-bar>
 
+    <!-- <merchant-cell></merchant-cell> -->
+
     <div class="category-header">
       <div class="category-header__name">Recently Purchased</div>
       <div class="category-header__button">See All</div>
     </div>
-    <!-- <merchant-cell></merchant-cell> -->
+    <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
 
+    <div class="category-header">
+      <div class="category-header__name">Just Added</div>
+      <!-- <div class="category-header__button">See All</div> -->
+    </div>
+    <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
+
+    <div class="category-header">
+      <div class="category-header__name">Popular Brands</div>
+      <div class="category-header__button">See All</div>
+    </div>
     <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
 
     <!-- <button ion-item class="card-list-item" *ngFor="let card of visibleCards" (click)="buyCard(card)">
