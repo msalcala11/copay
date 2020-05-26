@@ -8,6 +8,23 @@ card-catalog-page {
     height: 100vh;
   }
 
+  .category-header {
+    padding: 20px;
+    font-weight: 600;
+    font-weight: 16px;
+
+    &__name {
+      color: #9BA3AE;
+      flex-grow: 1;
+    }
+
+    &__button {
+      color: #4F6EF7;
+    }
+
+    display: flex;
+  }
+
   .settings-list {
     position: relative;
     z-index: 0;

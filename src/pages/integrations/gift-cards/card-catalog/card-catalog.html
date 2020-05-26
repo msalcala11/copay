@@ -20,6 +20,12 @@
 
     <search-bar [scrollArea]="wideHeaderPage?.scrollArea" (search)="onSearch($event.target.value)"
       placeholder="{{ 'Search for a brand' | translate }}"></search-bar>
+
+    <div class="category-header">
+      <div class="category-header__name">Just Added</div>
+      <div class="category-header__button">See All</div>
+    </div>
+    <merchant-cell></merchant-cell>
     <!-- <ion-list class="bp-list" [virtualScroll]="allCards" [approxItemHeight]="'87px'" [virtualTrackBy]="trackBy"
       [headerFn]="getHeaderFn" [hidden]="searchQuery">
 

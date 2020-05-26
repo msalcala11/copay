@@ -1,0 +1,42 @@
+merchant-cell,
+.merchant-cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 14px;
+  background: white;
+  border-radius: 8px;
+  transition: all 300ms ease-in-out;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background: darken(#f8fbfd, 1%);
+  }
+
+  &__avatar {
+    border-radius: 50vh;
+    width: 53px;
+    height: 53px;
+    margin-right: 14px;
+    flex-shrink: 0;
+  }
+
+  &__block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    color: $black;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  &__caption {
+    font-size: 14px;
+    // color: #9BA3AE;
+    color: rgba($slateDark, 0.75);
+    max-width: 200px;
+  }
+}

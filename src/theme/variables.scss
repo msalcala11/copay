@@ -24,8 +24,7 @@ $app-direction: ltr;
 @import 'modals';
 @import 'zero-state';
 // Colors
-$colors: (
-  primary: $color-primary,
+$colors: (primary: $color-primary,
   secondary: $color-secondary,
   warning: #fdb455,
   danger: #df5264,
@@ -36,19 +35,19 @@ $colors: (
   dark: #000,
   grey: #667,
   light-grey: #9b9bab,
-  error: #e56c7b
-);
+  error: #e56c7b);
 
-$background-colors: (
-  warning: #fff7f2,
+$background-colors: (warning: #fff7f2,
   danger: #fff2f4,
   success: #bfffeb,
-  info: #eff1f8
-);
+  info: #eff1f8);
 
 // Wallet-details
 $feather-dark: #f8f8f9;
 $feather: #fbfbff;
+
+$slateDark: #434d5a;
+$black: #303133;
 
 // Refresh color
 $refresher-icon-color: color($colors, primary);
@@ -65,11 +64,9 @@ $toolbar-ios-title-text-color: color($colors, light);
 $toolbar-md-title-text-color: color($colors, light);
 // Onboarding colors
 $onboarding-gradient-bottom-color: $color-secondary-dark;
-$onboarding-background-image: linear-gradient(
-  to bottom,
+$onboarding-background-image: linear-gradient(to bottom,
   $onboarding-gradient-top-color 0%,
-  $onboarding-gradient-bottom-color 100%
-);
+  $onboarding-gradient-bottom-color 100%);
 // Removes green border below the input (Android)
 $text-input-md-highlight-color-invalid: transparent;
 $text-input-md-highlight-color-valid: transparent;
@@ -167,10 +164,11 @@ $segment-button-md-padding-top: 4px;
 .md,
 .ios {
   .card {
-    ion-list > .item:last-child,
-    ion-list > .item-wrapper:last-child .item,
-    ion-list > .item:last-child,
-    ion-list > .item-wrapper:last-child .item {
+
+    ion-list>.item:last-child,
+    ion-list>.item-wrapper:last-child .item,
+    ion-list>.item:last-child,
+    ion-list>.item-wrapper:last-child .item {
       border-bottom: none;
     }
   }
@@ -207,6 +205,7 @@ ion-footer {
 }
 
 .toolbar {
+
   // Titles centered on all headers for material design
   &.toolbar-md {
     //material design only
