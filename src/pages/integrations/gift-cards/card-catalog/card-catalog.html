@@ -41,6 +41,24 @@
     </div>
     <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
 
+    <div class="category-header">
+      <div class="category-header__name">Categories</div>
+      <div class="category-header__button">See All Brands</div>
+    </div>
+    <button ion-item class="category-item">
+      <ion-icon item-start> ️👠</ion-icon>
+      Fashion & Apparel
+    </button>
+    <button ion-item class="category-item">
+      <ion-icon item-start> ️️👾</ion-icon>
+      Entertainment & Gaming
+    </button>
+
+    <br>
+    <br>
+    <br>
+
+
     <!-- <button ion-item class="card-list-item" *ngFor="let card of visibleCards" (click)="buyCard(card)">
       <ion-icon item-start>
         <img-loader class="card-list-item__icon" [src]="cardConfigMap[card.name]?.icon" [fallbackAsPlaceholder]="true"
