@@ -75,6 +75,26 @@ card-catalog-page {
     }
   }
 
+  .no-results {
+    height: calc(100% - 270px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &__title {
+      font-size: 17px;
+      color: rgba(black, 0.5);
+      font-weight: 500;
+    }
+
+    &__subtitle {
+      font-size: 15px;
+      color: rgba(black, 0.3);
+      margin-top: 7px;
+    }
+  }
+
   .discount {
     &-prefix {
       display: none;

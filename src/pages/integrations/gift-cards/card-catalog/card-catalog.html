@@ -60,8 +60,15 @@
       <br>
     </div>
 
-    <div *ngIf="searchQuery">
+    <div *ngIf="searchQuery && visibleCards.length">
       <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
+    </div>
+
+    <div class="no-results" *ngIf="searchQuery && !visibleCards.length">
+      <div>
+        <div class="no-results__title">No Results</div>
+        <div class="no-results__subtitle">Please try searching something else</div>
+      </div>
     </div>
 
 
