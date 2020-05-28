@@ -35,10 +35,32 @@ card-catalog-page {
       margin-right: 18px;
     }
 
-    .item-inner {
-      padding-top: 15px;
-      padding-bottom: 15px;
+    &.item-block {
+      .item-inner {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        border-bottom: 0;
+      }
     }
+
+    &:after {
+      content: "";
+      height: 1px;
+      background: rgba(0, 0, 0, 0.05);
+      bottom: 0;
+      right: 0;
+      left: 0;
+      position: absolute;
+      margin: auto 20px;
+      // transition: all 250ms linear;
+    }
+  }
+
+  .category-divider {
+    background-color: rgba(0, 0, 0, 0.05);
+    height: 1px;
+    width: 90%;
+    margin: 20px auto;
   }
 
   .settings-list {
