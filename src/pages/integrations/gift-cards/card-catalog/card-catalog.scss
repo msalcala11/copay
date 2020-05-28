@@ -8,6 +8,24 @@ card-catalog-page {
     height: 100vh;
   }
 
+  .horizontal-list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 200px;
+
+    &-wrapper {
+      overflow-x: scroll;
+    }
+
+    card-list-item {
+      // width: calc(100% - 40px);
+
+      width: calc(100% - 15px);
+      margin-right: -17px;
+    }
+  }
+
   .category-header {
     padding: 10px 20px;
     padding-top: 15px;
