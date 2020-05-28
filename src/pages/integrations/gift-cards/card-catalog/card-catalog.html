@@ -23,40 +23,46 @@
 
     <!-- <merchant-cell></merchant-cell> -->
 
-    <div class="category-header">
-      <div class="category-header__name">Recently Purchased</div>
-      <div class="category-header__button">See All</div>
-    </div>
-    <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
-    <div class="category-divider"></div>
-    <div class="category-header">
-      <div class="category-header__name">Just Added</div>
-      <!-- <div class="category-header__button">See All</div> -->
-    </div>
-    <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
-    <div class="category-divider"></div>
-    <div class="category-header">
-      <div class="category-header__name">Popular Brands</div>
-      <div class="category-header__button">See All</div>
-    </div>
-    <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
-    <div class="category-divider"></div>
-    <div class="category-header">
-      <div class="category-header__name">Categories</div>
-      <div class="category-header__button">See All Brands</div>
-    </div>
-    <button ion-item class="category-item">
-      <ion-icon item-start> ️👠</ion-icon>
-      Fashion & Apparel
-    </button>
-    <button ion-item class="category-item">
-      <ion-icon item-start> ️️👾</ion-icon>
-      Entertainment & Gaming
-    </button>
+    <div *ngIf="!searchQuery">
+      <div class="category-header">
+        <div class="category-header__name">Recently Purchased</div>
+        <div class="category-header__button">See All</div>
+      </div>
+      <card-list-item *ngFor="let card of curatedCards" (click)="buyCard(card)" [card]="card"></card-list-item>
+      <div class="category-divider"></div>
+      <div class="category-header">
+        <div class="category-header__name">Just Added</div>
+        <!-- <div class="category-header__button">See All</div> -->
+      </div>
+      <card-list-item *ngFor="let card of curatedCards" (click)="buyCard(card)" [card]="card"></card-list-item>
+      <div class="category-divider"></div>
+      <div class="category-header">
+        <div class="category-header__name">Popular Brands</div>
+        <div class="category-header__button">See All</div>
+      </div>
+      <card-list-item *ngFor="let card of curatedCards" (click)="buyCard(card)" [card]="card"></card-list-item>
+      <div class="category-divider"></div>
+      <div class="category-header">
+        <div class="category-header__name">Categories</div>
+        <div class="category-header__button">See All Brands</div>
+      </div>
+      <button ion-item class="category-item">
+        <ion-icon item-start> ️👠</ion-icon>
+        Fashion & Apparel
+      </button>
+      <button ion-item class="category-item">
+        <ion-icon item-start> ️️👾</ion-icon>
+        Entertainment & Gaming
+      </button>
 
-    <br>
-    <br>
-    <br>
+      <br>
+      <br>
+      <br>
+    </div>
+
+    <div *ngIf="searchQuery">
+      <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
+    </div>
 
 
     <!-- <button ion-item class="card-list-item" *ngFor="let card of visibleCards" (click)="buyCard(card)">

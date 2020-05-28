@@ -4,6 +4,8 @@ import { NavController } from 'ionic-angular';
 import { BuyCardPage } from '../buy-card/buy-card';
 
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { ActionSheetProvider, PlatformProvider } from '../../../../providers';
 import {
   getDisplayNameSortValue,
@@ -21,7 +23,9 @@ import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-
 })
 export class CardCatalogPage extends WideHeaderPage {
   public allCards: CardConfig[];
+  public curatedCards: CardConfig[];
   public searchQuery: string = '';
+  public searchQuerySubject: Subject<string> = new Subject<string>();
   public visibleCards: CardConfig[] = [];
   public cardConfigMap: { [name: string]: CardConfig };
 
@@ -33,15 +37,19 @@ export class CardCatalogPage extends WideHeaderPage {
   constructor(
     private actionSheetProvider: ActionSheetProvider,
     public giftCardProvider: GiftCardProvider,
-    platormProvider: PlatformProvider,
+    platformProvider: PlatformProvider,
     private navCtrl: NavController,
     private translate: TranslateService
   ) {
-    super(platormProvider);
+    super(platformProvider);
   }
 
   ngOnInit() {
     this.title = 'Shop';
+    this.searchQuerySubject.pipe(debounceTime(300)).subscribe(query => {
+      this.searchQuery = query as string;
+      this.updateCardList();
+    });
   }
 
   ionViewWillEnter() {
@@ -55,6 +63,11 @@ export class CardCatalogPage extends WideHeaderPage {
             {}
           );
         this.allCards = allCards;
+        this.curatedCards = this.allCards
+          .slice()
+          .reverse()
+          .slice(this.allCards.length - 3)
+          .reverse();
         this.updateCardList();
       })
       .catch(_ => {
@@ -68,8 +81,9 @@ export class CardCatalogPage extends WideHeaderPage {
   }
 
   onSearch(query: string) {
-    this.searchQuery = query;
-    this.updateCardList();
+    // this.searchQuery = query;
+    // this.updateCardList();
+    this.searchQuerySubject.next(query);
   }
 
   getHeader(record, recordIndex, records) {
@@ -93,11 +107,8 @@ export class CardCatalogPage extends WideHeaderPage {
   updateCardList() {
     // console.log('this.allCards', this.allCards);
     this.visibleCards = this.allCards
-      .slice()
-      .reverse()
-      // .filter(c => isCardInSearchResults(c, this.searchQuery))
-      .slice(this.allCards.length - 3)
-      .reverse();
+      .filter(c => isCardInSearchResults(c, this.searchQuery))
+      .slice(0, 10);
     // console.log('this.visibleCards', this.visibleCards);
   }
 
