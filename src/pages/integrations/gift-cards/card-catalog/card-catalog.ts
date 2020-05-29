@@ -67,7 +67,7 @@ export class CardCatalogPage extends WideHeaderPage {
         this.curatedCards = this.allCards
           .slice()
           .reverse()
-          .slice(this.allCards.length - 7)
+          .slice(this.allCards.length - 4)
           .reverse();
         this.slides = this.curatedCards.reduce((all, one, i) => {
           const ch = Math.floor(i / 3);

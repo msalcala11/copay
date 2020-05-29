@@ -24,21 +24,24 @@
     <!-- <merchant-cell></merchant-cell> -->
 
     <div *ngIf="!searchQuery">
-      <div class="category-header">
-        <div class="category-header__name">Recently Purchased</div>
-        <!-- <div class="category-header__button">See All</div> -->
-      </div>
-      <ion-slides spaceBetween="-40" class="curation">
-        <ion-slide *ngFor="let slide of slides">
-          <card-list-item *ngFor="let card of slide" (click)="buyCard(card)" [card]="card"></card-list-item>
-        </ion-slide>
-        <!-- <ion-slide>
+      <div *ngIf="slides">
+        <div class="category-header">
+          <div class="category-header__name">Recently Purchased</div>
+          <!-- <div class="category-header__button">See All</div> -->
+        </div>
+        <ion-slides *ngIf="slides.length > 1" spaceBetween="-40" class="curation">
+          <ion-slide *ngFor="let slide of slides">
+            <card-list-item *ngFor="let card of slide" (click)="buyCard(card)" [card]="card"></card-list-item>
+          </ion-slide>
+          <!-- <ion-slide>
           <card-list-item *ngFor="let card of curatedCards" (click)="buyCard(card)" [card]="card"></card-list-item>
         </ion-slide>
         <ion-slide>
           <card-list-item *ngFor="let card of curatedCards" (click)="buyCard(card)" [card]="card"></card-list-item>
         </ion-slide> -->
-      </ion-slides>
+        </ion-slides>
+        <card-list-item *ngFor="let card of slides[0]" (click)="buyCard(card)" [card]="card"></card-list-item>
+      </div>
       <!-- <div class="horizontal-list-wrapper">
         <div class="horizontal-list">
           <card-list-item *ngFor="let card of curatedCards" (click)="buyCard(card)" [card]="card"></card-list-item>

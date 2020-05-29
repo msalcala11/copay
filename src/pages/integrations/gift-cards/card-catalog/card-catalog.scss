@@ -12,8 +12,10 @@ card-catalog-page {
 
     ion-slide {
 
-      .slide-zoom {
-        min-height: 261px;
+      &:not(:first-child) {
+        .slide-zoom {
+          min-height: 261px;
+        }
       }
 
       &:not(:last-child) {
