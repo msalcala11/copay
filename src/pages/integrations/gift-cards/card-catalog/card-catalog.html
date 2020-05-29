@@ -40,7 +40,9 @@
           <card-list-item *ngFor="let card of curatedCards" (click)="buyCard(card)" [card]="card"></card-list-item>
         </ion-slide> -->
         </ion-slides>
-        <card-list-item *ngFor="let card of slides[0]" (click)="buyCard(card)" [card]="card"></card-list-item>
+        <div *ngIf="slides.length === 1">
+          <card-list-item *ngFor="let card of slides[0]" (click)="buyCard(card)" [card]="card"></card-list-item>
+        </div>
       </div>
       <!-- <div class="horizontal-list-wrapper">
         <div class="horizontal-list">
