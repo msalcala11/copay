@@ -11,6 +11,11 @@ card-catalog-page {
   ion-slides.curation {
 
     ion-slide {
+
+      .slide-zoom {
+        min-height: 261px;
+      }
+
       &:not(:last-child) {
         card-list-item {
           button {

@@ -28,6 +28,7 @@ export class CardCatalogPage extends WideHeaderPage {
   public searchQuerySubject: Subject<string> = new Subject<string>();
   public visibleCards: CardConfig[] = [];
   public cardConfigMap: { [name: string]: CardConfig };
+  public slides: CardConfig[][];
 
   public getHeaderFn = this.getHeader.bind(this);
 
@@ -66,8 +67,14 @@ export class CardCatalogPage extends WideHeaderPage {
         this.curatedCards = this.allCards
           .slice()
           .reverse()
-          .slice(this.allCards.length - 3)
+          .slice(this.allCards.length - 7)
           .reverse();
+        this.slides = this.curatedCards.reduce((all, one, i) => {
+          const ch = Math.floor(i / 3);
+          all[ch] = [].concat(all[ch] || [], one);
+          return all;
+        }, []);
+        console.log('this.slides', this.slides);
         this.updateCardList();
       })
       .catch(_ => {
