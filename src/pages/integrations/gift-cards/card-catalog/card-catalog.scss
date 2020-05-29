@@ -12,7 +12,7 @@ card-catalog-page {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 200px;
+    max-height: 261px;
 
     &-wrapper {
       overflow-x: scroll;

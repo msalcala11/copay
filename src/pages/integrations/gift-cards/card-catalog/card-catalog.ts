@@ -86,6 +86,10 @@ export class CardCatalogPage extends WideHeaderPage {
     this.searchQuerySubject.next(query);
   }
 
+  viewCategory() {
+    this.navCtrl.push(CardCatalogPage);
+  }
+
   getHeader(record, recordIndex, records) {
     if (record.featured && recordIndex === 0) {
       return this.translate.instant('Featured Brands');
