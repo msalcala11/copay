@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 
 import { BuyCardPage } from '../buy-card/buy-card';
 
@@ -12,7 +12,8 @@ import {
   getPromo,
   GiftCardProvider,
   hasPromotion,
-  hasVisibleDiscount
+  hasVisibleDiscount,
+  sortByDisplayName
 } from '../../../../providers/gift-card/gift-card';
 import { CardConfig } from '../../../../providers/gift-card/gift-card.types';
 import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-page';
@@ -29,6 +30,7 @@ export class CardCatalogPage extends WideHeaderPage {
   public visibleCards: CardConfig[] = [];
   public cardConfigMap: { [name: string]: CardConfig };
   public slides: CardConfig[][];
+  public category: string;
 
   public getHeaderFn = this.getHeader.bind(this);
 
@@ -40,13 +42,15 @@ export class CardCatalogPage extends WideHeaderPage {
     public giftCardProvider: GiftCardProvider,
     platformProvider: PlatformProvider,
     private navCtrl: NavController,
+    private navParams: NavParams,
     private translate: TranslateService
   ) {
     super(platformProvider);
   }
 
   ngOnInit() {
-    this.title = 'Shop';
+    this.category = this.navParams.get('category');
+    this.title = this.category || 'Shop';
     this.searchQuerySubject.pipe(debounceTime(300)).subscribe(query => {
       this.searchQuery = query as string;
       this.updateCardList();
@@ -58,23 +62,23 @@ export class CardCatalogPage extends WideHeaderPage {
       .getAvailableCards()
       .then(allCards => {
         this.cardConfigMap = allCards
-          .sort(sortByFeaturedAndAlphabetically)
+          .sort(sortByDisplayName)
           .reduce(
             (map, cardConfig) => ({ ...map, [cardConfig.name]: cardConfig }),
             {}
           );
         this.allCards = allCards;
+        console.log('allCards', allCards);
         this.curatedCards = this.allCards
           .slice()
           .reverse()
-          .slice(this.allCards.length - 2)
+          .slice(this.allCards.length - 6)
           .reverse();
         this.slides = this.curatedCards.reduce((all, one, i) => {
           const ch = Math.floor(i / 3);
           all[ch] = [].concat(all[ch] || [], one);
           return all;
         }, []);
-        console.log('this.slides', this.slides);
         this.updateCardList();
       })
       .catch(_ => {
@@ -93,21 +97,21 @@ export class CardCatalogPage extends WideHeaderPage {
     this.searchQuerySubject.next(query);
   }
 
-  viewCategory() {
-    this.navCtrl.push(CardCatalogPage);
+  viewCategory(category: string) {
+    this.navCtrl.push(CardCatalogPage, { category });
   }
 
   getHeader(record, recordIndex, records) {
-    if (record.featured && recordIndex === 0) {
-      return this.translate.instant('Featured Brands');
-    }
-    const prevRecord = records[recordIndex - 1];
-    if (
-      (!record.featured && prevRecord && prevRecord.featured) ||
-      (!record.featured && !prevRecord && this.searchQuery)
-    ) {
-      return this.translate.instant('More Brands');
-    }
+    // if (record.featured && recordIndex === 0) {
+    //   return this.translate.instant('Featured Brands');
+    // }
+    // const prevRecord = records[recordIndex - 1];
+    // if (
+    //   (!record.featured && prevRecord && prevRecord.featured) ||
+    //   (!record.featured && !prevRecord && this.searchQuery)
+    // ) {
+    //   return this.translate.instant('More Brands');
+    // }
     return null;
   }
 
