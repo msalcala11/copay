@@ -3,7 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 
 import { BuyCardPage } from '../buy-card/buy-card';
 
-import { TranslateService } from '@ngx-translate/core';
+// import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ActionSheetProvider, PlatformProvider } from '../../../../providers';
@@ -32,7 +32,7 @@ export class CardCatalogPage extends WideHeaderPage {
   public slides: CardConfig[][];
   public category: string;
 
-  public getHeaderFn = this.getHeader.bind(this);
+  // public getHeaderFn = this.getHeader.bind(this);
 
   @ViewChild(WideHeaderPage)
   wideHeaderPage: WideHeaderPage;
@@ -42,8 +42,7 @@ export class CardCatalogPage extends WideHeaderPage {
     public giftCardProvider: GiftCardProvider,
     platformProvider: PlatformProvider,
     private navCtrl: NavController,
-    private navParams: NavParams,
-    private translate: TranslateService
+    private navParams: NavParams // private translate: TranslateService
   ) {
     super(platformProvider);
   }
@@ -68,7 +67,6 @@ export class CardCatalogPage extends WideHeaderPage {
             {}
           );
         this.allCards = allCards;
-        console.log('allCards', allCards);
         this.curatedCards = this.allCards
           .slice()
           .reverse()
@@ -101,19 +99,19 @@ export class CardCatalogPage extends WideHeaderPage {
     this.navCtrl.push(CardCatalogPage, { category });
   }
 
-  getHeader(record, recordIndex, records) {
-    // if (record.featured && recordIndex === 0) {
-    //   return this.translate.instant('Featured Brands');
-    // }
-    // const prevRecord = records[recordIndex - 1];
-    // if (
-    //   (!record.featured && prevRecord && prevRecord.featured) ||
-    //   (!record.featured && !prevRecord && this.searchQuery)
-    // ) {
-    //   return this.translate.instant('More Brands');
-    // }
-    return null;
-  }
+  // getHeader(record, recordIndex, records) {
+  //   if (record.featured && recordIndex === 0) {
+  //     return this.translate.instant('Featured Brands');
+  //   }
+  //   const prevRecord = records[recordIndex - 1];
+  //   if (
+  //     (!record.featured && prevRecord && prevRecord.featured) ||
+  //     (!record.featured && !prevRecord && this.searchQuery)
+  //   ) {
+  //     return this.translate.instant('More Brands');
+  //   }
+  //   return null;
+  // }
 
   trackBy(record) {
     return record.name;
