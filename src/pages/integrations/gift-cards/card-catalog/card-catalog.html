@@ -77,14 +77,11 @@
         <br>
       </div>
 
-      <div *ngIf="searchQuery && visibleCards.length">
-        <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
-      </div>
     </div>
 
     <!-- <div *ngIf="category"> -->
     <ion-list class="bp-list" [virtualScroll]="allCards" [approxItemHeight]="'87px'" [virtualTrackBy]="trackBy"
-      [headerFn]="getHeaderFn" [hidden]="searchQuery" *ngIf="category">
+      [headerFn]="getHeaderFn" [hidden]="searchQuery" *ngIf="category && !searchQuery">
 
       <ion-item-divider *virtualHeader="let header">
         {{ header }}
@@ -128,6 +125,10 @@
       </button>
 
     </ion-list>
+
+    <div *ngIf="searchQuery && visibleCards.length">
+      <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
+    </div>
     <!-- </div> -->
 
     <div class="no-results" *ngIf="searchQuery && !visibleCards.length">
