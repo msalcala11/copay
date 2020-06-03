@@ -751,8 +751,8 @@ export function sortByDescendingDate(a: GiftCard, b: GiftCard) {
 }
 
 export function sortByDisplayName(
-  a: CardConfig | GiftCard,
-  b: CardConfig | GiftCard
+  a: { displayName: string },
+  b: { displayName: string }
 ) {
   const aSortValue = getDisplayNameSortValue(a.displayName);
   const bSortValue = getDisplayNameSortValue(b.displayName);

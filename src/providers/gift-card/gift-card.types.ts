@@ -33,6 +33,7 @@ export interface GiftCardPromotion {
 
 export interface CommonCardConfig {
   activationFees?: GiftCardActivationFee[];
+  brandColor?: string;
   cardImage: string;
   categories: DirectoryCategory[];
   curations: DirectoryCuration[];
@@ -56,6 +57,7 @@ export interface CommonCardConfig {
   redeemButtonText?: string;
   redeemInstructions?: string;
   redeemUrl?: string;
+  supportedUrls?: string;
   tags?: string[];
   terms: string;
   website: string;

@@ -73,7 +73,7 @@ export const getDirectIntegrations = (
   Object.keys(res).map(name => ({ ...res[name], name }));
 
 export function fetchDirectIntegrations(): Promise<DirectIntegration[]> {
-  return fetch(`${process.env.API_ORIGIN}/merchant-directory/integrations`)
+  return fetch(`https://bitpay.com/merchant-directory/integrations`)
     .then(res => res.json())
     .then((merchantMap: DirectIntegrationMap) =>
       getDirectIntegrations(merchantMap)

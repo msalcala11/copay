@@ -21,6 +21,7 @@ import {
   sortByDisplayName
 } from '../../../../providers/gift-card/gift-card';
 import { CardConfig } from '../../../../providers/gift-card/gift-card.types';
+import { MerchantProvider } from '../../../../providers/merchant/merchant';
 import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-page';
 
 @Component({
@@ -45,6 +46,7 @@ export class CardCatalogPage extends WideHeaderPage {
   constructor(
     private actionSheetProvider: ActionSheetProvider,
     public giftCardProvider: GiftCardProvider,
+    private merchantProvider: MerchantProvider,
     platformProvider: PlatformProvider,
     private navCtrl: NavController,
     private navParams: NavParams // private translate: TranslateService
@@ -62,7 +64,7 @@ export class CardCatalogPage extends WideHeaderPage {
 
     this.giftCardProvider
       .getAvailableCards()
-      .then(allCards => {
+      .then(async allCards => {
         this.cardConfigMap = allCards
           .sort(sortByDisplayName)
           .reduce(
@@ -92,6 +94,8 @@ export class CardCatalogPage extends WideHeaderPage {
             }, [])
         }));
         this.updateCardList();
+        const merchants = await this.merchantProvider.fetchMerchants();
+        console.log('merchants', merchants);
       })
       .catch(_ => {
         this.showError();
