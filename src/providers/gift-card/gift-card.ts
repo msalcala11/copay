@@ -597,14 +597,20 @@ export class GiftCardProvider extends InvoiceProvider {
       )
         .map(apiCardConfig => ({
           ...apiCardConfig,
-          categories: directory.categories.filter(category =>
-            category.tags.some(tag => (apiCardConfig.tags || []).includes(tag))
-          ),
-          curations: directory.curated.filter(curation =>
-            curation.merchants.includes(
-              apiCardConfig.displayName || apiCardConfig.name
-            )
-          ),
+          categories: directory.categories
+            .map((category, index) => ({ ...category, index }))
+            .filter(category =>
+              category.tags.some(tag =>
+                (apiCardConfig.tags || []).includes(tag)
+              )
+            ),
+          curations: directory.curated
+            .map((category, index) => ({ ...category, index }))
+            .filter(curation =>
+              curation.merchants.includes(
+                apiCardConfig.displayName || apiCardConfig.name
+              )
+            ),
           displayName: apiCardConfig.displayName || apiCardConfig.name,
           tags: apiCardConfig.tags || []
         }))

@@ -1,3 +1,5 @@
+import { DirectoryCategory, DirectoryCuration } from '../directory/directory';
+
 export enum ClaimCodeType {
   barcode = 'barcode',
   code = 'code',
@@ -32,6 +34,8 @@ export interface GiftCardPromotion {
 export interface CommonCardConfig {
   activationFees?: GiftCardActivationFee[];
   cardImage: string;
+  categories: DirectoryCategory[];
+  curations: DirectoryCuration[];
   currency: string;
   defaultClaimCodeType: ClaimCodeType;
   description?: string;

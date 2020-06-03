@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import * as _ from 'lodash';
 
 import { BuyCardPage } from '../buy-card/buy-card';
 
@@ -7,6 +8,10 @@ import { BuyCardPage } from '../buy-card/buy-card';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ActionSheetProvider, PlatformProvider } from '../../../../providers';
+import {
+  DirectoryCategory,
+  DirectoryCuration
+} from '../../../../providers/directory/directory';
 import {
   getDisplayNameSortValue,
   getPromo,
@@ -29,6 +34,7 @@ export class CardCatalogPage extends WideHeaderPage {
   public searchQuerySubject: Subject<string> = new Subject<string>();
   public visibleCards: CardConfig[] = [];
   public cardConfigMap: { [name: string]: CardConfig };
+  public curations: Array<{ displayName: string; slides: CardConfig[][] }>;
   public slides: CardConfig[][];
   public category: string;
 
@@ -68,6 +74,41 @@ export class CardCatalogPage extends WideHeaderPage {
             {}
           );
         this.allCards = allCards;
+        // const uniqueCurations = _.uniqBy(
+        //   this.allCards
+        //     .filter(cardConfig => cardConfig.curations.length)
+        //     .map(cardConfig => cardConfig.curations)
+        //     .reduce((allCurations, cardConfigCurations) => [
+        //       ...allCurations,
+        //       ...cardConfigCurations
+        //     ]),
+        //   curation => curation.displayName
+        // );
+        const uniqueCurations = getUniqueCategoriesOrCurations(
+          this.allCards,
+          'curations'
+        );
+        const uniqueCategories = getUniqueCategoriesOrCurations(
+          this.allCards,
+          'categories'
+        );
+        this.curations = uniqueCurations.map(curation => ({
+          displayName: curation.displayName,
+          slides: this.allCards
+            .filter(cardConfig =>
+              cardConfig.curations
+                .map(cardCuration => cardCuration.displayName)
+                .includes(curation.displayName)
+            )
+            .reduce((all, one, i) => {
+              const ch = Math.floor(i / 3);
+              all[ch] = [].concat(all[ch] || [], one);
+              return all;
+            }, [])
+        }));
+        console.log('uniqueCurations', uniqueCurations);
+        console.log('uniqueCategories', uniqueCategories);
+        console.log('this.curations', this.curations);
         this.curatedCards = this.allCards
           .slice()
           .reverse()
@@ -197,4 +238,22 @@ export function getCatalogSortValue(cardConfig: CardConfig) {
   return `${cardConfig.featured ? 'a' : 'b'}${getDisplayNameSortValue(
     cardConfig.displayName
   )}`;
+}
+
+function getUniqueCategoriesOrCurations<
+  T extends DirectoryCategory | DirectoryCuration
+>(merchants: CardConfig[], field: 'curations' | 'categories'): T[] {
+  return _.uniqBy(
+    merchants
+      .filter(cardConfig => cardConfig[field].length)
+      .map(cardConfig => cardConfig[field])
+      .reduce(
+        (allCurations, cardConfigCurations) => [
+          ...allCurations,
+          ...cardConfigCurations
+        ],
+        []
+      ),
+    categoryOrCuration => categoryOrCuration.displayName
+  ) as T[];
 }
