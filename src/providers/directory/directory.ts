@@ -6,6 +6,7 @@ export interface DirectoryCurationApiObject {
 export interface DirectoryCategoryApiObject {
   displayName: string;
   emoji: string;
+  icon: string;
   tags: string[];
 }
 
@@ -88,7 +89,21 @@ export function convertObjectsToArrays(directory: DirectoryRawData): Directory {
   const curated = convertToArray(directory.curated);
   // .map(curation =>
   //   curation.displayName === 'Popular Brands'
-  //     ? { ...curation, merchants: ['Amazon'] }
+  //     ? {
+  //         ...curation,
+  //         merchants: [
+  //           'Amazon',
+  //           'Delta',
+  //           'DoorDash',
+  //           'Google Play',
+  //           'Hard Rock Cafe',
+  //           'Hotels.com',
+  //           'Mastercard',
+  //           'Starbucks',
+  //           'Uber',
+  //           'Uber Eats'
+  //         ]
+  //       }
   //     : curation
   // );
   const newDirectory = { curated, categories } as Directory;

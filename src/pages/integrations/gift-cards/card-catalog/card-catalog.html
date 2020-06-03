@@ -47,7 +47,9 @@
         </div>
         <button *ngFor="let category of categories" ion-item class="category-item"
           (click)="viewCategory(category.displayName)">
-          <ion-icon item-start> {{category.emoji}}</ion-icon>
+          <ion-icon item-start>
+            <img [src]="category.icon">
+          </ion-icon>
           {{category.displayName}}
         </button>
 

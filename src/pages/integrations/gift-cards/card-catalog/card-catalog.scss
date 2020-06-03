@@ -76,7 +76,9 @@ card-catalog-page {
     padding-left: 21px;
 
     ion-icon {
+      @include center;
       margin-right: 18px;
+      transform: translateY(-1px);
     }
 
     &.item-block {
