@@ -36,7 +36,7 @@
               <card-list-item *ngFor="let card of slide" (click)="buyCard(card)" [card]="card"></card-list-item>
             </ion-slide>
           </ion-slides>
-          <div *ngIf="slides.length === 1">
+          <div *ngIf="curation.slides.length === 1">
             <card-list-item *ngFor="let card of curation.slides[0]" (click)="buyCard(card)" [card]="card">
             </card-list-item>
           </div>
@@ -64,14 +64,15 @@
           <div class="category-header__name">Categories</div>
           <div tappable class="category-header__button" (click)="viewCategory('All')">See All Brands</div>
         </div>
-        <button ion-item class="category-item" (click)="viewCategory('Fashion & Apparel')">
-          <ion-icon item-start> ️👠</ion-icon>
-          Fashion & Apparel
+        <button *ngFor="let category of categories" ion-item class="category-item"
+          (click)="viewCategory(category.displayName)">
+          <ion-icon item-start> {{category.emoji}}</ion-icon>
+          {{category.displayName}}
         </button>
-        <button ion-item class="category-item">
+        <!-- <button ion-item class="category-item">
           <ion-icon item-start> ️️👾</ion-icon>
           Entertainment & Gaming
-        </button>
+        </button> -->
 
         <br>
         <br>

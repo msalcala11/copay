@@ -29,13 +29,12 @@ import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-
 })
 export class CardCatalogPage extends WideHeaderPage {
   public allCards: CardConfig[];
-  public curatedCards: CardConfig[];
   public searchQuery: string = '';
   public searchQuerySubject: Subject<string> = new Subject<string>();
   public visibleCards: CardConfig[] = [];
   public cardConfigMap: { [name: string]: CardConfig };
+  public categories: DirectoryCategory[];
   public curations: Array<{ displayName: string; slides: CardConfig[][] }>;
-  public slides: CardConfig[][];
   public category: string;
 
   // public getHeaderFn = this.getHeader.bind(this);
@@ -66,7 +65,6 @@ export class CardCatalogPage extends WideHeaderPage {
     this.giftCardProvider
       .getAvailableCards()
       .then(allCards => {
-        console.log('allCards', allCards);
         this.cardConfigMap = allCards
           .sort(sortByDisplayName)
           .reduce(
@@ -74,21 +72,10 @@ export class CardCatalogPage extends WideHeaderPage {
             {}
           );
         this.allCards = allCards;
-        // const uniqueCurations = _.uniqBy(
-        //   this.allCards
-        //     .filter(cardConfig => cardConfig.curations.length)
-        //     .map(cardConfig => cardConfig.curations)
-        //     .reduce((allCurations, cardConfigCurations) => [
-        //       ...allCurations,
-        //       ...cardConfigCurations
-        //     ]),
-        //   curation => curation.displayName
-        // );
-        const uniqueCurations = getUniqueCategoriesOrCurations(
-          this.allCards,
-          'curations'
-        );
-        const uniqueCategories = getUniqueCategoriesOrCurations(
+        const uniqueCurations = getUniqueCategoriesOrCurations<
+          DirectoryCuration
+        >(this.allCards, 'curations');
+        this.categories = getUniqueCategoriesOrCurations<DirectoryCategory>(
           this.allCards,
           'categories'
         );
@@ -106,19 +93,6 @@ export class CardCatalogPage extends WideHeaderPage {
               return all;
             }, [])
         }));
-        console.log('uniqueCurations', uniqueCurations);
-        console.log('uniqueCategories', uniqueCategories);
-        console.log('this.curations', this.curations);
-        this.curatedCards = this.allCards
-          .slice()
-          .reverse()
-          .slice(this.allCards.length - 6)
-          .reverse();
-        this.slides = this.curatedCards.reduce((all, one, i) => {
-          const ch = Math.floor(i / 3);
-          all[ch] = [].concat(all[ch] || [], one);
-          return all;
-        }, []);
         this.updateCardList();
       })
       .catch(_ => {
@@ -243,7 +217,7 @@ export function getCatalogSortValue(cardConfig: CardConfig) {
 function getUniqueCategoriesOrCurations<
   T extends DirectoryCategory | DirectoryCuration
 >(merchants: CardConfig[], field: 'curations' | 'categories'): T[] {
-  return _.uniqBy(
+  return (_.uniqBy(
     merchants
       .filter(cardConfig => cardConfig[field].length)
       .map(cardConfig => cardConfig[field])
@@ -255,5 +229,5 @@ function getUniqueCategoriesOrCurations<
         []
       ),
     categoryOrCuration => categoryOrCuration.displayName
-  ) as T[];
+  ) as T[]).sort((a, b) => a.index - b.index);
 }

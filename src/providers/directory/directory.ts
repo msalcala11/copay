@@ -23,10 +23,12 @@ export interface DirectoryRawData {
 }
 
 export interface DirectoryCuration extends DirectoryCurationApiObject {
+  index: number;
   name: string;
 }
 
 export interface DirectoryCategory extends DirectoryCategoryApiObject {
+  index: number;
   name: string;
 }
 
