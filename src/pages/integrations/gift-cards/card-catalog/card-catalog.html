@@ -58,7 +58,7 @@
 
     </div>
 
-    <ion-list class="bp-list" [virtualScroll]="allCards" [approxItemHeight]="'87px'" [virtualTrackBy]="trackBy"
+    <ion-list class="bp-list" [virtualScroll]="visibleCards" [approxItemHeight]="'87px'" [virtualTrackBy]="trackBy"
       [hidden]="searchQuery" *ngIf="category">
 
       <ion-item-divider *virtualHeader="let header">
