@@ -21,22 +21,24 @@ export interface Merchant extends DirectIntegration {
 
 @Injectable()
 export class MerchantProvider {
+  merchantPromise: Promise<Merchant[]>;
   constructor(private giftCardProvider: GiftCardProvider) {}
-  async fetchMerchants() {
-    const [
-      directIntegrations,
-      availableGiftCardBrands,
-      directory
-    ] = await Promise.all([
+  fetchMerchants() {
+    this.merchantPromise = Promise.all([
       fetchDirectIntegrations(),
       this.giftCardProvider.getAvailableCards(),
       fetchDirectory()
-    ]);
-    return getMerchants(directIntegrations, availableGiftCardBrands, directory);
+    ]).then(([directIntegrations, availableGiftCardBrands, directory]) =>
+      buildMerchants(directIntegrations, availableGiftCardBrands, directory)
+    );
+    return this.merchantPromise;
+  }
+  getMerchants() {
+    return this.merchantPromise ? this.merchantPromise : this.fetchMerchants();
   }
 }
 
-export function getMerchants(
+export function buildMerchants(
   directIntegrations: DirectIntegration[] = [],
   availableGiftCardBrands: CardConfig[] = [],
   directory: Directory

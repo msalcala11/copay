@@ -94,7 +94,7 @@ export class CardCatalogPage extends WideHeaderPage {
             }, [])
         }));
         this.updateCardList();
-        const merchants = await this.merchantProvider.fetchMerchants();
+        const merchants = await this.merchantProvider.getMerchants();
         console.log('merchants', merchants);
       })
       .catch(_ => {
