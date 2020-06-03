@@ -21,7 +21,10 @@ import {
   sortByDisplayName
 } from '../../../../providers/gift-card/gift-card';
 import { CardConfig } from '../../../../providers/gift-card/gift-card.types';
-import { MerchantProvider } from '../../../../providers/merchant/merchant';
+import {
+  Merchant,
+  MerchantProvider
+} from '../../../../providers/merchant/merchant';
 import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-page';
 
 @Component({
@@ -29,10 +32,12 @@ import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-
   templateUrl: 'card-catalog.html'
 })
 export class CardCatalogPage extends WideHeaderPage {
+  public allMerchants: Merchant[];
   public allCards: CardConfig[];
   public searchQuery: string = '';
   public searchQuerySubject: Subject<string> = new Subject<string>();
   public visibleCards: CardConfig[] = [];
+  public visibleMerchants: Merchant[] = [];
   public cardConfigMap: { [name: string]: CardConfig };
   public categories: DirectoryCategory[];
   public curations: Array<{ displayName: string; slides: CardConfig[][] }>;
@@ -62,29 +67,31 @@ export class CardCatalogPage extends WideHeaderPage {
       this.updateCardList();
     });
 
-    this.giftCardProvider
-      .getAvailableCards()
-      .then(async allCards => {
-        this.cardConfigMap = allCards
+    this.merchantProvider
+      .getMerchants()
+      .then(async merchants => {
+        console.log('merchants', merchants);
+        this.cardConfigMap = merchants
           .sort(sortByDisplayName)
           .reduce(
             (map, cardConfig) => ({ ...map, [cardConfig.name]: cardConfig }),
             {}
           );
-        this.allCards = allCards;
+        this.allMerchants = merchants;
         const uniqueCurations = getUniqueCategoriesOrCurations<
           DirectoryCuration
-        >(this.allCards, 'curations');
+        >(this.allMerchants, 'curations');
         this.categories = getUniqueCategoriesOrCurations<DirectoryCategory>(
-          this.allCards,
+          this.allMerchants,
           'categories'
         );
+        console.log('categories', this.categories);
         this.curations = uniqueCurations.map(curation => ({
           displayName: curation.displayName,
-          slides: this.allCards
-            .filter(cardConfig =>
-              cardConfig.curations
-                .map(cardCuration => cardCuration.displayName)
+          slides: this.allMerchants
+            .filter(merchant =>
+              merchant.curations
+                .map(merchantCuration => merchantCuration.displayName)
                 .includes(curation.displayName)
             )
             .reduce((all, one, i) => {
@@ -93,9 +100,8 @@ export class CardCatalogPage extends WideHeaderPage {
               return all;
             }, [])
         }));
+        console.log('curations', this.curations);
         this.updateCardList();
-        const merchants = await this.merchantProvider.getMerchants();
-        console.log('merchants', merchants);
       })
       .catch(_ => {
         this.showError();
@@ -136,8 +142,8 @@ export class CardCatalogPage extends WideHeaderPage {
   }
 
   updateCardList() {
-    this.visibleCards = this.allCards
-      .filter(c => isCardInSearchResults(c, this.searchQuery))
+    this.visibleMerchants = this.allMerchants
+      .filter(merchant => isMerchantInSearchResults(merchant, this.searchQuery))
       .filter(
         c =>
           !this.category ||
@@ -200,10 +206,10 @@ export class CardCatalogPage extends WideHeaderPage {
   }
 }
 
-export function isCardInSearchResults(c: CardConfig, search: string = '') {
-  const cardName = (c.displayName || c.name).toLowerCase();
+export function isMerchantInSearchResults(m: Merchant, search: string = '') {
+  const merchantName = (m.displayName || m.name).toLowerCase();
   const query = search.toLowerCase();
-  const matchableText = [cardName, stripPunctuation(cardName)];
+  const matchableText = [merchantName, stripPunctuation(merchantName)];
   return !search || matchableText.some(text => text.indexOf(query) > -1);
 }
 
@@ -223,15 +229,15 @@ export function getCatalogSortValue(cardConfig: CardConfig) {
 
 function getUniqueCategoriesOrCurations<
   T extends DirectoryCategory | DirectoryCuration
->(merchants: CardConfig[], field: 'curations' | 'categories'): T[] {
+>(merchants: Merchant[], field: 'curations' | 'categories'): T[] {
   return (_.uniqBy(
     merchants
-      .filter(cardConfig => cardConfig[field].length)
-      .map(cardConfig => cardConfig[field])
+      .filter(merchant => merchant[field].length)
+      .map(merchant => merchant[field])
       .reduce(
-        (allCurations, cardConfigCurations) => [
+        (allCurations, merchantCurations) => [
           ...allCurations,
-          ...cardConfigCurations
+          ...merchantCurations
         ],
         []
       ),
