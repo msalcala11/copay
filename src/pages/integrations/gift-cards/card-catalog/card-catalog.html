@@ -23,8 +23,6 @@
 
     <div *ngIf="category && category !== 'All'" class="category-divider"></div>
 
-
-
     <div *ngIf="!category">
       <div *ngIf="!searchQuery">
         <div *ngFor="let curation of curations">
@@ -42,24 +40,7 @@
           </div>
         </div>
         <div class="category-divider"></div>
-        <!-- <div class="category-header">
-          <div class="category-header__name">Just Added</div>
-        </div>
-        <div class="horizontal-list-wrapper">
-          <div class="horizontal-list">
-            <card-list-item *ngFor="let card of curatedCards" (click)="buyCard(card)" [card]="card"></card-list-item>
-          </div>
-        </div>
-        <div class="category-divider"></div>
-        <div class="category-header">
-          <div class="category-header__name">Popular Brands</div>
-        </div>
-        <div class="horizontal-list-wrapper">
-          <div class="horizontal-list">
-            <card-list-item *ngFor="let card of curatedCards" (click)="buyCard(card)" [card]="card"></card-list-item>
-          </div>
-        </div>
-        <div class="category-divider"></div> -->
+
         <div class="category-header">
           <div class="category-header__name">Categories</div>
           <div tappable class="category-header__button" (click)="viewCategory('All')">See All Brands</div>
@@ -69,10 +50,6 @@
           <ion-icon item-start> {{category.emoji}}</ion-icon>
           {{category.displayName}}
         </button>
-        <!-- <button ion-item class="category-item">
-          <ion-icon item-start> ️️👾</ion-icon>
-          Entertainment & Gaming
-        </button> -->
 
         <br>
         <br>
