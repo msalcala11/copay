@@ -60,6 +60,7 @@ export class CardCatalogPage extends WideHeaderPage {
     this.giftCardProvider
       .getAvailableCards()
       .then(allCards => {
+        console.log('allCards', allCards);
         this.cardConfigMap = allCards
           .sort(sortByDisplayName)
           .reduce(
