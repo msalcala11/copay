@@ -37,6 +37,9 @@ import { Merchant } from '../../../../../providers/merchant/merchant';
           <div class="card-list-item__label ellipsis">
             {{ merchant ? merchant.displayName : cardConfig.displayName }}
           </div>
+          <ion-note class="card-list-item__note ellipsis" *ngIf="!cardConfig">
+            {{ merchant.caption }}
+          </ion-note>
           <ion-note
             class="card-list-item__note"
             *ngIf="

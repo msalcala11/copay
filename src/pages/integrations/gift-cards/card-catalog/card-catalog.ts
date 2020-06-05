@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 
 import { BuyCardPage } from '../buy-card/buy-card';
 
-// import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ActionSheetProvider, PlatformProvider } from '../../../../providers';
@@ -43,8 +42,6 @@ export class CardCatalogPage extends WideHeaderPage {
   public curations: Array<{ displayName: string; slides: CardConfig[][] }>;
   public category: string;
 
-  // public getHeaderFn = this.getHeader.bind(this);
-
   @ViewChild(WideHeaderPage)
   wideHeaderPage: WideHeaderPage;
 
@@ -54,7 +51,7 @@ export class CardCatalogPage extends WideHeaderPage {
     private merchantProvider: MerchantProvider,
     platformProvider: PlatformProvider,
     private navCtrl: NavController,
-    private navParams: NavParams // private translate: TranslateService
+    private navParams: NavParams
   ) {
     super(platformProvider);
   }
@@ -70,7 +67,6 @@ export class CardCatalogPage extends WideHeaderPage {
     this.merchantProvider
       .getMerchants()
       .then(async merchants => {
-        console.log('merchants', merchants);
         this.cardConfigMap = merchants
           .sort(sortByDisplayName)
           .reduce(
@@ -85,7 +81,6 @@ export class CardCatalogPage extends WideHeaderPage {
           this.allMerchants,
           'categories'
         );
-        console.log('categories', this.categories);
         this.curations = uniqueCurations.map(curation => ({
           displayName: curation.displayName,
           slides: this.allMerchants
@@ -94,13 +89,19 @@ export class CardCatalogPage extends WideHeaderPage {
                 .map(merchantCuration => merchantCuration.displayName)
                 .includes(curation.displayName)
             )
+            .sort(
+              (a, b) =>
+                a.curations.find(c => c.displayName === curation.displayName)
+                  .merchantIndex -
+                b.curations.find(c => c.displayName === curation.displayName)
+                  .merchantIndex
+            )
             .reduce((all, one, i) => {
               const ch = Math.floor(i / 3);
               all[ch] = [].concat(all[ch] || [], one);
               return all;
             }, [])
         }));
-        console.log('curations', this.curations);
         this.updateCardList();
       })
       .catch(_ => {
@@ -114,28 +115,12 @@ export class CardCatalogPage extends WideHeaderPage {
   }
 
   onSearch(query: string) {
-    // this.searchQuery = query;
-    // this.updateCardList();
     this.searchQuerySubject.next(query);
   }
 
   viewCategory(category: string) {
     this.navCtrl.push(CardCatalogPage, { category });
   }
-
-  // getHeader(record, recordIndex, records) {
-  //   if (record.featured && recordIndex === 0) {
-  //     return this.translate.instant('Featured Brands');
-  //   }
-  //   const prevRecord = records[recordIndex - 1];
-  //   if (
-  //     (!record.featured && prevRecord && prevRecord.featured) ||
-  //     (!record.featured && !prevRecord && this.searchQuery)
-  //   ) {
-  //     return this.translate.instant('More Brands');
-  //   }
-  //   return null;
-  // }
 
   trackBy(record) {
     return record.name;

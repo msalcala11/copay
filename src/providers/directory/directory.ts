@@ -25,6 +25,7 @@ export interface DirectoryRawData {
 
 export interface DirectoryCuration extends DirectoryCurationApiObject {
   index: number;
+  merchantIndex: number;
   name: string;
 }
 

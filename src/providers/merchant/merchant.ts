@@ -80,7 +80,11 @@ export function appendCategories(
         category.tags.some(tag => merchant.tags.includes(tag))
       ),
     curations: directory.curated
-      .map((category, index) => ({ ...category, index }))
+      .map((curation, index) => ({
+        ...curation,
+        index,
+        merchantIndex: curation.merchants.indexOf(merchant.displayName)
+      }))
       .filter(curation => curation.merchants.includes(merchant.displayName))
   };
 }
