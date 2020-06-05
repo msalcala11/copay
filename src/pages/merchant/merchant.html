@@ -19,8 +19,10 @@
         <div class="body__instructions">{{merchant.instructions}}</div>
       </div>
       <div class="footer">
-        <button ion-button class="button-standard button-primary" (click)="finish()">
-          <span> Go to {{merchant.displayName}}</span>
+        <button ion-button class="button-standard button-primary" (click)="goToMerchant()">
+          <img src="assets/img/icon-chain-link.svg">
+          <span *ngIf="!merchant.cta || !merchant.cta.displayText"> Go to {{merchant.displayName}}</span>
+          <span *ngIf="merchant.cta && merchant.cta.displayText">{{merchant.cta.displayText}}</span>
         </button>
       </div>
     </div>
