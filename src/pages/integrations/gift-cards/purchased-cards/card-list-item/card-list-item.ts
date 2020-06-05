@@ -14,7 +14,7 @@ import { Merchant } from '../../../../../providers/merchant/merchant';
         <img-loader
           class="card-list-item__icon"
           [ngClass]="{ archived: card?.archived && type === 'purchased' }"
-          [src]="merchant?.icon"
+          [src]="cardConfig?.icon || merchant?.icon"
           [fallbackAsPlaceholder]="true"
           [fallbackUrl]="giftCardProvider.fallbackIcon"
         ></img-loader>
