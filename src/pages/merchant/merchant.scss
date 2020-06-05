@@ -1,0 +1,23 @@
+merchant-page {
+
+  .wrapper,
+  .content {
+    height: 100%;
+
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cover {
+    height: 77px;
+    opacity: 0.4;
+    background-image: linear-gradient(180deg, #FFFFFF 0%, #EBEDF8 97%);
+  }
+
+  .body {
+    flex-grow: 1;
+  }
+}

@@ -5,9 +5,21 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="gift-card-content">
+<ion-content>
   <div class="wrapper">
-    hi
+    <div class="content">
+      <div class="cover"></div>
+      <div class="body">
+        <div class="body__title">{{merchant.displayName}}</div>
+        <div class="body__caption">{{merchant.caption}}</div>
+        <div class="body__instructions">{{merchant.instructions}}</div>
+      </div>
+      <div class="footer">
+        <button ion-button class="button-standard button-primary" (click)="finish()">
+          <span> Go to {{merchant.displayName}}</span>
+        </button>
+      </div>
+    </div>
   </div>
 </ion-content>
 
