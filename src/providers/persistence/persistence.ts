@@ -53,6 +53,10 @@ const Keys = {
     const legacyGiftCardKey = getLegacyGiftCardKey(cardName, network);
     return legacyGiftCardKey || `giftCards-${cardName}-${network}`;
   },
+  PURCHASED_GIFT_CARDS: (network: Network) => {
+    const suffix = network === Network.livenet ? '' : `-${network}`;
+    return `purchasedGiftCards${suffix}`;
+  },
   HIDE_GIFT_CARD_DISCOUNT_ITEM: 'hideGiftCardDiscountItem',
   HIDE_BALANCE: walletId => 'hideBalance-' + walletId,
   TOTAL_BALANCE: 'totalBalance',
@@ -572,6 +576,14 @@ export class PersistenceProvider {
 
   getGiftCards(cardName: string, network: Network): Promise<GiftCardMap> {
     return this.storage.get(Keys.GIFT_CARDS(cardName, network));
+  }
+
+  setPurchasedGiftCards(network: Network, gcs: string) {
+    return this.storage.set(Keys.PURCHASED_GIFT_CARDS(network), gcs);
+  }
+
+  getPurchasedGiftCards(network: Network) {
+    return this.storage.get(Keys.PURCHASED_GIFT_CARDS(network));
   }
 
   setServerMessageDismissed(id) {

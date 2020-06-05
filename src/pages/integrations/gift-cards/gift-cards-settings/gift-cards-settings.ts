@@ -29,6 +29,8 @@ export class GiftCardsSettingsPage {
     this.showAtHome = this.homeIntegrationsProvider.shouldShowInHome(
       'giftcards'
     );
+    const purchasedGiftCards = await this.giftCardProvider.getPurchasedCards();
+    console.log('purchasedGiftCards', purchasedGiftCards);
     const purchasedCards = await this.giftCardProvider.getPurchasedBrands();
     this.purchasedBrands = _.uniqBy(
       purchasedCards,

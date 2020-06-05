@@ -37,7 +37,9 @@ describe('GiftCardProvider', () => {
       [GiftCardProvider, HttpTestingController],
       (giftCardProvider: GiftCardProvider, httpMock: HttpTestingController) =>
         fakeAsync(async () => {
-          const promise = giftCardProvider.getPurchasedCards('Amazon.co.jp');
+          const promise = giftCardProvider.getPurchasedCardsOfBrand(
+            'Amazon.co.jp'
+          );
           respondWithAvailableCards(httpMock, giftCardProvider);
           const cards = await promise;
           expect(cards).toEqual([]);
@@ -47,7 +49,9 @@ describe('GiftCardProvider', () => {
       [GiftCardProvider, HttpTestingController],
       (giftCardProvider: GiftCardProvider, httpMock: HttpTestingController) =>
         fakeAsync(async () => {
-          const promise = giftCardProvider.getPurchasedCards('Amazon.com');
+          const promise = giftCardProvider.getPurchasedCardsOfBrand(
+            'Amazon.com'
+          );
           respondWithAvailableCards(httpMock, giftCardProvider);
           const cards = await promise;
           expect(cards[0].currency).toBe('USD');
@@ -68,7 +72,9 @@ describe('GiftCardProvider', () => {
           const archivePromise = giftCardProvider.archiveAllCards('Amazon.com');
           respondWithAvailableCards(httpMock, giftCardProvider);
           await archivePromise;
-          const cards = await giftCardProvider.getPurchasedCards('Amazon.com');
+          const cards = await giftCardProvider.getPurchasedCardsOfBrand(
+            'Amazon.com'
+          );
           expect(cards.every(c => c.archived)).toBe(true);
         })
     ));

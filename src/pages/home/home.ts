@@ -116,6 +116,9 @@ export class HomePage {
 
   ionViewDidLoad() {
     this.preFetchWallets();
+    setTimeout(() => {
+      this.giftCardProvider.migratePurchasedCardsIfNeeded();
+    }, 3000);
   }
 
   private setMerchantDirectoryAdvertisement() {

@@ -192,7 +192,25 @@ export class GiftCardProvider extends InvoiceProvider {
       : getCardsFromInvoiceMap(giftCardMap, configMap);
   }
 
-  async getPurchasedCards(cardName: string): Promise<GiftCard[]> {
+  async getPurchasedCards(): Promise<GiftCard[]> {
+    const savedPurchasedGiftCardsValue = await this.persistenceProvider.getPurchasedGiftCards(
+      this.getNetwork()
+    );
+    console.log('savedPurchasedGiftCardsValue', savedPurchasedGiftCardsValue);
+    let savedPurchasedGiftCards;
+    try {
+      savedPurchasedGiftCards = JSON.parse(savedPurchasedGiftCardsValue);
+    } catch (err) {
+      console.log('error parsing', err);
+      savedPurchasedGiftCards =
+        savedPurchasedGiftCardsValue instanceof Array
+          ? savedPurchasedGiftCardsValue
+          : undefined;
+    }
+    return savedPurchasedGiftCards;
+  }
+
+  async getPurchasedCardsOfBrand(cardName: string): Promise<GiftCard[]> {
     const [configMap, giftCardMap] = await Promise.all([
       this.getSupportedCardConfigMap(),
       this.getCardMap(cardName)
@@ -210,7 +228,7 @@ export class GiftCardProvider extends InvoiceProvider {
       cardConfig => cardConfig.displayName === cardBrand
     );
     const cardPromises = cardConfigs.map(cardConfig =>
-      this.getPurchasedCards(cardConfig.name)
+      this.getPurchasedCardsOfBrand(cardConfig.name)
     );
     const cardsGroup = await Promise.all(cardPromises);
     return cardsGroup
@@ -222,7 +240,7 @@ export class GiftCardProvider extends InvoiceProvider {
     const supportedCards = await this.getSupportedCards();
     const supportedCardNames = supportedCards.map(c => c.name);
     const purchasedCardPromises = supportedCardNames.map(cardName =>
-      this.getPurchasedCards(cardName)
+      this.getPurchasedCardsOfBrand(cardName)
     );
     const purchasedCards = await Promise.all(purchasedCardPromises);
     return purchasedCards
@@ -276,9 +294,9 @@ export class GiftCardProvider extends InvoiceProvider {
   }
 
   async saveGiftCard(giftCard: GiftCard, opts?: GiftCardSaveParams) {
-    const originalCard = (await this.getPurchasedCards(giftCard.name)).find(
-      c => c.invoiceId === giftCard.invoiceId
-    );
+    const originalCard = (await this.getPurchasedCardsOfBrand(
+      giftCard.name
+    )).find(c => c.invoiceId === giftCard.invoiceId);
     const cardChanged =
       !originalCard ||
       originalCard.status !== giftCard.status ||
@@ -318,7 +336,7 @@ export class GiftCardProvider extends InvoiceProvider {
   }
 
   async archiveAllCards(cardName: string) {
-    const activeCards = (await this.getPurchasedCards(cardName)).filter(
+    const activeCards = (await this.getPurchasedCardsOfBrand(cardName)).filter(
       c => !c.archived
     );
     const oldGiftCards = await this.getCardMap(cardName);
@@ -497,6 +515,21 @@ export class GiftCardProvider extends InvoiceProvider {
         [cardConfig.name]: cardConfig
       }),
       {}
+    );
+  }
+
+  async migratePurchasedCardsIfNeeded(): Promise<void> {
+    const savedPurchasedGiftCards = await this.getPurchasedCards();
+    if (!savedPurchasedGiftCards) {
+      console.log('already migrated');
+      return;
+    }
+    console.log('migrating');
+    const purchasedBrands = await this.getPurchasedBrands();
+    const purchasedGiftCards = ([] as GiftCard[]).concat(...purchasedBrands);
+    await this.persistenceProvider.setPurchasedGiftCards(
+      this.getNetwork(),
+      JSON.stringify(purchasedGiftCards)
     );
   }
 

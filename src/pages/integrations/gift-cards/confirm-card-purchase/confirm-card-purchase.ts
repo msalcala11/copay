@@ -722,7 +722,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
   }
 
   async getNumActiveCards(): Promise<number> {
-    const allGiftCards = await this.giftCardProvider.getPurchasedCards(
+    const allGiftCards = await this.giftCardProvider.getPurchasedCardsOfBrand(
       this.cardConfig.name
     );
     const currentGiftCards = allGiftCards.filter(c => !c.archived);
