@@ -112,7 +112,7 @@ export function convertObjectsToArrays(directory: DirectoryRawData): Directory {
 
 export async function fetchDirectory(): Promise<Directory> {
   const directory = await fetch(
-    `https://marty.bp:8088/merchant-directory/directory`
+    `https://bitpay.com/merchant-directory/directory`
   ).then(res => res.json());
   const newDirectory: Directory = convertObjectsToArrays(directory);
   return newDirectory;

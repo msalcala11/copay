@@ -4,6 +4,7 @@ import {
   CardConfig,
   GiftCard
 } from '../../../../../providers/gift-card/gift-card.types';
+import { Merchant } from '../../../../../providers/merchant/merchant';
 
 @Component({
   selector: 'card-list-item',
@@ -13,7 +14,7 @@ import {
         <img-loader
           class="card-list-item__icon"
           [ngClass]="{ archived: card?.archived && type === 'purchased' }"
-          [src]="cardConfig?.icon"
+          [src]="merchant?.icon"
           [fallbackAsPlaceholder]="true"
           [fallbackUrl]="giftCardProvider.fallbackIcon"
         ></img-loader>
@@ -27,20 +28,29 @@ import {
             card.date | amTimeAgo
           }}</ion-note>
         </div>
-        <div *ngIf="(type === 'catalog' || type === 'settings') && cardConfig">
+        <div
+          *ngIf="
+            (type === 'catalog' || type === 'settings') &&
+            (cardConfig || merchant)
+          "
+        >
           <div class="card-list-item__label ellipsis">
-            {{ cardConfig.displayName }}
+            {{ merchant ? merchant.displayName : cardConfig.displayName }}
           </div>
           <ion-note
             class="card-list-item__note"
-            *ngIf="!cardConfig.supportedAmounts && type === 'catalog'"
+            *ngIf="
+              cardConfig && !cardConfig.supportedAmounts && type === 'catalog'
+            "
           >
             {{ cardConfig.minAmount | formatCurrency: currency:0 }} —
             {{ cardConfig.maxAmount | formatCurrency: currency:0 }}
           </ion-note>
           <ion-note
             class="card-list-item__note ellipsis"
-            *ngIf="cardConfig.supportedAmounts && type === 'catalog'"
+            *ngIf="
+              cardConfig && cardConfig.supportedAmounts && type === 'catalog'
+            "
           >
             <span
               *ngFor="
@@ -69,15 +79,21 @@ export class CardListItemComponent {
   @Input()
   config: CardConfig;
 
+  @Input()
+  merchant: Merchant;
+
   currency: string;
 
   constructor(public giftCardProvider: GiftCardProvider) {}
 
   async ngOnInit() {
-    this.cardConfig = this.config
-      ? this.config
-      : await this.giftCardProvider.getCardConfig(this.card.name);
+    this.cardConfig =
+      this.config ||
+      (this.merchant && this.merchant.giftCards[0]) ||
+      (this.card &&
+        (await this.giftCardProvider.getCardConfig(this.card.name)));
     this.currency =
-      (this.card && this.card.currency) || this.cardConfig.currency;
+      (this.card && this.card.currency) ||
+      (this.cardConfig && this.cardConfig.currency);
   }
 }
