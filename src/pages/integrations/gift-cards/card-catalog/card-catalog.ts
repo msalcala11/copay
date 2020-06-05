@@ -130,10 +130,10 @@ export class CardCatalogPage extends WideHeaderPage {
     this.visibleMerchants = this.allMerchants
       .filter(merchant => isMerchantInSearchResults(merchant, this.searchQuery))
       .filter(
-        c =>
+        merchant =>
           !this.category ||
           this.category === 'All' ||
-          c.categories
+          merchant.categories
             .map(category => category.displayName)
             .includes(this.category)
       );

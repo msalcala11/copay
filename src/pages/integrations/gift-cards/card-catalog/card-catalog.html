@@ -62,57 +62,63 @@
 
     </div>
 
-    <ion-list class="bp-list" [virtualScroll]="visibleCards" [approxItemHeight]="'87px'" [virtualTrackBy]="trackBy"
+    <ion-list class="bp-list" [virtualScroll]="visibleMerchants" [approxItemHeight]="'87px'" [virtualTrackBy]="trackBy"
       [hidden]="searchQuery" *ngIf="category">
 
-      <ion-item-divider *virtualHeader="let header">
+      <!-- <ion-item-divider *virtualHeader="let header">
         {{ header }}
-      </ion-item-divider>
+      </ion-item-divider> -->
 
-      <button ion-item class="card-list-item" *virtualItem="let card" (click)="buyCard(card)">
+      <button ion-item class="card-list-item" *virtualItem="let merchant" (click)="buyCard(merchant)">
         <ion-icon item-start>
-          <img-loader class="card-list-item__icon" [src]="cardConfigMap[card.name]?.icon" [fallbackAsPlaceholder]="true"
+          <img-loader class="card-list-item__icon" [src]="merchant?.icon" [fallbackAsPlaceholder]="true"
             [fallbackUrl]="giftCardProvider.fallbackIcon"></img-loader>
         </ion-icon>
         <ion-label>
 
           <div *ngIf="cardConfigMap">
             <div class="card-list-item__label ellipsis">
-              {{ cardConfigMap[card.name].displayName }}
+              {{ merchant.displayName }}
             </div>
-            <ion-note class="card-list-item__note ellipsis" *ngIf="!cardConfigMap[card.name].supportedAmounts">
-              {{ cardConfigMap[card.name].minAmount | formatCurrency: cardConfigMap[card.name].currency:0 }} —
-              {{ cardConfigMap[card.name].maxAmount | formatCurrency: cardConfigMap[card.name].currency:0 }}
+            <ion-note class="card-list-item__note ellipsis" *ngIf="!merchant.giftCards.length">
+              {{ merchant.caption }}
             </ion-note>
-            <ion-note class="card-list-item__note ellipsis" *ngIf="cardConfigMap[card.name].supportedAmounts">
+            <ion-note class="card-list-item__note ellipsis"
+              *ngIf="merchant.giftCards[0] && !merchant.giftCards[0].supportedAmounts">
+              {{ merchant.giftCards[0].minAmount | formatCurrency: merchant.giftCards[0].currency:0 }} —
+              {{ merchant.giftCards[0].maxAmount | formatCurrency: merchant.giftCards[0].currency:0 }}
+            </ion-note>
+            <ion-note class="card-list-item__note ellipsis"
+              *ngIf="merchant.giftCards[0] && merchant.giftCards[0].supportedAmounts">
               <span *ngFor="
-                    let amount of cardConfigMap[card.name].supportedAmounts;
+                    let amount of merchant.giftCards[0].supportedAmounts;
                     let last = last
                   ">
-                {{ amount | formatCurrency: cardConfigMap[card.name].currency:'minimal'
+                {{ amount | formatCurrency: merchant.giftCards[0].currency:'minimal'
                 }}<span *ngIf="!last">,</span>
               </span>
             </ion-note>
           </div>
         </ion-label>
-        <ion-note item-end class="discount" *ngIf="hasVisibleDiscount(card)"><span class="discount-prefix">Save
+        <!-- <ion-note item-end class="discount" *ngIf="hasVisibleDiscount(card)"><span class="discount-prefix">Save
           </span>
           <gift-card-discount-text [showConcisePercentage]="true" [cardConfig]="card" [discount]="card.discounts[0]">
           </gift-card-discount-text><span class="discount-suffix"> Off</span>
         </ion-note>
         <ion-note item-end class="discount" *ngIf="!hasVisibleDiscount(card) && hasPromotion(card)">
           Deal
-        </ion-note>
+        </ion-note> -->
 
       </button>
 
     </ion-list>
 
-    <div *ngIf="searchQuery && visibleCards.length">
-      <card-list-item *ngFor="let card of visibleCards" (click)="buyCard(card)" [card]="card"></card-list-item>
+    <div *ngIf="searchQuery && visibleMerchants.length">
+      <card-list-item *ngFor="let merchant of visibleMerchants" (click)="buyCard(merchant)" [merchant]="merchant">
+      </card-list-item>
     </div>
 
-    <div class="no-results" *ngIf="searchQuery && !visibleCards.length">
+    <div class="no-results" *ngIf="searchQuery && !visibleMerchants.length">
       <div>
         <div class="no-results__title">No Results</div>
         <div class="no-results__subtitle">Please try searching something else</div>
