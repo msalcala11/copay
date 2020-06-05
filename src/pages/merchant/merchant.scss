@@ -64,11 +64,11 @@ merchant-page {
 
         img {
           margin-right: 12px;
+          transform: translateY(-1px);
         }
 
         >span {
           line-height: 1.2;
-          transform: translateY(1px);
         }
       }
     }
