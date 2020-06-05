@@ -21,7 +21,7 @@
       <div class="footer">
         <button ion-button class="button-standard button-primary" (click)="goToMerchant()">
           <img src="assets/img/icon-chain-link.svg">
-          <span *ngIf="!merchant.cta || !merchant.cta.displayText" [clamp]="1"> Go to {{merchant.displayName}}</span>
+          <span *ngIf="!merchant.cta || !merchant.cta.displayText" [clamp]="1">Go to {{merchant.displayName}}</span>
           <span *ngIf="merchant.cta && merchant.cta.displayText" [clamp]="1">{{merchant.cta.displayText}}</span>
         </button>
       </div>
