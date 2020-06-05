@@ -14,7 +14,7 @@ import { AnalyticsProvider } from '../analytics/analytics';
 import { AppProvider } from '../app/app';
 import { BitPayIdProvider } from '../bitpay-id/bitpay-id';
 import { ConfigProvider } from '../config/config';
-import { fetchDirectory } from '../directory/directory';
+// import { fetchDirectory } from '../directory/directory';
 import { EmailNotificationsProvider } from '../email-notifications/email-notifications';
 import { HomeIntegrationsProvider } from '../home-integrations/home-integrations';
 import { InvoiceProvider } from '../invoice/invoice';

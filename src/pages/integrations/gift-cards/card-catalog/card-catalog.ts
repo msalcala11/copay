@@ -24,6 +24,7 @@ import {
   Merchant,
   MerchantProvider
 } from '../../../../providers/merchant/merchant';
+import { MerchantPage } from '../../../merchant/merchant';
 import { WideHeaderPage } from '../../../templates/wide-header-page/wide-header-page';
 
 @Component({
@@ -137,6 +138,12 @@ export class CardCatalogPage extends WideHeaderPage {
             .map(category => category.displayName)
             .includes(this.category)
       );
+  }
+
+  viewMerchant(merchant: Merchant) {
+    return merchant.hasDirectIntegration
+      ? this.navCtrl.push(MerchantPage, { merchant })
+      : this.buyCard(merchant.giftCards[0]);
   }
 
   buyCard(cardConfig: CardConfig) {

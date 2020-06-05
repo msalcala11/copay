@@ -31,12 +31,12 @@
           </div>
           <ion-slides *ngIf="curation.slides.length > 1" spaceBetween="-40" class="curation">
             <ion-slide *ngFor="let slide of curation.slides">
-              <card-list-item *ngFor="let merchant of slide" (click)="buyCard(merchant)" [merchant]="merchant">
+              <card-list-item *ngFor="let merchant of slide" (click)="viewMerchant(merchant)" [merchant]="merchant">
               </card-list-item>
             </ion-slide>
           </ion-slides>
           <div *ngIf="curation.slides.length === 1">
-            <card-list-item *ngFor="let merchant of curation.slides[0]" (click)="buyCard(merchant)"
+            <card-list-item *ngFor="let merchant of curation.slides[0]" (click)="viewMerchant(merchant)"
               [merchant]="merchant">
             </card-list-item>
           </div>
@@ -69,7 +69,7 @@
         {{ header }}
       </ion-item-divider> -->
 
-      <button ion-item class="card-list-item" *virtualItem="let merchant" (click)="buyCard(merchant)">
+      <button ion-item class="card-list-item" *virtualItem="let merchant" (click)="viewMerchant(merchant)">
         <ion-icon item-start>
           <img-loader class="card-list-item__icon" [src]="merchant?.icon" [fallbackAsPlaceholder]="true"
             [fallbackUrl]="giftCardProvider.fallbackIcon"></img-loader>
@@ -114,7 +114,7 @@
     </ion-list>
 
     <div *ngIf="searchQuery && visibleMerchants.length">
-      <card-list-item *ngFor="let merchant of visibleMerchants" (click)="buyCard(merchant)" [merchant]="merchant">
+      <card-list-item *ngFor="let merchant of visibleMerchants" (click)="viewMerchant(merchant)" [merchant]="merchant">
       </card-list-item>
     </div>
 
@@ -126,7 +126,7 @@
     </div>
 
 
-    <!-- <button ion-item class="card-list-item" *ngFor="let card of visibleCards" (click)="buyCard(card)">
+    <!-- <button ion-item class="card-list-item" *ngFor="let card of visibleCards" (click)="viewMerchant(card)">
       <ion-icon item-start>
         <img-loader class="card-list-item__icon" [src]="cardConfigMap[card.name]?.icon" [fallbackAsPlaceholder]="true"
           [fallbackUrl]="giftCardProvider.fallbackIcon"></img-loader>
@@ -184,7 +184,7 @@
         {{ header }}
       </ion-item-divider>
 
-      <button ion-item class="card-list-item" *virtualItem="let card" (click)="buyCard(card)">
+      <button ion-item class="card-list-item" *virtualItem="let card" (click)="viewMerchant(card)">
         <ion-icon item-start>
           <img-loader class="card-list-item__icon" [src]="cardConfigMap[card.name]?.icon" [fallbackAsPlaceholder]="true"
             [fallbackUrl]="giftCardProvider.fallbackIcon"></img-loader>
@@ -225,7 +225,7 @@
 
     <ion-list class="bp-list" [virtualScroll]="visibleCards" [approxItemHeight]="'87px'" [virtualTrackBy]="trackBy">
 
-      <button ion-item class="card-list-item" *virtualItem="let card" (click)="buyCard(card)">
+      <button ion-item class="card-list-item" *virtualItem="let card" (click)="viewMerchant(card)">
         <ion-icon item-start>
           <img-loader class="card-list-item__icon" [src]="cardConfigMap[card.name]?.icon" [fallbackAsPlaceholder]="true"
             [fallbackUrl]="giftCardProvider.fallbackIcon"></img-loader>
