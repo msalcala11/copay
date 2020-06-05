@@ -8,10 +8,14 @@
 <ion-content>
   <div class="wrapper">
     <div class="content">
-      <div class="cover"></div>
+      <div class="cover">
+        <img [src]="merchant.icon">
+      </div>
       <div class="body">
         <div class="body__title">{{merchant.displayName}}</div>
         <div class="body__caption">{{merchant.caption}}</div>
+        <div class="section-divider"></div>
+        <div class="body__subtitle">Payment Instructions</div>
         <div class="body__instructions">{{merchant.instructions}}</div>
       </div>
       <div class="footer">
@@ -22,12 +26,3 @@
     </div>
   </div>
 </ion-content>
-
-<!-- <ion-footer>
-  <ion-toolbar>
-    <button ion-button full class="button-footer" (click)="next()">
-      <ng-container *ngIf="cardConfig?.supportedAmounts">{{'Continue' | translate}}</ng-container>
-      <ng-container *ngIf="!cardConfig?.supportedAmounts">{{'Enter Amount' | translate}}</ng-container>
-    </button>
-  </ion-toolbar>
-</ion-footer> -->

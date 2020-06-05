@@ -21,7 +21,7 @@
     <search-bar *ngIf="!category || category === 'All'" [scrollArea]="wideHeaderPage?.scrollArea"
       (search)="onSearch($event.target.value)" placeholder="{{ 'Search for a brand' | translate }}"></search-bar>
 
-    <div *ngIf="category && category !== 'All'" class="category-divider"></div>
+    <div *ngIf="category && category !== 'All'" class="section-divider"></div>
 
     <div *ngIf="!category">
       <div *ngIf="!searchQuery">
@@ -40,8 +40,8 @@
               [merchant]="merchant">
             </card-list-item>
           </div>
+          <div class="section-divider"></div>
         </div>
-        <div class="category-divider"></div>
 
         <div class="category-header">
           <div class="category-header__name">Categories</div>
