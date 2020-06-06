@@ -32,10 +32,12 @@ export class GiftCardsSettingsPage {
     const purchasedGiftCards = await this.giftCardProvider.getPurchasedCards();
     console.log('purchasedGiftCards', purchasedGiftCards);
     const purchasedCards = await this.giftCardProvider.getPurchasedBrands();
-    this.purchasedBrands = _.uniqBy(
+    const allPurchasedBrands = _.uniqBy(
       purchasedCards,
       ([cards]) => cards.displayName
     );
+    this.purchasedBrands = allPurchasedBrands.slice(0, 20);
+    setTimeout(() => (this.purchasedBrands = allPurchasedBrands), 1000);
   }
 
   goToCardSettings(cardName: string) {
