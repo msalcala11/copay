@@ -34,7 +34,7 @@ import { BitPaySettingsPage } from '../integrations/bitpay-card/bitpay-settings/
 import { CoinbaseSettingsPage } from '../integrations/coinbase/coinbase-settings/coinbase-settings';
 import { GiftCardsSettingsPage } from '../integrations/gift-cards/gift-cards-settings/gift-cards-settings';
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
-import { CreatePayIdPage } from '../pay-id/create-pay-id';
+import { CreatePayIdPage } from '../pay-id/create-pay-id/create-pay-id';
 import { PinModalPage } from '../pin/pin-modal/pin-modal';
 import { AboutPage } from './about/about';
 import { AddressbookPage } from './addressbook/addressbook';
