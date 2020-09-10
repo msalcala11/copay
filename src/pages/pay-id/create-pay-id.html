@@ -5,6 +5,10 @@
         <ion-label floating>PayID</ion-label>
         <ion-input type="text" formControlName="payId"></ion-input>
       </ion-item>
+      <button ion-button class="button-standard" [disabled]="!createForm.valid" (click)="createPayId()"
+        style="margin-top: 70px">
+        {{'Create' | translate}}
+      </button>
     </form>
   </div>
 </wide-header-page>

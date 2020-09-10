@@ -13,4 +13,8 @@ export class CreatePayIdPage {
       payId: ['', Validators.required]
     });
   }
+
+  createPayId() {
+    console.log('create payId called');
+  }
 }
