@@ -115,7 +115,7 @@ export class SettingsPage {
     private events: Events
   ) {
     this.appName = this.app.info.nameCase;
-    this.isCordova = this.platformProvider.isCordova;
+    this.isCordova = this.platformProvider.isCordova || true;
     this.isCopay = this.app.info.name === 'copay';
     this.user$ = this.iabCardProvider.user$;
 
