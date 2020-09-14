@@ -1,9 +1,9 @@
 <wide-header-page title="Create your PayID">
   <div page-content>
-    <form [formGroup]="createForm">
-      <ion-item>
+    <form [formGroup]="createForm" class="pay-id-form">
+      <ion-item [ngClass]="{'has-error': hasError}">
         <ion-label floating>PayID</ion-label>
-        <ion-input type="text" formControlName="payId" style="font-weight: 600;"></ion-input>
+        <ion-input type="text" formControlName="payId" style="font-weight: 600;" (input)="onChange()"></ion-input>
         <ion-note item-right class="suffix">$bitpay.com</ion-note>
       </ion-item>
       <div class="input-footer">You can use letters and numbers</div>

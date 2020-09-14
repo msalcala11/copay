@@ -1,6 +1,23 @@
+.pay-id-form {
+  ion-item.item {
+    padding-right: 20px;
+    padding-left: 20px;
+
+    &.has-error {
+      ion-input {
+        color: color($colors, error);
+      }
+
+      .item-inner {
+        border-bottom-color: color($colors, error);
+      }
+    }
+  }
+}
+
 .input-footer {
   color: color($colors, light-grey);
   font-size: 16px;
-  margin-left: 15px;
+  margin-left: 20px;
   margin-top: 10px;
 }
