@@ -1,9 +1,10 @@
-<wide-header-page title="Create PayID">
+<wide-header-page title="Create your PayID">
   <div page-content>
     <form [formGroup]="createForm">
       <ion-item>
         <ion-label floating>PayID</ion-label>
-        <ion-input type="text" formControlName="payId"></ion-input>
+        <ion-input type="text" formControlName="payId" style="font-weight: 600;"></ion-input>
+        <ion-note item-right class="suffix">$bitpay.com</ion-note>
       </ion-item>
       <button ion-button class="button-standard" [disabled]="!createForm.valid" (click)="createPayId()"
         style="margin-top: 70px">
