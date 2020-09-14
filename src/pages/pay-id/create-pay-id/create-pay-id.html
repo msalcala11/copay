@@ -6,6 +6,7 @@
         <ion-input type="text" formControlName="payId" style="font-weight: 600;"></ion-input>
         <ion-note item-right class="suffix">$bitpay.com</ion-note>
       </ion-item>
+      <div class="input-footer">You can use letters and numbers</div>
       <button ion-button class="button-standard" [disabled]="!createForm.valid" (click)="createPayId()"
         style="margin-top: 70px">
         {{'Create' | translate}}

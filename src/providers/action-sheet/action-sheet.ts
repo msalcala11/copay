@@ -42,6 +42,7 @@ export type InfoSheetType =
   | 'one-phone-country'
   | 'payment-request'
   | 'payment-method-changed'
+  | 'pay-id-taken'
   | 'print-required'
   | 'sensitive-info'
   | 'in-app-notification'
