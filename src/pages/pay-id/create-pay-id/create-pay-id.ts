@@ -26,10 +26,13 @@ export class CreatePayIdPage {
   }
 
   createPayId() {
-    console.log('create payId called');
-    console.log('this.nav', this.nav, ReceivingWalletsPage);
-    // this.nav.push(ReceivingWalletsPage);
-    this.showTakenActionSheet();
+    this.isTaken()
+      ? this.showTakenActionSheet()
+      : this.nav.push(ReceivingWalletsPage);
+  }
+
+  isTaken() {
+    return this.createForm.value.payId === 'taken-test';
   }
 
   onChange() {
