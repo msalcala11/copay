@@ -6,7 +6,12 @@ import { Component, Input } from '@angular/core';
 })
 export class WalletItemContent {
   @Input()
+  mode: 'select' | undefined;
+
+  @Input()
   wallet: any;
+
+  selected: boolean = false;
 
   getBalance(wallet, currency) {
     const lastKnownBalance = this.getLastKownBalance(wallet, currency);

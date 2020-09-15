@@ -36,10 +36,11 @@
         </ion-label>
       </div>
       <ion-list no-lines class="bp-list">
-        <wallet-item-content *ngFor="let wallet of walletGroup" [wallet]="wallet" (click)="goToWalletDetails(wallet)">
+        <wallet-item-content *ngFor="let wallet of walletGroup" [wallet]="wallet" (click)="goToWalletDetails(wallet)"
+          mode="select">
         </wallet-item-content>
       </ion-list>
-      <label-tip type="warn" *ngIf="walletGroup && walletGroup[0] && walletGroup[0].needsBackup" header="no-header"
+      <!-- <label-tip type="warn" *ngIf="walletGroup && walletGroup[0] && walletGroup[0].needsBackup" header="no-header"
         margin-top>
         <div label-tip-body>
           <span translate>Before retrieving your wallets addresses, it's recommended that you first write down your
@@ -48,7 +49,7 @@
           <br>
           <a class="label-tip-link" (click)="openBackupPage(walletGroup[0].keyId)" translate>Backup now</a>
         </div>
-      </label-tip>
+      </label-tip> -->
     </div>
   </div>
 </ion-content>

@@ -3,11 +3,23 @@ wallet-item-content {
     .item-inner {
       border-bottom: 0px !important;
     }
+
+    &.toggle-ios.toggle-disabled,
+    &.item-ios,
+    &.item-md {
+      &.item-toggle-disabled ion-label {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
   }
+
   .wallet-warning {
     color: color($colors, danger);
+
     ion-label {
       white-space: inherit;
     }
   }
+
 }
