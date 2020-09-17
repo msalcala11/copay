@@ -18,6 +18,8 @@
       </ion-toolbar>
     </expandable-header>
 
+    <div class="instructions">Select the wallets into which you would like to receive payments using your PayID.</div>
+
     <div *ngFor="let walletGroup of walletsGroups; let i = index" class="wallets-container">
       <div class="section-header" *ngIf="walletGroup[0].canSign && walletsGroups.length > 1">
         <ion-icon class="item-img" item-start>
