@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import * as _ from 'lodash';
+
 import {
   ActionSheetProvider,
   Logger,
@@ -11,7 +13,6 @@ import {
   templateUrl: 'receiving-wallets.html'
 })
 export class ReceivingWalletsPage {
-  public wallets;
   public walletsGroups;
 
   constructor(
@@ -22,7 +23,7 @@ export class ReceivingWalletsPage {
   ) {}
 
   ionViewWillEnter() {
-    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    this.walletsGroups = _.clone(this.profileProvider.orderedWalletsByGroup);
   }
 
   ionViewDidLoad() {
@@ -37,7 +38,11 @@ export class ReceivingWalletsPage {
         body: 'PayID successfully created.'
       }
     );
-
+    console.log('this.wallets', this.walletsGroups);
+    const selectedWallets = this.walletsGroups
+      .flat()
+      .filter(wallet => wallet.selected);
+    console.log('selectedWallets', selectedWallets);
     await infoSheet.present();
     this.nav.popToRoot();
   }

@@ -13,7 +13,7 @@
     </div>
   </ion-label>
   <ion-note item-end>
-    <ion-toggle *ngIf="mode === 'select'" [(ngModel)]="selected"
+    <ion-toggle *ngIf="mode === 'select'" [(ngModel)]="wallet.selected"
       [disabled]="wallet.needsBackup || !wallet?.isComplete()"></ion-toggle>
     <div *ngIf="mode !== 'select'">
       <div>
