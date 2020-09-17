@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { Logger, ProfileProvider } from '../../../providers';
+import { NavController } from 'ionic-angular';
+import {
+  ActionSheetProvider,
+  Logger,
+  ProfileProvider
+} from '../../../providers';
 
 @Component({
   selector: 'page-receiving-wallets',
@@ -10,8 +15,10 @@ export class ReceivingWalletsPage {
   public walletsGroups;
 
   constructor(
+    private actionSheetProvider: ActionSheetProvider,
     private logger: Logger,
-    private profileProvider: ProfileProvider
+    private profileProvider: ProfileProvider,
+    private nav: NavController
   ) {}
 
   ionViewWillEnter() {
@@ -20,5 +27,18 @@ export class ReceivingWalletsPage {
 
   ionViewDidLoad() {
     this.logger.info('Loaded: ReceivingWalletsPage');
+  }
+
+  async finish() {
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'in-app-notification',
+      {
+        title: 'PayID Created',
+        body: 'PayID successfully created.'
+      }
+    );
+
+    await infoSheet.present();
+    this.nav.popToRoot();
   }
 }
