@@ -36,8 +36,8 @@
         </ion-label>
       </div>
       <ion-list no-lines class="bp-list">
-        <wallet-item-content *ngFor="let wallet of walletGroup" [wallet]="wallet" (click)="goToWalletDetails(wallet)"
-          mode="select">
+        <wallet-item-content *ngFor="let wallet of walletGroup" [wallet]="wallet" mode="select"
+          (ionChange)="onSelectionChange(wallet)">
         </wallet-item-content>
       </ion-list>
       <!-- <label-tip type="warn" *ngIf="walletGroup && walletGroup[0] && walletGroup[0].needsBackup" header="no-header"
@@ -56,7 +56,7 @@
 
 <ion-footer>
   <ion-toolbar>
-    <button ion-button full class="button-footer" (click)="finish()">
+    <button ion-button full class="button-footer" (click)="finish()" [disabled]="!getNumSelectedWallets()">
       Continue
     </button>
   </ion-toolbar>

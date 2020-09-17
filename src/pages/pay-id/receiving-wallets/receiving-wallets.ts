@@ -30,6 +30,35 @@ export class ReceivingWalletsPage {
     this.logger.info('Loaded: ReceivingWalletsPage');
   }
 
+  onSelectionChange(wallet) {
+    const otherSelectedWallets = this.walletsGroups
+      .flat()
+      .filter(w => w.id !== wallet.id && wallet.selected);
+    const alreadySelected = isCurrencyAlreadySelected(
+      otherSelectedWallets,
+      wallet.coin
+    );
+    if (alreadySelected) {
+      this.showAlreadySelectedError(wallet.coin);
+      setTimeout(() => (wallet.selected = false));
+    }
+  }
+
+  getNumSelectedWallets() {
+    return (
+      this.walletsGroups &&
+      this.walletsGroups.flat().filter(wallet => wallet.selected).length
+    );
+  }
+
+  showAlreadySelectedError(coin: string) {
+    this.actionSheetProvider
+      .createInfoSheet('currency-already-selected', {
+        coin
+      })
+      .present();
+  }
+
   async finish() {
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'in-app-notification',
@@ -38,12 +67,11 @@ export class ReceivingWalletsPage {
         body: 'PayID successfully created.'
       }
     );
-    console.log('this.wallets', this.walletsGroups);
-    const selectedWallets = this.walletsGroups
-      .flat()
-      .filter(wallet => wallet.selected);
-    console.log('selectedWallets', selectedWallets);
     await infoSheet.present();
     this.nav.popToRoot();
   }
+}
+
+function isCurrencyAlreadySelected(wallets: any, coin: string): boolean {
+  return wallets.some(wallet => wallet.selected && wallet.coin === coin);
 }

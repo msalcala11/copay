@@ -256,6 +256,14 @@
       <span sheet-button-text translate>START OVER</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'currency-already-selected'" type="warning">
+      <span sheet-title-text translate>{{params.coin.toUpperCase()}} wallet already selected</span>
+      <span sheet-text>
+        You may only select one receiving wallet per currency.
+      </span>
+      <span sheet-button-text translate>OK</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'pay-id-taken'" type="warning">
       <span sheet-title-text translate>"{{params.payId}}" is not available</span>
       <span sheet-text>

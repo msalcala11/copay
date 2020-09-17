@@ -14,7 +14,7 @@
   </ion-label>
   <ion-note item-end>
     <ion-toggle *ngIf="mode === 'select'" [(ngModel)]="wallet.selected"
-      [disabled]="wallet.needsBackup || !wallet?.isComplete()"></ion-toggle>
+      [disabled]="wallet.needsBackup || !wallet?.isComplete()" (ionChange)="onSelectionChange($event)"></ion-toggle>
     <div *ngIf="mode !== 'select'">
       <div>
         <div *ngIf="!hasZeroBalance(wallet, wallet?.coin.toUpperCase()) && !wallet?.balanceHidden">

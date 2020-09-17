@@ -27,6 +27,7 @@ export type InfoSheetType =
   | 'copy-to-clipboard'
   | 'copied-gift-card-claim-code'
   | 'copied-invoice-url'
+  | 'currency-already-selected'
   | 'default-error'
   | 'gift-card-archived'
   | 'gift-cards-unavailable'

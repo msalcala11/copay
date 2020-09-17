@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'wallet-item-content',
@@ -11,7 +11,14 @@ export class WalletItemContent {
   @Input()
   wallet: any;
 
+  @Output()
+  ionChange: EventEmitter<Event> = new EventEmitter();
+
   selected: boolean = false;
+
+  onSelectionChange(event) {
+    this.ionChange.emit(event);
+  }
 
   getBalance(wallet, currency) {
     const lastKnownBalance = this.getLastKownBalance(wallet, currency);
