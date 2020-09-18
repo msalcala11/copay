@@ -5,8 +5,25 @@ page-pay-id {
     align-items: center;
   }
 
+  .nav-share-button {
+    background: rgba(79, 110, 247, .1);
+    height: 39px;
+    padding: 0 14px;
+    border-radius: 30px;
+    color: #4f6ef7 !important;
+    font-weight: 500;
+
+    ion-icon.item-img.icon {
+      img {
+        height: 16px;
+        margin-right: 7px;
+        margin-top: -3px;
+      }
+    }
+  }
+
   .bp-list {
-    padding-top: 26px;
+    padding-top: 30px;
     max-width: 312px;
     margin: 0 auto;
 
