@@ -39,6 +39,9 @@ export class CreatePayIdPage {
     this.zone.run(() => {
       this.hasError = false;
       this.infoSheet && this.infoSheet.dismiss();
+      this.createForm.controls.payId.setValue(
+        this.createForm.value.payId.replace(/[^a-z0-9]/gi, '')
+      );
     });
   }
 
