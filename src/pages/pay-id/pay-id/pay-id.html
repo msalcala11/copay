@@ -5,11 +5,20 @@
         {{ 'Settings' | translate }}
       </div>
     </ion-title> -->
+    <ion-buttons end>
+      <button ion-button>
+        <span translate>Share</span>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <div class="wrapper">
-    Hi
+    <div class="pay-id__name">Houston Harpp</div>
+    <div class="pay-id__handle">houston$bitpay.com</div>
+    <bp-qr-code copy-to-clipboard="{{ 'marty$bitpay.com' }}" contents="{{ 'marty$bitpay.com' }}" mask-x-to-y-ratio="1">
+      <img src="assets/img/currencies/{{ 'bch' }}.svg" slot="icon" />
+    </bp-qr-code>
   </div>
 </ion-content>

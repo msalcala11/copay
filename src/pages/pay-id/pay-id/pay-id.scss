@@ -1,0 +1,30 @@
+page-pay-id {
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pay-id {
+    &__name {
+      font-size: 25px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      margin-top: 40px;
+    }
+
+    &__handle {
+      font-size: 16px;
+      color: #434D5A;
+    }
+  }
+
+  bp-qr-code {
+    padding-top: 14px;
+    border: 1px solid #E5E5E5;
+    padding-left: 10px;
+    border-radius: 30px;
+    max-width: 289px;
+    margin-top: 30px;
+  }
+}
