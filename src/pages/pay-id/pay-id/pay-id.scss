@@ -5,6 +5,40 @@ page-pay-id {
     align-items: center;
   }
 
+  .bp-list {
+    padding-top: 26px;
+    max-width: 312px;
+    margin: 0 auto;
+
+    button.item {
+
+      &.item-ios,
+      &.item-md {
+        font-weight: 500;
+
+        .item-inner {
+          padding-top: 8px;
+          padding-bottom: 8px;
+        }
+
+        ion-icon.item-img.icon.item-icon {
+          margin-right: 5px;
+          margin-left: -18px;
+
+          img {
+            height: 18px;
+          }
+        }
+      }
+    }
+
+
+
+    .line-divider {
+      margin: 0px 14px;
+    }
+  }
+
   .pay-id {
     &__name {
       font-size: 25px;
@@ -16,6 +50,12 @@ page-pay-id {
     &__handle {
       font-size: 16px;
       color: #434D5A;
+    }
+
+    &__caption {
+      font-size: 16px;
+      color: #434D5A;
+      margin-top: 15px;
     }
   }
 

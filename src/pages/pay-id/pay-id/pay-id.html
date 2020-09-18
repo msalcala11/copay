@@ -16,5 +16,28 @@
       position-ring-color="#4d6ef7" module-color="#414b59" position-center-color="#414b59">
       <img src="assets/img/bitpay-mark-round.svg" slot="icon" style="max-width: calc(100% - 4px);" />
     </bp-qr-code>
+    <div class="pay-id__caption">Scan to pay</div>
   </div>
+
+
+  <ion-list margin-bottom class="bp-list">
+    <button ion-item (click)="goToShop()">
+      <ion-icon class="item-img" item-start>
+        <img src="assets/img/preferences-gray.svg" width="25" />
+      </ion-icon>
+      <ion-label>
+        <div class="services-list-label" translate>Show Verify Code</div>
+      </ion-label>
+    </button>
+    <div class="line-divider"></div>
+    <button ion-item (click)="goToAmountPage()">
+      <ion-icon class="item-img" item-start>
+        <img src="assets/img/preferences-gray.svg" width="25" />
+      </ion-icon>
+      <ion-label>
+        <div class="services-list-label" translate>PayID Settings</div>
+      </ion-label>
+    </button>
+    <div class="line-divider"></div>
+  </ion-list>
 </ion-content>
