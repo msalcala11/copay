@@ -35,6 +35,7 @@ import { CoinbaseSettingsPage } from '../integrations/coinbase/coinbase-settings
 import { GiftCardsSettingsPage } from '../integrations/gift-cards/gift-cards-settings/gift-cards-settings';
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { CreatePayIdPage } from '../pay-id/create-pay-id/create-pay-id';
+import { PayIdPage } from '../pay-id/pay-id/pay-id';
 import { PinModalPage } from '../pin/pin-modal/pin-modal';
 import { AboutPage } from './about/about';
 import { AddressbookPage } from './addressbook/addressbook';
@@ -288,6 +289,10 @@ export class SettingsPage {
 
   public setUpPayId(): void {
     this.navCtrl.push(CreatePayIdPage);
+  }
+
+  public viewPayId(): void {
+    this.navCtrl.push(PayIdPage);
   }
 
   public openSettingIntegration(name: string): void {

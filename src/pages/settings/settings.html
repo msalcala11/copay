@@ -226,6 +226,12 @@
           </ion-icon>
           <span class="main-label">Set up PayID</span>
         </button>
+        <button ion-item (click)="viewPayId()">
+          <ion-icon class="item-img" item-start>
+            <img src="assets/img/payid-icon.svg" width="25" />
+          </ion-icon>
+          <span class="main-label">PayID</span>
+        </button>
       </ng-container>
 
       <ion-item-divider *ngIf="integrationServices && integrationServices[0]">

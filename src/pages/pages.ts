@@ -107,6 +107,7 @@ import { LockPage } from '../pages/settings/lock/lock';
 import { NotificationsPage } from '../pages/settings/notifications/notifications';
 import { SharePage } from '../pages/settings/share/share';
 import { CreatePayIdPage } from './pay-id/create-pay-id/create-pay-id';
+import { PayIdPage } from './pay-id/pay-id/pay-id';
 import { ReceivingWalletsPage } from './pay-id/receiving-wallets/receiving-wallets';
 
 /* Wallet Group Settings */
@@ -191,6 +192,7 @@ export const PAGES = [
   BackupKeyPage,
   CreateEthMultisigPage,
   CreatePayIdPage,
+  PayIdPage,
   ConfirmPage,
   MultiSendPage,
   TransferToModalPage,
