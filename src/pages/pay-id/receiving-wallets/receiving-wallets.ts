@@ -23,7 +23,9 @@ export class ReceivingWalletsPage {
   ) {}
 
   ionViewWillEnter() {
-    this.walletsGroups = _.clone(this.profileProvider.orderedWalletsByGroup);
+    this.walletsGroups = _.cloneDeep(
+      this.profileProvider.orderedWalletsByGroup
+    );
   }
 
   ionViewDidLoad() {
