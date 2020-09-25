@@ -1,0 +1,23 @@
+.verify-box {
+  padding: 20px;
+  padding-top: 50px;
+
+  &__handle {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 500;
+
+    >img {
+      margin-right: 15px;
+    }
+  }
+
+  &__code {
+    background: #F6F7FC;
+    border-radius: 13px;
+    height: 100px;
+    margin-top: 15px;
+    width: 100%;
+  }
+}
