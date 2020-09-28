@@ -15,3 +15,11 @@
     </div>
   </div>
 </wide-header-page>
+<ion-footer>
+  <div class="padding-bottom" style="padding-bottom: 40px">
+    <button ion-button class="button-standard" (click)="next()">
+      {{'Mark as verified' | translate}}
+    </button>
+    <div tappable class="btn-deemphasized" (click)="next(true)">Something is wrong</div>
+  </div>
+</ion-footer>
