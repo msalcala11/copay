@@ -1,4 +1,6 @@
 .verify-box {
+  max-width: 500px;
+  margin: 0 auto;
   padding: 20px;
   padding-top: 50px;
 
@@ -7,6 +9,7 @@
     align-items: center;
     font-size: 18px;
     font-weight: 500;
+    padding-left: 15px;
 
     >img {
       margin-right: 15px;
@@ -16,8 +19,31 @@
   &__code {
     background: #F6F7FC;
     border-radius: 13px;
-    height: 100px;
+    padding: 20px;
+    text-align: center;
     margin-top: 15px;
     width: 100%;
+
+    &__row {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 8px 5px;
+      font-size: 16px;
+
+      &__value {
+        font-weight: 600;
+      }
+
+      &__dash {
+        color: #a6b5e0;
+        font-weight: 600;
+
+        &:last-child {
+          display: none;
+        }
+      }
+
+    }
   }
 }
