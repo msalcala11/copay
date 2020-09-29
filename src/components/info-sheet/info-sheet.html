@@ -17,6 +17,26 @@
       <span sheet-second-button-text translate>Not right now</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'pay-id-unsupported-coin'" type="danger">
+      <span sheet-title-text translate>No address for <span *ngIf="params.network === 'testnet'">testnet</span>
+        {{params.coin}}</span>
+      <span sheet-text translate>
+        <strong>{{params.payId}}</strong> has not yet configured a receiving address for <span
+          *ngIf="params.network === 'testnet'">testnet</span> {{params.coin}}.
+      </span>
+      <span sheet-button-text translate>Ok</span>
+    </info-sheet-template>
+
+    <info-sheet-template *ngSwitchCase="'pay-id-confirmation'" type="warning">
+      <span sheet-title-text translate>Are you sure?</span>
+      <span sheet-text translate>
+        The payment information for <strong>{{params.payIdDetails.payId}}</strong> cannot be verified. ONLY send to this
+        address IF you TRUST the server.
+      </span>
+      <span sheet-button-text translate>Continue</span>
+      <span sheet-second-button-text translate>No</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'miner-fee-notice'" type="warning">
       <span sheet-title-text translate>Miner Fee Notice</span>
       <span sheet-text>
