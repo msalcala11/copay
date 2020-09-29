@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Events } from 'ionic-angular';
@@ -11,6 +12,7 @@ import { Coin, CurrencyProvider } from '../currency/currency';
 import { IABCardProvider } from '../in-app-browser/card';
 import { Logger } from '../logger/logger';
 import { OnGoingProcessProvider } from '../on-going-process/on-going-process';
+import { fetchPayIdDetails, isPayId } from '../pay-id/pay-id';
 import { PayproProvider } from '../paypro/paypro';
 import { PersistenceProvider } from '../persistence/persistence';
 import { ProfileProvider } from '../profile/profile';
@@ -31,6 +33,7 @@ export class IncomingDataProvider {
     private events: Events,
     private bwcProvider: BwcProvider,
     private currencyProvider: CurrencyProvider,
+    private http: HttpClient,
     private payproProvider: PayproProvider,
     private logger: Logger,
     private appProvider: AppProvider,
@@ -246,6 +249,14 @@ export class IncomingDataProvider {
     );
     const url = this.getPayProUrl(data);
     this.handleBitPayInvoice(url);
+  }
+
+  private async handlePayId(data: string) {
+    const payIdDetails = await fetchPayIdDetails(this.http, data);
+    this.showMenu({
+      data,
+      type: 'payId'
+    });
   }
 
   private async handleBitPayInvoice(invoiceUrl: string) {
@@ -736,8 +747,18 @@ export class IncomingDataProvider {
   }
 
   public redir(data: string, redirParams?: RedirParams): boolean {
+    data = 'matias$ematiu.sandbox.payid.org';
     if (redirParams && redirParams.activePage)
       this.activePage = redirParams.activePage;
+
+    if (isPayId(data)) {
+      this.handlePayId(data).catch(() => {
+        this.actionSheetProvider
+          .createInfoSheet('pay-id-not-found', { payId: data })
+          .present();
+      });
+      return true;
+    }
 
     //  Handling of a bitpay invoice url
     if (this.isValidBitPayInvoice(data)) {

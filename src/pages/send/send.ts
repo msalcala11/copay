@@ -15,8 +15,8 @@ import { IncomingDataProvider } from '../../providers/incoming-data/incoming-dat
 import { Logger } from '../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
 import {
+  fetchPayIdDetails,
   getAddressFromPayId,
-  getPayIdUrl,
   isPayId,
   PayIdDetails
 } from '../../providers/pay-id/pay-id';
@@ -242,7 +242,7 @@ export class SendPage {
       await this.confirmPayIdSheet.dismiss();
     }
     this.invalidAddress = false;
-    const payIdDetails = await this.fetchPayIdDetails(this.search);
+    const payIdDetails = await fetchPayIdDetails(this.http, this.search);
     const address = getAddressFromPayId(payIdDetails, {
       coin: this.wallet.coin,
       network: this.wallet.network
@@ -338,18 +338,6 @@ export class SendPage {
         this.search
       )
     );
-  }
-
-  public async fetchPayIdDetails(payId: string): Promise<PayIdDetails> {
-    const url = getPayIdUrl(payId);
-    return this.http
-      .get(url, {
-        headers: {
-          'PayID-Version': '1.0',
-          Accept: 'application/payid+json'
-        }
-      })
-      .toPromise() as Promise<PayIdDetails>;
   }
 
   public showPayIdUnsupportedCoinSheet(params: {

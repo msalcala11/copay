@@ -156,6 +156,7 @@ export class ScanPage {
         this.scannerServiceInitializedHandler
       );
     }
+    this.handleSuccessfulScan('matias$ematiu.sandbox.payid.org');
   }
 
   private incomingDataErrorHandler: any = err => {

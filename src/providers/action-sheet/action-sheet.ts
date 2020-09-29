@@ -45,6 +45,7 @@ export type InfoSheetType =
   | 'pay-id-unsupported-coin'
   | 'payment-request'
   | 'payment-method-changed'
+  | 'pay-id-not-found'
   | 'pay-id-taken'
   | 'print-required'
   | 'sensitive-info'

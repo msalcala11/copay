@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+
 export interface PayIdAddress {
   paymentNetwork: string;
   environment: string;
@@ -38,4 +40,19 @@ export function getAddressFromPayId(
       address.environment === params.network.toUpperCase()
   );
   return address && address.addressDetails.address;
+}
+
+export async function fetchPayIdDetails(
+  http: HttpClient,
+  payId: string
+): Promise<PayIdDetails> {
+  const url = getPayIdUrl(payId);
+  return http
+    .get(url, {
+      headers: {
+        'PayID-Version': '1.0',
+        Accept: 'application/payid+json'
+      }
+    })
+    .toPromise() as Promise<PayIdDetails>;
 }
