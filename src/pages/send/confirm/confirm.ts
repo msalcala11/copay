@@ -32,6 +32,7 @@ import { FeeProvider } from '../../../providers/fee/fee';
 import { HomeIntegrationsProvider } from '../../../providers/home-integrations/home-integrations';
 import { IABCardProvider } from '../../../providers/in-app-browser/card';
 import { OnGoingProcessProvider } from '../../../providers/on-going-process/on-going-process';
+import { PayIdDetails } from '../../../providers/pay-id/pay-id';
 import { PayproProvider } from '../../../providers/paypro/paypro';
 import { PlatformProvider } from '../../../providers/platform/platform';
 import { PopupProvider } from '../../../providers/popup/popup';
@@ -100,6 +101,8 @@ export class ConfirmPage {
   public mainTitle: string;
   public isSpeedUpTx: boolean;
 
+  public payIdDetails: PayIdDetails;
+
   // // Card flags for zen desk chat support
   // private isCardPurchase: boolean;
   // private isHelpOpen: boolean = false;
@@ -138,6 +141,8 @@ export class ConfirmPage {
   ) {
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
     this.fromWalletDetails = this.navParams.data.fromWalletDetails;
+    console.log('payIdDetails confirm', this.navParams.data.payIdDetails);
+    this.payIdDetails = this.navParams.data.payIdDetails;
     this.fromCoinbase = this.navParams.data.fromCoinbase;
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
     this.CONFIRM_LIMIT_USD = 20;

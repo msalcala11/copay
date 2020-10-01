@@ -47,12 +47,16 @@ export async function fetchPayIdDetails(
   payId: string
 ): Promise<PayIdDetails> {
   const url = getPayIdUrl(payId);
-  return http
+  const payIdDetails = await (http
     .get(url, {
       headers: {
         'PayID-Version': '1.0',
         Accept: 'application/payid+json'
       }
     })
-    .toPromise() as Promise<PayIdDetails>;
+    .toPromise() as Promise<PayIdDetails>);
+  // payIdDetails.addresses[0].environment = 'TESTNET';
+  // payIdDetails.addresses[0].addressDetails.address =
+  //   'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
+  return payIdDetails;
 }

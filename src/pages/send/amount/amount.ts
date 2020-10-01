@@ -39,6 +39,7 @@ import { CustomAmountPage } from '../../receive/custom-amount/custom-amount';
 import { ConfirmPage } from '../confirm/confirm';
 
 import { TranslateService } from '@ngx-translate/core';
+import { PayIdDetails } from '../../../providers/pay-id/pay-id';
 import { CoinbaseWithdrawPage } from '../../integrations/coinbase/coinbase-withdraw/coinbase-withdraw';
 
 @Component({
@@ -75,6 +76,7 @@ export class AmountPage {
   public useSmallFontSize: boolean;
   public recipientType: string;
   public toAddress: string;
+  public payIdDetails: PayIdDetails;
   public network: string;
   public name: string;
   public email: string;
@@ -135,6 +137,7 @@ export class AmountPage {
     this.useAsModal = this.navParams.data.useAsModal;
     this.recipientType = this.navParams.data.recipientType;
     this.toAddress = this.navParams.data.toAddress;
+    this.payIdDetails = this.navParams.data.payIdDetails;
     this.network = this.navParams.data.network;
     this.name = this.navParams.data.name;
     this.email = this.navParams.data.email;
@@ -601,6 +604,7 @@ export class AmountPage {
         recipientType: this.recipientType,
         amount,
         toAddress: this.toAddress,
+        payIdDetails: this.payIdDetails,
         name: this.name,
         email: this.email,
         color: this.color,

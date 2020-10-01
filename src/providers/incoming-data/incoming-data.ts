@@ -60,6 +60,7 @@ export class IncomingDataProvider {
           data.redirTo == 'AddressbookAddPage' ? data.value : null,
         toAddress: data.redirTo == 'AmountPage' ? data.value : null,
         coin: data.coin ? data.coin : 'btc',
+        payIdDetails: data.payIdDetails,
         privateKey: data.redirTo == 'PaperWalletPage' ? data.value : null
       };
       nextView = {
@@ -67,6 +68,7 @@ export class IncomingDataProvider {
         params: stateParams
       };
     }
+    console.log('nextView', nextView);
     this.incomingDataRedir(nextView);
   }
 
@@ -253,6 +255,7 @@ export class IncomingDataProvider {
 
   private async handlePayId(data: string) {
     const payIdDetails = await fetchPayIdDetails(this.http, data);
+    console.log('payIdDetails', payIdDetails);
     this.showMenu({
       data,
       type: 'payId'
@@ -747,7 +750,7 @@ export class IncomingDataProvider {
   }
 
   public redir(data: string, redirParams?: RedirParams): boolean {
-    data = 'matias$ematiu.sandbox.payid.org';
+    // data = 'matias$ematiu.sandbox.payid.org';
     if (redirParams && redirParams.activePage)
       this.activePage = redirParams.activePage;
 

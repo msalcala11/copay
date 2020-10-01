@@ -362,7 +362,17 @@ export class SendPage {
     this.confirmPayIdSheet.onDidDismiss(option => {
       this.confirmPayIdSheet = undefined;
       if (option) {
-        this.redir(getAddressFromPayId(params.payIdDetails, this.wallet));
+        // getAddressFromPayId(params.payIdDetails, this.wallet);
+        const address = getAddressFromPayId(params.payIdDetails, this.wallet);
+        console.log('params', params);
+        console.log('wallet', this.wallet);
+        console.log('address', address);
+        this.incomingDataProvider.finishIncomingData({
+          payIdDetails: params.payIdDetails,
+          redirTo: 'AmountPage',
+          coin: this.wallet.coin,
+          value: address
+        });
       } else {
         this.search = '';
       }
