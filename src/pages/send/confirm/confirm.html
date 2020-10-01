@@ -50,6 +50,11 @@
             </div>
           </div>
 
+          <div *ngIf="payIdDetails" class="verified-badge">
+            <img src="assets/img/verified.svg" alt="verified" />Verified
+          </div>
+
+
           <ion-row align-items-center class="wallet" *ngIf="tx.recipientType == 'wallet'">
             <ion-col>
               <coin-icon [coin]="tx.coin" [network]="tx.network"></coin-icon>

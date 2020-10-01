@@ -55,8 +55,8 @@ export async function fetchPayIdDetails(
       }
     })
     .toPromise() as Promise<PayIdDetails>);
-  // payIdDetails.addresses[0].environment = 'TESTNET';
-  // payIdDetails.addresses[0].addressDetails.address =
-  //   'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
+  payIdDetails.addresses[0].environment = 'TESTNET';
+  payIdDetails.addresses[0].addressDetails.address =
+    'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
   return payIdDetails;
 }

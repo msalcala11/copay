@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Interface/Large/Check</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Send-Flow-3/3---Confirm-Payment-(PayID)" transform="translate(-284.000000, -337.000000)" fill="#9BA3AE" fill-rule="nonzero">
+            <g id="Interface/Large/Check" transform="translate(284.000000, 337.000000)">
+                <path d="M6,0 C2.6862915,0 0,2.6862915 0,6 C0,9.3137085 2.6862915,12 6,12 C9.3137085,12 12,9.3137085 12,6 C11.9903886,2.69028083 9.30971917,0.00961135888 6,0 Z M5,8.707 L2.293,6 L3,5.293 L5,7.293 L9,3.293 L9.707,4 L5,8.707 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>
