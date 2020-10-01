@@ -27,6 +27,14 @@
       <span sheet-button-text translate>Ok</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'verify-pay-id'" type="info">
+      <span sheet-title-text translate>{{params.payIdDetails.payId}} is not verified</span>
+      <span sheet-text translate>
+        Verification is required before sending to this PayID.
+      </span>
+      <span sheet-button-text translate>Verify</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'pay-id-confirmation'" type="warning">
       <span sheet-title-text translate>Are you sure?</span>
       <span sheet-text translate>

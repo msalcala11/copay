@@ -43,6 +43,7 @@ export type InfoSheetType =
   | 'one-phone-country'
   | 'pay-id-confirmation'
   | 'pay-id-unsupported-coin'
+  | 'verify-pay-id'
   | 'payment-request'
   | 'payment-method-changed'
   | 'pay-id-not-found'

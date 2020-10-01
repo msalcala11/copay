@@ -35,6 +35,7 @@ import { SelectInvoicePage } from '../integrations/invoice/select-invoice/select
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { SimplexPage } from '../integrations/simplex/simplex';
 import { PaperWalletPage } from '../paper-wallet/paper-wallet';
+import { VerifyPayIdPage } from '../pay-id/verify/verify';
 import { ScanPage } from '../scan/scan';
 import { AmountPage } from '../send/amount/amount';
 import { ConfirmPage } from '../send/confirm/confirm';
@@ -53,7 +54,7 @@ export class SendPage {
   public hasWallets: boolean;
   public invalidAddress: boolean;
   public invalidAddressErrorMessage: string;
-  public confirmPayIdSheet: InfoSheetComponent;
+  public verifyPayIdSheet: InfoSheetComponent;
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
     'BitcoinCashAddress',
@@ -238,9 +239,9 @@ export class SendPage {
   }
 
   public async handlePayId() {
-    if (this.confirmPayIdSheet) {
-      this.confirmPayIdSheet.onDidDismiss(() => {});
-      await this.confirmPayIdSheet.dismiss();
+    if (this.verifyPayIdSheet) {
+      this.verifyPayIdSheet.onDidDismiss(() => {});
+      await this.verifyPayIdSheet.dismiss();
     }
     this.clearInvalidAddressError();
     const payIdDetails = await fetchPayIdDetails(this.http, this.search);
@@ -249,7 +250,7 @@ export class SendPage {
       network: this.wallet.network
     });
     return address
-      ? this.showConfirmPayIdSheet({ payIdDetails })
+      ? this.showVerifyPayIdSheet({ payIdDetails })
       : this.showPayIdUnsupportedCoinSheet({
           payId: this.search,
           coin: this.wallet.coin.toUpperCase(),
@@ -362,31 +363,58 @@ export class SendPage {
     infoSheet.present();
   }
 
-  public showConfirmPayIdSheet(params: { payIdDetails: PayIdDetails }): void {
-    this.confirmPayIdSheet = this.actionSheetProvider.createInfoSheet(
-      'pay-id-confirmation',
+  public showVerifyPayIdSheet(params: { payIdDetails: PayIdDetails }): void {
+    this.verifyPayIdSheet = this.actionSheetProvider.createInfoSheet(
+      'verify-pay-id',
       params
     );
-    this.confirmPayIdSheet.present();
-    this.confirmPayIdSheet.onDidDismiss(option => {
-      this.confirmPayIdSheet = undefined;
+    this.verifyPayIdSheet.present();
+    this.verifyPayIdSheet.onDidDismiss(option => {
+      this.verifyPayIdSheet = undefined;
       if (option) {
         // getAddressFromPayId(params.payIdDetails, this.wallet);
-        const address = getAddressFromPayId(params.payIdDetails, this.wallet);
-        console.log('params', params);
-        console.log('wallet', this.wallet);
-        console.log('address', address);
-        this.incomingDataProvider.finishIncomingData({
-          payIdDetails: params.payIdDetails,
-          redirTo: 'AmountPage',
-          coin: this.wallet.coin,
-          value: address
-        });
+        this.navCtrl.push(VerifyPayIdPage);
+        // const address = getAddressFromPayId(params.payIdDetails, this.wallet);
+        // console.log('params', params);
+        // console.log('wallet', this.wallet);
+        // console.log('address', address);
+        // this.incomingDataProvider.finishIncomingData({
+        //   payIdDetails: params.payIdDetails,
+        //   redirTo: 'AmountPage',
+        //   coin: this.wallet.coin,
+        //   value: address
+        // });
       } else {
         this.search = '';
       }
     });
   }
+
+  // public showConfirmPayIdSheet(params: { payIdDetails: PayIdDetails }): void {
+  //   this.confirmPayIdSheet = this.actionSheetProvider.createInfoSheet(
+  //     'pay-id-confirmation',
+  //     params
+  //   );
+  //   this.confirmPayIdSheet.present();
+  //   this.confirmPayIdSheet.onDidDismiss(option => {
+  //     this.confirmPayIdSheet = undefined;
+  //     if (option) {
+  //       // getAddressFromPayId(params.payIdDetails, this.wallet);
+  //       const address = getAddressFromPayId(params.payIdDetails, this.wallet);
+  //       console.log('params', params);
+  //       console.log('wallet', this.wallet);
+  //       console.log('address', address);
+  //       this.incomingDataProvider.finishIncomingData({
+  //         payIdDetails: params.payIdDetails,
+  //         redirTo: 'AmountPage',
+  //         coin: this.wallet.coin,
+  //         value: address
+  //       });
+  //     } else {
+  //       this.search = '';
+  //     }
+  //   });
+  // }
 
   public showMoreOptions(): void {
     const optionsSheet = this.actionSheetProvider.createOptionsSheet(
