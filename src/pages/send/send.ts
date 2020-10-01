@@ -52,6 +52,7 @@ export class SendPage {
   public search: string = '';
   public hasWallets: boolean;
   public invalidAddress: boolean;
+  public invalidAddressErrorMessage: string;
   public confirmPayIdSheet: InfoSheetComponent;
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
@@ -176,7 +177,7 @@ export class SendPage {
     }
 
     if (isValid) {
-      this.invalidAddress = false;
+      this.clearInvalidAddressError();
       return true;
     } else {
       this.invalidAddress = true;
@@ -233,7 +234,7 @@ export class SendPage {
 
   public cleanSearch() {
     this.search = '';
-    this.invalidAddress = false;
+    this.clearInvalidAddressError();
   }
 
   public async handlePayId() {
@@ -241,7 +242,7 @@ export class SendPage {
       this.confirmPayIdSheet.onDidDismiss(() => {});
       await this.confirmPayIdSheet.dismiss();
     }
-    this.invalidAddress = false;
+    this.clearInvalidAddressError();
     const payIdDetails = await fetchPayIdDetails(this.http, this.search);
     const address = getAddressFromPayId(payIdDetails, {
       coin: this.wallet.coin,
@@ -257,10 +258,11 @@ export class SendPage {
   }
 
   public async processInput() {
-    if (this.search == '') this.invalidAddress = false;
+    if (this.search == '') this.clearInvalidAddressError();
     if (isPayId(this.search)) {
       return this.handlePayId().catch(() => {
         this.invalidAddress = true;
+        this.invalidAddressErrorMessage = 'PayID not found.';
       });
     }
     const hasContacts = await this.checkIfContact();
@@ -322,8 +324,13 @@ export class SendPage {
         this.invalidAddress = true;
       }
     } else {
-      this.invalidAddress = false;
+      this.clearInvalidAddressError();
     }
+  }
+
+  private clearInvalidAddressError() {
+    this.invalidAddress = false;
+    this.invalidAddressErrorMessage = undefined;
   }
 
   public async checkIfContact() {
@@ -345,11 +352,13 @@ export class SendPage {
     coin: string;
     network: string;
   }): void {
+    console.log('in here');
     this.invalidAddress = true;
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'pay-id-unsupported-coin',
       params
     );
+    console.log('infoSheet', infoSheet);
     infoSheet.present();
   }
 

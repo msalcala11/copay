@@ -39,6 +39,7 @@
               <img src="assets/img/scan-ico.svg">
             </ion-icon>
           </ion-item>
+          <div class="invalid-address-error">{{invalidAddressErrorMessage}}</div>
         </div>
 
         <page-transfer-to [wallet]="wallet" [searchInput]="search" [useAsModal]="false" [fromWalletDetails]="true"
