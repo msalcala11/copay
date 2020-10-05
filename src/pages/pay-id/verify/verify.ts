@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { NavParams } from 'ionic-angular';
+import { ActionSheetProvider, IncomingDataProvider } from '../../../providers';
 
 @Component({
   selector: 'verify-pay-id-page',
@@ -20,9 +22,29 @@ export class VerifyPayIdPage {
     '00510'
   ];
   codeRows: string[][];
-  constructor() {
+  constructor(
+    private incomingDataProvider: IncomingDataProvider,
+    private actionSheetProvider: ActionSheetProvider,
+    private navParams: NavParams
+  ) {
     this.codeRows = chunkify(this.code, 4);
     console.log('codeRows', this.codeRows);
+  }
+
+  public async next() {
+    await this.saveToContacts();
+  }
+
+  private async saveToContacts() {
+    const params = this.navParams.get('incomingDataParams');
+    const sheet = this.actionSheetProvider.createInfoSheet(
+      'pay-id-added-to-contacts',
+      { payIdDetails: params.payIdDetails }
+    );
+    sheet.present();
+    sheet.onDidDismiss(() =>
+      this.incomingDataProvider.finishIncomingData(params)
+    );
   }
 }
 
