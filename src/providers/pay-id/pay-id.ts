@@ -22,7 +22,26 @@ export function isPayId(value: string): boolean {
   );
 }
 
-export function getPayIdUrl(payId: string): string {
+export async function getPayIdUrlTemplate(
+  http: HttpClient,
+  payId: string
+): Promise<string> {
+  const [handle, domain] = payId.split('$');
+  const discoveryUrl = `https://${domain}/.well-known/webfinger?resource=payid%3A${handle}%24${domain}`;
+  const res = await (http
+    .get(discoveryUrl, {
+      headers: {
+        'PayID-Version': '1.0',
+        Accept: 'application/payid+json'
+      }
+    })
+    .toPromise() as Promise<{ template: string }>).catch(() => undefined);
+  res.links[0].template = `https://ematiu.sandbox.payid.org/{acctpart}`;
+  console.log('res', res);
+  return res && res.links && res.links[0] && res.links[0].template;
+}
+
+export function getPayIdUrlViaManualDiscovery(payId: string): string {
   const parts = payId.split('$');
   return `https://${parts[1]}/${parts[0]}`;
 }
@@ -46,7 +65,10 @@ export async function fetchPayIdDetails(
   http: HttpClient,
   payId: string
 ): Promise<PayIdDetails> {
-  const url = getPayIdUrl(payId);
+  const urlTemplate = await getPayIdUrlTemplate(http, payId);
+  const url = urlTemplate
+    ? urlTemplate.replace('{acctpart}', payId.split('$')[0])
+    : getPayIdUrlViaManualDiscovery(payId);
   const payIdDetails = await (http
     .get(url, {
       headers: {
@@ -55,6 +77,8 @@ export async function fetchPayIdDetails(
       }
     })
     .toPromise() as Promise<PayIdDetails>);
+  const template = await getPayIdUrlTemplate(http, payIdDetails.payId);
+  console.log('template', template);
   payIdDetails.addresses[0].environment = 'TESTNET';
   payIdDetails.addresses[0].addressDetails.address =
     'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
