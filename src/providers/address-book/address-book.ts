@@ -161,4 +161,9 @@ export class AddressBookProvider {
         });
     });
   }
+
+  public async update(entry): Promise<any> {
+    await this.remove(entry.addr);
+    await this.add(entry);
+  }
 }

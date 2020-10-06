@@ -171,10 +171,10 @@ export class TransferToPage {
         contactsList.push({
           name: _.isObject(v) ? v.name : v,
           address: k,
-          network: addrData.network,
+          network: addrData && addrData.network,
           email: _.isObject(v) ? v.email : null,
           recipientType: 'contact',
-          coin: addrData.coin,
+          coin: addrData && addrData.coin,
           getAddress: () => Promise.resolve(k),
           destinationTag: v.tag
         });

@@ -54,6 +54,7 @@ export class VerifyPayIdPage {
       //   coin: 'BTC',
       //   network: 'testnet'
       // }),
+      verified: true,
       tag: ''
     });
     const sheet = this.actionSheetProvider.createInfoSheet(

@@ -26,6 +26,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 // Pages
 import { HttpClient } from '@angular/common/http';
 import { InfoSheetComponent } from '../../components/info-sheet/info-sheet';
+import { AddressBookProvider } from '../../providers';
 import { CopayersPage } from '../add/copayers/copayers';
 import { ImportWalletPage } from '../add/import-wallet/import-wallet';
 import { JoinWalletPage } from '../add/join-wallet/join-wallet';
@@ -83,6 +84,7 @@ export class SendPage {
   };
 
   constructor(
+    private addressBookProvider: AddressBookProvider,
     private currencyProvider: CurrencyProvider,
     private http: HttpClient,
     private navCtrl: NavController,
@@ -249,6 +251,12 @@ export class SendPage {
       coin: this.wallet.coin,
       network: this.wallet.network
     });
+    const contact = await this.addressBookProvider.get(payIdDetails.payId);
+    if (contact && contact.verified) {
+      return this.incomingDataProvider.finishIncomingData(
+        this.getIncomingDataParams(payIdDetails, address)
+      );
+    }
     return address
       ? this.showVerifyPayIdSheet({ payIdDetails })
       : this.showPayIdUnsupportedCoinSheet({
@@ -363,6 +371,15 @@ export class SendPage {
     infoSheet.present();
   }
 
+  private getIncomingDataParams(payIdDetails: PayIdDetails, address: string) {
+    return {
+      payIdDetails,
+      redirTo: 'AmountPage',
+      coin: this.wallet.coin,
+      value: address
+    };
+  }
+
   public showVerifyPayIdSheet(params: { payIdDetails: PayIdDetails }): void {
     this.verifyPayIdSheet = this.actionSheetProvider.createInfoSheet(
       'verify-pay-id',
@@ -374,12 +391,10 @@ export class SendPage {
       if (option) {
         const address = getAddressFromPayId(params.payIdDetails, this.wallet);
         this.navCtrl.push(VerifyPayIdPage, {
-          incomingDataParams: {
-            payIdDetails: params.payIdDetails,
-            redirTo: 'AmountPage',
-            coin: this.wallet.coin,
-            value: address
-          }
+          incomingDataParams: this.getIncomingDataParams(
+            params.payIdDetails,
+            address
+          )
         });
         // const address = getAddressFromPayId(params.payIdDetails, this.wallet);
         // console.log('params', params);
