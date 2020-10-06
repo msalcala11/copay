@@ -78,7 +78,7 @@ export class AddressbookViewPage {
   public showMoreOptions(): void {
     const optionsSheet = this.actionSheetProvider.createOptionsSheet(
       'address-book',
-      { coin: this.coin.toUpperCase() }
+      { coin: this.coin && this.coin.toUpperCase() }
     );
     optionsSheet.present();
 
