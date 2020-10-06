@@ -1,6 +1,14 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
-import { ActionSheetProvider, IncomingDataProvider } from '../../../providers';
+import {
+  ActionSheetProvider,
+  AddressBookProvider,
+  IncomingDataProvider
+} from '../../../providers';
+import {
+  getAddressFromPayId,
+  PayIdDetails
+} from '../../../providers/pay-id/pay-id';
 
 @Component({
   selector: 'verify-pay-id-page',
@@ -23,6 +31,7 @@ export class VerifyPayIdPage {
   ];
   codeRows: string[][];
   constructor(
+    private ab: AddressBookProvider,
     private incomingDataProvider: IncomingDataProvider,
     private actionSheetProvider: ActionSheetProvider,
     private navParams: NavParams
@@ -36,7 +45,20 @@ export class VerifyPayIdPage {
   }
 
   private async saveToContacts() {
-    const params = this.navParams.get('incomingDataParams');
+    const params = this.navParams.get('incomingDataParams') as {
+      payIdDetails: PayIdDetails;
+    };
+    await this.ab.add({
+      name: '',
+      email: '',
+      // email: params.payIdDetails.payId,
+      address: params.payIdDetails.payId,
+      // address: getAddressFromPayId(params.payIdDetails, {
+      //   coin: 'BTC',
+      //   network: 'testnet'
+      // }),
+      tag: ''
+    });
     const sheet = this.actionSheetProvider.createInfoSheet(
       'pay-id-added-to-contacts',
       { payIdDetails: params.payIdDetails }
