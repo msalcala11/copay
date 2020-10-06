@@ -5,10 +5,7 @@ import {
   AddressBookProvider,
   IncomingDataProvider
 } from '../../../providers';
-import {
-  getAddressFromPayId,
-  PayIdDetails
-} from '../../../providers/pay-id/pay-id';
+import { PayIdDetails } from '../../../providers/pay-id/pay-id';
 
 @Component({
   selector: 'verify-pay-id-page',
