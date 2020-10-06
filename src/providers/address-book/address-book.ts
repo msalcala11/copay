@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
-import { AddressProvider, CoinNetwork } from '../address/address';
+import { AddressProvider } from '../address/address';
 
 import * as _ from 'lodash';
 import { isPayId } from '../pay-id/pay-id';

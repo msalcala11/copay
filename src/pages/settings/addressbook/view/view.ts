@@ -35,8 +35,8 @@ export class AddressbookViewPage {
   ) {
     this.address = this.navParams.data.contact.address;
     const addrData = this.addressProvider.getCoinAndNetwork(this.address);
-    this.coin = addrData.coin;
-    this.network = addrData.network;
+    this.coin = addrData && addrData.coin;
+    this.network = addrData && addrData.network;
     this.name = this.navParams.data.contact.name;
     this.email = this.navParams.data.contact.email;
     this.tag = this.navParams.data.contact.tag;

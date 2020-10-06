@@ -45,7 +45,8 @@ export class AddressbookPage {
           const contactIsPayId = isPayId(contact.address);
           const coinInfo = this.getCoinAndNetwork(k);
           contacts.push({
-            name: (_.isObject(contact) ? contact.name : contact) || k,
+            name:
+              (_.isObject(contact) ? contact.name : contact) || k.split('$')[0],
             address: k,
             email: _.isObject(contact) ? contact.email : null,
             tag: _.isObject(contact) ? contact.tag : null,

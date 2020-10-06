@@ -24,13 +24,8 @@
           <gravatar [name]="entry.name || entry.address" [height]="40" [width]="40" [email]="entry.email"
             [coin]="entry.coin" [network]="entry.network"></gravatar>
         </ion-icon>
-        <div *ngIf="entry.name !== entry.address">
-          <div class="item-title">{{ entry.name }}</div>
-          <div class="item-subtitle">{{ entry.address }}</div>
-        </div>
-        <div *ngIf="entry.name === entry.address">
-          <div class="item-title">{{ entry.address }}</div>
-        </div>
+        <div class="item-title">{{ entry.name }}</div>
+        <div class="item-subtitle">{{ entry.address }}</div>
       </button>
     </ion-list>
   </div>
