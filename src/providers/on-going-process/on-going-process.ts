@@ -38,6 +38,7 @@ export class OnGoingProcessProvider {
       extractingWalletInfo: this.translate.instant(
         'Extracting Wallet information...'
       ),
+      fetchingPayIdDetails: this.translate.instant('Fetching PayID details...'),
       fetchingPayPro: this.translate.instant('Fetching payment information...'),
       fetchingPayProOptions: this.translate.instant(
         'Fetching payment options...'

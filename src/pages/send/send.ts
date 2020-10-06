@@ -246,12 +246,14 @@ export class SendPage {
       await this.verifyPayIdSheet.dismiss();
     }
     this.clearInvalidAddressError();
+    this.onGoingProcessProvider.set('fetchingPayIdDetails');
     const payIdDetails = await fetchPayIdDetails(this.http, this.search);
     const address = getAddressFromPayId(payIdDetails, {
       coin: this.wallet.coin,
       network: this.wallet.network
     });
     const contact = await this.addressBookProvider.get(payIdDetails.payId);
+    this.onGoingProcessProvider.clear();
     if (contact && contact.verified) {
       return this.incomingDataProvider.finishIncomingData(
         this.getIncomingDataParams(payIdDetails, address)
