@@ -35,6 +35,15 @@
       <span sheet-button-text translate>Verify</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'pay-id-something-wrong'" type="warning">
+      <span sheet-title-text translate>Code doesn't match?</span>
+      <span sheet-text translate>
+        If the code above does not match what <strong>{{params.payIdDetails.payId}}</strong> sees, then it is possible
+        that this PayID has been compromised by an attacker. Do not send any funds to this PayID.
+      </span>
+      <span sheet-button-text translate>OK</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'pay-id-added-to-contacts'" type="success">
       <span sheet-title-text translate>Verified</span>
       <span sheet-text translate>

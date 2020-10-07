@@ -42,6 +42,7 @@ export type InfoSheetType =
   | 'miner-fee-notice'
   | 'one-phone-country'
   | 'pay-id-confirmation'
+  | 'pay-id-something-wrong'
   | 'pay-id-unsupported-coin'
   | 'verify-pay-id'
   | 'payment-request'
