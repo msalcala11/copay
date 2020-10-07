@@ -71,7 +71,6 @@ export class AddressBookProvider {
   }
 
   public add(entry): Promise<any> {
-    console.log('entry', JSON.stringify(entry, null, 4));
     return new Promise((resolve, reject) => {
       const entryIsPayId = isPayId(entry.address);
       const addrData = this.addressProvider.getCoinAndNetwork(entry.address);
@@ -163,7 +162,7 @@ export class AddressBookProvider {
   }
 
   public async update(entry): Promise<any> {
-    await this.remove(entry.addr);
+    await this.remove(entry.address);
     await this.add(entry);
   }
 }

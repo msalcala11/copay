@@ -56,17 +56,16 @@ export class VerifyPayIdPage {
   }
 
   private async saveToContacts() {
-    await this.ab.add({
-      name: '',
+    const saveParams = {
+      name: this.params.payIdDetails.payId.split('$')[0],
       email: '',
-      // email: params.payIdDetails.payId,
       address: this.params.payIdDetails.payId,
-      // address: getAddressFromPayId(params.payIdDetails, {
-      //   coin: 'BTC',
-      //   network: 'testnet'
-      // }),
       verified: true,
       tag: ''
+    };
+    await this.ab.add(saveParams).catch(err => {
+      console.log('update call', err);
+      this.ab.update(saveParams);
     });
     const sheet = this.actionSheetProvider.createInfoSheet(
       'pay-id-added-to-contacts',

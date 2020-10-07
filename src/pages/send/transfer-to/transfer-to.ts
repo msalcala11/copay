@@ -6,6 +6,7 @@ import {
   ViewController
 } from 'ionic-angular';
 import * as _ from 'lodash';
+import { isPayId } from '../../../providers/pay-id/pay-id';
 
 // Providers
 import { AddressBookProvider } from '../../../providers/address-book/address-book';
@@ -183,6 +184,7 @@ export class TransferToPage {
       this.contactsList = contactsList.filter(c =>
         this.filterIrrelevantRecipients(c)
       );
+      console.log('contactsList', this.contactsList);
       let shortContactsList = _.clone(
         this.contactsList.slice(
           0,
@@ -214,14 +216,16 @@ export class TransferToPage {
   }
 
   private filterIrrelevantRecipients(recipient: {
+    address?: string;
     coin: string;
     network: string;
     walletId: string;
   }): boolean {
     return this._wallet
-      ? this._wallet.coin === recipient.coin &&
+      ? (this._wallet.coin === recipient.coin &&
           this._wallet.network === recipient.network &&
-          this._wallet.id !== recipient.walletId
+          this._wallet.id !== recipient.walletId) ||
+          (recipient.address && isPayId(recipient.address))
       : true;
   }
 
