@@ -33,13 +33,13 @@
           {{ tag }}
         </div>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="coin">
         {{'Coin' | translate}}
         <ion-note item-end>
           {{ coin | uppercase }}
         </ion-note>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="network">
         {{'Network' | translate}}
         <ion-note item-end>
           {{ network }}
