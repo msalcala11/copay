@@ -13,6 +13,10 @@ import {
 } from '../../../providers/pay-id/pay-id';
 
 // Providers
+import {
+  ActionSheetProvider,
+  OnGoingProcessProvider
+} from '../../../providers';
 import { AddressBookProvider } from '../../../providers/address-book/address-book';
 import { AddressProvider } from '../../../providers/address/address';
 import {
@@ -77,9 +81,11 @@ export class TransferToPage {
   private currentContactsPage: number = 0;
 
   constructor(
+    private actionSheetProvider: ActionSheetProvider,
     private currencyProvider: CurrencyProvider,
     private navCtrl: NavController,
     private navParams: NavParams,
+    private ongoingProcessProvider: OnGoingProcessProvider,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private addressBookProvider: AddressBookProvider,
@@ -285,6 +291,20 @@ export class TransferToPage {
     });
   }
 
+  public showPayIdUnsupportedCoinSheet(params: {
+    payId: string;
+    coin: string;
+    network: string;
+  }): void {
+    console.log('in here');
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'pay-id-unsupported-coin',
+      params
+    );
+    console.log('infoSheet', infoSheet);
+    infoSheet.present();
+  }
+
   public close(item): void {
     item
       .getAddress()
@@ -308,7 +328,20 @@ export class TransferToPage {
         } else {
           let payIdDetails;
           if (isPayId(addr)) {
+            this.ongoingProcessProvider.set('fetchingPayIdDetails');
             payIdDetails = await fetchPayIdDetails(this.http, addr);
+            this.ongoingProcessProvider.clear();
+            const address = getAddressFromPayId(payIdDetails, {
+              coin: this.wallet.coin,
+              network: this.wallet.network
+            });
+            if (!address) {
+              return this.showPayIdUnsupportedCoinSheet({
+                payId: payIdDetails.payId,
+                coin: this.wallet.coin,
+                network: this.wallet.network
+              });
+            }
           }
           const params = {
             walletId: this.navParams.data.wallet.id,

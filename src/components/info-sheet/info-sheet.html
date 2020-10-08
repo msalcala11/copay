@@ -17,12 +17,12 @@
       <span sheet-second-button-text translate>Not right now</span>
     </info-sheet-template>
 
-    <info-sheet-template *ngSwitchCase="'pay-id-unsupported-coin'" type="danger">
+    <info-sheet-template *ngSwitchCase="'pay-id-unsupported-coin'" type="warning">
       <span sheet-title-text translate>No address for <span *ngIf="params.network === 'testnet'">testnet</span>
-        {{params.coin}}</span>
+        {{params.coin.toUpperCase()}}</span>
       <span sheet-text translate>
         <strong>{{params.payId}}</strong> has not yet configured a receiving address for <span
-          *ngIf="params.network === 'testnet'">testnet</span> {{params.coin}}.
+          *ngIf="params.network === 'testnet'">testnet</span> {{params.coin.toUpperCase()}}.
       </span>
       <span sheet-button-text translate>Ok</span>
     </info-sheet-template>
