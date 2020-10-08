@@ -50,6 +50,8 @@ export interface FlatWallet {
   templateUrl: 'transfer-to.html'
 })
 export class TransferToPage {
+  isPayId = isPayId;
+
   public search: string = '';
   public wallets = {} as CoinsMap<any>;
   public hasWallets = {} as CoinsMap<boolean>;
@@ -175,8 +177,12 @@ export class TransferToPage {
       let contactsList = [];
       _.each(ab, (v, k: string) => {
         const addrData = this.addressProvider.getCoinAndNetwork(k);
+        let name = _.isObject(v) ? v.name : v;
+        if (isPayId(k) && k.split('$')[0] === name) {
+          name = k;
+        }
         contactsList.push({
-          name: _.isObject(v) ? v.name : v,
+          name,
           address: k,
           network: addrData && addrData.network,
           email: _.isObject(v) ? v.email : null,
