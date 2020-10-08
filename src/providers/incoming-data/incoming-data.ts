@@ -61,7 +61,8 @@ export class IncomingDataProvider {
         toAddress: data.redirTo == 'AmountPage' ? data.value : null,
         coin: data.coin ? data.coin : 'btc',
         payIdDetails: data.payIdDetails,
-        privateKey: data.redirTo == 'PaperWalletPage' ? data.value : null
+        privateKey: data.redirTo == 'PaperWalletPage' ? data.value : null,
+        recipientType: data.recipientType
       };
       nextView = {
         name: data.redirTo,

@@ -39,7 +39,6 @@ export class VerifyPayIdPage {
   ) {
     this.codeRows = chunkify(this.code, 4);
     this.params = this.navParams.get('incomingDataParams');
-    console.log('codeRows', this.codeRows);
   }
 
   public async next() {
@@ -63,10 +62,7 @@ export class VerifyPayIdPage {
       verified: true,
       tag: ''
     };
-    await this.ab.add(saveParams).catch(err => {
-      console.log('update call', err);
-      this.ab.update(saveParams);
-    });
+    await this.ab.add(saveParams).catch(() => this.ab.update(saveParams));
     const sheet = this.actionSheetProvider.createInfoSheet(
       'pay-id-added-to-contacts',
       { payIdDetails: this.params.payIdDetails }

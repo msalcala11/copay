@@ -6,7 +6,11 @@ import {
   ViewController
 } from 'ionic-angular';
 import * as _ from 'lodash';
-import { isPayId } from '../../../providers/pay-id/pay-id';
+import {
+  fetchPayIdDetails,
+  getAddressFromPayId,
+  isPayId
+} from '../../../providers/pay-id/pay-id';
 
 // Providers
 import { AddressBookProvider } from '../../../providers/address-book/address-book';
@@ -22,6 +26,7 @@ import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
 // Pages
+import { HttpClient } from '@angular/common/http';
 import { AmountPage } from '../amount/amount';
 
 export interface FlatWallet {
@@ -80,7 +85,8 @@ export class TransferToPage {
     private popupProvider: PopupProvider,
     private addressProvider: AddressProvider,
     private viewCtrl: ViewController,
-    private events: Events
+    private events: Events,
+    private http: HttpClient
   ) {
     this.availableCoins = this.currencyProvider.getAvailableCoins();
     for (const coin of this.availableCoins) {
@@ -184,7 +190,6 @@ export class TransferToPage {
       this.contactsList = contactsList.filter(c =>
         this.filterIrrelevantRecipients(c)
       );
-      console.log('contactsList', this.contactsList);
       let shortContactsList = _.clone(
         this.contactsList.slice(
           0,
@@ -277,7 +282,7 @@ export class TransferToPage {
   public close(item): void {
     item
       .getAddress()
-      .then((addr: string) => {
+      .then(async (addr: string) => {
         if (!addr) {
           // Error is already formated
           this.popupProvider.ionicAlert('Error - no address');
@@ -295,20 +300,31 @@ export class TransferToPage {
           this.events.publish('addRecipient', recipient);
           this.viewCtrl.dismiss();
         } else {
-          this.navCtrl.push(AmountPage, {
+          let payIdDetails;
+          if (isPayId(addr)) {
+            payIdDetails = await fetchPayIdDetails(this.http, addr);
+          }
+          const params = {
             walletId: this.navParams.data.wallet.id,
-            recipientType: item.recipientType,
+            recipientType: isPayId(addr) ? 'payId' : item.recipientType,
             amount: parseInt(this.navParams.data.amount, 10),
-            toAddress: addr,
+            toAddress: isPayId(addr)
+              ? getAddressFromPayId(payIdDetails, {
+                  coin: this.navParams.data.wallet.coin,
+                  network: this.navParams.data.wallet.network
+                })
+              : addr,
             name: item.name,
             email: item.email,
             color: item.color,
             coin: item.coin,
-            network: item.network,
+            network: item.network || this.navParams.data.wallet.network,
             useAsModal: this._useAsModal,
             fromWalletDetails: this._fromWalletDetails,
-            destinationTag: item.destinationTag
-          });
+            destinationTag: item.destinationTag,
+            payIdDetails
+          };
+          this.navCtrl.push(AmountPage, params);
         }
       })
       .catch(err => {

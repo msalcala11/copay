@@ -141,7 +141,6 @@ export class ConfirmPage {
   ) {
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
     this.fromWalletDetails = this.navParams.data.fromWalletDetails;
-    console.log('payIdDetails confirm', this.navParams.data.payIdDetails);
     this.payIdDetails = this.navParams.data.payIdDetails;
     this.fromCoinbase = this.navParams.data.fromCoinbase;
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();

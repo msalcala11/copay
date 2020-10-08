@@ -25,15 +25,13 @@
         <ion-note item-end>
           <div class="payment-proposal-to" *ngIf="!tx.recipientType">
             <div class="background-content" *ngIf="!tx.paypro && !fromCoinbase"
-              copy-to-clipboard="{{ payIdDetails ? payIdDetails.payId : tx.origToAddress }}">
-              <img *ngIf="!payIdDetails" class="coin-img" src="assets/img/currencies/{{tx.coin}}.svg"
+              copy-to-clipboard="{{ tx.origToAddress }}">
+              <img class="coin-img" src="assets/img/currencies/{{tx.coin}}.svg"
                 [ngClass]="{'testnet': tx.network === 'testnet'}" alt="Coin" />
-              <img *ngIf="payIdDetails" class="coin-img" src="assets/img/payid-icon.svg" alt="PayId" />
-              <span *ngIf="!payIdDetails">
+              <span>
                 <span *ngIf="!tx.name">{{tx.origToAddress | shortenedAddress}}</span>
                 <span class="ellipsis" *ngIf="tx.name">{{tx.name}}</span>
               </span>
-              <span *ngIf="payIdDetails" class="ellipsis">{{payIdDetails.payId}}</span>
             </div>
 
             <div class="paypro" *ngIf="tx.paypro">
@@ -50,11 +48,6 @@
             </div>
           </div>
 
-          <div *ngIf="payIdDetails" class="verified-badge">
-            <img src="assets/img/verified.svg" alt="verified" />Verified
-          </div>
-
-
           <ion-row align-items-center class="wallet" *ngIf="tx.recipientType == 'wallet'">
             <ion-col>
               <coin-icon [coin]="tx.coin" [network]="tx.network"></coin-icon>
@@ -67,6 +60,16 @@
               </div>
             </ion-col>
           </ion-row>
+
+          <div *ngIf="tx.recipientType === 'payId'">
+            <div class="payment-proposal-to" copy-to-clipboard="{{ payIdDetails.payId }}">
+              <img class="coin-img" src="assets/img/payid-icon.svg" alt="PayId" />
+              <span class="ellipsis">{{payIdDetails.payId}}</span>
+            </div>
+            <div *ngIf="payIdDetails" class="verified-badge">
+              <img src="assets/img/verified.svg" alt="verified" />Verified
+            </div>
+          </div>
 
           <ion-row align-items-center class="wallet" *ngIf="tx.recipientType == 'contact'"
             (longPress)="toggleAddress()">

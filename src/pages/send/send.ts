@@ -375,6 +375,7 @@ export class SendPage {
     return {
       payIdDetails,
       redirTo: 'AmountPage',
+      recipientType: 'payId',
       coin: this.wallet.coin,
       value: address
     };
