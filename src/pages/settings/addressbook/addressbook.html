@@ -21,8 +21,9 @@
     <ion-list class="bp-list" margin-top>
       <button ion-item *ngFor="let entry of filteredAddressbook | orderBy : ['name']" (click)="viewEntry(entry)">
         <ion-icon item-start>
-          <gravatar [name]="entry.name || entry.address" [height]="40" [width]="40" [email]="entry.email"
-            [coin]="entry.coin" [network]="entry.network"></gravatar>
+          <gravatar *ngIf="!isPayId(entry.address)" [name]="entry.name || entry.address" [height]="40" [width]="40"
+            [email]="entry.email" [coin]="entry.coin" [network]="entry.network"></gravatar>
+          <img *ngIf="isPayId(entry.address)" src="assets/img/payid-icon.svg" alt="PayId" />
         </ion-icon>
         <div class="item-title">{{ entry.name }}</div>
         <div class="item-subtitle">{{ entry.address }}</div>

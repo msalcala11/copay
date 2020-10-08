@@ -13,6 +13,7 @@ import { AddressbookViewPage } from './view/view';
   templateUrl: 'addressbook.html'
 })
 export class AddressbookPage {
+  isPayId = isPayId;
   private cache: boolean = false;
   public addressbook: object[] = [];
   public filteredAddressbook: object[] = [];
