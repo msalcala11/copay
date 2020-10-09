@@ -6,7 +6,7 @@ page-pay-id {
   }
 
   .nav-share-button {
-    background: rgba(79, 110, 247, .1);
+    background: rgba(79, 110, 247, 0.1);
     height: 39px;
     padding: 0 14px;
     border-radius: 30px;
@@ -28,7 +28,6 @@ page-pay-id {
     margin: 0 auto;
 
     button.item {
-
       &.item-ios,
       &.item-md {
         font-weight: 500;
@@ -49,8 +48,6 @@ page-pay-id {
       }
     }
 
-
-
     .line-divider {
       margin: 0px 14px;
     }
@@ -66,19 +63,19 @@ page-pay-id {
 
     &__handle {
       font-size: 16px;
-      color: #434D5A;
+      color: #434d5a;
     }
 
     &__caption {
       font-size: 16px;
-      color: #434D5A;
+      color: #434d5a;
       margin-top: 15px;
     }
   }
 
   bp-qr-code {
     padding-top: 14px;
-    border: 1px solid #E5E5E5;
+    border: 1px solid #e5e5e5;
     padding-left: 10px;
     border-radius: 30px;
     // max-width: 289px;
