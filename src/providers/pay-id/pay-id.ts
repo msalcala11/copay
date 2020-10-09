@@ -37,7 +37,6 @@ export async function getPayIdUrlTemplate(
     })
     .toPromise() as Promise<{ template: string }>).catch(() => undefined);
   res.links[0].template = `https://ematiu.sandbox.payid.org/{acctpart}`;
-  console.log('res', res);
   return res && res.links && res.links[0] && res.links[0].template;
 }
 
@@ -77,8 +76,6 @@ export async function fetchPayIdDetails(
       }
     })
     .toPromise() as Promise<PayIdDetails>);
-  const template = await getPayIdUrlTemplate(http, payIdDetails.payId);
-  console.log('template', template);
   payIdDetails.addresses[0].environment = 'TESTNET';
   payIdDetails.addresses[0].addressDetails.address =
     'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
