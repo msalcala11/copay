@@ -68,7 +68,7 @@
     </div>
 
     <div *ngSwitchCase="'address-book'">
-      <button ion-item (click)="optionClicked('send-to-contact')">
+      <button ion-item (click)="optionClicked('send-to-contact')" *ngIf="params?.coin">
         <ion-icon class="item-img icon-settings" name="send" item-start></ion-icon>
         <ion-label>
           <span class="main-label" translate>Send {{params?.coin}} to contact</span>

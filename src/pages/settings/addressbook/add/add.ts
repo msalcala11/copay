@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import {
   AbstractControl,
@@ -7,6 +8,11 @@ import {
   Validators
 } from '@angular/forms';
 import { Events, NavController, NavParams } from 'ionic-angular';
+import { VerifyPayIdPage } from '../../../../pages/pay-id/verify/verify';
+import {
+  fetchPayIdDetails,
+  isPayId
+} from '../../../../providers/pay-id/pay-id';
 
 // providers
 import { AddressBookProvider } from '../../../../providers/address-book/address-book';
@@ -31,6 +37,7 @@ export class AddressbookAddPage {
   private regex: RegExp;
 
   constructor(
+    private http: HttpClient,
     private navCtrl: NavController,
     private navParams: NavParams,
     private events: Events,
@@ -93,7 +100,17 @@ export class AddressbookAddPage {
     return control.value === '' ? null : Validators.email(control);
   }
 
-  public save(): void {
+  public async save(): Promise<void> {
+    if (isPayId(this.addressBookAdd.value.address)) {
+      const payIdDetails = await fetchPayIdDetails(
+        this.http,
+        this.addressBookAdd.value.address
+      );
+      return this.navCtrl.push(VerifyPayIdPage, {
+        incomingDataParams: { payIdDetails },
+        fromAddressBook: true
+      });
+    }
     this.addressBookAdd.controls['address'].setValue(
       this.parseAddress(this.addressBookAdd.value.address)
     );

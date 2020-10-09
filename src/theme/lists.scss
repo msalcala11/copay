@@ -6,12 +6,20 @@
       color: rgb(229, 108, 123);
     }
   }
+
+  ion-note[item-right] {
+    &.suffix {
+      margin-top: 40px;
+      margin-right: -6px;
+    }
+  }
 }
 
 .bp-list {
   &.top-padding {
     margin-top: 40px;
   }
+
   ion-item:not(.align-with-button) {
     padding-left: 19px;
   }
@@ -53,38 +61,49 @@
       margin: 9px 15px 9px 0;
       justify-content: center;
       padding: 7px;
+
       img {
         width: 35px;
       }
+
       .gravatar-img {
         width: 40px;
       }
+
       &.rectangle {
         border-radius: 12px;
         justify-content: center;
       }
+
       &.background {
         &_btc {
           background-color: #f7931a;
         }
+
         &_bch {
           background-color: #2fcf6e;
         }
+
         &_eth {
           background-color: #6b71d6;
         }
+
         &_xrp {
           background-color: #000000;
         }
+
         &_usdc {
           background-color: #a9caeb;
         }
+
         &_pax {
           background-color: #b2d434;
         }
+
         &_gusd {
           background-color: #caf5fe;
         }
+
         &_busd {
           background-color: #f3ba2d;
         }
@@ -143,6 +162,7 @@
     line-height: 24px;
     text-align: end;
   }
+
   .secondary-note {
     color: #565d6d;
     font-weight: 400;
@@ -184,11 +204,13 @@
     font-size: 16px;
     font-weight: 500;
   }
+
   .subtotal-label {
     .title {
       opacity: 0.5;
     }
   }
+
   .total-amount {
     color: #000000;
     font-size: 24px;
@@ -196,12 +218,15 @@
     line-height: 30px;
     text-align: right;
   }
+
   .subtotal-amount {
     opacity: 0.5;
   }
+
   .amount-details {
     padding-right: 19px;
   }
+
   .total-amount-note {
     color: #000000;
     font-weight: 500;
@@ -209,9 +234,11 @@
     line-height: 25px;
     text-align: end;
   }
+
   .subtotal-amount-note {
     opacity: 50%;
   }
+
   coin-icon {
     margin: 0px !important;
   }
@@ -246,6 +273,7 @@
       }
     }
   }
+
   coin-icon {
     margin: 0px !important;
   }

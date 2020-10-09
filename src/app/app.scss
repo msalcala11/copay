@@ -550,6 +550,14 @@ ion-app,
   box-shadow: none;
 }
 
+.btn-deemphasized {
+  color: $color-primary;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 24px;
+}
+
 .alertDanger {
   .alert-message {
     color: color($colors, danger);

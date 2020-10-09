@@ -106,6 +106,10 @@ import { LocalThemePage } from '../pages/settings/local-theme/local-theme';
 import { LockPage } from '../pages/settings/lock/lock';
 import { NotificationsPage } from '../pages/settings/notifications/notifications';
 import { SharePage } from '../pages/settings/share/share';
+import { CreatePayIdPage } from './pay-id/create-pay-id/create-pay-id';
+import { PayIdPage } from './pay-id/pay-id/pay-id';
+import { ReceivingWalletsPage } from './pay-id/receiving-wallets/receiving-wallets';
+import { VerifyPayIdPage } from './pay-id/verify/verify';
 
 /* Wallet Group Settings */
 import { ClearEncryptPasswordPage } from '../pages/settings/key-settings/clear-encrypt-password/clear-encrypt-password';
@@ -188,6 +192,8 @@ export const PAGES = [
   BackupGamePage,
   BackupKeyPage,
   CreateEthMultisigPage,
+  CreatePayIdPage,
+  PayIdPage,
   ConfirmPage,
   MultiSendPage,
   TransferToModalPage,
@@ -216,6 +222,7 @@ export const PAGES = [
   SelectCurrencyPage,
   SelectInvoicePage,
   CoinbaseSettingsPage,
+  ReceivingWalletsPage,
   ShapeshiftConfirmPage,
   ShapeshiftDetailsPage,
   ShapeshiftSettingsPage,
@@ -254,6 +261,7 @@ export const PAGES = [
   KeySettingsPage,
   KeyNamePage,
   KeyOnboardingPage,
+  VerifyPayIdPage,
   WalletDetailsPage,
   WalletRecoverPage,
   WalletMnemonicRecoverPage,

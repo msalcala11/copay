@@ -6,8 +6,17 @@ import {
   ViewController
 } from 'ionic-angular';
 import * as _ from 'lodash';
+import {
+  fetchPayIdDetails,
+  getAddressFromPayId,
+  isPayId
+} from '../../../providers/pay-id/pay-id';
 
 // Providers
+import {
+  ActionSheetProvider,
+  OnGoingProcessProvider
+} from '../../../providers';
 import { AddressBookProvider } from '../../../providers/address-book/address-book';
 import { AddressProvider } from '../../../providers/address/address';
 import {
@@ -21,6 +30,7 @@ import { ProfileProvider } from '../../../providers/profile/profile';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 
 // Pages
+import { HttpClient } from '@angular/common/http';
 import { AmountPage } from '../amount/amount';
 
 export interface FlatWallet {
@@ -44,6 +54,8 @@ export interface FlatWallet {
   templateUrl: 'transfer-to.html'
 })
 export class TransferToPage {
+  isPayId = isPayId;
+
   public search: string = '';
   public wallets = {} as CoinsMap<any>;
   public hasWallets = {} as CoinsMap<boolean>;
@@ -69,9 +81,11 @@ export class TransferToPage {
   private currentContactsPage: number = 0;
 
   constructor(
+    private actionSheetProvider: ActionSheetProvider,
     private currencyProvider: CurrencyProvider,
     private navCtrl: NavController,
     private navParams: NavParams,
+    private ongoingProcessProvider: OnGoingProcessProvider,
     private profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private addressBookProvider: AddressBookProvider,
@@ -79,7 +93,8 @@ export class TransferToPage {
     private popupProvider: PopupProvider,
     private addressProvider: AddressProvider,
     private viewCtrl: ViewController,
-    private events: Events
+    private events: Events,
+    private http: HttpClient
   ) {
     this.availableCoins = this.currencyProvider.getAvailableCoins();
     for (const coin of this.availableCoins) {
@@ -168,13 +183,17 @@ export class TransferToPage {
       let contactsList = [];
       _.each(ab, (v, k: string) => {
         const addrData = this.addressProvider.getCoinAndNetwork(k);
+        let name = _.isObject(v) ? v.name : v;
+        if (isPayId(k) && k.split('$')[0] === name) {
+          name = k;
+        }
         contactsList.push({
-          name: _.isObject(v) ? v.name : v,
+          name,
           address: k,
-          network: addrData.network,
+          network: addrData && addrData.network,
           email: _.isObject(v) ? v.email : null,
           recipientType: 'contact',
-          coin: addrData.coin,
+          coin: addrData && addrData.coin,
           getAddress: () => Promise.resolve(k),
           destinationTag: v.tag
         });
@@ -214,14 +233,16 @@ export class TransferToPage {
   }
 
   private filterIrrelevantRecipients(recipient: {
+    address?: string;
     coin: string;
     network: string;
     walletId: string;
   }): boolean {
     return this._wallet
-      ? this._wallet.coin === recipient.coin &&
+      ? (this._wallet.coin === recipient.coin &&
           this._wallet.network === recipient.network &&
-          this._wallet.id !== recipient.walletId
+          this._wallet.id !== recipient.walletId) ||
+          (recipient.address && isPayId(recipient.address))
       : true;
   }
 
@@ -270,10 +291,22 @@ export class TransferToPage {
     });
   }
 
+  public showPayIdUnsupportedCoinSheet(params: {
+    payId: string;
+    coin: string;
+    network: string;
+  }): void {
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'pay-id-unsupported-coin',
+      params
+    );
+    infoSheet.present();
+  }
+
   public close(item): void {
     item
       .getAddress()
-      .then((addr: string) => {
+      .then(async (addr: string) => {
         if (!addr) {
           // Error is already formated
           this.popupProvider.ionicAlert('Error - no address');
@@ -291,20 +324,44 @@ export class TransferToPage {
           this.events.publish('addRecipient', recipient);
           this.viewCtrl.dismiss();
         } else {
-          this.navCtrl.push(AmountPage, {
+          let payIdDetails;
+          if (isPayId(addr)) {
+            this.ongoingProcessProvider.set('fetchingPayIdDetails');
+            payIdDetails = await fetchPayIdDetails(this.http, addr);
+            this.ongoingProcessProvider.clear();
+            const address = getAddressFromPayId(payIdDetails, {
+              coin: this.wallet.coin,
+              network: this.wallet.network
+            });
+            if (!address) {
+              return this.showPayIdUnsupportedCoinSheet({
+                payId: payIdDetails.payId,
+                coin: this.wallet.coin,
+                network: this.wallet.network
+              });
+            }
+          }
+          const params = {
             walletId: this.navParams.data.wallet.id,
-            recipientType: item.recipientType,
+            recipientType: isPayId(addr) ? 'payId' : item.recipientType,
             amount: parseInt(this.navParams.data.amount, 10),
-            toAddress: addr,
+            toAddress: isPayId(addr)
+              ? getAddressFromPayId(payIdDetails, {
+                  coin: this.navParams.data.wallet.coin,
+                  network: this.navParams.data.wallet.network
+                })
+              : addr,
             name: item.name,
             email: item.email,
             color: item.color,
             coin: item.coin,
-            network: item.network,
+            network: item.network || this.navParams.data.wallet.network,
             useAsModal: this._useAsModal,
             fromWalletDetails: this._fromWalletDetails,
-            destinationTag: item.destinationTag
-          });
+            destinationTag: item.destinationTag,
+            payIdDetails
+          };
+          this.navCtrl.push(AmountPage, params);
         }
       })
       .catch(err => {

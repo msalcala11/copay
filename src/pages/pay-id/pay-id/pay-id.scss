@@ -1,0 +1,84 @@
+page-pay-id {
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-share-button {
+    background: rgba(79, 110, 247, 0.1);
+    height: 39px;
+    padding: 0 14px;
+    border-radius: 30px;
+    color: #4f6ef7 !important;
+    font-weight: 500;
+
+    ion-icon.item-img.icon {
+      img {
+        height: 16px;
+        margin-right: 7px;
+        margin-top: -3px;
+      }
+    }
+  }
+
+  .bp-list {
+    padding-top: 30px;
+    max-width: 312px;
+    margin: 0 auto;
+
+    button.item {
+      &.item-ios,
+      &.item-md {
+        font-weight: 500;
+
+        .item-inner {
+          padding-top: 8px;
+          padding-bottom: 8px;
+        }
+
+        ion-icon.item-img.icon.item-icon {
+          margin-right: 5px;
+          margin-left: -18px;
+
+          img {
+            height: 18px;
+          }
+        }
+      }
+    }
+
+    .line-divider {
+      margin: 0px 14px;
+    }
+  }
+
+  .pay-id {
+    &__name {
+      font-size: 25px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      margin-top: 40px;
+    }
+
+    &__handle {
+      font-size: 16px;
+      color: #434d5a;
+    }
+
+    &__caption {
+      font-size: 16px;
+      color: #434d5a;
+      margin-top: 15px;
+    }
+  }
+
+  bp-qr-code {
+    padding-top: 14px;
+    border: 1px solid #e5e5e5;
+    padding-left: 10px;
+    border-radius: 30px;
+    max-width: 80%;
+    margin-top: 30px;
+  }
+}

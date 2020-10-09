@@ -5,7 +5,8 @@
     </button>
   </ion-buttons>
   <div page-content>
-    <search-bar *ngIf="!isEmptyList" [scrollArea]="wideHeaderPage?.scrollArea" (search)="getItems($event)" placeholder="{{'Search a contact' | translate}}"></search-bar>
+    <search-bar *ngIf="!isEmptyList" [scrollArea]="wideHeaderPage?.scrollArea" (search)="getItems($event)"
+      placeholder="{{'Search a contact' | translate}}"></search-bar>
     <div class="zero-state" *ngIf="isEmptyList">
       <ion-icon class="zero-state-icon">
         <img class="svg" src="assets/img/address-book-add.svg" />
@@ -20,7 +21,9 @@
     <ion-list class="bp-list" margin-top>
       <button ion-item *ngFor="let entry of filteredAddressbook | orderBy : ['name']" (click)="viewEntry(entry)">
         <ion-icon item-start>
-          <gravatar [name]="entry.name" [height]="40" [width]="40" [email]="entry.email" [coin]="entry.coin" [network]="entry.network"></gravatar>
+          <gravatar *ngIf="!isPayId(entry.address)" [name]="entry.name || entry.address" [height]="40" [width]="40"
+            [email]="entry.email" [coin]="entry.coin" [network]="entry.network"></gravatar>
+          <img *ngIf="isPayId(entry.address)" src="assets/img/payid-icon.svg" alt="PayId" />
         </ion-icon>
         <div class="item-title">{{ entry.name }}</div>
         <div class="item-subtitle">{{ entry.address }}</div>

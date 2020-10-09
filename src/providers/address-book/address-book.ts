@@ -5,6 +5,7 @@ import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { AddressProvider } from '../address/address';
 
 import * as _ from 'lodash';
+import { isPayId } from '../pay-id/pay-id';
 
 @Injectable()
 export class AddressBookProvider {
@@ -71,14 +72,16 @@ export class AddressBookProvider {
 
   public add(entry): Promise<any> {
     return new Promise((resolve, reject) => {
+      const entryIsPayId = isPayId(entry.address);
       const addrData = this.addressProvider.getCoinAndNetwork(entry.address);
-      if (_.isEmpty(addrData)) {
+      const network = entryIsPayId ? 'livenet' : addrData.network;
+      if (_.isEmpty(addrData) && !entryIsPayId) {
         let msg = this.translate.instant('Not valid bitcoin address');
         return reject(msg);
       }
 
       this.persistenceProvider
-        .getAddressBook(addrData.network)
+        .getAddressBook(network)
         .then(ab => {
           if (ab && _.isString(ab)) ab = JSON.parse(ab);
           ab = ab || {};
@@ -89,7 +92,7 @@ export class AddressBookProvider {
           }
           ab[entry.address] = entry;
           this.persistenceProvider
-            .setAddressBook(addrData.network, JSON.stringify(ab))
+            .setAddressBook(network, JSON.stringify(ab))
             .then(() => {
               this.list()
                 .then(ab => {
@@ -112,15 +115,18 @@ export class AddressBookProvider {
 
   public remove(addr): Promise<any> {
     return new Promise((resolve, reject) => {
+      const addrIsPayId = isPayId(addr);
       const addrData = this.addressProvider.getCoinAndNetwork(addr);
 
-      if (_.isEmpty(addrData)) {
+      const network = addrIsPayId ? 'livenet' : addrData.network;
+
+      if (_.isEmpty(addrData) && !addrIsPayId) {
         let msg = this.translate.instant('Not valid bitcoin address');
         return reject(msg);
       }
 
       this.persistenceProvider
-        .getAddressBook(addrData.network)
+        .getAddressBook(network)
         .then(ab => {
           if (ab && _.isString(ab)) ab = JSON.parse(ab);
           ab = ab || {};
@@ -134,7 +140,7 @@ export class AddressBookProvider {
           }
           delete ab[addr];
           this.persistenceProvider
-            .setAddressBook(addrData.network, JSON.stringify(ab))
+            .setAddressBook(network, JSON.stringify(ab))
             .then(() => {
               this.list()
                 .then(ab => {
@@ -153,5 +159,10 @@ export class AddressBookProvider {
           return reject(err);
         });
     });
+  }
+
+  public async update(entry): Promise<any> {
+    await this.remove(entry.address);
+    await this.add(entry);
   }
 }

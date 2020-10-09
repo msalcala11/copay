@@ -14,10 +14,19 @@ import { ErrorsProvider } from '../../providers/errors/errors';
 import { IncomingDataProvider } from '../../providers/incoming-data/incoming-data';
 import { Logger } from '../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
+import {
+  fetchPayIdDetails,
+  getAddressFromPayId,
+  isPayId,
+  PayIdDetails
+} from '../../providers/pay-id/pay-id';
 import { PayproProvider } from '../../providers/paypro/paypro';
 import { ProfileProvider } from '../../providers/profile/profile';
 
 // Pages
+import { HttpClient } from '@angular/common/http';
+import { InfoSheetComponent } from '../../components/info-sheet/info-sheet';
+import { AddressBookProvider } from '../../providers';
 import { CopayersPage } from '../add/copayers/copayers';
 import { ImportWalletPage } from '../add/import-wallet/import-wallet';
 import { JoinWalletPage } from '../add/join-wallet/join-wallet';
@@ -27,6 +36,7 @@ import { SelectInvoicePage } from '../integrations/invoice/select-invoice/select
 import { ShapeshiftPage } from '../integrations/shapeshift/shapeshift';
 import { SimplexPage } from '../integrations/simplex/simplex';
 import { PaperWalletPage } from '../paper-wallet/paper-wallet';
+import { VerifyPayIdPage } from '../pay-id/verify/verify';
 import { ScanPage } from '../scan/scan';
 import { AmountPage } from '../send/amount/amount';
 import { ConfirmPage } from '../send/confirm/confirm';
@@ -44,6 +54,8 @@ export class SendPage {
   public search: string = '';
   public hasWallets: boolean;
   public invalidAddress: boolean;
+  public invalidAddressErrorMessage: string;
+  public verifyPayIdSheet: InfoSheetComponent;
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
     'BitcoinCashAddress',
@@ -72,7 +84,9 @@ export class SendPage {
   };
 
   constructor(
+    private addressBookProvider: AddressBookProvider,
     private currencyProvider: CurrencyProvider,
+    private http: HttpClient,
     private navCtrl: NavController,
     private navParams: NavParams,
     private payproProvider: PayproProvider,
@@ -142,10 +156,8 @@ export class SendPage {
   }
 
   public showOptions(coin: Coin) {
-    return (
-      this.currencyProvider.isMultiSend(coin) ||
-      this.currencyProvider.isUtxoCoin(coin)
-    );
+    this.currencyProvider.isMultiSend(coin) ||
+      this.currencyProvider.isUtxoCoin(coin);
   }
 
   private checkCoinAndNetwork(data, isPayPro?): boolean {
@@ -166,7 +178,7 @@ export class SendPage {
     }
 
     if (isValid) {
-      this.invalidAddress = false;
+      this.clearInvalidAddressError();
       return true;
     } else {
       this.invalidAddress = true;
@@ -183,8 +195,8 @@ export class SendPage {
     return false;
   }
 
-  private redir() {
-    this.incomingDataProvider.redir(this.search, {
+  private redir(search?: string) {
+    this.incomingDataProvider.redir(search || this.search, {
       activePage: 'SendPage',
       amount: this.navParams.data.amount,
       coin: this.navParams.data.coin // TODO ???? what is this for ?
@@ -223,11 +235,45 @@ export class SendPage {
 
   public cleanSearch() {
     this.search = '';
-    this.invalidAddress = false;
+    this.clearInvalidAddressError();
+  }
+
+  public async handlePayId() {
+    if (this.verifyPayIdSheet) {
+      this.verifyPayIdSheet.onDidDismiss(() => {});
+      await this.verifyPayIdSheet.dismiss();
+    }
+    this.clearInvalidAddressError();
+    this.onGoingProcessProvider.set('fetchingPayIdDetails');
+    const payIdDetails = await fetchPayIdDetails(this.http, this.search);
+    const address = getAddressFromPayId(payIdDetails, {
+      coin: this.wallet.coin,
+      network: this.wallet.network
+    });
+    const contact = await this.addressBookProvider.get(payIdDetails.payId);
+    this.onGoingProcessProvider.clear();
+    if (contact && contact.verified) {
+      return this.incomingDataProvider.finishIncomingData(
+        this.getIncomingDataParams(payIdDetails, address)
+      );
+    }
+    return address
+      ? this.showVerifyPayIdSheet({ payIdDetails })
+      : this.showPayIdUnsupportedCoinSheet({
+          payId: this.search,
+          coin: this.wallet.coin.toUpperCase(),
+          network: this.wallet.network
+        });
   }
 
   public async processInput() {
-    if (this.search == '') this.invalidAddress = false;
+    if (this.search == '') this.clearInvalidAddressError();
+    if (isPayId(this.search)) {
+      return this.handlePayId().catch(() => {
+        this.invalidAddress = true;
+        this.invalidAddressErrorMessage = 'PayID not found.';
+      });
+    }
     const hasContacts = await this.checkIfContact();
     if (!hasContacts) {
       const parsedData = this.incomingDataProvider.parseData(this.search);
@@ -276,7 +322,6 @@ export class SendPage {
         const isValid = this.checkCoinAndNetwork(this.search);
         if (isValid) this.redir();
       } else if (parsedData && parsedData.type == 'BitPayCard') {
-        // this.close();
         this.incomingDataProvider.redir(this.search, {
           activePage: 'SendPage'
         });
@@ -288,8 +333,13 @@ export class SendPage {
         this.invalidAddress = true;
       }
     } else {
-      this.invalidAddress = false;
+      this.clearInvalidAddressError();
     }
+  }
+
+  private clearInvalidAddressError() {
+    this.invalidAddress = false;
+    this.invalidAddressErrorMessage = undefined;
   }
 
   public async checkIfContact() {
@@ -304,6 +354,51 @@ export class SendPage {
         this.search
       )
     );
+  }
+
+  public showPayIdUnsupportedCoinSheet(params: {
+    payId: string;
+    coin: string;
+    network: string;
+  }): void {
+    this.invalidAddress = true;
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'pay-id-unsupported-coin',
+      params
+    );
+    infoSheet.present();
+  }
+
+  private getIncomingDataParams(payIdDetails: PayIdDetails, address: string) {
+    return {
+      payIdDetails,
+      redirTo: 'AmountPage',
+      recipientType: 'payId',
+      coin: this.wallet.coin,
+      value: address
+    };
+  }
+
+  public showVerifyPayIdSheet(params: { payIdDetails: PayIdDetails }): void {
+    this.verifyPayIdSheet = this.actionSheetProvider.createInfoSheet(
+      'verify-pay-id',
+      params
+    );
+    this.verifyPayIdSheet.present();
+    this.verifyPayIdSheet.onDidDismiss(option => {
+      this.verifyPayIdSheet = undefined;
+      if (option) {
+        const address = getAddressFromPayId(params.payIdDetails, this.wallet);
+        this.navCtrl.push(VerifyPayIdPage, {
+          incomingDataParams: this.getIncomingDataParams(
+            params.payIdDetails,
+            address
+          )
+        });
+      } else {
+        this.search = '';
+      }
+    });
   }
 
   public showMoreOptions(): void {

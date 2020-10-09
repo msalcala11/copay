@@ -1,10 +1,12 @@
 <action-sheet>
-  <ion-list class="bp-list" *ngIf="type === 'bitcoinAddress' || type === 'ethereumAddress' || type === 'rippleAddress'">
+  <ion-list class="bp-list"
+    *ngIf="type === 'bitcoinAddress' || type === 'ethereumAddress' || type === 'rippleAddress' || type === 'payId'">
     <ion-item-divider *ngIf="coinName">{{'{coinName} Address' | translate: { coinName: coinName } }}</ion-item-divider>
-    <ion-item>
+    <ion-item [ngStyle]="{'font-weight': type === 'payId' ? '600' : 'unset'}" style="padding-top: 8px">
       {{data}}
       <ion-icon item-start>
-        <img src="assets/img/icon-{{coin}}-small.svg" alt="Coin">
+        <img src="assets/img/icon-{{coin}}-small.svg" alt="Coin" *ngIf="type !== 'payId'">
+        <img src="assets/img/payid-icon.svg" width="24px" *ngIf="type === 'payId'" />
       </ion-icon>
     </ion-item>
     <button ion-item (click)="close('AddressbookAddPage', data)">
@@ -13,7 +15,7 @@
       </ion-icon>
       <span translate>Add as a contact</span>
     </button>
-    <button ion-item (click)="close('AmountPage', data)">
+    <button ion-item (click)="close('AmountPage', data)" *ngIf="type !== 'payId'">
       <ion-icon item-start>
         <img src="assets/img/icon-send-alt.svg">
       </ion-icon>

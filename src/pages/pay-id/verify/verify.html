@@ -1,0 +1,25 @@
+<wide-header-page title="Verify">
+  <div page-content>
+    <div class="instructions">Confirm that <a>{{params.payIdDetails.payId}}</a> sees the same code as you.</div>
+    <div class="verify-box">
+      <div class="verify-box__handle"> <img src="assets/img/payid-icon.svg" width="25" />
+        {{params.payIdDetails.payId}}</div>
+      <div class="verify-box__code">
+        <div *ngFor="let codeRow of codeRows" class="verify-box__code__row">
+          <ng-container *ngFor="let codeItem of codeRow">
+            <div class="verify-box__code__row__value">{{codeItem}}</div>
+            <div class="verify-box__code__row__dash">-</div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</wide-header-page>
+<ion-footer>
+  <div class="padding-bottom" style="padding-bottom: 40px">
+    <button ion-button class="button-standard" (click)="next()">
+      {{'Mark as verified' | translate}}
+    </button>
+    <div tappable class="btn-deemphasized" (click)="somethingIsWrong()">Something is wrong</div>
+  </div>
+</ion-footer>

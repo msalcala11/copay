@@ -7,52 +7,64 @@ page-coinbase-tx-details,
 page-bitpay-card-topup {
   .amount-label {
     padding-top: 1rem;
+
     .amount {
       display: flex;
       font-size: 3.5rem;
       justify-content: space-between;
       font-size: 3.5rem;
+
       img.sending-img {
         width: auto;
         height: 40px;
       }
+
       .amount-coin {
         font-size: 1.5rem;
         margin-top: 0.35rem;
         margin-left: 0.8rem;
       }
+
       div {
         display: flex;
       }
     }
+
     .alternative {
       margin-top: 0.5rem;
       color: color($colors, light-grey);
     }
   }
+
   .item-fee {
     .fee-loading {
       font-weight: 300;
       color: color($colors, light-grey);
     }
+
     &.warn {
       color: color($colors, error);
+
       .fee-details {
         color: color($colors, error);
       }
     }
+
     &.btn-opacity {
       background-color: #fbfbfb;
     }
   }
+
   .padded-input {
     padding-top: 10px;
     padding-bottom: 15px;
   }
+
   .paypro {
     width: 100%;
     cursor: pointer;
   }
+
   .no-wallet-message {
     ion-item {
       text-align: center;
@@ -69,26 +81,32 @@ page-bitpay-card-topup {
     display: flex;
     justify-content: center;
     align-items: center;
+
     .multiple-length {
       display: flex;
     }
+
     .coin-img {
       width: 18px;
       height: 18px;
       margin-right: 6px;
     }
+
     .text-address {
       display: flex;
       width: 25px;
       justify-content: space-between;
     }
+
     .debit-card {
       width: 40px;
     }
   }
+
   .not-clickable {
     pointer-events: none;
   }
+
   .last-item {
     margin-left: auto !important;
   }
@@ -100,10 +118,12 @@ page-bitpay-card-topup {
       font-weight: 500;
       line-height: 18px;
     }
+
     .item {
       &.item-ios,
       &.item-md {
         padding-left: 19px;
+
         .item-inner {
           padding-top: 0px;
           padding-bottom: 0px;
@@ -111,6 +131,7 @@ page-bitpay-card-topup {
       }
     }
   }
+
   .background-content {
     display: flex;
     padding: 0px 10px;
@@ -134,19 +155,23 @@ page-bitpay-card-topup {
       line-height: 19px;
       text-align: right;
     }
+
     ion-icon.item-img.icon {
       &.icon-md,
       &.icon-ios {
         margin: 9px 0px 9px 0;
         justify-content: center;
         padding: 7px;
+
         img {
           width: 20px;
         }
+
         &.rectangle {
           border-radius: 7px;
           justify-content: center;
         }
+
         .coin-img {
           width: 18px;
           height: 18px;
@@ -154,26 +179,32 @@ page-bitpay-card-topup {
         }
       }
     }
+
     .gravatar {
       ion-icon {
         padding: 0px !important;
         margin: 0px !important;
+
         img {
           width: 18px;
         }
+
         &.rectangle {
           border-radius: 12px !important;
         }
       }
     }
   }
+
   .multi-recip-title {
     display: flex;
     align-items: center;
   }
+
   .line-divider {
     margin: 0px 17px;
   }
+
   .background-button-content {
     height: 47px;
     background-color: #edf0fe;
@@ -184,15 +215,28 @@ page-bitpay-card-topup {
     border-radius: 21px;
     margin: 25px auto;
   }
+
   .scanner-icon {
     z-index: 99;
     font-size: 28px;
     color: color($colors, primary);
     padding-top: 20px;
   }
+
   .item-img {
     &.info {
       padding-left: 10px;
+    }
+  }
+
+  .verified-badge {
+    text-align: right;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    padding-top: 9px;
+
+    > img {
+      margin-right: 4px;
     }
   }
 }

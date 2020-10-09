@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="19px" viewBox="0 0 15 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Interface/Medium/Export</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="PayID---Profile" transform="translate(-290.000000, -51.000000)" fill="#4F6EF7" fill-rule="nonzero">
+            <g id="Group" transform="translate(276.000000, 41.000000)">
+                <g transform="translate(12.000000, 10.000000)" id="Interface/Medium/Export">
+                    <g id="upload" transform="translate(2.375000, 0.000000)">
+                        <path d="M6.33333333,7.91666667 L6.33333333,13.4583333 L7.91666667,13.4583333 L7.91666667,7.91666667 L13.4583333,7.91666667 C13.8955588,7.91666667 14.25,8.27110791 14.25,8.70833333 L14.25,8.70833333 L14.25,18.2083333 C14.25,18.6455588 13.8955588,19 13.4583333,19 L13.4583333,19 L0.791666667,19 C0.35444124,19 0,18.6455588 0,18.2083333 L0,18.2083333 L0,8.70833333 C0,8.27110791 0.35444124,7.91666667 0.791666667,7.91666667 L0.791666667,7.91666667 L6.33333333,7.91666667 Z M7.125,0 L11.0833333,4.75 L7.91666667,4.75 L7.91666667,7.91666667 L6.33333333,7.91666667 L6.33333333,4.75 L3.16666667,4.75 L7.125,0 Z" id="Path-2"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

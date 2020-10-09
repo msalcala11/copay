@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { AddressBookProvider } from '../../../providers/address-book/address-book';
 import { AddressProvider } from '../../../providers/address/address';
 import { Logger } from '../../../providers/logger/logger';
+import { isPayId } from '../../../providers/pay-id/pay-id';
 import { AddressbookAddPage } from './add/add';
 import { AddressbookViewPage } from './view/view';
 
@@ -12,6 +13,7 @@ import { AddressbookViewPage } from './view/view';
   templateUrl: 'addressbook.html'
 })
 export class AddressbookPage {
+  isPayId = isPayId;
   private cache: boolean = false;
   public addressbook: object[] = [];
   public filteredAddressbook: object[] = [];
@@ -38,17 +40,20 @@ export class AddressbookPage {
       .list()
       .then(addressBook => {
         this.isEmptyList = _.isEmpty(addressBook);
-
         let contacts: object[] = [];
         _.each(addressBook, (contact, k: string) => {
+          const contactIsPayId = isPayId(contact.address);
           const coinInfo = this.getCoinAndNetwork(k);
           contacts.push({
-            name: _.isObject(contact) ? contact.name : contact,
+            name:
+              (_.isObject(contact) ? contact.name : contact) || k.split('$')[0],
             address: k,
             email: _.isObject(contact) ? contact.email : null,
             tag: _.isObject(contact) ? contact.tag : null,
-            coin: coinInfo.coin,
-            network: coinInfo.network
+            ...(!contactIsPayId && {
+              coin: coinInfo.coin,
+              network: coinInfo.network
+            })
           });
         });
         this.addressbook = _.clone(contacts);
