@@ -1,9 +1,9 @@
 <wide-header-page title="Verify">
   <div page-content>
-    <div class="instructions">Confirm that <a>marty$savant.com</a> sees the same code as you.</div>
+    <div class="instructions">Confirm that <a>{{params.payIdDetails.payId}}</a> sees the same code as you.</div>
     <div class="verify-box">
       <div class="verify-box__handle"> <img src="assets/img/payid-icon.svg" width="25" />
-        marty$savant.com</div>
+        {{params.payIdDetails.payId}}</div>
       <div class="verify-box__code">
         <div *ngFor="let codeRow of codeRows" class="verify-box__code__row">
           <ng-container *ngFor="let codeItem of codeRow">
