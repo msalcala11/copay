@@ -15,7 +15,7 @@
       </ion-icon>
       <span translate>Add as a contact</span>
     </button>
-    <button ion-item (click)="close('AmountPage', data)">
+    <button ion-item (click)="close('AmountPage', data)" *ngIf="type !== 'payId'">
       <ion-icon item-start>
         <img src="assets/img/icon-send-alt.svg">
       </ion-icon>

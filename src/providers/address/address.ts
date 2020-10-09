@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 // Providers
 import { BwcProvider } from '../../providers/bwc/bwc';
 import { Logger } from '../../providers/logger/logger';
+import { isPayId } from '../pay-id/pay-id';
 
 export interface CoinNetwork {
   coin: string;
@@ -86,6 +87,8 @@ export class AddressProvider {
     const URICash = this.bitcoreCash.URI;
     const AddressCash = this.bitcoreCash.Address;
     const { Validation } = this.core;
+
+    if (isPayId(str)) return true;
 
     // Bip21 uri
     if (URI.isValid(str)) return true;
