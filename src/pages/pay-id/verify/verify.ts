@@ -5,7 +5,6 @@ import {
   AddressBookProvider,
   IncomingDataProvider
 } from '../../../providers';
-import { PayIdDetails } from '../../../providers/pay-id/pay-id';
 
 @Component({
   selector: 'verify-pay-id-page',
@@ -27,9 +26,8 @@ export class VerifyPayIdPage {
     '00510'
   ];
   codeRows: string[][];
-  params: {
-    payIdDetails: PayIdDetails;
-  };
+  params: any;
+
   constructor(
     private ab: AddressBookProvider,
     private incomingDataProvider: IncomingDataProvider,
@@ -69,7 +67,11 @@ export class VerifyPayIdPage {
     );
     sheet.present();
     sheet.onDidDismiss(() =>
-      this.incomingDataProvider.finishIncomingData(this.params)
+      this.navParams.get('fromAddressBook')
+        ? this.nav.popToRoot()
+        : this.incomingDataProvider.finishIncomingData(
+            this.navParams.get('incomingDataParams')
+          )
     );
   }
 }
