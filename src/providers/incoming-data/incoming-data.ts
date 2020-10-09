@@ -748,7 +748,6 @@ export class IncomingDataProvider {
   }
 
   public redir(data: string, redirParams?: RedirParams): boolean {
-    data = 'matias$ematiu.sandbox.payid.org';
     if (redirParams && redirParams.activePage)
       this.activePage = redirParams.activePage;
 
