@@ -13,6 +13,7 @@ import { WyreProvider } from '../wyre/wyre';
 @Injectable()
 export class BuyCryptoProvider {
   public paymentMethodsAvailable;
+  public exchangeCoinsSupported: string[];
 
   constructor(
     private configProvider: ConfigProvider,
@@ -25,6 +26,10 @@ export class BuyCryptoProvider {
   ) {
     this.logger.debug('BuyCrypto Provider initialized');
 
+    this.exchangeCoinsSupported = _.union(
+      this.simplexProvider.supportedCoins,
+      this.wyreProvider.supportedCoins
+    );
     this.paymentMethodsAvailable = {
       applePay: {
         label: this.translate.instant('Apple Pay'),
@@ -35,6 +40,16 @@ export class BuyCryptoProvider {
           wyre: true
         },
         enabled: this.platformProvider.isIOS
+      },
+      sepaBankTransfer: {
+        label: this.translate.instant('SEPA Bank Transfer'),
+        method: 'sepaBankTransfer',
+        imgSrc: 'assets/img/buy-crypto/icon-bank.svg',
+        supportedExchanges: {
+          simplex: true, // EU Only
+          wyre: false
+        },
+        enabled: true
       },
       creditCard: {
         label: this.translate.instant('Credit Card'),
@@ -97,7 +112,7 @@ export class BuyCryptoProvider {
       case 'simplex':
         return _.includes(this.simplexProvider.supportedCoins, coin);
       case 'wyre':
-        return _.includes(this.wyreProvider.supportedCoins, coin.toUpperCase());
+        return _.includes(this.wyreProvider.supportedCoins, coin);
       default:
         return false;
     }

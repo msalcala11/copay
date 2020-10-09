@@ -16,7 +16,6 @@ import { CryptoPaymentMethodPage } from '../pages/buy-crypto/crypto-payment-meth
 import { CryptoSettingsPage } from '../pages/buy-crypto/crypto-settings/crypto-settings';
 import { SendFeedbackPage } from '../pages/feedback/send-feedback/send-feedback';
 import { FinishModalPage } from '../pages/finish/finish';
-import { NewFeatureTourPage } from '../pages/new-feature-tour/new-feature-tour';
 import { CollectEmailPage } from '../pages/onboarding/collect-email/collect-email';
 import { DisclaimerPage } from '../pages/onboarding/disclaimer/disclaimer';
 import { OnboardingPage } from '../pages/onboarding/onboarding';
@@ -48,9 +47,7 @@ import { ShapeshiftShiftPage } from '../pages/integrations/shapeshift/shapeshift
 
 // Integrations: Simplex
 import { SimplexPage } from '../pages/integrations/simplex/simplex';
-import { SimplexBuyPage } from '../pages/integrations/simplex/simplex-buy/simplex-buy';
 import { SimplexDetailsPage } from '../pages/integrations/simplex/simplex-details/simplex-details';
-import { SimplexSettingsPage } from '../pages/integrations/simplex/simplex-settings/simplex-settings';
 
 // Integrations: Wyre
 import { WyrePage } from '../pages/integrations/wyre/wyre';
@@ -229,9 +226,7 @@ export const PAGES = [
   ShapeshiftPage,
   ShapeshiftShiftPage,
   SimplexPage,
-  SimplexBuyPage,
   SimplexDetailsPage,
-  SimplexSettingsPage,
   WyrePage,
   WyreDetailsPage,
   NotificationsPage,
@@ -240,7 +235,6 @@ export const PAGES = [
   SessionLogPage,
   SendFeedbackPage,
   FinishModalPage,
-  NewFeatureTourPage,
   TabsPage,
   TxpDetailsPage,
   TxDetailsModal,

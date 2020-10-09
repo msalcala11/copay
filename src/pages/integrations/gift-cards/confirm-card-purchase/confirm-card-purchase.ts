@@ -203,12 +203,13 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       this.homeIntegrationsProvider.shouldShowInHome('coinbase') &&
       this.coinbaseProvider.isLinked();
 
-    this.coinbaseAccounts = this.showCoinbase
-      ? this.coinbaseProvider.getAvailableAccounts(null, {
-          amount: this.amount,
-          currency: this.currency
-        })
-      : [];
+    this.coinbaseAccounts =
+      this.showCoinbase && this.network === 'livenet'
+        ? this.coinbaseProvider.getAvailableAccounts(null, {
+            amount: this.amount,
+            currency: this.currency
+          })
+        : [];
 
     if (
       _.isEmpty(this.wallets) &&
@@ -419,6 +420,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     const payload = {
       address
     };
+
     const details = await this.payproProvider
       .getPayProDetails({ paymentUrl: payProUrl, coin: wallet.coin, payload })
       .catch(err => {
@@ -487,6 +489,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
       txp.toAddress = this.bitcoreCash.Address(txp.toAddress).toString(true);
       txp.outputs[0].toAddress = txp.toAddress;
     }
+
     return this.walletProvider.createTx(wallet, txp);
   }
 

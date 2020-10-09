@@ -366,9 +366,10 @@ export class ConfirmPage {
       coin
     });
 
-    this.coinbaseAccounts = this.showCoinbase
-      ? this.coinbaseProvider.getAvailableAccounts(coin)
-      : [];
+    this.coinbaseAccounts =
+      this.showCoinbase && network === 'livenet'
+        ? this.coinbaseProvider.getAvailableAccounts(coin)
+        : [];
 
     if (_.isEmpty(this.wallets) && _.isEmpty(this.coinbaseAccounts)) {
       const msg = this.translate.instant(
@@ -382,7 +383,7 @@ export class ConfirmPage {
 
   /* sets a wallet on the UI, creates a TXPs for that wallet */
 
-  private async setWallet(wallet) {
+  private setWallet(wallet): void {
     this.wallet = wallet;
     this.coinbaseAccount = null;
 
@@ -400,22 +401,7 @@ export class ConfirmPage {
       this.isSpeedUpTx
     );
 
-    if (this.tx.paypro) {
-      const address = await this.walletProvider.getAddress(wallet, false);
-      const payload = {
-        address
-      };
-      this.tx.paypro = await this.payproProvider.getPayProDetails({
-        paymentUrl: this.tx.payProUrl,
-        coin: wallet.coin,
-        payload,
-        disableLoader: true
-      });
-      // Update Fees to most recent
-      this.tx.feeRate = this.tx.paypro.requiredFeeRate;
-      this.paymentTimeControl(this.tx.paypro.expires);
-    }
-
+    if (this.tx.paypro) this.paymentTimeControl(this.tx.paypro.expires);
     const exit =
       this.wallet || (this.wallets && this.wallets.length === 1) ? true : false;
     const feeOpts = this.feeProvider.getFeeOpts();

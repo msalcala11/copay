@@ -1,17 +1,10 @@
 import { Component } from '@angular/core';
-// import { NavController, NavParams } from 'ionic-angular';
 import { NavParams, ViewController } from 'ionic-angular';
-import { Logger } from '../../../providers/logger/logger';
-
-// native
-// import { SplashScreen } from '@ionic-native/splash-screen';
 
 // Providers
 import { BitPayProvider } from '../../../providers/bitpay/bitpay';
-// import { ConfigProvider } from '../../../providers/config/config';
+import { Logger } from '../../../providers/logger/logger';
 import { PersistenceProvider } from '../../../providers/persistence/persistence';
-// import { PlatformProvider } from '../../../providers/platform/platform';
-// import { RateProvider } from '../../../providers/rate/rate';
 
 import * as _ from 'lodash';
 
@@ -23,22 +16,15 @@ export class CountrySelectorPage {
   public completeCountryList;
   public searchedCountry: string;
   public countryList;
-  public loading;
-  public currentCurrency;
   public commonCountriesList;
   public useAsModal;
+  private EUCountries: string[];
 
   private PAGE_COUNTER: number = 3;
   private SHOW_LIMIT: number = 10;
-  // private unusedCurrencyList;
 
   constructor(
-    // private configProvider: ConfigProvider,
     private logger: Logger,
-    // private navCtrl: NavController,
-    // private rate: RateProvider,
-    // private splashScreen: SplashScreen,
-    // private platformProvider: PlatformProvider,
     private viewCtrl: ViewController,
     private persistenceProvider: PersistenceProvider,
     private navParams: NavParams,
@@ -55,7 +41,37 @@ export class CountrySelectorPage {
       }
     ];
 
+    this.EUCountries = [
+      'DE',
+      'AT',
+      'BE',
+      'BG',
+      'CY',
+      'HR',
+      'DK',
+      'SK',
+      'SI',
+      'ES',
+      'EE',
+      'FI',
+      'FR',
+      'EL',
+      'HU',
+      'IE',
+      'IT',
+      'LV',
+      'LU',
+      'MT',
+      'NL',
+      'PL',
+      'PT',
+      'CZ',
+      'RO',
+      'SE'
+    ];
+
     this.completeCountryList = this.navParams.data.countryList;
+    this.setEUCountries();
   }
 
   ionViewDidLoad() {
@@ -70,6 +86,7 @@ export class CountrySelectorPage {
         ({ data }) => {
           this.persistenceProvider.setCountries(data);
           this.completeCountryList = data;
+          this.setEUCountries();
           this.countryList = this.completeCountryList.slice(0, 20);
         },
         () => {}
@@ -109,6 +126,14 @@ export class CountrySelectorPage {
         _.includes(val.toLowerCase(), this.searchedCountry.toLowerCase()) ||
         _.includes(val2.toLowerCase(), this.searchedCountry.toLowerCase())
       );
+    });
+  }
+
+  private setEUCountries() {
+    this.completeCountryList.forEach(country => {
+      if (country.shortCode && this.EUCountries.includes(country.shortCode)) {
+        country.EUCountry = true;
+      }
     });
   }
 

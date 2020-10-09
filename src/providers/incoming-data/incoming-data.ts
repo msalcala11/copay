@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Events } from 'ionic-angular';
@@ -9,10 +8,11 @@ import { ActionSheetProvider } from '../action-sheet/action-sheet';
 import { AppProvider } from '../app/app';
 import { BwcProvider } from '../bwc/bwc';
 import { Coin, CurrencyProvider } from '../currency/currency';
+import { ExternalLinkProvider } from '../external-link/external-link';
 import { IABCardProvider } from '../in-app-browser/card';
 import { Logger } from '../logger/logger';
 import { OnGoingProcessProvider } from '../on-going-process/on-going-process';
-import { fetchPayIdDetails, isPayId } from '../pay-id/pay-id';
+import { isPayId } from '../pay-id/pay-id';
 import { PayproProvider } from '../paypro/paypro';
 import { PersistenceProvider } from '../persistence/persistence';
 import { ProfileProvider } from '../profile/profile';
@@ -33,7 +33,7 @@ export class IncomingDataProvider {
     private events: Events,
     private bwcProvider: BwcProvider,
     private currencyProvider: CurrencyProvider,
-    private http: HttpClient,
+    private externalLinkProvider: ExternalLinkProvider,
     private payproProvider: PayproProvider,
     private logger: Logger,
     private appProvider: AppProvider,
@@ -697,12 +697,18 @@ export class IncomingDataProvider {
 
   private goToWyre(data: string): void {
     this.logger.debug('Incoming-data (redirect): Wyre URL: ' + data);
-
-    if (
-      data === this.appProvider.info.name + '://wyre' ||
-      data.indexOf(this.appProvider.info.name + '://wyreError') === 0
-    )
+    if (data.indexOf(this.appProvider.info.name + '://wyreError') >= 0) {
+      const infoSheet = this.actionSheetProvider.createInfoSheet('wyre-error');
+      infoSheet.present();
+      infoSheet.onDidDismiss(option => {
+        if (option) {
+          this.openExternalLink('https://support.sendwyre.com/');
+        }
+      });
       return;
+    }
+
+    if (data === this.appProvider.info.name + '://wyre') return;
     const res = data.replace(new RegExp('&amp;', 'g'), '&');
     const transferId = this.getParameterByName('transferId', res);
     const orderId = this.getParameterByName('orderId', res);
@@ -729,6 +735,10 @@ export class IncomingDataProvider {
       params: stateParams
     };
     this.incomingDataRedir(nextView);
+  }
+
+  private openExternalLink(url: string) {
+    this.externalLinkProvider.open(url);
   }
 
   private goToInvoice(data: string): void {
@@ -1204,8 +1214,10 @@ export class IncomingDataProvider {
     url: string,
     coin: Coin,
     payProOptions?,
-    disableLoader?: boolean
+    disableLoader?: boolean,
+    activePage?: string
   ): void {
+    if (activePage) this.activePage = activePage;
     this.payproProvider
       .getPayProDetails({ paymentUrl: url, coin, disableLoader })
       .then(details => {

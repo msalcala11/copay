@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Events, Platform } from 'ionic-angular';
@@ -51,7 +52,8 @@ export class TabsPage {
     private tabProvider: TabProvider,
     private rateProvider: RateProvider,
     private platformProvider: PlatformProvider,
-    private configProvider: ConfigProvider
+    private configProvider: ConfigProvider,
+    private http: HttpClient
   ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.logger.info('Loaded: TabsPage');
@@ -105,10 +107,27 @@ export class TabsPage {
   }
 
   ngOnInit() {
-    this.tabProvider.prefetchCards().then(data => {
+    this.tabProvider.prefetchCards().then(async data => {
+      let cardExperimentEnabled;
+      try {
+        this.logger.debug('BitPay: setting country');
+        const { country } = await this.http
+          .get<{ country: string }>('https://bitpay.com/wallet-card/location')
+          .toPromise();
+        if (country === 'US') {
+          this.logger.debug('If US: Set Card Experiment Flag Enabled');
+          await this.persistenceProvider.setCardExperimentFlag('enabled');
+          cardExperimentEnabled = true;
+        }
+      } catch (err) {
+        this.logger.error('Error setting country: ', err);
+      }
       // [0] BitPay Cards
       // [1] Gift Cards
-      this.events.publish('Local/FetchCards', data[0]);
+      this.events.publish('Local/FetchCards', {
+        bpCards: data[0],
+        cardExperimentEnabled
+      });
     });
   }
 
@@ -172,10 +191,10 @@ export class TabsPage {
     );
   };
 
-  private updateTotalBalance() {
+  private updateTotalBalance(wallets) {
     this.rateProvider.getLastDayRates().then(lastDayRatesArray => {
       this.walletProvider
-        .getTotalAmount(this.profileProvider.wallet, lastDayRatesArray)
+        .getTotalAmount(wallets, lastDayRatesArray)
         .then(data => {
           this.logger.debug('Total Balance and Price Updated');
           this.events.publish('Local/HomeBalance', data);
@@ -208,6 +227,16 @@ export class TabsPage {
     );
   }
 
+  private connectionError = _.debounce(
+    async () => {
+      this.events.publish('Local/ConnectionError');
+    },
+    5000,
+    {
+      leading: false
+    }
+  );
+
   private fetchAllWalletsStatus = _.debounce(
     async () => {
       this._fetchAllWallets();
@@ -236,8 +265,11 @@ export class TabsPage {
   }
 
   private _fetchAllWallets() {
+    let hasConnectionError: boolean = false;
     // Set the default alternative currency if the one setted is no longer supported
     this.checkAltCurrency();
+
+    this.profileProvider.setLastKnownBalance();
 
     let wallets = this.profileProvider.wallet;
     if (_.isEmpty(wallets)) {
@@ -255,8 +287,8 @@ export class TabsPage {
     const pr = wallet => {
       return this.walletProvider
         .fetchStatus(wallet, {})
-        .then(async status => {
-          wallet.cachedStatus = status;
+        .then(st => {
+          wallet.cachedStatus = st;
           wallet.error = wallet.errorObj = null;
           const balance =
             wallet.coin === 'xrp'
@@ -270,10 +302,10 @@ export class TabsPage {
             finished: true
           });
 
-          if (!foundMessage && !_.isEmpty(status.serverMessages)) {
+          if (!foundMessage && !_.isEmpty(st.serverMessages)) {
             foundMessage = true;
             this.events.publish('Local/ServerMessage', {
-              serverMessages: status.serverMessages
+              serverMessages: st.serverMessages
             });
           }
 
@@ -281,6 +313,10 @@ export class TabsPage {
         })
         .catch(err => {
           this.processWalletError(wallet, err);
+          if (err && err.message == 'Wallet service connection error.') {
+            hasConnectionError = true;
+            this.connectionError();
+          }
           return Promise.resolve();
         });
     };
@@ -292,7 +328,7 @@ export class TabsPage {
     });
 
     Promise.all(promises).then(() => {
-      this.updateTotalBalance();
+      if (!hasConnectionError) this.updateTotalBalance(wallets);
       this.updateTxps();
     });
   }

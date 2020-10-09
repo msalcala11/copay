@@ -203,7 +203,12 @@ export class SettingsPage {
         else return x;
       });
       this.cardServices = _.remove(_.clone(integrations), x => {
-        if (x.name == 'debitcard' || x.type == 'exchange') return false;
+        if (
+          x.name === 'debitcard' ||
+          x.type === 'exchange' ||
+          (x.name === 'giftcards' && this.platformProvider.isMacApp())
+        )
+          return false;
         else return x;
       });
     }, 200);

@@ -158,16 +158,32 @@ export class BitPayCardTopUpPage {
               transactionCurrency: 'USD'
             });
 
+        const network = this.bitPayProvider.getEnvironment().network;
+
         const walletOptions = {
           onlyComplete: true,
           coin,
-          network: this.bitPayProvider.getEnvironment().network,
+          network,
           hasFunds: true
         };
-        this.wallets = this.profileProvider.getWallets({
-          ...walletOptions,
-          minFiatCurrency: { amount: this.amount, currency: this.currency }
-        });
+
+        if (Coin[this.currency]) {
+          const { amountSat } = this.txFormatProvider.parseAmount(
+            this.currency.toLowerCase(),
+            this.amount,
+            this.currency
+          );
+
+          this.wallets = this.profileProvider.getWallets({
+            ...walletOptions,
+            minAmount: amountSat
+          });
+        } else {
+          this.wallets = this.profileProvider.getWallets({
+            ...walletOptions,
+            minFiatCurrency: { amount: this.amount, currency: this.currency }
+          });
+        }
 
         const pendingWallets = this.profileProvider.getWallets({
           ...walletOptions,
@@ -178,12 +194,13 @@ export class BitPayCardTopUpPage {
           this.homeIntegrationsProvider.shouldShowInHome('coinbase') &&
           this.coinbaseProvider.isLinked();
 
-        this.coinbaseAccounts = this.showCoinbase
-          ? this.coinbaseProvider.getAvailableAccounts(null, {
-              amount: this.amount,
-              currency: this.currency
-            })
-          : [];
+        this.coinbaseAccounts =
+          this.showCoinbase && network === 'livenet'
+            ? this.coinbaseProvider.getAvailableAccounts(null, {
+                amount: this.amount,
+                currency: this.currency
+              })
+            : [];
 
         if (
           _.isEmpty(this.wallets) &&
@@ -777,8 +794,8 @@ export class BitPayCardTopUpPage {
     this.logCardTopUpEvent(wallet.coin, false);
 
     this.logger.debug(
-      `Creating invoice. amount: ${dataSrc.amount} - currency: ${
-        dataSrc.currency
+      `Creating invoice. amount: ${parsedAmount.amount} - currency: ${
+        parsedAmount.currency
       }`
     );
     this.createInvoice(dataSrc)
@@ -1055,6 +1072,18 @@ export class BitPayCardTopUpPage {
         this.amount,
         this.currency
       );
+
+      this.isERCToken = this.currencyProvider.isERCToken(
+        option.accountSelected.currency.code.toLowerCase()
+      );
+
+      if (this.countDown) {
+        clearInterval(this.countDown);
+      }
+      if (!this.isERCToken) {
+        // Update Rates
+        this.updateRates(option.accountSelected.currency.code);
+      }
       this.initializeCoinbaseTopUp(option.accountSelected, {
         ...parsedAmount,
         coin: option.accountSelected.currency.code
@@ -1125,7 +1154,7 @@ export class BitPayCardTopUpPage {
 
   private openFinishModal(): void {
     const finishComment =
-      this.wallet.credentials.m === 1
+      (this.wallet && this.wallet.credentials.m === 1) || this.coinbaseAccount
         ? this.translate.instant('Funds were added to debit card')
         : this.translate.instant('Transaction initiated');
     let finishText = '';

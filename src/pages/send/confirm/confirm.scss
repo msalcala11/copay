@@ -82,6 +82,10 @@ page-bitpay-card-topup {
     justify-content: center;
     align-items: center;
 
+    &.align-right {
+      margin-left: auto;
+    }
+
     .multiple-length {
       display: flex;
     }
@@ -109,6 +113,11 @@ page-bitpay-card-topup {
 
   .last-item {
     margin-left: auto !important;
+  }
+
+  .multi-amount {
+    text-align: right;
+    margin-top: 15px;
   }
 
   .bp-list {
