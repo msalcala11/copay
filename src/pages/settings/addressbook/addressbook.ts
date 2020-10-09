@@ -40,7 +40,6 @@ export class AddressbookPage {
       .list()
       .then(addressBook => {
         this.isEmptyList = _.isEmpty(addressBook);
-
         let contacts: object[] = [];
         _.each(addressBook, (contact, k: string) => {
           const contactIsPayId = isPayId(contact.address);
@@ -58,7 +57,6 @@ export class AddressbookPage {
           });
         });
         this.addressbook = _.clone(contacts);
-        console.log('this.addressbook', this.addressbook);
         this.filteredAddressbook = _.clone(this.addressbook);
       })
       .catch(err => {

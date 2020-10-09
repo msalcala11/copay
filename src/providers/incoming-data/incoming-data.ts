@@ -69,7 +69,6 @@ export class IncomingDataProvider {
         params: stateParams
       };
     }
-    console.log('nextView', nextView);
     this.incomingDataRedir(nextView);
   }
 
@@ -255,8 +254,6 @@ export class IncomingDataProvider {
   }
 
   private async handlePayId(data: string) {
-    const payIdDetails = await fetchPayIdDetails(this.http, data);
-    console.log('payIdDetails', payIdDetails);
     this.showMenu({
       data,
       type: 'payId'

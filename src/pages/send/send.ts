@@ -361,13 +361,11 @@ export class SendPage {
     coin: string;
     network: string;
   }): void {
-    console.log('in here');
     this.invalidAddress = true;
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'pay-id-unsupported-coin',
       params
     );
-    console.log('infoSheet', infoSheet);
     infoSheet.present();
   }
 
@@ -397,47 +395,11 @@ export class SendPage {
             address
           )
         });
-        // const address = getAddressFromPayId(params.payIdDetails, this.wallet);
-        // console.log('params', params);
-        // console.log('wallet', this.wallet);
-        // console.log('address', address);
-        // this.incomingDataProvider.finishIncomingData({
-        //   payIdDetails: params.payIdDetails,
-        //   redirTo: 'AmountPage',
-        //   coin: this.wallet.coin,
-        //   value: address
-        // });
       } else {
         this.search = '';
       }
     });
   }
-
-  // public showConfirmPayIdSheet(params: { payIdDetails: PayIdDetails }): void {
-  //   this.confirmPayIdSheet = this.actionSheetProvider.createInfoSheet(
-  //     'pay-id-confirmation',
-  //     params
-  //   );
-  //   this.confirmPayIdSheet.present();
-  //   this.confirmPayIdSheet.onDidDismiss(option => {
-  //     this.confirmPayIdSheet = undefined;
-  //     if (option) {
-  //       // getAddressFromPayId(params.payIdDetails, this.wallet);
-  //       const address = getAddressFromPayId(params.payIdDetails, this.wallet);
-  //       console.log('params', params);
-  //       console.log('wallet', this.wallet);
-  //       console.log('address', address);
-  //       this.incomingDataProvider.finishIncomingData({
-  //         payIdDetails: params.payIdDetails,
-  //         redirTo: 'AmountPage',
-  //         coin: this.wallet.coin,
-  //         value: address
-  //       });
-  //     } else {
-  //       this.search = '';
-  //     }
-  //   });
-  // }
 
   public showMoreOptions(): void {
     const optionsSheet = this.actionSheetProvider.createOptionsSheet(

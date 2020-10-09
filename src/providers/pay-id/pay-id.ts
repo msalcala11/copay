@@ -36,7 +36,7 @@ export async function getPayIdUrlTemplate(
       }
     })
     .toPromise() as Promise<{ template: string }>).catch(() => undefined);
-  res.links[0].template = `https://ematiu.sandbox.payid.org/{acctpart}`;
+  // res.links[0].template = `https://ematiu.sandbox.payid.org/{acctpart}`;
   return res && res.links && res.links[0] && res.links[0].template;
 }
 

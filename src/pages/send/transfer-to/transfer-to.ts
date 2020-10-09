@@ -296,12 +296,10 @@ export class TransferToPage {
     coin: string;
     network: string;
   }): void {
-    console.log('in here');
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'pay-id-unsupported-coin',
       params
     );
-    console.log('infoSheet', infoSheet);
     infoSheet.present();
   }
 
