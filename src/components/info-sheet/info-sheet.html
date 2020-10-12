@@ -24,7 +24,7 @@
         <strong>{{params.payId}}</strong> has not yet configured a verifiable receiving address for <span
           *ngIf="params.network === 'testnet'">testnet</span> {{params.coin.toUpperCase()}}.
       </span>
-      <span sheet-button-text translate>Ok</span>
+      <span sheet-button-text translate>OK</span>
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'verify-pay-id'" type="info">
@@ -119,7 +119,7 @@
         Receiving funds will be temporary disabled until you can verify your recovery phrase has been stored away
         securely. You can always complete this later from your wallet settings.
       </span>
-      <span sheet-button-text translate>Ok</span>
+      <span sheet-button-text translate>OK</span>
       <span sheet-second-button-text translate>Continue Backup</span>
     </info-sheet-template>
 

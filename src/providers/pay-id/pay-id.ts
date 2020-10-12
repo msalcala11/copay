@@ -71,9 +71,10 @@ export function getAddressFromPayId(
   }
 ): string | undefined {
   const address = payIdDetails.verifiedAddresses.find(address => {
+    const paymentNetwork = address.parsedPayload.payIdAddress.paymentNetwork;
+    const paymentCoin = paymentNetwork === 'XRPL' ? 'XRP' : paymentNetwork;
     return (
-      address.parsedPayload.payIdAddress.paymentNetwork ===
-        params.coin.toUpperCase() &&
+      paymentCoin === params.coin.toUpperCase() &&
       address.parsedPayload.payIdAddress.environment ===
         params.network.toUpperCase()
     );
@@ -100,7 +101,6 @@ export async function fetchPayIdDetails(
       })
     )
     .toPromise() as Promise<PayIdDetails>);
-  console.log('payIdDetails', payIdDetails);
   const parsedPayIdDetails = {
     ...payIdDetails,
     verifiedAddresses: payIdDetails.verifiedAddresses.map(verifiedAddress => {
@@ -112,9 +112,11 @@ export async function fetchPayIdDetails(
       };
     })
   };
+  parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.environment =
+    'TESTNET';
+  parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.addressDetails.address =
+    'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
+  parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.paymentNetwork =
+    'BTC';
   return parsedPayIdDetails;
-  // payIdDetails.addresses[0].environment = 'TESTNET';
-  // payIdDetails.addresses[0].addressDetails.address =
-  //   'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
-  // return payIdDetails;
 }
