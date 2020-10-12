@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+// import PayId from 'bitcore-payid';
 import { NavController, NavParams } from 'ionic-angular';
 import {
   ActionSheetProvider,
@@ -37,6 +38,7 @@ export class VerifyPayIdPage {
   ) {
     this.codeRows = chunkify(this.code, 4);
     this.params = this.navParams.get('incomingDataParams');
+    // console.log('PayId', PayId);
   }
 
   public async next() {

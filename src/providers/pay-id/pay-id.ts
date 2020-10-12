@@ -1,4 +1,6 @@
 import { HttpClient } from '@angular/common/http';
+import { of } from 'rxjs/observable/of';
+import { catchError, timeout } from 'rxjs/operators';
 
 export interface PayIdAddress {
   paymentNetwork: string;
@@ -7,18 +9,38 @@ export interface PayIdAddress {
   addressDetails: { address: string };
 }
 
+export interface VerifiedPayIdAddressSignature {
+  name: string;
+  protected: string;
+  signature: string;
+}
+
+export interface VerifiedPayIdAddressPayloadObject {
+  payId: string;
+  payIdAddress: PayIdAddress;
+}
+
+export interface VerifiedPayIdAddress {
+  signatures: VerifiedPayIdAddressSignature[];
+  parsedPayload: VerifiedPayIdAddressPayloadObject;
+  payload: string;
+}
+
 export interface PayIdDetails {
   payId: string;
   version: string;
   addresses: PayIdAddress[];
+  verifiedAddresses: VerifiedPayIdAddress[];
 }
 
 export function isPayId(value: string): boolean {
   return (
     value.includes('$') &&
     !value.startsWith('$') &&
-    !value.includes('https://') &&
-    value.endsWith('ematiu.sandbox.payid.org')
+    !value.endsWith('$') &&
+    !value.endsWith('.') &&
+    value.split('$')[1].includes('.') &&
+    !value.includes('https://')
   );
 }
 
@@ -26,23 +48,19 @@ export async function getPayIdUrlTemplate(
   http: HttpClient,
   payId: string
 ): Promise<string> {
-  const [handle, domain] = payId.split('$');
-  const discoveryUrl = `https://${domain}/.well-known/webfinger?resource=payid%3A${handle}%24${domain}`;
-  const res = await (http
-    .get(discoveryUrl, {
-      headers: {
-        'PayID-Version': '1.0',
-        Accept: 'application/payid+json'
-      }
-    })
-    .toPromise() as Promise<{ template: string }>).catch(() => undefined);
+  // const [handle, domain] = payId.split('$');
+  const discoveryUrl = `https://bws.bitpay.com/bws/api/v1/service/discoverPayId/${payId}`; // `https://${domain}/.well-known/webfinger?resource=payid%3A${handle}%24${domain}`;
+  const res = await (http.get(discoveryUrl).toPromise() as Promise<{
+    template: string;
+  }>).catch(() => undefined);
+  console.log('discovery details', res);
   // res.links[0].template = `https://ematiu.sandbox.payid.org/{acctpart}`;
   return res && res.links && res.links[0] && res.links[0].template;
 }
 
 export function getPayIdUrlViaManualDiscovery(payId: string): string {
-  const parts = payId.split('$');
-  return `https://${parts[1]}/${parts[0]}`;
+  // const parts = payId.split('$');
+  return `https://bws.bitpay.com/bws/api/v1/service/payId/${payId}`; // `https://${parts[1]}/${parts[0]}`;
 }
 
 export function getAddressFromPayId(
@@ -52,32 +70,51 @@ export function getAddressFromPayId(
     network: string;
   }
 ): string | undefined {
-  const address = payIdDetails.addresses.find(
-    address =>
-      address.paymentNetwork === params.coin.toUpperCase() &&
-      address.environment === params.network.toUpperCase()
-  );
-  return address && address.addressDetails.address;
+  const address = payIdDetails.verifiedAddresses.find(address => {
+    return (
+      address.parsedPayload.payIdAddress.paymentNetwork ===
+        params.coin.toUpperCase() &&
+      address.parsedPayload.payIdAddress.environment ===
+        params.network.toUpperCase()
+    );
+  });
+  return address && address.parsedPayload.payIdAddress.addressDetails.address;
 }
 
 export async function fetchPayIdDetails(
   http: HttpClient,
   payId: string
 ): Promise<PayIdDetails> {
-  const urlTemplate = await getPayIdUrlTemplate(http, payId);
-  const url = urlTemplate
-    ? urlTemplate.replace('{acctpart}', payId.split('$')[0])
-    : getPayIdUrlViaManualDiscovery(payId);
+  // const urlTemplate = await getPayIdUrlTemplate(http, payId);
+  // const url = urlTemplate
+  //   ? urlTemplate.replace('{acctpart}', payId.split('$')[0])
+  //   : getPayIdUrlViaManualDiscovery(payId);
+  // console.log('url', url);
   const payIdDetails = await (http
-    .get(url, {
-      headers: {
-        'PayID-Version': '1.0',
-        Accept: 'application/payid+json'
-      }
-    })
+    .get(`https://bws.bitpay.com/bws/api/v1/service/payId/${payId}`)
+    .pipe(
+      timeout(2000),
+      catchError(() => {
+        // do something on a timeout
+        return of(null);
+      })
+    )
     .toPromise() as Promise<PayIdDetails>);
-  payIdDetails.addresses[0].environment = 'TESTNET';
-  payIdDetails.addresses[0].addressDetails.address =
-    'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
-  return payIdDetails;
+  console.log('payIdDetails', payIdDetails);
+  const parsedPayIdDetails = {
+    ...payIdDetails,
+    verifiedAddresses: payIdDetails.verifiedAddresses.map(verifiedAddress => {
+      return {
+        ...verifiedAddress,
+        parsedPayload: JSON.parse(
+          verifiedAddress.payload
+        ) as VerifiedPayIdAddressPayloadObject
+      };
+    })
+  };
+  return parsedPayIdDetails;
+  // payIdDetails.addresses[0].environment = 'TESTNET';
+  // payIdDetails.addresses[0].addressDetails.address =
+  //   'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
+  // return payIdDetails;
 }
