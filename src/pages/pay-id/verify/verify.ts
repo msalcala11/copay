@@ -6,6 +6,7 @@ import {
   AddressBookProvider,
   IncomingDataProvider
 } from '../../../providers';
+import { PayIdDetails } from '../../../providers/pay-id/pay-id';
 
 @Component({
   selector: 'verify-pay-id-page',
@@ -27,7 +28,7 @@ export class VerifyPayIdPage {
     '00510'
   ];
   codeRows: string[][];
-  params: any;
+  params: { payIdDetails: PayIdDetails };
 
   constructor(
     private ab: AddressBookProvider,
@@ -37,7 +38,9 @@ export class VerifyPayIdPage {
     private navParams: NavParams
   ) {
     this.codeRows = chunkify(this.code, 4);
-    this.params = this.navParams.get('incomingDataParams');
+    this.params = this.navParams.get('incomingDataParams') as {
+      payIdDetails: PayIdDetails;
+    };
     // console.log('PayId', PayId);
   }
 
@@ -59,7 +62,11 @@ export class VerifyPayIdPage {
       name: this.params.payIdDetails.payId.split('$')[0],
       email: '',
       address: this.params.payIdDetails.payId,
-      verified: true,
+      payIdDetails: {
+        verified: true,
+        identityKey: this.params.payIdDetails.verifiedAddresses[0].signatures[0]
+          .protected
+      },
       tag: ''
     };
     await this.ab.add(saveParams).catch(() => this.ab.update(saveParams));

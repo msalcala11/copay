@@ -327,7 +327,17 @@ export class TransferToPage {
           let payIdDetails;
           if (isPayId(addr)) {
             this.ongoingProcessProvider.set('fetchingPayIdDetails');
-            payIdDetails = await fetchPayIdDetails(this.http, addr);
+            payIdDetails = await fetchPayIdDetails(this.http, addr).catch(
+              err => {
+                this.logger.error('Send: error fetching PayID', err);
+                this.ongoingProcessProvider.clear();
+              }
+            );
+            if (!payIdDetails) {
+              return this.actionSheetProvider
+                .createInfoSheet('pay-id-not-found', { payId: addr })
+                .present();
+            }
             this.ongoingProcessProvider.clear();
             const address = getAddressFromPayId(payIdDetails, {
               coin: this.wallet.coin,

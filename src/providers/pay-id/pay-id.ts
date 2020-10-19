@@ -63,13 +63,24 @@ export function getPayIdUrlViaManualDiscovery(payId: string): string {
   return `https://bws.bitpay.com/bws/api/v1/service/payId/${payId}`; // `https://${parts[1]}/${parts[0]}`;
 }
 
-export function getAddressFromPayId(
+export function getRawAddressFromPayId(
   payIdDetails: PayIdDetails,
   params: {
     coin: string;
     network: string;
   }
 ): string | undefined {
+  const address = getAddressFromPayId(payIdDetails, params);
+  return address && address.parsedPayload.payIdAddress.addressDetails.address;
+}
+
+export function getAddressFromPayId(
+  payIdDetails: PayIdDetails,
+  params: {
+    coin: string;
+    network: string;
+  }
+): VerifiedPayIdAddress {
   const address = payIdDetails.verifiedAddresses.find(address => {
     const paymentNetwork = address.parsedPayload.payIdAddress.paymentNetwork;
     const paymentCoin = paymentNetwork === 'XRPL' ? 'XRP' : paymentNetwork;
@@ -79,7 +90,20 @@ export function getAddressFromPayId(
         params.network.toUpperCase()
     );
   });
-  return address && address.parsedPayload.payIdAddress.addressDetails.address;
+  return address;
+}
+
+export function validateAddressSignature({
+  identityKey,
+  signature,
+  payload
+}: {
+  identityKey: string;
+  signature: string;
+  payload: string;
+}): boolean {
+  console.log(identityKey, signature, payload);
+  return true;
 }
 
 export async function fetchPayIdDetails(
@@ -101,22 +125,27 @@ export async function fetchPayIdDetails(
       })
     )
     .toPromise() as Promise<PayIdDetails>);
-  const parsedPayIdDetails = {
-    ...payIdDetails,
-    verifiedAddresses: payIdDetails.verifiedAddresses.map(verifiedAddress => {
-      return {
-        ...verifiedAddress,
-        parsedPayload: JSON.parse(
-          verifiedAddress.payload
-        ) as VerifiedPayIdAddressPayloadObject
-      };
-    })
-  };
-  parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.environment =
-    'TESTNET';
-  parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.addressDetails.address =
-    'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
-  parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.paymentNetwork =
-    'BTC';
-  return parsedPayIdDetails;
+  console.log('payIdDetails', payIdDetails);
+  try {
+    const parsedPayIdDetails = {
+      ...payIdDetails,
+      verifiedAddresses: payIdDetails.verifiedAddresses.map(verifiedAddress => {
+        return {
+          ...verifiedAddress,
+          parsedPayload: JSON.parse(
+            verifiedAddress.payload
+          ) as VerifiedPayIdAddressPayloadObject
+        };
+      })
+    };
+    parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.environment =
+      'TESTNET';
+    parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.addressDetails.address =
+      'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
+    parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.paymentNetwork =
+      'BTC';
+    return parsedPayIdDetails;
+  } catch (e) {
+    throw e;
+  }
 }

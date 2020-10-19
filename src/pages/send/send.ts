@@ -17,8 +17,10 @@ import { OnGoingProcessProvider } from '../../providers/on-going-process/on-goin
 import {
   fetchPayIdDetails,
   getAddressFromPayId,
+  getRawAddressFromPayId,
   isPayId,
-  PayIdDetails
+  PayIdDetails,
+  validateAddressSignature
 } from '../../providers/pay-id/pay-id';
 import { PayproProvider } from '../../providers/paypro/paypro';
 import { ProfileProvider } from '../../providers/profile/profile';
@@ -250,20 +252,37 @@ export class SendPage {
       coin: this.wallet.coin,
       network: this.wallet.network
     });
-    const contact = await this.addressBookProvider.get(payIdDetails.payId);
-    this.onGoingProcessProvider.clear();
-    if (contact && contact.verified) {
-      return this.incomingDataProvider.finishIncomingData(
-        this.getIncomingDataParams(payIdDetails, address)
-      );
+    if (!address) {
+      return this.showPayIdUnsupportedCoinSheet({
+        payId: this.search,
+        coin: this.wallet.coin.toUpperCase(),
+        network: this.wallet.network
+      });
     }
-    return address
-      ? this.showVerifyPayIdSheet({ payIdDetails })
-      : this.showPayIdUnsupportedCoinSheet({
-          payId: this.search,
-          coin: this.wallet.coin.toUpperCase(),
-          network: this.wallet.network
-        });
+    const identityKey = address.signatures[0].protected;
+    if (
+      !validateAddressSignature({
+        identityKey,
+        payload: address.payload,
+        signature: address.signatures[0].signature
+      })
+    ) {
+      console.log('invalid signature sheet comes up here');
+      return;
+    }
+    const contact = await this.addressBookProvider.get(payIdDetails.payId);
+    if (
+      contact.payIdDetails.identityKey !== identityKey ||
+      !contact.payIdDetails.verified
+    ) {
+      return this.showVerifyPayIdSheet({ payIdDetails });
+    }
+    this.onGoingProcessProvider.clear();
+    const rawAddress =
+      address.parsedPayload.payIdAddress.addressDetails.address;
+    return this.incomingDataProvider.finishIncomingData(
+      this.getIncomingDataParams(payIdDetails, rawAddress)
+    );
   }
 
   public async processInput() {
@@ -272,6 +291,7 @@ export class SendPage {
       return this.handlePayId().catch(() => {
         this.invalidAddress = true;
         this.invalidAddressErrorMessage = 'PayID not found.';
+        this.onGoingProcessProvider.clear();
       });
     }
     const hasContacts = await this.checkIfContact();
@@ -390,7 +410,10 @@ export class SendPage {
     this.verifyPayIdSheet.onDidDismiss(option => {
       this.verifyPayIdSheet = undefined;
       if (option) {
-        const address = getAddressFromPayId(params.payIdDetails, this.wallet);
+        const address = getRawAddressFromPayId(
+          params.payIdDetails,
+          this.wallet
+        );
         this.navCtrl.push(VerifyPayIdPage, {
           incomingDataParams: this.getIncomingDataParams(
             params.payIdDetails,
