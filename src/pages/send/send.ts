@@ -253,11 +253,12 @@ export class SendPage {
       network: this.wallet.network
     });
     if (!address) {
-      return this.showPayIdUnsupportedCoinSheet({
+      this.showPayIdUnsupportedCoinSheet({
         payId: this.search,
         coin: this.wallet.coin.toUpperCase(),
         network: this.wallet.network
       });
+      throw new Error('PayId unsupported coin');
     }
     const identityKey = address.signatures[0].protected;
     if (
@@ -268,7 +269,12 @@ export class SendPage {
       })
     ) {
       console.log('invalid signature sheet comes up here');
-      return;
+      this.actionSheetProvider
+        .createInfoSheet('pay-id-bad-signature', {
+          payIdDetails
+        })
+        .present();
+      throw new Error('PayId invalid signature');
     }
     const contact = await this.addressBookProvider.get(payIdDetails.payId);
     if (

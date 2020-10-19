@@ -48,6 +48,7 @@ export type InfoSheetType =
   | 'payment-request'
   | 'payment-method-changed'
   | 'pay-id-added-to-contacts'
+  | 'pay-id-bad-signature'
   | 'pay-id-not-found'
   | 'pay-id-taken'
   | 'print-required'

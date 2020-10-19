@@ -27,6 +27,15 @@
       <span sheet-button-text translate>OK</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'pay-id-bad-signature'" type="warning">
+      <span sheet-title-text translate>Invalid Signature</span>
+      <span sheet-text translate>
+        The payment information associated with <strong>{{params.payIdDetails.payId}}</strong> contains an invalid
+        signature and cannot be trusted. Do not send any funds to this PayID.
+      </span>
+      <span sheet-button-text translate>OK</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'verify-pay-id'" type="info">
       <span sheet-title-text translate>{{params.payIdDetails.payId}} is not verified</span>
       <span sheet-text translate>

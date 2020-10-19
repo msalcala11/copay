@@ -138,12 +138,14 @@ export async function fetchPayIdDetails(
         };
       })
     };
-    parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.environment =
-      'TESTNET';
-    parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.addressDetails.address =
-      'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
-    parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.paymentNetwork =
-      'BTC';
+    if (parsedPayIdDetails.verifiedAddresses[0]) {
+      parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.environment =
+        'TESTNET';
+      parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.addressDetails.address =
+        'n21ZMdccBUXnejc3Lv1XVaxtHJpASPVrNk';
+      parsedPayIdDetails.verifiedAddresses[0].parsedPayload.payIdAddress.paymentNetwork =
+        'BTC';
+    }
     return parsedPayIdDetails;
   } catch (e) {
     throw e;
