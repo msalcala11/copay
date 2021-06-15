@@ -87,6 +87,9 @@ export interface TransactionProposal {
   invoiceID?: string;
   multisigGnosisContractAddress?: string;
   multisigContractAddress?: string;
+  instantAcceptanceEscrow?: {
+    satoshis: number;
+  };
 }
 
 @Injectable()
@@ -1247,13 +1250,14 @@ export class WalletProvider {
     return new Promise((resolve, reject) => {
       if (_.isEmpty(txp) || _.isEmpty(wallet))
         return reject('MISSING_PARAMETER');
-
+      console.log('txp before bwc', JSON.stringify(txp, null, 2));
       wallet.createTxProposal(txp, (err, createdTxp) => {
         if (err) return reject(err);
-        else {
-          this.logger.debug('Transaction created');
-          return resolve(createdTxp);
-        }
+        console.log('createdTxp bwc', JSON.stringify(createdTxp, null, 2));
+        // else {
+        this.logger.debug('Transaction created');
+        return resolve(createdTxp);
+        // }
       });
     });
   }
@@ -1282,6 +1286,9 @@ export class WalletProvider {
       if (!wallet || !txp) return reject('MISSING_PARAMETER');
 
       const rootPath = wallet.getRootPath();
+      console.log('wallet', wallet);
+      console.log('rootPath', rootPath);
+      console.log('txp', txp);
 
       let signatures;
 
@@ -1311,7 +1318,7 @@ export class WalletProvider {
           this.logsProvider.get(this.appProvider.info.nameCase, platform);
         });
       }
-
+      console.log('signatures', signatures);
       try {
         wallet.pushSignatures(txp, signatures, (err, signedTxp) => {
           if (err) {
@@ -1348,6 +1355,7 @@ export class WalletProvider {
           }
         }
 
+        console.log('txp', txp);
         wallet.broadcastTxProposal(txp, (err, broadcastedTxp, memo) => {
           if (err) {
             if (_.isArrayBuffer(err)) {
