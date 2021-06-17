@@ -79,6 +79,7 @@ export interface TransactionProposal {
     toWalletName?: any;
   };
   payProUrl: any;
+  allowNotYetBroadcastUtxos?: boolean;
   excludeUnconfirmedUtxos: boolean;
   feePerKb: number;
   feeLevel: string;
@@ -1666,7 +1667,7 @@ export class WalletProvider {
     });
   }
 
-  private async reclaimEscrow(wallet, signedTxp, password) {
+  private async generateEscrowReclaimTxp(wallet, signedTxp, password) {
     /*
       1. Get escrow address and use it as an input in a new tx
       2. set .sendMax on the tx
@@ -1692,7 +1693,7 @@ export class WalletProvider {
               // "amount": escrowAmount,
               // "scriptPubKey": "76a914d7ac863d53d5b45e8aa56b25d0099885de3ab0f688ac",
               "txid": signedTxp.txid,
-              "vout": 0,
+              "vout": signedTxp.outputOrder.findIndex(outputIndex => outputIndex === 1),
               "locked": false,
               "confirmations": 0,
               "path": signedTxp.changeAddress.path,
@@ -1707,10 +1708,12 @@ export class WalletProvider {
     console.log('reclaimTxp', reclaimTxp);
     return this.createTx(wallet, reclaimTxp)
      .then((createdTxp) => {
+       createdTxp.allowNotYetBroadcastUtxos = true;
        return this.publishTx(wallet, createdTxp).then((publishedTxp) => {
          console.log('publishedTxp', publishedTxp);
          return this.signTx(wallet, publishedTxp, password).then((signedReclaimTxp) => {
            console.log('signedTx', signedReclaimTxp);
+           return signedReclaimTxp;
          });
        })
       });
@@ -1727,11 +1730,12 @@ export class WalletProvider {
       this.signTx(wallet, publishedTxp, password)
         .then(async signedTxp => {
           this.invalidateCache(wallet);
-          await this.reclaimEscrow(wallet, signedTxp, password);
+          const signedReclaimTxp = await this.generateEscrowReclaimTxp(wallet, signedTxp, password);
           if (signedTxp.status == 'accepted') {
             this.onGoingProcessProvider.set('broadcastingTx');
             this.broadcastTx(wallet, signedTxp)
-              .then(broadcastedTxp => {
+              .then(async broadcastedTxp => {
+                await this.broadcastTx(wallet, signedReclaimTxp);
                 this.events.publish('Local/TxAction', {
                   walletId: wallet.id,
                   until: { totalAmount: expected }
