@@ -1709,8 +1709,8 @@ export class WalletProvider {
      .then((createdTxp) => {
        return this.publishTx(wallet, createdTxp).then((publishedTxp) => {
          console.log('publishedTxp', publishedTxp);
-         return this.signTx(wallet, publishedTxp, password).then((signature) => {
-           console.log('signedTx', signature, password);
+         return this.signTx(wallet, publishedTxp, password).then((signedReclaimTxp) => {
+           console.log('signedTx', signedReclaimTxp);
          });
        })
       });
