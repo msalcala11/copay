@@ -1672,90 +1672,24 @@ export class WalletProvider {
       2. set .sendMax on the tx
       3. Get a new address from the wallet to send to
     */
-    // const inputs = await this.getUtxos(wallet);
-    // const reclaimTxp = {
-    //   coin: "bch",
-    //   dryRun: false,
-    //   excludeUnconfirmedUtxos: false,
-    //   feePerKb: 1000,
-    //   from: signedTxp.outputs[0].toAddress,
-    //   outputs: [{toAddress: "qrt6ep3a202mgh52544jt5qfnzzauw4s7cuq4p3px4", amount: 165300, message: null}],
-    //   signingMethod: "schnorr"
-    // } as Partial<TransactionProposal>
 
-    // const getChangeAddress = (): Promise<Address> => new Promise((resolve, reject) => {
-    //   wallet.createAddress({ isChange: true }, (err, address) => {
-    //     if (err) {
-    //       return reject(err);
-    //     }
-    //     resolve(address);
-    //   });
-    // });
-
-    const changeAddress = {
-      address: 'qrt6ep3a202mgh52544jt5qfnzzauw4s7cuq4p3px4'
-    };// signedTxp.changeAddress; // await getChangeAddress();
-    // const tx = await this.createTx(wallet, reclaimTxp);
     const escrowSatoshis = signedTxp.inputs[0].satoshis - signedTxp.outputs[0].amount - signedTxp.fee;
-    const escrowAmount = escrowSatoshis / 100000000;
-    const fee = 300;
+    const bytes = 281;
+    const feePerByte = 1;
+    const fee = feePerByte * bytes;
     const outputAmount = escrowSatoshis - fee; 
-    const reclaimTxp = {
-      // "actions": [
-      //     {
-      //         "version": "1.0.0",
-      //         "createdOn": 1623896081,
-      //         "copayerId": "2e24e458e49d7c608bec85320a58fb85635f0baff3b23d0c116310240b313ce0",
-      //         "type": "accept",
-      //         // "signatures": [
-      //         //     "c93547da0a13cc60191f114197ea369c7ea7a9110ce2c613a42bf2fd4d20a6095f210d133764a110af461a131dcecf3b67daeb2791d68b23f3f1adb9fbd907ba"
-      //         // ],
-      //         "xpub": "tpubDCB9wshFFpzE4veZM9fxfYchAMU8FLXHMULUoGycDwh9H1UJpdUazqbkkXtf1EC9ZkHQsoqLUn57etdqnhemT6yMhi2VxJ2DwidE73bjn3q",
-      //         "comment": "",
-      //         "copayerName": ""
-      //     }
-      // ],
-      "version": 3,
-      // "createdOn": 1623896072,
-      // "id": "d8eda3e8-e7e0-4339-825a-b1d445e2d063",
-      "walletId": wallet.id,
-      creatorId: signedTxp.creatorId,
-      // "creatorId": "2e24e458e49d7c608bec85320a58fb85635f0baff3b23d0c116310240b313ce0",
-      "coin": "bch",
-      "network": "testnet",
-      "outputs": [
-          {
-              "amount": outputAmount,
-              "toAddress": changeAddress.address,
-              "message": null,
-          }
-      ],
-      "amount": outputAmount,
-      // "message": "Payment request for BitPay invoice NVcMdHmiyQaJ66ABkdMAAW for merchant Bitty",
-      // "payProUrl": "https://test.bitpay.com/i/NVcMdHmiyQaJ66ABkdMAAW",
-      // changeAddress,
-      // "changeAddress": {
-      //     "version": "1.0.0",
-      //     "createdOn": 1623896072,
-      //     "address": "pze5njzp2dzzuz4e6yk4m69mnmkxaamtdghrq6q9y4",
-      //     "walletId": "86359747-1729-4920-b2ed-5f268a9b23cb",
-      //     "isChange": true,
-      //     "path": "m/1/79",
-      //     "publicKeys": [
-      //         "0348c20ddca8a031693898ed3b3a537f760de3470a92a762573ead5f4fdb60022b",
-      //         "03d2fc83d5f6f208bca80c2bb4da812ce5a58664c5b30010db014c3d005b912551"
-      //     ],
-      //     "coin": "bch",
-      //     "network": "testnet",
-      //     "type": "P2PKH",
-      //     "hasActivity": null,
-      //     "beRegistered": null
-      // },
+
+    const reclaimTxp = { 
+      coin: "bch",
+      dryRun: false,
+      excludeUnconfirmedUtxos: false,
+      fee,
+      from: signedTxp.changeAddress.address,
       "inputs": [
           {
               "address": signedTxp.changeAddress.address,
               "satoshis": escrowSatoshis,
-              "amount": escrowAmount,
+              // "amount": escrowAmount,
               // "scriptPubKey": "76a914d7ac863d53d5b45e8aa56b25d0099885de3ab0f688ac",
               "txid": signedTxp.txid,
               "vout": 0,
@@ -1765,49 +1699,12 @@ export class WalletProvider {
               "publicKeys": signedTxp.changeAddress.publicKeys
           }
       ],
-      "walletM": 1,
-      "walletN": 1,
-      "requiredSignatures": 1,
-      "requiredRejections": 1,
-      // "status": "accepted",
-      // "txid": "0bdf3af67000415b5304961de64b85250e7e0ba108309e7e3356a8c57147aded",
-      // "broadcastedOn": null,
-      "inputPaths": [
-          "m/0/5"
-      ],
-      "outputOrder": [
-          0
-      ],
-      "fee": fee,
-      "feeLevel": null,
-      // "feePerKb": 1000,
-      "excludeUnconfirmedUtxos": false,
-      "addressType": "P2PKH",
-      // "customData": null,
-      // "proposalSignature": "30440220137862ef19a89a751615d54f16b9ba6bbf2cda51799194b918f3017933c80fa802207805c5e8dba056d2e37b27f263f0f02b31893c23c93357520f5b6b4fee8038b2",
-      "signingMethod": "schnorr",
-      // "proposalSignaturePubKey": null,
-      // "proposalSignaturePubKeySig": null,
-      // "lockUntilBlockHeight": null,
-      // "gasPrice": null,
-      "from": "qp779jvd4t7yhfp0n9jjzq2ss6mdan4frvstcqyre7",
-      // "nonce": null,
-      // "gasLimit": null,
-      // "data": null,
-      // "tokenAddress": null,
-      // "multisigContractAddress": null,
-      // "multisigTxId": null,
-      // "destinationTag": null,
-      // "invoiceID": null,
-      "derivationStrategy": "BIP44",
-      // "creatorName": "me",
-      // "raw": "0100000001e23c9ec271f058dd41b25b2057e3c549acc4f7b45e1c4c2a9fc526cafa712f81000000006441c93547da0a13cc60191f114197ea369c7ea7a9110ce2c613a42bf2fd4d20a6095f210d133764a110af461a131dcecf3b67daeb2791d68b23f3f1adb9fbd907ba412103d2fc83d5f6f208bca80c2bb4da812ce5a58664c5b30010db014c3d005b912551ffffffff02cc810200000000001976a914d0a5aeb36345a91862ebf5a994ebc1c9abe80d2f88acde6e00000000000017a914b349c84153442e0ab9d12d5de8bb9eec6ef76b6a8700000000",
-      // "encryptedMessage": "{\"iv\":\"ayh1Z2BmXEn8XDeGMY9ang==\",\"v\":1,\"iter\":1,\"ks\":128,\"ts\":64,\"mode\":\"ccm\",\"adata\":\"\",\"cipher\":\"aes\",\"ct\":\"R8HTlwhqSDDXonDcVHEpAKfg2cgBkNfTSgx5+bMizGAOZI6wcx5XRl8tcqZ2jrewyfpZWehg5BVIh1ejY0baC3SD8cj/mKjkEJlUI4P3gu/oPoac\"}",
-      "hasUnconfirmedInputs": true
-  } as Partial<TransactionProposal>;
-
+      outputs: [{
+        toAddress: signedTxp.inputs[0].address, amount: outputAmount, message: null
+      }],
+      signingMethod: "schnorr" 
+    };
     console.log('reclaimTxp', reclaimTxp);
-    // console.log('inputs', inputs);
     return this.createTx(wallet, reclaimTxp)
      .then((createdTxp) => {
        return this.publishTx(wallet, createdTxp).then((publishedTxp) => {
@@ -1817,8 +1714,6 @@ export class WalletProvider {
          });
        })
       });
-    // const signature = 'dkljfd'; 
-    // return signature;
   }
 
   private signAndBroadcast(wallet, publishedTxp, password): Promise<any> {
