@@ -1674,7 +1674,7 @@ export class WalletProvider {
       3. Get a new address from the wallet to send to
     */
 
-    const escrowSatoshis = signedTxp.inputs[0].satoshis - signedTxp.outputs[0].amount - signedTxp.fee;
+    const escrowSatoshis = signedTxp.instantAcceptanceEscrow.satoshis;
     const bytes = 281;
     const feePerByte = 1;
     const fee = feePerByte * bytes;
@@ -1684,20 +1684,21 @@ export class WalletProvider {
       coin: "bch",
       dryRun: false,
       excludeUnconfirmedUtxos: false,
+      allowNotYetBroadcastUtxos: true,
       fee,
-      from: signedTxp.changeAddress.address,
+      from: signedTxp.escrowAddress.address,
       "inputs": [
           {
-              "address": signedTxp.changeAddress.address,
+              "address": signedTxp.escrowAddress.address,
               "satoshis": escrowSatoshis,
               // "amount": escrowAmount,
               // "scriptPubKey": "76a914d7ac863d53d5b45e8aa56b25d0099885de3ab0f688ac",
               "txid": signedTxp.txid,
-              "vout": signedTxp.outputOrder.findIndex(outputIndex => outputIndex === 1),
+              "vout": signedTxp.outputOrder.findIndex(outputIndex => outputIndex === 1), 
               "locked": false,
               "confirmations": 0,
-              "path": signedTxp.changeAddress.path,
-              "publicKeys": signedTxp.changeAddress.publicKeys
+              "path": signedTxp.escrowAddress.path,
+              "publicKeys": signedTxp.escrowAddress.publicKeys
           }
       ],
       outputs: [{
