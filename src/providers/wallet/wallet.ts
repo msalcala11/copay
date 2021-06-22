@@ -1673,6 +1673,9 @@ export class WalletProvider {
       2. set .sendMax on the tx
       3. Get a new address from the wallet to send to
     */
+   if(!signedTxp.escrowAddress) {
+     return;
+   }
 
     const escrowSatoshis = signedTxp.instantAcceptanceEscrow.satoshis;
     const bytes = 281;
@@ -1736,7 +1739,9 @@ export class WalletProvider {
             this.onGoingProcessProvider.set('broadcastingTx');
             this.broadcastTx(wallet, signedTxp)
               .then(async broadcastedTxp => {
-                await this.broadcastTx(wallet, signedReclaimTxp);
+                if(signedReclaimTxp) {
+                  await this.broadcastTx(wallet, signedReclaimTxp);
+                }
                 this.events.publish('Local/TxAction', {
                   walletId: wallet.id,
                   until: { totalAmount: expected }
