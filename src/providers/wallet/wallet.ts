@@ -1694,8 +1694,6 @@ export class WalletProvider {
           {
               "address": signedTxp.escrowAddress.address,
               "satoshis": escrowSatoshis,
-              // "amount": escrowAmount,
-              // "scriptPubKey": "76a914d7ac863d53d5b45e8aa56b25d0099885de3ab0f688ac",
               "txid": signedTxp.txid,
               "vout": signedTxp.outputOrder.findIndex(outputIndex => outputIndex === 1), 
               "locked": false,
