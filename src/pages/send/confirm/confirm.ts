@@ -1274,8 +1274,10 @@ export class ConfirmPage {
 
           txp.from = address;
           txp.instantAcceptanceEscrow = {
-            satoshis: 10000
+            satoshis: 11000
           };
+          // txp.fee = undefined;
+          // txp.feePerKb = 1000;
           this.walletProvider
             .createTx(wallet, txp)
             .then(ctxp => {

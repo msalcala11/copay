@@ -1668,17 +1668,20 @@ export class WalletProvider {
   }
 
   private async generateEscrowReclaimTxp(wallet, signedTxp, password) {
-    /*
-      1. Get escrow address and use it as an input in a new tx
-      2. set .sendMax on the tx
-      3. Get a new address from the wallet to send to
-    */
-   if(!signedTxp.escrowAddress) {
-     return;
-   }
+    if(!signedTxp.escrowAddress) {
+      return;
+    }
+
+    const getReclaimTxSize = (numInputs: number) => {
+      const escrowReclaimTxBytesForSingleInputZceTx = 254;
+      const bytesPerAdditionalInput = 27;
+      const numAdditionalInputs = numInputs - 1;
+      const bytes = escrowReclaimTxBytesForSingleInputZceTx + bytesPerAdditionalInput*numAdditionalInputs;
+      return bytes;
+    }
 
     const escrowSatoshis = signedTxp.instantAcceptanceEscrow.satoshis;
-    const bytes = 281;
+    const bytes = getReclaimTxSize(signedTxp.inputs.length);
     const feePerByte = 1;
     const fee = feePerByte * bytes;
     const outputAmount = escrowSatoshis - fee; 
