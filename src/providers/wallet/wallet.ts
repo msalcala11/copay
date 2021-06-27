@@ -1680,48 +1680,53 @@ export class WalletProvider {
       return bytes;
     }
 
+    const getChangeAddress: any = () => new Promise((resolve, reject) => {
+      wallet.createAddress({ isChange: true }, (err, address) => {
+        if (err) return reject(err);
+        resolve(address);
+      });
+    });
+
+    const reclaimAddress = await getChangeAddress();
+
     const escrowSatoshis = signedTxp.instantAcceptanceEscrow.satoshis;
     const bytes = getReclaimTxSize(signedTxp.inputs.length);
     const feePerByte = 1;
     const fee = feePerByte * bytes;
-    const outputAmount = escrowSatoshis - fee; 
+    const outputAmount = escrowSatoshis - fee;
+
+    const inputSatoshis = signedTxp.inputs.reduce((total, input) => total + input.satoshis, 0);
+    const outputSatoshis = signedTxp.amount + escrowSatoshis;
+    const hasChangeAddress = inputSatoshis - ( outputSatoshis + signedTxp.fee ) > 0;
+    const outputOrder = hasChangeAddress ? signedTxp.outputOrder : signedTxp.outputOrder.filter(outputIndex => outputIndex !== 2);
 
     const reclaimTxp = { 
-      coin: "bch",
+      coin: 'bch',
       dryRun: false,
       excludeUnconfirmedUtxos: false,
       allowNotYetBroadcastUtxos: true,
       fee,
       from: signedTxp.escrowAddress.address,
-      "inputs": [
+      inputs: [
           {
-              "address": signedTxp.escrowAddress.address,
-              "satoshis": escrowSatoshis,
-              "txid": signedTxp.txid,
-              "vout": signedTxp.outputOrder.findIndex(outputIndex => outputIndex === 1), 
-              "locked": false,
-              "confirmations": 0,
-              "path": signedTxp.escrowAddress.path,
-              "publicKeys": signedTxp.escrowAddress.publicKeys
+              address: signedTxp.escrowAddress.address,
+              satoshis: escrowSatoshis,
+              txid: signedTxp.txid,
+              vout: outputOrder.findIndex(outputIndex => outputIndex === 1), 
+              path: signedTxp.escrowAddress.path,
+              publicKeys: signedTxp.escrowAddress.publicKeys
           }
       ],
       outputs: [{
-        toAddress: signedTxp.inputs[0].address, amount: outputAmount, message: null
+        toAddress: reclaimAddress.address, amount: outputAmount, message: null
       }],
       signingMethod: "schnorr" 
     };
-    console.log('reclaimTxp', reclaimTxp);
-    return this.createTx(wallet, reclaimTxp)
-     .then((createdTxp) => {
-       createdTxp.allowNotYetBroadcastUtxos = true;
-       return this.publishTx(wallet, createdTxp).then((publishedTxp) => {
-         console.log('publishedTxp', publishedTxp);
-         return this.signTx(wallet, publishedTxp, password).then((signedReclaimTxp) => {
-           console.log('signedTx', signedReclaimTxp);
-           return signedReclaimTxp;
-         });
-       })
-      });
+    const createdTxp = await this.createTx(wallet, reclaimTxp);
+    createdTxp.allowNotYetBroadcastUtxos = true;
+    const publishedTxp = await this.publishTx(wallet, createdTxp);
+    const signedReclaimTxp = await this.signTx(wallet, publishedTxp, password);
+    return signedReclaimTxp;
   }
 
   private signAndBroadcast(wallet, publishedTxp, password): Promise<any> {
