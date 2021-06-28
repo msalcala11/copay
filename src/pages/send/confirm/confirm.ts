@@ -1273,11 +1273,14 @@ export class ConfirmPage {
           }
 
           txp.from = address;
-          txp.instantAcceptanceEscrow = {
-            satoshis: 11000
-          };
-          // txp.fee = undefined;
-          // txp.feePerKb = 1000;
+          if(txp.payProUrl) {
+            txp.instantAcceptanceEscrow = {
+              satoshis: 11000
+            };
+          }
+          // txp.fee = 281;
+          // txp.outputs[0].amount = txp.inputs[0].satoshis - txp.fee;
+          // txp.feePerKb = 1500;
           this.walletProvider
             .createTx(wallet, txp)
             .then(ctxp => {

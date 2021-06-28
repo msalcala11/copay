@@ -1672,6 +1672,8 @@ export class WalletProvider {
       return;
     }
 
+    console.log('signedTxp', JSON.stringify(signedTxp, null, 4));
+
     const getReclaimTxSize = (numInputs: number) => {
       const escrowReclaimTxBytesForSingleInputZceTx = 254;
       const bytesPerAdditionalInput = 27;
