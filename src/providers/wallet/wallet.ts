@@ -1748,7 +1748,9 @@ export class WalletProvider {
             this.broadcastTx(wallet, signedTxp)
               .then(async broadcastedTxp => {
                 if(signedReclaimTxp) {
-                  await this.broadcastTx(wallet, signedReclaimTxp);
+                  await this.broadcastTx(wallet, signedReclaimTxp).catch(_ => {
+                    this.removeTx(wallet, signedReclaimTxp);
+                  });
                 }
                 this.events.publish('Local/TxAction', {
                   walletId: wallet.id,
@@ -1757,6 +1759,9 @@ export class WalletProvider {
                 return resolve(broadcastedTxp);
               })
               .catch(err => {
+                if(signedReclaimTxp) {
+                  this.removeTx(wallet, signedReclaimTxp);
+                }
                 return reject(this.bwcErrorProvider.msg(err));
               });
           } else {
