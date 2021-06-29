@@ -25,7 +25,6 @@ import { RateProvider } from '../rate/rate';
 import { TouchIdProvider } from '../touchid/touchid';
 import { TxFormatProvider } from '../tx-format/tx-format';
 
-
 export interface HistoryOptionsI {
   limitTx?: string;
   lowAmount?: number;
@@ -1120,6 +1119,16 @@ export class WalletProvider {
     return parseInt((size * (1 + safetyMargin)).toFixed(0), 10);
   }
 
+  public getEscrowReclaimTxSize(numInputsInEscrowPayment: number) {
+    const escrowReclaimTxBytesForSingleInputZceTx = 254;
+    const bytesPerAdditionalInput = 27;
+    const numAdditionalInputs = numInputsInEscrowPayment - 1;
+    const bytes =
+      escrowReclaimTxBytesForSingleInputZceTx +
+      bytesPerAdditionalInput * numAdditionalInputs;
+    return bytes;
+  }
+
   public getTxNote(wallet, txid: string): Promise<any> {
     return new Promise((resolve, reject) => {
       wallet.getTxNote(
@@ -1284,14 +1293,10 @@ export class WalletProvider {
   }
 
   public signTx(wallet, txp, password: string): Promise<any> {
-    console.log('in here')
     return new Promise((resolve, reject) => {
       if (!wallet || !txp) return reject('MISSING_PARAMETER');
 
       const rootPath = wallet.getRootPath();
-      console.log('wallet', wallet);
-      console.log('rootPath', rootPath);
-      console.log('txp', txp);
 
       let signatures;
 
@@ -1668,41 +1673,54 @@ export class WalletProvider {
   }
 
   private async generateEscrowReclaimTxp(wallet, signedTxp, password) {
-    if(!signedTxp.escrowAddress) {
+    if (!signedTxp.escrowAddress) {
       return;
     }
 
     console.log('signedTxp', JSON.stringify(signedTxp, null, 4));
 
-    const getReclaimTxSize = (numInputs: number) => {
-      const escrowReclaimTxBytesForSingleInputZceTx = 254;
-      const bytesPerAdditionalInput = 27;
-      const numAdditionalInputs = numInputs - 1;
-      const bytes = escrowReclaimTxBytesForSingleInputZceTx + bytesPerAdditionalInput*numAdditionalInputs;
-      return bytes;
-    }
-
-    const getChangeAddress: any = () => new Promise((resolve, reject) => {
-      wallet.createAddress({ isChange: true }, (err, address) => {
-        if (err) return reject(err);
-        resolve(address);
+    const getChangeAddress = (): Promise<{address: string}> =>
+      new Promise((resolve, reject) => {
+        wallet.createAddress({ isChange: true }, (err, address) => {
+          if (err) return reject(err);
+          resolve(address);
+        });
       });
-    });
 
-    const reclaimAddress = await getChangeAddress();
+    const getFeePerByte = (): Promise<number> => this.feeProvider
+        .getFeeLevels(wallet.coin, wallet.network)
+        .then(data => {
+          const normalLevelRate = _.find(data.levels, level => {
+            return level.level === 'normal';
+          });
+          const lowLevelRate = (
+            normalLevelRate.feePerKb / 1000
+          ).toFixed(0);
+          return parseInt(lowLevelRate, 10);
+        })
+
+    const [ reclaimAddress, feePerByte ] = await Promise.all([
+      getChangeAddress(),
+      getFeePerByte()
+    ]);
 
     const escrowSatoshis = signedTxp.instantAcceptanceEscrow.satoshis;
-    const bytes = getReclaimTxSize(signedTxp.inputs.length);
-    const feePerByte = 1;
+    const bytes = this.getEscrowReclaimTxSize(signedTxp.inputs.length);
     const fee = feePerByte * bytes;
     const outputAmount = escrowSatoshis - fee;
 
-    const inputSatoshis = signedTxp.inputs.reduce((total, input) => total + input.satoshis, 0);
+    const inputSatoshis = signedTxp.inputs.reduce(
+      (total, input) => total + input.satoshis,
+      0
+    );
     const outputSatoshis = signedTxp.amount + escrowSatoshis;
-    const hasChangeAddress = inputSatoshis - ( outputSatoshis + signedTxp.fee ) > 0;
-    const outputOrder = hasChangeAddress ? signedTxp.outputOrder : signedTxp.outputOrder.filter(outputIndex => outputIndex !== 2);
+    const hasChangeAddress =
+      inputSatoshis - (outputSatoshis + signedTxp.fee) > 0;
+    const outputOrder = hasChangeAddress
+      ? signedTxp.outputOrder
+      : signedTxp.outputOrder.filter(outputIndex => outputIndex !== 2);
 
-    const reclaimTxp = { 
+    const reclaimTxp = {
       coin: 'bch',
       dryRun: false,
       excludeUnconfirmedUtxos: false,
@@ -1710,19 +1728,23 @@ export class WalletProvider {
       fee,
       from: signedTxp.escrowAddress.address,
       inputs: [
-          {
-              address: signedTxp.escrowAddress.address,
-              satoshis: escrowSatoshis,
-              txid: signedTxp.txid,
-              vout: outputOrder.findIndex(outputIndex => outputIndex === 1), 
-              path: signedTxp.escrowAddress.path,
-              publicKeys: signedTxp.escrowAddress.publicKeys
-          }
+        {
+          address: signedTxp.escrowAddress.address,
+          satoshis: escrowSatoshis,
+          txid: signedTxp.txid,
+          vout: outputOrder.findIndex(outputIndex => outputIndex === 1),
+          path: signedTxp.escrowAddress.path,
+          publicKeys: signedTxp.escrowAddress.publicKeys
+        }
       ],
-      outputs: [{
-        toAddress: reclaimAddress.address, amount: outputAmount, message: null
-      }],
-      signingMethod: "schnorr" 
+      outputs: [
+        {
+          toAddress: reclaimAddress.address,
+          amount: outputAmount,
+          message: null
+        }
+      ],
+      signingMethod: 'schnorr'
     };
     const createdTxp = await this.createTx(wallet, reclaimTxp);
     createdTxp.allowNotYetBroadcastUtxos = true;
@@ -1738,7 +1760,7 @@ export class WalletProvider {
       let expected =
         wallet.cachedStatus.balance.totalAmount -
         publishedTxp.amount -
-        publishedTxp.fee; 
+        publishedTxp.fee;
       this.signTx(wallet, publishedTxp, password)
         .then(async signedTxp => {
           this.invalidateCache(wallet);
@@ -1747,7 +1769,7 @@ export class WalletProvider {
             this.onGoingProcessProvider.set('broadcastingTx');
             this.broadcastTx(wallet, signedTxp)
               .then(async broadcastedTxp => {
-                if(signedReclaimTxp) {
+                if (signedReclaimTxp) {
                   await this.broadcastTx(wallet, signedReclaimTxp).catch(_ => {
                     this.removeTx(wallet, signedReclaimTxp);
                   });
@@ -1759,7 +1781,7 @@ export class WalletProvider {
                 return resolve(broadcastedTxp);
               })
               .catch(err => {
-                if(signedReclaimTxp) {
+                if (signedReclaimTxp) {
                   this.removeTx(wallet, signedReclaimTxp);
                 }
                 return reject(this.bwcErrorProvider.msg(err));
