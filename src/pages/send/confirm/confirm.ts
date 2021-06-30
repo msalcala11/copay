@@ -482,6 +482,9 @@ export class ConfirmPage {
     );
 
     if (this.tx.paypro) {
+      this.tx.paypro.instantAcceptanceEscrow = {
+        satoshis: 1100100
+      }
       if (!this.currencyProvider.isUtxoCoin(this.tx.coin)) {
         // Update fees to most recent for eth ( in case required fee change ? )
         const address = await this.walletProvider.getAddress(
@@ -1085,6 +1088,7 @@ export class ConfirmPage {
             gasLimit: tx.gasLimit
           });
         }
+        txp.instantAcceptanceEscrow = tx.paypro.instantAcceptanceEscrow;
       } else {
         if (tx.fromSelectInputs) {
           const size = this.walletProvider.getEstimatedTxSize(
@@ -1273,12 +1277,12 @@ export class ConfirmPage {
           }
 
           txp.from = address;
-          if(txp.payProUrl) {
-            txp.instantAcceptanceEscrow = {
-              satoshis: 11000
-            };
-          }
-          // txp.fee = 281;
+          // if(txp.payProUrl) {
+          //   txp.instantAcceptanceEscrow = {
+          //     satoshis: 1100000
+          //   };
+          // }
+          // txp.fee = 281; 
           // txp.outputs[0].amount = txp.inputs[0].satoshis - txp.fee;
           // txp.feePerKb = 1500;
           this.walletProvider
@@ -1764,6 +1768,17 @@ export class ConfirmPage {
       err instanceof this.errors.INSUFFICIENT_FUNDS_FOR_FEE;
     const isInsufficientLinkedEthFundsForFeeErr =
       err instanceof this.errors.INSUFFICIENT_ETH_FEE;
+
+    if(this.tx.paypro.instantAcceptanceEscrow && !this.tx.instantAcceptanceEscrow.required) {
+      this.tx.paypro.instantAcceptanceEscrow = undefined;
+      this.updateTx(this.tx, this.wallet, {
+        clearCache: true,
+        dryRun: true
+      }).catch(err => {
+        this.handleError(err);
+      });
+      return;
+    }
 
     if (isInsufficientFundsErr) {
       if (this.showUseUnconfirmedMsg()) {
