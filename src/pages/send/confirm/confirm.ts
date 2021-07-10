@@ -482,9 +482,6 @@ export class ConfirmPage {
     );
 
     if (this.tx.paypro) {
-      this.tx.paypro.instantAcceptanceEscrow = {
-        satoshis: 1100100
-      }
       if (!this.currencyProvider.isUtxoCoin(this.tx.coin)) {
         // Update fees to most recent for eth ( in case required fee change ? )
         const address = await this.walletProvider.getAddress(
@@ -1087,8 +1084,8 @@ export class ConfirmPage {
             data: instruction.data,
             gasLimit: tx.gasLimit
           });
+          txp.instantAcceptanceEscrow = instruction.instantAcceptanceEscrow;
         }
-        txp.instantAcceptanceEscrow = tx.paypro.instantAcceptanceEscrow;
       } else {
         if (tx.fromSelectInputs) {
           const size = this.walletProvider.getEstimatedTxSize(
@@ -1282,7 +1279,7 @@ export class ConfirmPage {
           //     satoshis: 1100000
           //   };
           // }
-          // txp.fee = 281; 
+          // txp.fee = 281;
           // txp.outputs[0].amount = txp.inputs[0].satoshis - txp.fee;
           // txp.feePerKb = 1500;
           this.walletProvider
@@ -1769,8 +1766,8 @@ export class ConfirmPage {
     const isInsufficientLinkedEthFundsForFeeErr =
       err instanceof this.errors.INSUFFICIENT_ETH_FEE;
 
-    if(this.tx.paypro.instantAcceptanceEscrow && !this.tx.paypro.instantAcceptanceEscrow.required) {
-      this.tx.paypro.instantAcceptanceEscrow = undefined;
+    if (this.tx.paypro.instructions[0].instantAcceptanceEscrow) {
+      this.tx.paypro.instructions[0].instantAcceptanceEscrow = undefined;
       this.updateTx(this.tx, this.wallet, {
         clearCache: true,
         dryRun: true

@@ -88,9 +88,7 @@ export interface TransactionProposal {
   invoiceID?: string;
   multisigGnosisContractAddress?: string;
   multisigContractAddress?: string;
-  instantAcceptanceEscrow?: {
-    satoshis: number;
-  };
+  instantAcceptanceEscrow?: number;
 }
 
 @Injectable()
@@ -1679,7 +1677,7 @@ export class WalletProvider {
 
     console.log('signedTxp', JSON.stringify(signedTxp, null, 4));
 
-    const getChangeAddress = (): Promise<{address: string}> =>
+    const getChangeAddress = (): Promise<{ address: string }> =>
       new Promise((resolve, reject) => {
         wallet.createAddress({ isChange: true }, (err, address) => {
           if (err) return reject(err);
@@ -1687,24 +1685,21 @@ export class WalletProvider {
         });
       });
 
-    const getFeePerByte = (): Promise<number> => this.feeProvider
-        .getFeeLevels(wallet.coin, wallet.network)
-        .then(data => {
-          const normalLevelRate = _.find(data.levels, level => {
-            return level.level === 'normal';
-          });
-          const lowLevelRate = (
-            normalLevelRate.feePerKb / 1000
-          ).toFixed(0);
-          return parseInt(lowLevelRate, 10);
-        })
+    const getFeePerByte = (): Promise<number> =>
+      this.feeProvider.getFeeLevels(wallet.coin, wallet.network).then(data => {
+        const normalLevelRate = _.find(data.levels, level => {
+          return level.level === 'normal';
+        });
+        const lowLevelRate = (normalLevelRate.feePerKb / 1000).toFixed(0);
+        return parseInt(lowLevelRate, 10);
+      });
 
-    const [ reclaimAddress, feePerByte ] = await Promise.all([
+    const [reclaimAddress, feePerByte] = await Promise.all([
       getChangeAddress(),
       getFeePerByte()
     ]);
 
-    const escrowSatoshis = signedTxp.instantAcceptanceEscrow.satoshis;
+    const escrowSatoshis = signedTxp.instantAcceptanceEscrow;
     const bytes = this.getEscrowReclaimTxSize(signedTxp.inputs.length);
     const fee = feePerByte * bytes;
     const outputAmount = escrowSatoshis - fee;
@@ -1750,6 +1745,7 @@ export class WalletProvider {
     createdTxp.allowNotYetBroadcastUtxos = true;
     const publishedTxp = await this.publishTx(wallet, createdTxp);
     const signedReclaimTxp = await this.signTx(wallet, publishedTxp, password);
+    signedTxp.escrowReclaimTxp = signedReclaimTxp;
     return signedReclaimTxp;
   }
 
@@ -1764,7 +1760,11 @@ export class WalletProvider {
       this.signTx(wallet, publishedTxp, password)
         .then(async signedTxp => {
           this.invalidateCache(wallet);
-          const signedReclaimTxp = await this.generateEscrowReclaimTxp(wallet, signedTxp, password);
+          const signedReclaimTxp = await this.generateEscrowReclaimTxp(
+            wallet,
+            signedTxp,
+            password
+          );
           if (signedTxp.status == 'accepted') {
             this.onGoingProcessProvider.set('broadcastingTx');
             this.broadcastTx(wallet, signedTxp)
